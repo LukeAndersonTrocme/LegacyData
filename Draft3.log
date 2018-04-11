@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  11 APR 2018 09:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  11 APR 2018 15:41
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -465,59 +465,53 @@ LaTeX Info: Redefining \nameref on input line 32.
 \tf@toc=\write4
 \openout4 = `Draft3.toc'.
 
- [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \vbox (badness 1057) has occurred while \output is active []
+ [1{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
 
- [2
-
-]
-<MapQualOverTime.jpg, id=130, 2409.0pt x 2409.0pt>
+] [3]
+<MapQualOverTime.jpg, id=149, 2409.0pt x 2409.0pt>
 File: MapQualOverTime.jpg Graphic file (type jpg)
  <use MapQualOverTime.jpg>
-Package pdftex.def Info: MapQualOverTime.jpg used on input line 79.
+Package pdftex.def Info: MapQualOverTime.jpg used on input line 108.
 (pdftex.def)             Requested size: 418.25368pt x 418.23631pt.
 
-<GWAS_Qual_GenomeWide_JPT.jpg, id=132, 4516.875pt x 1505.625pt>
+<GWAS_Qual_GenomeWide_JPT.jpg, id=151, 4516.875pt x 1505.625pt>
 File: GWAS_Qual_GenomeWide_JPT.jpg Graphic file (type jpg)
 
 <use GWAS_Qual_GenomeWide_JPT.jpg>
-Package pdftex.def Info: GWAS_Qual_GenomeWide_JPT.jpg used on input line 94.
+Package pdftex.def Info: GWAS_Qual_GenomeWide_JPT.jpg used on input line 123.
 (pdftex.def)             Requested size: 418.25368pt x 139.40598pt.
 
-<SNPOverlap6.jpg, id=134, 2409.0pt x 2107.875pt>
+<SNPOverlap6.jpg, id=153, 2409.0pt x 2107.875pt>
 File: SNPOverlap6.jpg Graphic file (type jpg)
  <use SNPOverlap6.jpg>
-Package pdftex.def Info: SNPOverlap6.jpg used on input line 103.
+Package pdftex.def Info: SNPOverlap6.jpg used on input line 132.
 (pdftex.def)             Requested size: 418.25368pt x 365.95677pt.
- [3]
-[4 <./MapQualOverTime.jpg>] [5 <./GWAS_Qual_GenomeWide_JPT.jpg>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6 <./SNPOverlap6.jpg>] [7]
-Overfull \hbox (5.83948pt too wide) in paragraph at lines 189--190
+ [4]
+[5 <./MapQualOverTime.jpg>] [6 <./GWAS_Qual_GenomeWide_JPT.jpg>] [7 <./SNPOverl
+ap6.jpg>] [8]
+Overfull \hbox (5.83948pt too wide) in paragraph at lines 218--219
  \OT1/cmr/m/n/12 5.4.\OT1/cmr/bx/n/12 Genome Wide As-so-ci-a-tion.[][] \OT1/cmr
 /m/n/12 Us-ing PLINK v1.90b4.4 we ran a lin-ear genome
  []
 
-[8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 206.
- [9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 206.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 235.
+[9]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 235.
  (./Draft3.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 206.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 206.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 235.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 235.
 Package rerunfilecheck Info: File `Draft3.out' has not changed.
-(rerunfilecheck)             Checksum: 963374B774697D4D1F09A59AEC9FAD95;1560.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 206.
+(rerunfilecheck)             Checksum: 494679E77B5840A17589CF4376230663;1770.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 235.
  ) 
 Here is how much of TeX's memory you used:
- 7524 strings out of 492995
- 109386 string characters out of 6132704
+ 7530 strings out of 492995
+ 109469 string characters out of 6132704
  211805 words of memory out of 5000000
- 10768 multiletter control sequences out of 15000+600000
+ 10771 multiletter control sequences out of 15000+600000
  10891 words of font info for 43 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
- 34i,7n,35p,631b,341s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,6n,35p,631b,341s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><
@@ -525,10 +519,10 @@ Here is how much of TeX's memory you used:
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
 local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/loc
 al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on Draft3.pdf (9 pages, 2988415 bytes).
+Output written on Draft3.pdf (9 pages, 2992025 bytes).
 PDF statistics:
- 208 PDF objects out of 1000 (max. 8388607)
- 185 compressed objects within 2 object streams
- 36 named destinations out of 1000 (max. 500000)
- 192 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 227 PDF objects out of 1000 (max. 8388607)
+ 203 compressed objects within 3 object streams
+ 39 named destinations out of 1000 (max. 500000)
+ 216 words of extra memory for PDF output out of 10000 (max. 10000000)
 

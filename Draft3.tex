@@ -39,7 +39,7 @@
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
 \lat{not a fan of this sentence}
 Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
-Mutations associated to a disease can be identified by comparing individuals afflicted by a disease to healthy individuals. 
+Mutations associated to a disease can be identified by comparing healthy individuals to those afflicted by a disease. 
 The mutations more common in one group might be associated to the disease.
 Demonstrating that these mutations are biologically relevant to the disease can be difficult.
 Certain factors like age, sex or ancestral origin might be correlated to the trait in question and could potentially be mistakenly associated to a disease. 
@@ -49,21 +49,29 @@ Benign mutations at high frequencies in one populations might be exceedingly rar
 Therefore, population wide differences in mutations must be included as covariates to avoid spurious associations.
 
 \subsection{Imputation}
- improvements in the identification of rare genetic diseases as well as the risk prediction to certain types of cancer and diseases. 
-Genotype data is often imputed to increase power for association studies in a cost effective way. 
-This process is done using a reference database comprised of whole genome sequence data from other individuals in reference populations. 
-We often combine these reference databases to increase the sample size and in turn, the accuracy of imputation. 
-Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.  
+Genome wide associations using large cohorts have lead to developments in the identification of rare genetic diseases as well as the risk prediction to certain types of cancer and diseases. 
+Despite drastic reductions in cost of whole genome sequencing, it remains an expensive test for large sample sizes.
+While on average, two humans differ in about 1/10,000 bases, this number is lower in closely related individuals, and higher in individuals from different continental origins.
+Modern chip sequencing will provide the genotype information for over 1 million bases of the genome.
+This data can then be aligned to a reference database of whole genome sequences where the haplotypes that are identical by descent in individuals form the same population can be used to infer the most likely haplotypes of a genotyped individual.
+
+
+The accuracy of imputation depends on the size of the reference database; this varies significantly from one population to another.
+This means that individuals with ancestry that is less well represented in the reference database will have lower accuracy of imputation.
+To overcome this bias, reference databases are often combined to increase the sample size and in turn, the accuracy of imputation.
+However, combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
-Many of the legacy datasets have been known to contain a higher rate of false positives than their more recent counterparts. 
+Many of the legacy datasets produced using vintage sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
 Is it time to retire legacy datasets? 
 
 
-\lat{sentence about harris} 
+\subsection{Mutation Spectra} 
 A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 The signatures from individuals from the same population will have a tendency to be more similar due to shared ancestry.
 Harris et al have recently proposed that there are patterns of mutations that differ across human populations.
-They argued this by showing that relative difference in mutational types between and even within continental populations.  
+They argued this by showing relative differences in mutational types between and even within continental populations.
+
+\lat{rewrite this section}
 In investigating a mutational signature identified in a Japanese cohort by Harris et. al (2017), we noticed that the individuals responsible for this signal all had lower average quality scores compared to the other Japanese individuals. 
 To further investigate the extent to which low quality individuals were associated to spurious mutations, we then performed a genome-wide association study (GWAS). 
 We discovered \todo{000} variants that were associated to low mapping quality in \todo{000} individuals from \todo{000} of the 26 populations included in the 1000 genomes dataset. 
@@ -74,12 +82,12 @@ This project was motivated by an unusual population genetics observation in a re
 This heterogeneously distributed mutational signal was unexpected as a signal of this nature could either be due to population structure, a recent mutagen, or technical bias.
 
 
-Our research center had recently obtained access to a large cohort of several thousand high-quality whole genome sequences from Japanese individuals from the Fumi institute. 
+Our research center had recently obtained access to a large cohort of several thousand high-quality whole genome sequences from Japanese individuals from the Fumi institute. \lat{change focus to data not center}
 We started off by trying to replicate the results found in Harris et al. 2017, but after several attempts and double checking we had the right quality controls, we were unable to replicate their results with the Fumi dataset. 
 Upon comparing the allele frequencies between the two datasets, we observed an unusually large number of private SNPs despite both cohorts being from the same population. 
 Further investigation in the allele frequency spectra of the two Japanese datasets, indicated that the SNPs responsible for the signal were missing in the more recent dataset. 
 This result raised several red flags. 
-Why would a supposedly genome wide signal be concentrated in private SNPs from a legacy dataset?
+Why would a genome wide signal be concentrated in private SNPs from a legacy dataset?
 
 
 Upon investigating the quality control pipelines of the more recent dataset, many of these positions uniquely found in the 1000 Genomes Project had been removed in the standard QC of the sequencing centre. 
