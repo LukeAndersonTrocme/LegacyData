@@ -17,7 +17,7 @@
 \AppendGraphicsExtensions{.tiff}
 
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
-\newcommand{\latcomment}[1]{\textcolor{blue}{LAT: #1}}
+\newcommand{\lat}[1]{\textcolor{blue}{LAT: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{TODO: #1}}
 
 % \geometry{landscape} % rotated page geometry
@@ -35,17 +35,38 @@
 \tableofcontents
 \clearpage
 			\section{Introduction}
-The last 5 years has seen an increase in number of individuals genotyped through private companies as well as medical research cohorts. Genotype data is often imputed to increase power for association studies in a cost effective way. 
+\subsection{Larger Sample Sizes}			
+The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
+\lat{not a fan of this sentence}
+Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
+Mutations associated to a disease can be identified by comparing individuals afflicted by a disease to healthy individuals. 
+The mutations more common in one group might be associated to the disease.
+Demonstrating that these mutations are biologically relevant to the disease can be difficult.
+Certain factors like age, sex or ancestral origin might be correlated to the trait in question and could potentially be mistakenly associated to a disease. 
+Especially with the increasing size of cohorts, spurious associations are increasingly becoming an issue. 
+For this reason, careful consideration must be taken when including individuals from different ancestral origins in these association studies. 
+Benign mutations at high frequencies in one populations might be exceedingly rare in another population. 
+Therefore, population wide differences in mutations must be included as covariates to avoid spurious associations.
+
+\subsection{Imputation}
+ improvements in the identification of rare genetic diseases as well as the risk prediction to certain types of cancer and diseases. 
+Genotype data is often imputed to increase power for association studies in a cost effective way. 
 This process is done using a reference database comprised of whole genome sequence data from other individuals in reference populations. 
-We often combine these reference databases to increase the sample size and in turn, the accuracy of imputation. Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.  
+We often combine these reference databases to increase the sample size and in turn, the accuracy of imputation. 
+Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.  
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
 Many of the legacy datasets have been known to contain a higher rate of false positives than their more recent counterparts. 
 Is it time to retire legacy datasets? 
 
 
+\lat{sentence about harris} 
+A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
+The signatures from individuals from the same population will have a tendency to be more similar due to shared ancestry.
+Harris et al have recently proposed that there are patterns of mutations that differ across human populations.
+They argued this by showing that relative difference in mutational types between and even within continental populations.  
 In investigating a mutational signature identified in a Japanese cohort by Harris et. al (2017), we noticed that the individuals responsible for this signal all had lower average quality scores compared to the other Japanese individuals. 
 To further investigate the extent to which low quality individuals were associated to spurious mutations, we then performed a genome-wide association study (GWAS). 
-We discovered 000 variants that were associated to low mapping quality in \todo{000} individuals from 000 of the 26 populations included in the 1000 genomes dataset. 
+We discovered \todo{000} variants that were associated to low mapping quality in \todo{000} individuals from \todo{000} of the 26 populations included in the 1000 genomes dataset. 
 One third of these mutations were included in imputation tests. Population specific mutational signatures were also clarified by removing these spurious mutations.
 
 \subsection{Context}
@@ -71,43 +92,17 @@ This suggested that some individuals with lower quality were driving this appare
 Furthermore, when looking at the days when the individuals were sequenced, we noticed that individuals with this mutational signal were sequenced on the same day in the same sequencing centre.
 We then turned our attention to the rest of the 1000 Genomes populations and saw that there were similar batch effects in many of these populations.
 
-			\section{Methods}
-\subsection{Metadata}
-The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
-Average quality of mapped bases per sample was obtained from the BAS files associated with each alignment file. 
-Each BAS file has metadata regarding each sequencing event for each sample. 
-If a sample was sequenced more than once, we took the average of the each quality score from each sequencing instance. 
-The date of completion of each sequencing occurrence was not available, however we managed to find the submission dates and sequencing centres for each sample in the phase3 analysis sequence index file.  
-This file also has multiple entries per sample, however, we were unable to match the individual sequencing runs between the bas files and the index file, which lead us to take the average of the quality scores and only kept the earliest sequencing date per sample. 
-The dates of the sequencing are only used to plot Figure. [Average Quality of mapped bases: How was it calculated?]
-
-\subsection{Data Availability}
-
-Index of BAS files \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/1000genomes.low_coverage.GRCh38DH.alignment.index}{available here}.
-Phase3 analysis sequence index file  \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index}{available here} 
-[link to my compiled metadata file here]
-
-\subsection{Quality Controls}
-We reproduced the quality control pipelines used by Harris et. al as they applied the current state of the art quality thresholds to remove questionable sequences especially for the high standards for detecting population level differences. 
-Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or basepair complexity compared to the rest of the genome. 
-The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} was used to remove low quality regions of the genome , highly conserved regions were removed using the \href{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/phastConsElements100way.txt.gz}{phastCons100way} mask file and highly repetitive regions were also removed using the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file from RepeatMasker. 
-Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
-
-\subsection{Genome Wide Association}
-
-Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1000 Genomes Project. We used the average quality of mapped bases per individual as the phenotype for the analysis. We also controlled for population structure by including the first 4 principle components of a PCA of each population using genotype data. [NOT DONE YET]
-
-\subsection{Mutation Spectrum}
-We calculated the mutation spectrum for each list of significant SNPs for each population [NOT DONE YET]
-
-We also compared the mutation spectrum ratio between populations using a modified version of the methods used in Harris et al. 2017. 
-
-\subsection{Imputation}
-Using the Michigan Imputation Server, we imputed the genotype data from 1000 Genomes Project
-
 			\section{Results}
 \subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
+
+\caption{A) The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. B) Same data as in A) except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
+\label{Figure1}
+\end{figure}
+
 
 \subsection{Genome Wide Association}
 GWAS are commonly used to find genomic regions associated with biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like individuals with low average quality of mapped bases.
@@ -116,8 +111,21 @@ Using the linear GWAS function offered by PLINK, we were able to identify 000 SN
 The results from of the GWAS for other populations are available in supplementary data. 
 A total of 0000 SNPs were associated to low quality in all populations combined.
 
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{GWAS_Qual_GenomeWide_JPT.jpg}
+\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, 000 of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
+ \label{Figure2}
+\end{figure}
+
 \subsection{Overlap of Significant SNPs}
 Comparing the results of each independent GWAS, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
+
+\caption{Overlap of SNPs identified independently to be associated with quality. Not surprisingly, the populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
+  \label{Figure3}
+\end{figure}
 
 \subsection{Significant SNPs}
 When we remove individuals below a quality of 30, population structure is clarified. 
@@ -172,42 +180,49 @@ This study only used one dataset and one quality metric, but using this same app
 As more and more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the amplification of false positives. 
 These results bring forth many questions regarding the reliability of legacy datasets. 
 Moreover, since there are so many broad applications of imputation, it frames the question for reference data turnover. 
-			
-\afterpage{
-\begin{figure}
-\includegraphics[width=\hsize]{figures/MapQualOverTime.jpg}
 
-\caption{A) The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. B) Same data as in A) except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
-\label{Figure1}
-\end{figure}
-\clearpage
-}
 
-\afterpage{
-\begin{landscape}
-\begin{figure}[]
-\centering
-\includegraphics[width=23cm,keepaspectratio, right]{figures/GWAS_Qual_GenomeWide_JPT.jpg}
-\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, 000 of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
- \label{Figure2}
-\end{figure}
-\end{landscape}
 
-\clearpage
+\section{Methods}
+\subsection{Metadata}
+The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
+Average quality of mapped bases per sample was obtained from the BAS files associated with each alignment file. 
+Each BAS file has metadata regarding each sequencing event for each sample. 
+If a sample was sequenced more than once, we took the average of the each quality score from each sequencing instance. 
+The date of completion of each sequencing occurrence was not available, however we managed to find the submission dates and sequencing centres for each sample in the phase3 analysis sequence index file.  
+This file also has multiple entries per sample, however, we were unable to match the individual sequencing runs between the bas files and the index file, which lead us to take the average of the quality scores and only kept the earliest sequencing date per sample. 
+The dates of the sequencing are only used to plot Figure. [Average Quality of mapped bases: How was it calculated?]
 
-  }
+\subsection{Data Availability}
+
+Index of BAS files \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/1000genomes.low_coverage.GRCh38DH.alignment.index}{available here}.
+Phase3 analysis sequence index file  \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index}{available here} 
+[link to my compiled metadata file here]
+
+\subsection{Quality Controls}
+We reproduced the quality control pipelines used by Harris et. al as they applied the current state of the art quality thresholds to remove questionable sequences especially for the high standards for detecting population level differences. 
+Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or basepair complexity compared to the rest of the genome. 
+The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} was used to remove low quality regions of the genome , highly conserved regions were removed using the \href{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/phastConsElements100way.txt.gz}{phastCons100way} mask file and highly repetitive regions were also removed using the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file from RepeatMasker. 
+Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
+
+\subsection{Genome Wide Association}
+
+Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1000 Genomes Project. We used the average quality of mapped bases per individual as the phenotype for the analysis. We also controlled for population structure by including the first 4 principle components of a PCA of each population using genotype data. [NOT DONE YET]
+
+\subsection{Mutation Spectrum}
+We calculated the mutation spectrum for each list of significant SNPs for each population [NOT DONE YET]
+
+We also compared the mutation spectrum ratio between populations using a modified version of the methods used in Harris et al. 2017. 
+
+\subsection{Imputation}
+Using the Michigan Imputation Server, we imputed the genotype data from 1000 Genomes Project
+
+
+
+
   
 
-\afterpage{
-\begin{figure}[h]
-\centering
-\includegraphics[width=\hsize,keepaspectratio, right]{figures/SNPOverlap6.jpg}
 
-\caption{Overlap of SNPs identified independently to be associated with quality. Not surprisingly, the populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
-  \label{Figure3}
-\end{figure}
-\clearpage
-}
 
 \end{document}
 
