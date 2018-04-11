@@ -35,9 +35,8 @@
 \tableofcontents
 \clearpage
 			\section{Introduction}
-\subsection{Larger Sample Sizes}			
+	\subsection{Larger Sample Sizes}			
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
-\lat{not a fan of this sentence}
 Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
 Mutations associated to a disease can be identified by comparing healthy individuals to those afflicted by a disease. 
 The mutations more common in one group might be associated to the disease.
@@ -48,7 +47,7 @@ For this reason, careful consideration must be taken when including individuals 
 Benign mutations at high frequencies in one populations might be exceedingly rare in another population. 
 Therefore, population wide differences in mutations must be included as covariates to avoid spurious associations.
 
-\subsection{Imputation}
+	\subsection{Imputation}
 Genome wide associations using large cohorts have lead to developments in the identification of rare genetic diseases as well as the risk prediction to certain types of cancer and diseases. 
 Despite drastic reductions in cost of whole genome sequencing, it remains an expensive test for large sample sizes.
 While on average, two humans differ in about 1/10,000 bases, this number is lower in closely related individuals, and higher in individuals from different continental origins.
@@ -64,44 +63,48 @@ The errors in one dataset don't disappear when they are combined with another hi
 Many of the legacy datasets produced using vintage sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
 Is it time to retire legacy datasets? 
 
-
-\subsection{Mutation Spectra} 
+	\subsection{Mutation Spectra} 
 A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 The signatures from individuals from the same population will have a tendency to be more similar due to shared ancestry.
 Harris et al have recently proposed that there are patterns of mutations that differ across human populations.
 They argued this by showing relative differences in mutational types between and even within continental populations.
+\lat{more here about mutation spectra}
 
-\lat{rewrite this section}
-In investigating a mutational signature identified in a Japanese cohort by Harris et. al (2017), we noticed that the individuals responsible for this signal all had lower average quality scores compared to the other Japanese individuals. 
-To further investigate the extent to which low quality individuals were associated to spurious mutations, we then performed a genome-wide association study (GWAS). 
+	\subsection{Context}
+This project was motivated by an unusual population genetics observation in a recent publication by Harris et. al, that the 1000 Genomes Project Japanese population seem to be partitioned in two clusters of diff mutation rates. 
+This heterogeneously distributed mutational signal was unexpected as a signal of this nature could either be due to population structure, a recent mutagen, or technical bias.
+In investigating this mutational signature, we were unable to reproduce the results using a larger and higher quality dataset.
+
+
+This study is the result of an investigation in the quality of the 1000 Genomes Project (1kGP) dataset.
+To begin, we will discuss the discrepancy between the Japanese samples from the 1kGP and a more recent counterpart. 
+We then consider methods to discriminate troublesome variants resulting from dated sequencing technologies. 
+Furthermore, we explore more broadly how low quality variants have been propagated in the other populations included in the 1kGP.
+Finally, we will discuss the impact these variants have on modern analyses.
+
+
+			\section{Results}
+	\subsection{A heterogeneously distributed mutational signal}			
+Upon comparing the allele frequencies between the two datasets, we observed an unusually large number of private SNPs despite both cohorts being from the same population.
+The SNPs responsible for the signal observed by Harris et. al (2017) were missing in the more recent dataset. 
+\todo{plot SFS NAG vs JPT}
+We also noticed that the individuals carrying these mutations all had lower average quality scores.
+This suggested that individuals with lower quality were driving this apparent population genetics signal.
+\todo{plot PC1 vs Qual}
+
+
+To further investigate	 the extent to which low quality individuals were associated to spurious mutations, we then performed a genome-wide association study (GWAS) \ref{Figure2}.
+
+
 We discovered \todo{000} variants that were associated to low mapping quality in \todo{000} individuals from \todo{000} of the 26 populations included in the 1000 genomes dataset. 
 One third of these mutations were included in imputation tests. Population specific mutational signatures were also clarified by removing these spurious mutations.
 
-\subsection{Context}
-This project was motivated by an unusual population genetics observation in a recent publication by Harris et. al, that the 1000 Genomes Project Japanese population seem to be partitioned in two clusters of diff mutation rates. 
-This heterogeneously distributed mutational signal was unexpected as a signal of this nature could either be due to population structure, a recent mutagen, or technical bias.
-
-
-Our research center had recently obtained access to a large cohort of several thousand high-quality whole genome sequences from Japanese individuals from the Fumi institute. \lat{change focus to data not center}
-We started off by trying to replicate the results found in Harris et al. 2017, but after several attempts and double checking we had the right quality controls, we were unable to replicate their results with the Fumi dataset. 
-Upon comparing the allele frequencies between the two datasets, we observed an unusually large number of private SNPs despite both cohorts being from the same population. 
-Further investigation in the allele frequency spectra of the two Japanese datasets, indicated that the SNPs responsible for the signal were missing in the more recent dataset. 
-This result raised several red flags. 
-Why would a genome wide signal be concentrated in private SNPs from a legacy dataset?
-
-
-Upon investigating the quality control pipelines of the more recent dataset, many of these positions uniquely found in the 1000 Genomes Project had been removed in the standard QC of the sequencing centre. 
-Does this legacy dataset meet the current industry standards of quality? 
-This study is the result of an investigation in the quality of the 1000 Genomes Project dataset. 
-
-
 After compiling all the metadata from each 1000 genomes sequencing run, we noticed a correlation between PC1 of the mutation spectrum signal and the average quality of mapped bases per individual. 
-This suggested that some individuals with lower quality were driving this apparent population genetics signal. [mention fake pop structure]
+
 Furthermore, when looking at the days when the individuals were sequenced, we noticed that individuals with this mutational signal were sequenced on the same day in the same sequencing centre.
 We then turned our attention to the rest of the 1000 Genomes populations and saw that there were similar batch effects in many of these populations.
-
-			\section{Results}
-\subsection{Average quality of mapped snps Quality Over Time}
+			
+	\subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
 
 \begin{figure}
@@ -111,8 +114,7 @@ As one would expect, the sequencing quality of individuals increases over time \
 \label{Figure1}
 \end{figure}
 
-
-\subsection{Genome Wide Association}
+	\subsection{Genome Wide Association}
 GWAS are commonly used to find genomic regions associated with biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like individuals with low average quality of mapped bases.
  
 Using the linear GWAS function offered by PLINK, we were able to identify 000 SNPs that were associated to low quality with  p-values below $10^{-8}$ and 000 snps with p-values below $10^{-6}$ \ref{Figure2}. 
@@ -125,7 +127,7 @@ A total of 0000 SNPs were associated to low quality in all populations combined.
  \label{Figure2}
 \end{figure}
 
-\subsection{Overlap of Significant SNPs}
+	\subsection{Overlap of Significant SNPs}
 Comparing the results of each independent GWAS, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
 
 \begin{figure}
@@ -135,21 +137,22 @@ Comparing the results of each independent GWAS, we were able to identify over 00
   \label{Figure3}
 \end{figure}
 
-\subsection{Significant SNPs}
+	\subsection{Significant SNPs}
 When we remove individuals below a quality of 30, population structure is clarified. 
-The signal identified in Harris et. al is enriched in sites associated with low quality. [Need to run harris pipeline without $10^{-6}$ ]
+The signal identified in Harris et. al is enriched in sites associated with low quality
 Therefore, when these low quality sites are removed, the mutational signal is also removed. (Or in this case when we remove the individuals with qualities below 30.)
 
-\subsection{Higher quality datasets don't have these SNPs}
+	\subsection{Higher quality datasets don't have these SNPs}
 
 Interestingly, the SNPs we identified had already been removed in higher quality datasets. 
 These HQ datasets also have filtered more SNPs than the GWAS was able to identify. 
 When we compare the allele frequencies between the 1000 Genomes project Japanese population to a more contemporary dataset, there are many more sites that are enriched with the same mutational signature as described above that are not identified using a GWAS. 
 This suggests that we lack the power to identify all the questionable variants from these legacy datasets. 
-\subsection{Imputation}
+
+	\subsection{Imputation}
 ~30\% of the SNPs we identified as being associated with low quality were found to be imputed using the Michigan Imputation Server. These  should be removed from reference database
 
-\subsection{Found to be included in other GWAS}
+	\subsection{Found to be included in other GWAS}
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWA studies that might have called these erroneous variants as being significantly correlated with some biological trait. 
 Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 6 recent publications that had found at least one of the variants to have reached genome wide significance in their study. 
 
