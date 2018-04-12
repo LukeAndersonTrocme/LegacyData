@@ -38,21 +38,24 @@
 	\subsection{Larger Sample Sizes}			
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
 Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
-Mutations associated to a disease can be identified by comparing healthy individuals to those afflicted by a disease. 
-The mutations more common in one group might be associated to the disease.
-Demonstrating that these mutations are biologically relevant to the disease can be difficult.
-Certain factors like age, sex or ancestral origin might be correlated to the trait in question and could potentially be mistakenly associated to a disease. 
+Mutations associated to a disease can be identified by comparing the genomes of healthy individuals to those afflicted by a disease. 
+The mutations commonly found in patients and rarely in controls might be associated to the disease in question.
+However, demonstrating that these mutations are biologically relevant can be difficult.
 Especially with the increasing size of cohorts, spurious associations are increasingly becoming an issue. 
-For this reason, careful consideration must be taken when including individuals from different ancestral origins in these association studies. 
-Benign mutations at high frequencies in one populations might be exceedingly rare in another population. 
+For this reason, careful consideration must be taken when including individuals from different ancestral origins in these association studies.
+Benign mutations at high frequencies in one populations might be exceedingly rare in another population.
 Therefore, population wide differences in mutations must be included as covariates to avoid spurious associations.
 
 	\subsection{Imputation}
 Genome wide associations using large cohorts have lead to developments in the identification of rare genetic diseases as well as the risk prediction to certain types of cancer and diseases. 
 Despite drastic reductions in cost of whole genome sequencing, it remains an expensive test for large sample sizes.
-While on average, two humans differ in about 1/10,000 bases, this number is lower in closely related individuals, and higher in individuals from different continental origins.
+For this reason, genotype data is often imputed to increase power for association studies in a cost effective way.
+
+
+Imputation of genotype data is a probabilistic method that infers the bases of a given genome based on its similarity to a set of reference genomes.
+While on average, two humans differ in about 1/10,000 bases, this number is \todo{lower} in closely related individuals, and \todo{higher} in individuals from different continental origins.
 Modern chip sequencing will provide the genotype information for over 1 million bases of the genome.
-This data can then be aligned to a reference database of whole genome sequences where the haplotypes that are identical by descent in individuals form the same population can be used to infer the most likely haplotypes of a genotyped individual.
+The unique combination of genotyped bases can be enough to identify haplotype blocks that are identical by descent in individuals form the reference database.
 
 
 The accuracy of imputation depends on the size of the reference database; this varies significantly from one population to another.
@@ -60,26 +63,26 @@ This means that individuals with ancestry that is less well represented in the r
 To overcome this bias, reference databases are often combined to increase the sample size and in turn, the accuracy of imputation.
 However, combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
-Many of the legacy datasets produced using vintage sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
-Is it time to retire legacy datasets? 
+Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
+Is it time to retire legacy data? 
 
 	\subsection{Mutation Spectra} 
 A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 The signatures from individuals from the same population will have a tendency to be more similar due to shared ancestry.
-Harris et al have recently proposed that there are patterns of mutations that differ across human populations.
+Harris et al have recently put forward that there are patterns of mutations that differ across human populations.
 They argued this by showing relative differences in mutational types between and even within continental populations.
 \lat{more here about mutation spectra}
 
 	\subsection{Context}
-This project was motivated by an unusual population genetics observation in a recent publication by Harris et. al, that the 1000 Genomes Project Japanese population seem to be partitioned in two clusters of diff mutation rates. 
+This project was motivated by an unusual population genetics observation in a recent publication by Harris et. al, that the 1000 Genomes Project (1kGP) Japanese population seem to be partitioned in two clusters of diff mutation rates. 
 This heterogeneously distributed mutational signal was unexpected as a signal of this nature could either be due to population structure, a recent mutagen, or technical bias.
-In investigating this mutational signature, we were unable to reproduce the results using a larger and higher quality dataset.
+In investigating this mutational signature, we were unable to reproduce the results using a larger and higher quality dataset and concluded that this signal can be attributed to sequencing error.
 
 
-This study is the result of an investigation in the quality of the 1000 Genomes Project (1kGP) dataset.
-To begin, we will discuss the discrepancy between the Japanese samples from the 1kGP and a more recent counterpart. 
-We then consider methods to discriminate troublesome variants resulting from dated sequencing technologies. 
-Furthermore, we explore more broadly how low quality variants have been propagated in the other populations included in the 1kGP.
+This study is the result of an investigation in the quality of the 1kGP dataset.
+To begin, we will discuss the discrepancy between the Japanese samples from the 1kGP and a more recent high quality dataset. 
+We then consider methods to discriminate sequencing errors resulting from dated technologies.
+Next, we explore more broadly how low quality variants have proliferated in other populations from the 1kGP.
 Finally, we will discuss the impact these variants have on modern analyses.
 
 
@@ -93,17 +96,14 @@ This suggested that individuals with lower quality were driving this apparent po
 \todo{plot PC1 vs Qual}
 
 
-To further investigate	 the extent to which low quality individuals were associated to spurious mutations, we then performed a genome-wide association study (GWAS) \ref{Figure2}.
+To further investigate	 the extent to which low quality individuals were associated to spurious mutations, we performed a genome-wide association (GWA) study  \ref{Figure2}. GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
+ 
+Using the linear GWAS function offered by PLINK, we were able to identify \todo{000} SNPs that were associated to low quality with  p-values below $10^{-8}$ and \todo{000} snps with p-values below $10^{-6}$ \ref{Figure2}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
+The results from of the GWAS for other populations are available in supplementary data. 
+A total of \todo{000} SNPs were associated to low quality in all populations combined.
 
+\todo{does getting rid of these SNPs get rid of the signal?  
 
-We discovered \todo{000} variants that were associated to low mapping quality in \todo{000} individuals from \todo{000} of the 26 populations included in the 1000 genomes dataset. 
-One third of these mutations were included in imputation tests. Population specific mutational signatures were also clarified by removing these spurious mutations.
-
-After compiling all the metadata from each 1000 genomes sequencing run, we noticed a correlation between PC1 of the mutation spectrum signal and the average quality of mapped bases per individual. 
-
-Furthermore, when looking at the days when the individuals were sequenced, we noticed that individuals with this mutational signal were sequenced on the same day in the same sequencing centre.
-We then turned our attention to the rest of the 1000 Genomes populations and saw that there were similar batch effects in many of these populations.
-			
 	\subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
 
@@ -115,15 +115,11 @@ As one would expect, the sequencing quality of individuals increases over time \
 \end{figure}
 
 	\subsection{Genome Wide Association}
-GWAS are commonly used to find genomic regions associated with biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like individuals with low average quality of mapped bases.
- 
-Using the linear GWAS function offered by PLINK, we were able to identify 000 SNPs that were associated to low quality with  p-values below $10^{-8}$ and 000 snps with p-values below $10^{-6}$ \ref{Figure2}. 
-The results from of the GWAS for other populations are available in supplementary data. 
-A total of 0000 SNPs were associated to low quality in all populations combined.
+
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{GWAS_Qual_GenomeWide_JPT.jpg}
-\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, 000 of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
+\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
  \label{Figure2}
 \end{figure}
 
@@ -167,14 +163,14 @@ These SNPs matter because they reached genome wide significance for medically re
 Could lead to false diagnosis at worst, or spurious correlations at least. 
 They were not caught sooner because the batch effect of 1000 genomes had never been properly addressed. 
 
-Our GWAS method was able to identify 000 variants that are likely to be false positives.
+Our GWAS method was able to identify \todo{000} variants that are likely to be false positives.
 
 We compared the number of SNPs identified in the GWAS to the number of sites that differed between our higher quality Japanese dataset and found that 100?\% of the sites were also missing from the Fumi data. 
 Because we are running the GWAS on a per-population base, for rarer mutations, we are lacking the power to identify these significant SNPs.  
-However, upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified 000 more variants that are beyond the expected frequency spectrum deviation for individuals from the same population. 
+However, upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified \todo{000} more variants that are beyond the expected frequency spectrum deviation for individuals from the same population. 
 This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
 The most conservative approach would be to remove all individuals that don't meet the quality threshold. 
-In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been previously used by 000 studies.
+In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been previously used by \todo{000} studies.
 
 \subsection{GWAS from other papers}
 Since these variants are present in more than one population from the 1000 genomes project, they are more likely to be associated to biological traits as they would appear to be like any other variant that is shared among multiple populations. 
@@ -202,7 +198,7 @@ Each BAS file has metadata regarding each sequencing event for each sample.
 If a sample was sequenced more than once, we took the average of the each quality score from each sequencing instance. 
 The date of completion of each sequencing occurrence was not available, however we managed to find the submission dates and sequencing centres for each sample in the phase3 analysis sequence index file.  
 This file also has multiple entries per sample, however, we were unable to match the individual sequencing runs between the bas files and the index file, which lead us to take the average of the quality scores and only kept the earliest sequencing date per sample. 
-The dates of the sequencing are only used to plot Figure. [Average Quality of mapped bases: How was it calculated?]
+The dates of the sequencing are only used to plot Figure. \todo:{Average Quality of mapped bases: How was it calculated?}
 
 \subsection{Data Availability}
 
@@ -218,10 +214,10 @@ Furthermore, only diallelic autosomal SNPs were considered, with missingness bel
 
 \subsection{Genome Wide Association}
 
-Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1000 Genomes Project. We used the average quality of mapped bases per individual as the phenotype for the analysis. We also controlled for population structure by including the first 4 principle components of a PCA of each population using genotype data. [NOT DONE YET]
+Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1000 Genomes Project. We used the average quality of mapped bases per individual as the phenotype for the analysis. We also controlled for population structure by including the first 4 principle components of a PCA of each population using genotype data. \todo{NOT DONE YET}
 
 \subsection{Mutation Spectrum}
-We calculated the mutation spectrum for each list of significant SNPs for each population [NOT DONE YET]
+We calculated the mutation spectrum for each list of significant SNPs for each population \todo{NOT DONE YET}
 
 We also compared the mutation spectrum ratio between populations using a modified version of the methods used in Harris et al. 2017. 
 
@@ -241,6 +237,14 @@ Using the Michigan Imputation Server, we imputed the genotype data from 1000 Gen
 
 
 
+We discovered \todo{000} variants that were associated to low mapping quality in \todo{000} individuals from \todo{000} of the 26 populations included in the 1000 genomes dataset. 
+One third of these mutations were included in imputation tests. Population specific mutational signatures were also clarified by removing these spurious mutations.
+
+After compiling all the metadata from each 1000 genomes sequencing run, we noticed a correlation between PC1 of the mutation spectrum signal and the average quality of mapped bases per individual. 
+
+Furthermore, when looking at the days when the individuals were sequenced, we noticed that individuals with this mutational signal were sequenced on the same day in the same sequencing centre.
+We then turned our attention to the rest of the 1000 Genomes populations and saw that there were similar batch effects in many of these populations.
+			
 
 
 
