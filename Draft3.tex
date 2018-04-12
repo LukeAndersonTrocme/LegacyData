@@ -1,6 +1,6 @@
 
-\documentclass[12pt]{amsart}
-\usepackage{geometry} % see geometry.pdf on how to lay out the page. There's lots.
+\documentclass[12pt,twocolumn]{article}
+\usepackage[margin=2.2cm]{geometry} % see geometry.pdf on how to lay out the page. There's lots.
 \usepackage{graphicx}
 \usepackage[export]{adjustbox}
 \usepackage{lscape}
@@ -11,14 +11,14 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=cyan,
-}\geometry{a4paper} % or letter or a5paper or ... etc
-\usepackage{epstopdf}
-\epstopdfDeclareGraphicsRule{.tiff}{png}{.png}{convert #1 \OutputFile}
-\AppendGraphicsExtensions{.tiff}
+}
+
+%\geometry{a4paper} % or letter or a5paper or ... etc
+
 
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\lat}[1]{\textcolor{blue}{LAT: #1}}
-\newcommand{\todo}[1]{\textcolor{blue}{todo: #1}}
+\newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
 
 % \geometry{landscape} % rotated page geometry
 
@@ -31,9 +31,11 @@
 %%% BEGIN DOCUMENT
 \begin{document}
 
+\onecolumn
 \maketitle
 \tableofcontents
 \clearpage
+\twocolumn
 			\section{Introduction}
 	\subsection{Larger Sample Sizes}			
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
@@ -108,31 +110,31 @@ Using the linear GWAS function offered by PLINK, we were able to identify \todo{
 	\subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
 
-\begin{figure}
+\begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
 
 \caption{A) The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. B) Same data as in A) except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
 \label{Figure1}
-\end{figure}
+\end{figure*}
 
 	\subsection{Genome Wide Association}
 
 
-\begin{figure}
+\begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{GWAS_Qual_GenomeWide_JPT.jpg}
 \caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
  \label{Figure2}
-\end{figure}
+\end{figure*}
 
 	\subsection{Overlap of Significant SNPs}
 Comparing the results of each independent GWAS, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
 
-\begin{figure}
+\begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
 
 \caption{Overlap of SNPs identified independently to be associated with quality. Not surprisingly, the populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
   \label{Figure3}
-\end{figure}
+\end{figure*}
 
 	\subsection{Significant SNPs}
 When we remove individuals below a quality of 30, population structure is clarified. 
