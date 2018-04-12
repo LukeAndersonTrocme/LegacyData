@@ -18,7 +18,7 @@
 
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\lat}[1]{\textcolor{blue}{LAT: #1}}
-\newcommand{\todo}[1]{\textcolor{blue}{TODO: #1}}
+\newcommand{\todo}[1]{\textcolor{blue}{todo: #1}}
 
 % \geometry{landscape} % rotated page geometry
 
@@ -61,16 +61,19 @@ The unique combination of genotyped bases can be enough to identify haplotype bl
 The accuracy of imputation depends on the size of the reference database; this varies significantly from one population to another.
 This means that individuals with ancestry that is less well represented in the reference database will have lower accuracy of imputation.
 To overcome this bias, reference databases are often combined to increase the sample size and in turn, the accuracy of imputation.
-However, combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
+
+
+Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
 Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
 Is it time to retire legacy data? 
 
 	\subsection{Mutation Spectra} 
 A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
-The signatures from individuals from the same population will have a tendency to be more similar due to shared ancestry.
-Harris et al have recently put forward that there are patterns of mutations that differ across human populations.
+The signatures from individuals in the same population will have a tendency to be more similar due to shared ancestry.
+Harris et al have recently posited that there are patterns of mutations that differ across human populations.
 They argued this by showing relative differences in mutational types between and even within continental populations.
+In particular, there is \todo{15 percent} more TTC to TCC mutations in people of European descent.
 \lat{more here about mutation spectra}
 
 	\subsection{Context}
@@ -82,27 +85,25 @@ In investigating this mutational signature, we were unable to reproduce the resu
 This study is the result of an investigation in the quality of the 1kGP dataset.
 To begin, we will discuss the discrepancy between the Japanese samples from the 1kGP and a more recent high quality dataset. 
 We then consider methods to discriminate sequencing errors resulting from dated technologies.
-Next, we explore more broadly how low quality variants have proliferated in other populations from the 1kGP.
+Next, we explore more broadly how low quality variants remain embedded in other populations of the 1kGP.
 Finally, we will discuss the impact these variants have on modern analyses.
 
 
 			\section{Results}
 	\subsection{A heterogeneously distributed mutational signal}			
 Upon comparing the allele frequencies between the two datasets, we observed an unusually large number of private SNPs despite both cohorts being from the same population.
-The SNPs responsible for the signal observed by Harris et. al (2017) were missing in the more recent dataset. 
+Surprisingly, the SNPs responsible for the signal observed by Harris et. al (2017) were missing in the more recent dataset. 
 \todo{plot SFS NAG vs JPT}
 We also noticed that the individuals carrying these mutations all had lower average quality scores.
-This suggested that individuals with lower quality were driving this apparent population genetics signal.
+This suggested that individuals with lower quality were driving this signal.
 \todo{plot PC1 vs Qual}
 
 
 To further investigate	 the extent to which low quality individuals were associated to spurious mutations, we performed a genome-wide association (GWA) study  \ref{Figure2}. GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
  
-Using the linear GWAS function offered by PLINK, we were able to identify \todo{000} SNPs that were associated to low quality with  p-values below $10^{-8}$ and \todo{000} snps with p-values below $10^{-6}$ \ref{Figure2}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
-The results from of the GWAS for other populations are available in supplementary data. 
-A total of \todo{000} SNPs were associated to low quality in all populations combined.
+Using the linear GWAS function offered by PLINK, we were able to identify \todo{000 $10^{-8}$ and 000 $10^{-6}$} SNPs that were associated to the average quality of SNPs mapped for an individual \ref{Figure2}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
 
-\todo{does getting rid of these SNPs get rid of the signal?  
+\todo{does getting rid of these SNPs get rid of the signal? What is the lowest frequency SNP that is statistically significant?}
 
 	\subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
