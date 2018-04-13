@@ -1,7 +1,6 @@
 
-\documentclass[12pt,twocolumn]{article}
-\usepackage[margin=2.2cm]{geometry} % see geometry.pdf on how to lay out the page. There's lots.
-\usepackage{graphicx}
+\documentclass[]{elife}
+
 \usepackage[export]{adjustbox}
 \usepackage{lscape}
 \usepackage{afterpage}
@@ -13,11 +12,8 @@
     urlcolor=cyan,
 }
 
-%\geometry{a4paper} % or letter or a5paper or ... etc
-
-
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
-\newcommand{\lat}[1]{\textcolor{blue}{LAT: #1}}
+\newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
 
 % \geometry{landscape} % rotated page geometry
@@ -31,10 +27,7 @@
 %%% BEGIN DOCUMENT
 \begin{document}
 
-\onecolumn
 \maketitle
-\tableofcontents
-\clearpage
 \twocolumn
 			\section{Introduction}
 	\subsection{Larger Sample Sizes}			
@@ -76,7 +69,7 @@ The signatures from individuals in the same population will have a tendency to b
 Harris et al have recently posited that there are patterns of mutations that differ across human populations.
 They argued this by showing relative differences in mutational types between and even within continental populations.
 In particular, there is \todo{15 percent} more TTC to TCC mutations in people of European descent.
-\lat{more here about mutation spectra}
+\luke{more here about mutation spectra}
 
 	\subsection{Context}
 This project was motivated by an unusual population genetics observation in a recent publication by Harris et. al, that the 1000 Genomes Project (1kGP) Japanese population seem to be partitioned in two clusters of diff mutation rates. 
@@ -133,12 +126,12 @@ As one would expect, the sequencing quality of individuals increases over time \
 	\subsection{Overlap of Significant SNPs}
 Comparing the results of each independent GWA study, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
 
-\begin{figure}
+\begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
 
 \caption{Overlap of SNPs identified independently to be associated with quality. The populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
   \label{Figure3}
-\end{figure}
+\end{figure*}
 
 	\subsection{Significant SNPs}
 When we remove individuals below a quality of 30, population structure is clarified. 

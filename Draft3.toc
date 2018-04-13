@@ -1,25 +1,26 @@
-\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
-\contentsline {subsection}{\numberline {1.1}Larger Sample Sizes}{2}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Imputation}{2}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Mutation Spectra}{2}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}Context}{3}{subsection.1.4}
-\contentsline {section}{\numberline {2}Results}{3}{section.2}
-\contentsline {subsection}{\numberline {2.1}A peculiar mutational signal}{3}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Average quality of mapped snps Quality Over Time}{4}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Overlap of Significant SNPs}{4}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Significant SNPs}{5}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Higher quality datasets don't have these SNPs}{5}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}Imputation}{5}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}Found to be included in other GWA studies}{5}{subsection.2.7}
-\contentsline {section}{\numberline {3}Discussion}{6}{section.3}
-\contentsline {subsection}{\numberline {3.1}Why do we care?}{6}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}GWA studies from other papers}{6}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Why were these SNPs even associated in the first place?}{6}{subsection.3.3}
-\contentsline {section}{\numberline {4}Conclusion}{6}{section.4}
-\contentsline {section}{\numberline {5}Methods}{7}{section.5}
-\contentsline {subsection}{\numberline {5.1}Metadata}{7}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Data Availability}{7}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Quality Controls}{7}{subsection.5.3}
-\contentsline {subsection}{\numberline {5.4}Genome Wide Association}{7}{subsection.5.4}
-\contentsline {subsection}{\numberline {5.5}Mutation Spectrum}{7}{subsection.5.5}
-\contentsline {subsection}{\numberline {5.6}Imputation}{7}{subsection.5.6}
+\select@language {english}
+\contentsline {section}{Introduction}{2}{section*.1}
+\contentsline {subsection}{Larger Sample Sizes}{2}{subsection*.2}
+\contentsline {subsection}{Imputation}{2}{subsection*.3}
+\contentsline {subsection}{Mutation Spectra}{2}{subsection*.4}
+\contentsline {subsection}{Context}{3}{subsection*.5}
+\contentsline {section}{Results}{3}{section*.6}
+\contentsline {subsection}{A peculiar mutational signal}{3}{subsection*.7}
+\contentsline {subsection}{Average quality of mapped snps Quality Over Time}{4}{subsection*.10}
+\contentsline {subsection}{Overlap of Significant SNPs}{4}{subsection*.12}
+\contentsline {subsection}{Significant SNPs}{5}{subsection*.14}
+\contentsline {subsection}{Higher quality datasets don't have these SNPs}{5}{subsection*.15}
+\contentsline {subsection}{Imputation}{5}{subsection*.16}
+\contentsline {subsection}{Found to be included in other GWA studies}{5}{subsection*.17}
+\contentsline {section}{Discussion}{5}{section*.18}
+\contentsline {subsection}{Why do we care?}{5}{subsection*.19}
+\contentsline {subsection}{GWA studies from other papers}{6}{subsection*.20}
+\contentsline {subsection}{Why were these SNPs even associated in the first place?}{6}{subsection*.21}
+\contentsline {section}{Conclusion}{6}{section*.22}
+\contentsline {section}{Methods}{6}{section*.23}
+\contentsline {subsection}{Metadata}{6}{subsection*.24}
+\contentsline {subsection}{Data Availability}{6}{subsection*.25}
+\contentsline {subsection}{Quality Controls}{7}{subsection*.26}
+\contentsline {subsection}{Genome Wide Association}{7}{subsection*.27}
+\contentsline {subsection}{Mutation Spectrum}{7}{subsection*.28}
+\contentsline {subsection}{Imputation}{7}{subsection*.29}
