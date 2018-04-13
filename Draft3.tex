@@ -1,5 +1,8 @@
-
-\documentclass[]{elife}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ELIFE ARTICLE TEMPLATE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PREAMBLE 
+\documentclass[9pt,lineno]{elife}
 
 \usepackage[export]{adjustbox}
 \usepackage{lscape}
@@ -15,22 +18,35 @@
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ARTICLE SETUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Legacy Data Confounds Modern Genomics Studies}
 
-% \geometry{landscape} % rotated page geometry
+\author[1]{Luke Anderson-Trocm\'e}
+\author[1,2]{Simon Gravel}
 
-% See the ``Article customise'' template for come common customisations
+\affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
+\affil[2]{McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada}
 
-\title{Legacy Data Confounds Modern Studies}
-\author{Luke Anderson-Trocm\'e , Simon Gravel}
-%\date{} % delete this line to display the current date
+\corr{luke.anderson-trocme@mail.mcgill.ca}{LAT}
 
-%%% BEGIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ARTICLE START
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 \maketitle
-\twocolumn
+\begin{abstract}
+\todo{This is not a real abtract}This study is the result of an investigation in the quality of the 1kGP dataset.
+To begin, we will discuss the discrepancy between the Japanese samples from the 1kGP and a more recent high quality dataset. 
+We then consider methods to discriminate sequencing errors resulting from dated technologies.
+Next, we explore more broadly how low quality variants remain embedded in other populations of the 1kGP.
+Finally, we will discuss the impact these variants have on modern analyses.
+\end{abstract}
+
 			\section{Introduction}
-	\subsection{Larger Sample Sizes}			
+	\subsection{Big Data}			
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
 Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
 Mutations associated to a disease can be identified by comparing the genomes of healthy individuals to those afflicted by a disease. 
@@ -119,7 +135,7 @@ As one would expect, the sequencing quality of individuals increases over time \
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
 
-\caption{A) The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. B) Same data as in A) except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
+\caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. \textbf{B} Same data as in \textbf{A} except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
 \label{Figure1}
 \end{figure}
 
@@ -226,8 +242,11 @@ We also compared the mutation spectrum ratio between populations using a modifie
 Using the Michigan Imputation Server, we imputed the genotype data from 1000 Genomes Project
 
 
+\section{Code Availability}
+\todo{here is where I will put my git hub}
 
-
+\section{Acknowledgments}
+We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
   
 
 

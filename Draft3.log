@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  13 APR 2018 16:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  13 APR 2018 16:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -505,8 +505,8 @@ Package ifluatex Info: LuaTeX not detected.
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/extsizes/extarticle.cls
 Document Class: extarticle 1996/10/08 v1.0 Non Standard LaTeX document class
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/extsizes/size9.clo
+File: size9.clo 1999/11/11 v1.4a NON-Standard LaTeX file (size option)
 )
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/exscale.sty
 Package: exscale 2014/09/29 v2.1h Standard LaTeX package exscale
@@ -1655,48 +1655,48 @@ Package: afterpage 2014/10/28 v1.08 After-Page Package (DPC)
 \AP@partial=\box54
 \AP@footins=\box55
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 13.
+Package hyperref Info: Option `colorlinks' set `true' on input line 16.
 
 (./Draft3.aux)
 \openout1 = `Draft3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 28.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 37.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 37.
  (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 28.
-LaTeX Font Info:    Try loading font information for LS1+stix on input line 28.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for LS1/stix/m/n on input line 37.
+LaTeX Font Info:    Try loading font information for LS1+stix on input line 37.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls1stix.fd
 File: ls1stix.fd 2015/04/17 v1.1.2-latex STIX LS1 font definitions
 )
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 28.
-LaTeX Font Info:    Try loading font information for LS2+stix on input line 28.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for LS2/stix/m/n on input line 37.
+LaTeX Font Info:    Try loading font information for LS2+stix on input line 37.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls2stix.fd
 File: ls2stix.fd 2015/04/17 v1.1.2-latex STIX LS2 font definitions
 )
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Try loading font information for T1+fos on input line 28.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 37.
+LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Try loading font information for T1+fos on input line 37.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/opensans/t1fos.fd
 File: t1fos.fd 2011/11/11 Fontinst v1.927 font definitions for T1/fos.
@@ -1717,7 +1717,7 @@ File: t1fos.fd 2011/11/11 Fontinst v1.927 font definitions for T1/fos.
 \makeMPintoPDFobject=\count280
 \everyMPtoPDFconversion=\toks42
 )
-LaTeX Info: Redefining \microtypecontext on input line 28.
+LaTeX Info: Redefining \microtypecontext on input line 37.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1762,15 +1762,15 @@ e
 * \textheight=666.9326pt
 * \oddsidemargin=98.44653pt
 * \evensidemargin=98.44653pt
-* \topmargin=-60.36449pt
+* \topmargin=-58.26448pt
 * \headheight=21.0pt
-* \headsep=24.0pt
-* \topskip=10.0pt
+* \headsep=21.9pt
+* \topskip=9.0pt
 * \footskip=30.0pt
 * \marginparwidth=113.81102pt
 * \marginparsep=14.22636pt
-* \columnsep=19.99512pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \columnsep=18.49548pt
+* \skip\footins=8.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -1786,8 +1786,8 @@ Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 28.
-Package hyperref Info: Link coloring ON on input line 28.
+(lastpage)             ! on input line 37.
+Package hyperref Info: Link coloring ON on input line 37.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -1796,67 +1796,74 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count281
 )
-LaTeX Info: Redefining \ref on input line 28.
-LaTeX Info: Redefining \pageref on input line 28.
-LaTeX Info: Redefining \nameref on input line 28.
+LaTeX Info: Redefining \ref on input line 37.
+LaTeX Info: Redefining \pageref on input line 37.
+LaTeX Info: Redefining \nameref on input line 37.
 
 (./Draft3.out) (./Draft3.out)
 \@outlinefile=\write4
 \openout4 = `Draft3.out'.
 
-LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <10> not available
-(Font)              Font shape `T1/fos/b/n' tried instead on input line 31.
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <9> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 40.
 LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <22> not available
-(Font)              Font shape `T1/fos/b/n' tried instead on input line 31.
-LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <12> not available
-(Font)              Font shape `T1/fos/b/n' tried instead on input line 31.
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 40.
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <10> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 40.
 LaTeX Font Info:    Try loading font information for LS1+stixscr on input line 
-31.
+40.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls1stixscr.fd
 File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
 )
-LaTeX Font Info:    Try loading font information for LS2+stixex on input line 3
-1.
+LaTeX Font Info:    Try loading font information for LS2+stixex on input line 4
+0.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls2stixex.fd
 File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
 
 )
 LaTeX Font Info:    Try loading font information for LS1+stixfrak on input line
- 31.
+ 40.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls1stixfrak.fd
 File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
 )
-LaTeX Font Info:    Try loading font information for LS1+stixbb on input line 3
-1.
+LaTeX Font Info:    Try loading font information for LS1+stixbb on input line 4
+0.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls1stixbb.fd
 File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
 
 )
 LaTeX Font Info:    Try loading font information for LS2+stixcal on input line 
-31.
+40.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls2stixcal.fd
 File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
 ons
 )
-LaTeX Font Info:    Try loading font information for LS1+stixsf on input line 3
-1.
+LaTeX Font Info:    Try loading font information for LS1+stixsf on input line 4
+0.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls1stixsf.fd
 File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
 
 )
-LaTeX Font Info:    Try loading font information for LS2+stixtt on input line 3
-1.
+LaTeX Font Info:    Try loading font information for LS2+stixtt on input line 4
+0.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/stix/ls2stixtt.fd
 File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
 
 )
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <7.5> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 40.
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <7> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 40.
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 48.
+
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
@@ -1864,232 +1871,109 @@ Overfull \hbox (6.0pt too wide) has occurred while \output is active
 [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/fos/b/n' tried instead on input line 32.
+<NAG_JPT_SFS_GenomeWide.jpg, id=126, 1806.75pt x 1505.625pt>
+File: NAG_JPT_SFS_GenomeWide.jpg Graphic file (type jpg)
 
-Overfull \hbox (5.9277pt too wide) in paragraph at lines 34--43
-\T1/fos/m/n/10 (-20) horts. Larger sam-ple sizes al-low re-searchers
- []
+<use NAG_JPT_SFS_GenomeWide.jpg>
+Package pdftex.def Info: NAG_JPT_SFS_GenomeWide.jpg used on input line 114.
+(pdftex.def)             Requested size: 406.58981pt x 338.81993pt.
+LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <8> not available
+(Font)              Font shape `T1/fos/b/n' tried instead on input line 115.
 
+<GWAS_Qual_GenomeWide_JPT.jpg, id=127, 2559.5625pt x 1656.1875pt>
+File: GWAS_Qual_GenomeWide_JPT.jpg Graphic file (type jpg)
 
-Overfull \hbox (3.90808pt too wide) in paragraph at lines 34--43
-\T1/fos/m/n/10 (-20) ceed-ingly rare in an-other pop-u-la-tion. There-
- []
-
-
-Overfull \hbox (3.44382pt too wide) in paragraph at lines 61--65
-\T1/fos/m/n/10 (-20) be-tween se-quenc-ing tech-nolo-gies and even
- []
-
-
-Overfull \hbox (12.64668pt too wide) in paragraph at lines 61--65
-\T1/fos/m/n/10 (-20) se-quenc-ing cen-tres. The er-rors in one dataset
- []
-
-
-Overfull \hbox (3.48389pt too wide) in paragraph at lines 67--73
-\T1/fos/m/n/10 (-20) con-ti-nen-tal pop-u-la-tions. In par-tic-u-lar, there
- []
-
+<use GWAS_Qual_GenomeWide_JPT.jpg>
+Package pdftex.def Info: GWAS_Qual_GenomeWide_JPT.jpg used on input line 121.
+(pdftex.def)             Requested size: 406.58981pt x 263.0748pt.
 
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
-[2
-
-]
-Overfull \hbox (5.48419pt too wide) in paragraph at lines 80--85
-\T1/fos/m/n/10 (-20) 1kGP and a more re-cent high qual-ity dataset.
- []
-
-
-Overfull \hbox (7.78494pt too wide) in paragraph at lines 80--85
-\T1/fos/m/n/10 (-20) tech-nolo-gies. Next, we ex-plore more broadly
- []
-
-<NAG_JPT_SFS_GenomeWide.jpg, id=121, 1806.75pt x 1505.625pt>
-File: NAG_JPT_SFS_GenomeWide.jpg Graphic file (type jpg)
-
-<use NAG_JPT_SFS_GenomeWide.jpg>
-Package pdftex.def Info: NAG_JPT_SFS_GenomeWide.jpg used on input line 98.
-(pdftex.def)             Requested size: 193.29735pt x 161.07042pt.
-LaTeX Font Info:    Font shape `T1/fos/bx/n' in size <9> not available
-(Font)              Font shape `T1/fos/b/n' tried instead on input line 99.
-
-<GWAS_Qual_GenomeWide_JPT.jpg, id=122, 2559.5625pt x 1656.1875pt>
-File: GWAS_Qual_GenomeWide_JPT.jpg Graphic file (type jpg)
-
-<use GWAS_Qual_GenomeWide_JPT.jpg>
-Package pdftex.def Info: GWAS_Qual_GenomeWide_JPT.jpg used on input line 105.
-(pdftex.def)             Requested size: 193.29735pt x 125.06793pt.
-
-Overfull \hbox (5.6512pt too wide) in paragraph at lines 110--111
-[]\T1/fos/m/n/10 (-20) To fur-ther in-ves-ti-gate the ex-tent to which
- []
-
-
-Overfull \hbox (12.22287pt too wide) in paragraph at lines 110--111
-\T1/fos/m/n/10 (-20) spu-ri-ous mu-ta-tions, we per-formed a genome-
- []
-
-
+[2]
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
 [3 <./NAG_JPT_SFS_GenomeWide.jpg>]
-<MapQualOverTime.jpg, id=134, 2409.0pt x 2409.0pt>
+<MapQualOverTime.jpg, id=144, 2409.0pt x 2409.0pt>
 File: MapQualOverTime.jpg Graphic file (type jpg)
  <use MapQualOverTime.jpg>
-Package pdftex.def Info: MapQualOverTime.jpg used on input line 120.
-(pdftex.def)             Requested size: 193.29735pt x 193.27531pt.
+Package pdftex.def Info: MapQualOverTime.jpg used on input line 136.
+(pdftex.def)             Requested size: 406.58981pt x 406.58392pt.
 
-<SNPOverlap6.jpg, id=136, 2409.0pt x 2107.875pt>
+<SNPOverlap6.jpg, id=146, 2409.0pt x 2107.875pt>
 File: SNPOverlap6.jpg Graphic file (type jpg)
  <use SNPOverlap6.jpg>
-Package pdftex.def Info: SNPOverlap6.jpg used on input line 130.
+Package pdftex.def Info: SNPOverlap6.jpg used on input line 146.
 (pdftex.def)             Requested size: 406.58981pt x 355.76093pt.
 
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
-[4 <./GWAS_Qual_GenomeWide_JPT.jpg> <./MapQualOverTime.jpg>]
+[4 <./GWAS_Qual_GenomeWide_JPT.jpg>]
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
-[5 <./SNPOverlap6.jpg>]
-Overfull \hbox (9.35846pt too wide) in paragraph at lines 141--141
-|\T1/fos/b/n/12 Higher qual-ity datasets don't have
- []
-
-
-Overfull \hbox (9.29842pt too wide) in paragraph at lines 151--151
-|\T1/fos/b/n/12 Found to be in-cluded in other GWA
- []
-
-
-Overfull \hbox (23.93646pt too wide) in paragraph at lines 155--159
-[]\T1/fos/m/n/10 (-20) Five of these stud-ies used the 1000 Genomes
- []
-
-
+[5 <./MapQualOverTime.jpg>]
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
-[6]
-Overfull \hbox (8.12865pt too wide) in paragraph at lines 176--178
-\T1/fos/m/n/10 (-20) than one pop-u-la-tion from the 1000 genomes
- []
-
-
-Overfull \hbox (0.69067pt too wide) in paragraph at lines 176--178
-\T1/fos/m/n/10 (-20) only way to dis-tin-guish some of these more
- []
-
-
-Overfull \hbox (1.36081pt too wide) in paragraph at lines 176--178
-\T1/fos/m/n/10 (-20) tests as-so-ci-at-ing the qual-ity met-rics of each
- []
-
-
-Overfull \hbox (4.17924pt too wide) in paragraph at lines 183--187
-\T1/fos/m/n/10 (-20) cused on the 1000 Genomes Project dataset
- []
-
-
-Overfull \hbox (0.37225pt too wide) in paragraph at lines 196--203
-\T1/fos/m/n/10 (-20) ob-tained from the BAS files as-so-ci-ated with
- []
-
-
-Overfull \hbox (9.97507pt too wide) in paragraph at lines 196--203
-\T1/fos/m/n/10 (-20) each sam-ple in the phase3 anal-y-sis se-quence
- []
-
-
-Overfull \hbox (2.69756pt too wide) in paragraph at lines 211--215
-\T1/fos/m/n/10 (-20) We re-pro-duced the qual-ity con-trol pipelines
- []
-
-
-Overfull \hbox (26.2944pt too wide) in paragraph at lines 211--215
-\T1/fos/m/n/10 (-20) gions were re-moved us-ing the [][]phast-Cons100way[][]
- []
-
-
-Overfull \hbox (0.5354pt too wide) in paragraph at lines 211--215
-\T1/fos/m/n/10 (-20) mask file and highly repet-i-tive re-gions were
- []
-
-
-Overfull \hbox (8.32504pt too wide) in paragraph at lines 211--215
-\T1/fos/m/n/10 (-20) also re-moved us-ing the [][]Nest-e-dRepeats[][] mask
- []
-
-
-Overfull \hbox (0.85512pt too wide) in paragraph at lines 211--215
-\T1/fos/m/n/10 (-20) with miss-ing-ness be-low 0.01, MAF less than
- []
-
-
+[6 <./SNPOverlap6.jpg>]
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
 [7]
-Overfull \hbox (14.42966pt too wide) in paragraph at lines 218--219
-\T1/fos/m/n/10 (-20) Using PLINK v1.90b4.4 we ran a lin-ear genome
+Overfull \hbox (6.0pt too wide) has occurred while \output is active
+ [][][][][][][]| 
  []
 
-
-Overfull \hbox (12.71703pt too wide) in paragraph at lines 218--219
-\T1/fos/m/n/10 (-20) each pop-u-la-tion of the 1000 Genomes Project.
- []
-
-
-Overfull \hbox (23.42644pt too wide) in paragraph at lines 226--227
-\T1/fos/m/n/10 (-20) im-puted the geno-type data from 1000 Genomes
- []
-
-
+[8] 
 AED: lastpage setting LastPage
 
 Overfull \hbox (6.0pt too wide) has occurred while \output is active
  [][][][][][][]| 
  []
 
-[8] (./Draft3.suppinfo)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 235.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 235.
+[9] (./Draft3.suppinfo)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 254.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 254.
  (./Draft3.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 235.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 235.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 254.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 254.
 Package rerunfilecheck Info: File `Draft3.out' has not changed.
-(rerunfilecheck)             Checksum: 25042CEDCFAE82E17721D41B44A8061F;1706.
+(rerunfilecheck)             Checksum: 9617F3E753CB9942C5CD8AE2665BC44C;1803.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 23176 strings out of 493089
- 394993 string characters out of 6134842
- 541231 words of memory out of 5000000
- 25936 multiletter control sequences out of 15000+600000
- 86836 words of font info for 318 fonts, out of 8000000 for 9000
+ 23324 strings out of 493089
+ 397824 string characters out of 6134842
+ 541657 words of memory out of 5000000
+ 26034 multiletter control sequences out of 15000+600000
+ 134773 words of font info for 389 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 49i,15n,45p,10420b,927s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-03.enc}
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-04.enc}{/
-usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-01.enc}</us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/opensans/OpenSans-Bold.pfb><
-/usr/local/texlive/2015/texmf-dist/fonts/type1/public/opensans/OpenSans-Regular
-.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/stix/stix-mathrm.pf
-b>
-Output written on Draft3.pdf (8 pages, 1941019 bytes).
+ 49i,15n,49p,10420b,927s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{page.10} has been referenced but does not exist, 
+replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-03.enc}{/
+usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-04.enc}{/us
+r/local/texlive/2015/texmf-dist/fonts/enc/dvips/opensans/opensans-01.enc}</usr/
+local/texlive/2015/texmf-dist/fonts/type1/public/opensans/OpenSans-Bold.pfb></u
+sr/local/texlive/2015/texmf-dist/fonts/type1/public/opensans/OpenSans-Regular.p
+fb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/stix/stix-mathrm.pfb>
+Output written on Draft3.pdf (9 pages, 1942569 bytes).
 PDF statistics:
- 203 PDF objects out of 1000 (max. 8388607)
- 184 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
- 25821 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 218 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
+ 42 named destinations out of 1000 (max. 500000)
+ 46829 words of extra memory for PDF output out of 51595 (max. 10000000)
 
