@@ -90,51 +90,55 @@ We then consider methods to discriminate sequencing errors resulting from dated 
 Next, we explore more broadly how low quality variants remain embedded in other populations of the 1kGP.
 Finally, we will discuss the impact these variants have on modern analyses.
 
-
 			\section{Results}
-	\subsection{A heterogeneously distributed mutational signal}			
-Upon comparing the allele frequencies between the two datasets, we observed an unusually large number of private SNPs despite both cohorts being from the same population.
-Surprisingly, the SNPs responsible for the signal observed by Harris et. al (2017) were missing in the more recent dataset. 
+	\subsection{A peculiar mutational signal}			
+One way to contrast two populations is by comparing the frequencies of the same variants in both populations.
+If the two groups are sampled from the same population, we expect there to be little deviation in allele frequencies.
+However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and a more recent dataset, we observed an unusually large number of private SNPs.
+Surprisingly, the variants responsible for the signal observed by Harris et. al (2017) were missing in the more recent dataset. 
 \todo{plot SFS NAG vs JPT}
-We also noticed that the individuals carrying these mutations all had lower average quality scores.
+We also noticed that the individuals carrying these mutations all had lower average quality scores of mapped bases.
 This suggested that individuals with lower quality were driving this signal.
 \todo{plot PC1 vs Qual}
 
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{NAG_JPT_SFS_GenomeWide.jpg}
+\caption{Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent dataset. Out of \todo{000} total SNPs, \todo{000} of them are missing in one population but present in the other by more than 1\%.}
+ \label{SFS}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{GWAS_Qual_GenomeWide_JPT.jpg}
+\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
+ \label{Figure2}
+\end{figure}
 
 To further investigate	 the extent to which low quality individuals were associated to spurious mutations, we performed a genome-wide association (GWA) study  \ref{Figure2}. GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
  
-Using the linear GWAS function offered by PLINK, we were able to identify \todo{000 $10^{-8}$ and 000 $10^{-6}$} SNPs that were associated to the average quality of SNPs mapped for an individual \ref{Figure2}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
+Using the linear GWA study function offered by PLINK, we were able to identify \todo{000 $10^{-8}$ and 000 $10^{-6}$} SNPs that were associated to the average quality of SNPs mapped for an individual \ref{Figure2}.  This GWA study included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
 
 \todo{does getting rid of these SNPs get rid of the signal? What is the lowest frequency SNP that is statistically significant?}
 
 	\subsection{Average quality of mapped snps Quality Over Time}
 As one would expect, the sequencing quality of individuals increases over time \ref{Figure1}. Sequencing centers improve on their laboratory techniques and sequencing technologies improve from one generation to the next. The magnitude and impact of the differences in quality within and between populations has not yet been explored. 
 
-\begin{figure*}
+\begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
 
 \caption{A) The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The average mapping quality per individual was obtained from the raw alignment index data for each sample. The X axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. B) Same data as in A) except the X axis is now sorted by sequencing date, and the colors indicate the sequencing centers that produced the data for each individual.}
 \label{Figure1}
-\end{figure*}
-
-	\subsection{Genome Wide Association}
-
-
-\begin{figure*}
-\includegraphics[width=\hsize,keepaspectratio]{GWAS_Qual_GenomeWide_JPT.jpg}
-\caption{Genome wide association of the average quality of mapped bases for the Japanese individuals included in the 1000 Genomes Project. This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project. The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
- \label{Figure2}
-\end{figure*}
+\end{figure}
 
 	\subsection{Overlap of Significant SNPs}
-Comparing the results of each independent GWAS, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
+Comparing the results of each independent GWA study, we were able to identify over 0000 variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a very strong result suggesting that these variants might not be legitimate  \ref{Figure3}. 
 
-\begin{figure*}
+\begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
 
-\caption{Overlap of SNPs identified independently to be associated with quality. Not surprisingly, the populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
+\caption{Overlap of SNPs identified independently to be associated with quality. The populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
   \label{Figure3}
-\end{figure*}
+\end{figure}
 
 	\subsection{Significant SNPs}
 When we remove individuals below a quality of 30, population structure is clarified. 
@@ -144,21 +148,21 @@ Therefore, when these low quality sites are removed, the mutational signal is al
 	\subsection{Higher quality datasets don't have these SNPs}
 
 Interestingly, the SNPs we identified had already been removed in higher quality datasets. 
-These HQ datasets also have filtered more SNPs than the GWAS was able to identify. 
-When we compare the allele frequencies between the 1000 Genomes project Japanese population to a more contemporary dataset, there are many more sites that are enriched with the same mutational signature as described above that are not identified using a GWAS. 
+These HQ datasets also have filtered more SNPs than the GWA study was able to identify. 
+When we compare the allele frequencies between the 1000 Genomes project Japanese population to a more contemporary dataset, there are many more sites that are enriched with the same mutational signature as described above that are not identified using a GWA study. 
 This suggests that we lack the power to identify all the questionable variants from these legacy datasets. 
 
 	\subsection{Imputation}
 ~30\% of the SNPs we identified as being associated with low quality were found to be imputed using the Michigan Imputation Server. These  should be removed from reference database
 
-	\subsection{Found to be included in other GWAS}
+	\subsection{Found to be included in other GWA studies}
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWA studies that might have called these erroneous variants as being significantly correlated with some biological trait. 
 Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 6 recent publications that had found at least one of the variants to have reached genome wide significance in their study. 
 
 Five of these studies used the 1000 Genomes Project as the reference database for imputation and one used the 1000 Genomes Project cell cultures and sequence data. 
 They used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, allele frequency differences using reference populations. 
 They also removed rare alleles and alleles with high degrees of missingness. 
-Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also to reach genome wide significance for the traits they were testing for. 
+Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. 
 
 			\section{Discussion}
 \subsection{Why do we care?}
@@ -169,15 +173,16 @@ They were not caught sooner because the batch effect of 1000 genomes had never b
 Our GWAS method was able to identify \todo{000} variants that are likely to be false positives.
 
 We compared the number of SNPs identified in the GWAS to the number of sites that differed between our higher quality Japanese dataset and found that 100?\% of the sites were also missing from the Fumi data. 
-Because we are running the GWAS on a per-population base, for rarer mutations, we are lacking the power to identify these significant SNPs.  
+Because we are running the GWA study on a per-population base, for rarer mutations, we are lacking the power to identify these significant SNPs.  
 However, upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified \todo{000} more variants that are beyond the expected frequency spectrum deviation for individuals from the same population. 
-This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
+This suggests that while the GWA approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
 The most conservative approach would be to remove all individuals that don't meet the quality threshold. 
 In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been previously used by \todo{000} studies.
 
-\subsection{GWAS from other papers}
+\subsection{GWA studies from other papers}
 Since these variants are present in more than one population from the 1000 genomes project, they are more likely to be associated to biological traits as they would appear to be like any other variant that is shared among multiple populations. 
 The only way to distinguish some of these more covert false positives is to use statistical tests associating the quality metrics of each position relative to each individual. 
+
 \subsection{Why were these SNPs even associated in the first place?}
 [due to the temporal nature of the batch effects, and because entire populations were sequenced in one centre on one day, the false positives are more likely to cluster with population structure or case/control?]
 
