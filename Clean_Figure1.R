@@ -51,7 +51,6 @@ HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme
 
 SPECT=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
-labs(subtitle=paste(nrow(SNP),'Significant SNPs'))+
 theme(plot.title = element_blank(),
 plot.subtitle = element_text(hjust = 0.5), 
 axis.title=element_blank(),
@@ -61,21 +60,17 @@ strip.background=element_blank())+
 scale_fill_gradient(low='white', high='blue',
 guide = guide_legend(title = 'Enrichment',title.position = "top"))
 
-p3=
-plot_grid(HIST,SFS,SPECT,nrow=1,rel_widths=c(1,5,1.5), align = 'h', labels=c('A','','B'))
+p3=plot_grid(HIST,SFS,SPECT,nrow=1,rel_widths=c(1,5,1.5), align = 'h', labels=c('A','','B'))
 ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
 
-fname=paste('/Users/luke/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_',pop,'_GWAS_Qual_ci.assoc.linear',sep='')
+fname='/Users/luke/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_JPT_GWAS_Qual_ci.assoc.linear'
 tab5rows <- read.table(fname, header = TRUE, nrows = 5, row.names=NULL)
 classes <- sapply(tab5rows, class)
-assoc<-read.table(fname, header=T,col.classes= classes)
-print(paste('##### read file complete :',pop))
+assoc<-read.table(fname, header=T,colClasses= classes)
 assoc$Plog10=-log10(assoc$P)
 
-assoc$fill=1
-assoc[which(assoc$CHR %% 2 == T),]$fill = 2
 
-ggplot(assoc, aes(x=BP, y = Plog10, color=as.factor(CHR)))+
+GWAS=ggplot(assoc, aes(x=BP, y = Plog10, color=as.factor(CHR)))+
 facet_grid(~CHR, scales='free_x', space='free_x', switch='x')+
 scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
@@ -91,3 +86,6 @@ axis.line.x=element_blank(),
 strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)
+
+fig1=plot_grid(p3, GWAS, ncol=1, rel_heights=c(3,2), labels=c('','C'))
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=7,width=7)
