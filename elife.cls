@@ -154,7 +154,7 @@
 \fancyhf{}
 \chead{%
 \setlength{\fboxsep}{3pt}
-\colorbox{eLifeMediumGrey}{\begin{minipage}{\headwidth}\centering\color{white} Manuscript submitted to eLife\end{minipage}}%
+%\colorbox{eLifeMediumGrey}{\begin{minipage}{\headwidth}\centering\color{white} Manuscript submitted to eLife\end{minipage}}%
 }
 
 % Footers
