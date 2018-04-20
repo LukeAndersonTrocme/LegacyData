@@ -23,13 +23,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Legacy Data Confounds Modern Genomics Studies}
 
-\author[1]{Luke Anderson-Trocm\'e}
+\author[1,2]{Luke Anderson-Trocm\'e}
 \author[1,2]{Simon Gravel}
 
 \affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
 \affil[2]{McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada}
 
-\corr{luke.anderson-trocme@mail.mcgill.ca}{LAT}
+\corr{simon.gravel@mcgill.ca}{SG}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE START
@@ -48,7 +48,7 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 \end{abstract}
 
 			\section{Introduction}
-	\subsection{Big Data}			
+	\subsection{Reference Cohorts}			
 The last 5 years has seen an increase in the number of individuals genotyped through private companies or medical research cohorts. 
 Larger sample sizes allow researchers to identify finer resolution statistically significant differences between groups of individuals. 
 Mutations associated to a disease can be identified by comparing the genomes of healthy individuals to those afflicted by a disease. 
@@ -64,17 +64,7 @@ Genome wide associations using large cohorts have lead to developments in the id
 Despite drastic reductions in cost of whole genome sequencing, it remains an expensive test for large sample sizes.
 For this reason, genotype data is often imputed to increase power for association studies in a cost effective way.
 
-
-Imputation of genotype data is a probabilistic method that infers the bases of a given genome based on its similarity to a set of reference genomes.
-While on average, two humans differ in about 1/10,000 bases, this number is \todo{lower} in closely related individuals, and \todo{higher} in individuals from different continental origins.
-Modern chip sequencing will provide the genotype information for over 1 million bases of the genome.
-The unique combination of genotyped bases can be enough to identify haplotype blocks that are identical by descent in individuals form the reference database.
-
-
-The accuracy of imputation depends on the size of the reference database; this varies significantly from one population to another.
-This means that individuals with ancestry that is less well represented in the reference database will have lower accuracy of imputation.
-To overcome this bias, reference databases are often combined to increase the sample size and in turn, the accuracy of imputation.
-
+\luke{cut paragraph to discussion}
 
 Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
@@ -193,6 +183,17 @@ This is likely because these variants have no peak in LD that is characteristic 
 \subsection{Recommendations}
 The most conservative approach would be to remove all individuals that don't meet the quality threshold as well as all the variants associated to low quality.
 In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been \todo{previously used by studies}. It is the minimum requirements for \todo{GATK variant calling} for them to have a minimum quality of 30.
+
+\subsection{Imputation}
+Imputation of genotype data is a probabilistic method that infers the bases of a given genome based on its similarity to a set of reference genomes.
+While on average, two humans differ in about 1/10,000 bases, this number is \todo{lower} in closely related individuals, and \todo{higher} in individuals from different continental origins.
+Modern chip sequencing will provide the genotype information for over 1 million bases of the genome.
+The unique combination of genotyped bases can be enough to identify haplotype blocks that are identical by descent in individuals form the reference database.
+
+
+The accuracy of imputation depends on the size of the reference database; this varies significantly from one population to another.
+This means that individuals with ancestry that is less well represented in the reference database will have lower accuracy of imputation.
+To overcome this bias, reference databases are often combined to increase the sample size and in turn, the accuracy of imputation.
 
 \subsection{GWA studies from other papers}
 Since these variants are present in more than one population from the 1000 genomes project, they are more likely to be associated to biological traits as they would appear to be like any other variant that is shared among multiple populations. 

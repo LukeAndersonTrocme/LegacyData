@@ -78,14 +78,14 @@ plt$Freq<-plt$Freq/m
 ##CHANGE THIS??
 
 SFS=ggplot(data= pltspect, aes(x=NAG_V6, y=JPT_V6))+
-geom_bin2d(binwidth=c(1/100, 1/100))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
+geom_bin2d(binwidth=c(1/884, 1/104))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
 scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000'))+
 scale_x_continuous(expand=c(0.01,0.01))+
 scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
 xlab(label="NAG")
 
-HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
+HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 
 SPECT=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
