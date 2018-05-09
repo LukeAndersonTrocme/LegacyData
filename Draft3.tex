@@ -131,9 +131,7 @@ The lowest frequency variants that are significantly associated to quality are a
 When we remove all the variants above 1\% in 1kGP but missing from the NAG data, the signal disappears.
 This suggests that while the GWA approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
 
- \luke{more here about using higher quality data to validate legacy data}. Upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified \todo{000} more variants that are beyond the expected frequency spectrum deviation for individuals from the same population.
- 
-\todo{supplementary figures : genome wide, mutspect without sig snps, and without <30}
+One way to assess the validity of these unusual variants is to see if they are present in a higher quality dataset. Upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified \todo{000} more variants that are beyond the expected frequency spectrum deviation for individuals from the same population. 
 
 	\subsection{Sequencing quality over time}
 We turned our attention to the other populations in the 1kGP, we found that the sequencing done in phase 1 was more variable and overall tended to include lower quality sequencing data \ref{MapQual}.
@@ -146,6 +144,7 @@ By 2011 the sequencing quality seems to level off.
 \caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The x-axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. \textbf{B} Same data as in \textbf{A} except the x-axis is sorted by sequencing date. The colors indicate the sequencing centers that produced the data for each individual.}
 \label{MapQual}
 \end{figure}
+
 
 	\subsection{Overlap of significant SNPs}
 Comparing the results of each independent GWA study, we were able to identify over \todo{0000} variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a strongly suggests that these variants might not be genuine \ref{Figure3}. 

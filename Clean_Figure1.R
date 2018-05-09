@@ -36,19 +36,18 @@ j<-j[,c('JPT_V1', 'JPT_V2','JPT_V6', 'NAG_V6', 'sum')]
 write.table(j,'~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
 #j<-read.table('~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
 
-tab5rows <- read.table('~/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_JPT_GWAS_Qual_ci.assoc.linear', header = TRUE, nrows = 5, row.names=NULL)
+tab5rows <- read.table('/Users/luke/Documents/1FinalGWAS/1kGP_Chr2.4bed_filtered.assoc.linear', header = T, nrows = 5, row.names=NULL)
 classes <- sapply(tab5rows, class)
-GWAS_JPT<-read.table('~/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_JPT_GWAS_Qual_ci_sig4.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
+GWAS_JPT<-read.table('/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
 GWAS_JPT$Plog10= -log10(GWAS_JPT$P)
 sig6<-GWAS_JPT[which(GWAS_JPT$Plog10 > 6),]
-
 
 
 pltspect<-merge(j, sig6, by.x=c('JPT_V1', 'JPT_V2'), by.y=c('CHR','BP'), all.x=T)
 
 jj<-pltspect[complete.cases(pltspect),]
 
-SNP<-read.table('~/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_JPT_Sig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+SNP<-read.table('/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
 
 ReverseComp <- function(x)
         chartr("ATGC","TACG",
@@ -78,14 +77,14 @@ plt$Freq<-plt$Freq/m
 ##CHANGE THIS??
 
 SFS=ggplot(data= pltspect, aes(x=NAG_V6, y=JPT_V6))+
-geom_bin2d(binwidth=c(1/100, 1/100))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
+geom_bin2d(binwidth=c(1/884, 1/104))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
 scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000'))+
 scale_x_continuous(expand=c(0.01,0.01))+
 scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
 xlab(label="NAG")
 
-HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
+HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 
 SPECT=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
@@ -98,13 +97,15 @@ strip.background=element_blank())+
 scale_fill_gradient(low='white', high='blue',
 guide = guide_legend(title = 'Enrichment',title.position = "top"))
 
-p3=plot_grid(SPECT,HIST,SFS,nrow=1,rel_widths=c(1.5,1,5), align = 'h', labels=c('A','','B'))
+A=plot_grid(SPECT,labels=c('A'))
+B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
+AB=plot_grid(A,B, rel_widths=c(1,5))
 #ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
 
-fname='/Users/luke/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_JPT_GWAS_Qual_ci.assoc.linear'
+fname='/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_noNA.assoc.linear'
 tab5rows <- read.table(fname, header = TRUE, nrows = 5, row.names=NULL)
 classes <- sapply(tab5rows, class)
-assoc<-read.table(fname, header=T,colClasses= classes)
+assoc<-read.table(fname, header=TRUE, colClasses= classes)
 assoc$Plog10=-log10(assoc$P)
 
 
@@ -124,6 +125,6 @@ axis.line.x=element_blank(),
 strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)
-
-fig1=plot_grid(p3, GWAS, ncol=1, rel_heights=c(3,2), labels=c('','C'))
+# my office mate whom sits next to me is my boss! 
+fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
 ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=7,width=7)
