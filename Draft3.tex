@@ -68,26 +68,28 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 
 The last 5 years have seen a drastic increase in the amount and quality of human genomes sequence data. Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity project \cite{}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
-Many of these large datasets comprise have been assembled over many years. The first sequenced genomes in the 1000 Genomes project, for example, were sequenced XX years ago, at a time when \sgcomment{blah blah blah}. Because of the extraordinary value of freely available data, this early data from the 1000 Genomes Project is still widely used as a reference panel for ...
+Many of these large datasets comprise have been assembled over many years. The first sequenced genomes in the 1000 Genomes project, for example, were sequenced XX years ago, at a time when \sgcomment{blah blah blah}. Because of the extraordinary value of freely available data, this early data from the 1000 Genomes Project is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
 Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
 
-
 \subsection{Motivations}
 
-A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. \sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} Mutation rate at a given base pair has long been known to depend on the neighbouring nucleotides \cite{}. Finer scale patterns have been reported in \cite{}. \sgcomment {then define mutational signature (ideally, more of a biological definition), and move on to the Harris paper}
+%A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
+%\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
+Mutation rate at a given base pair has long been known to depend on the neighbouring nucleotides \cite{}. 
+Finer scale patterns have been reported in \cite{}. 
+\sgcomment {then define mutational signature (ideally, more of a biological definition), and move on to the Harris paper}
 
 
-
-In 2015, Harris et al reported an overrepresentation of the TCC to TTC mutation in European populations. \sgcomment{quantify}
+In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations.
 Harris and Pritchard published a follow up study comparing how various ethnic groups differ from one another with respect to their mutational spectrum. 
 In this paper, they proposed that not only is there a distinct mutational spectrum difference in Europeans, but that these changes are present in most human populations. 
-One result was of particular interest to our research group \sgcomment{unless needed, no need to involve our persons in the study} : the heterogeneously distributed signal found in a subset of Japanese individuals. 
+One result was of particular interest the heterogeneously distributed signal found in a subset of Japanese individuals. 
 A mutational signature that is present unevenly across a population is unexpected because it suggested strong population structure; unlikely for a dense population living on an archipelago.
 
 While trying to follow up on this observation, we were unable to reproduce this particular observation in a different dataset. Tracing back the source of the discrepancy between the two datasets, we identified a strong and previously unreported batch effect in the 1000 Genomes Project data, and found that this batch effect led to spurious results in a number of recently published studies. 
 
-Here we discuss the source of the batch effect and the ways in which these batch effects contaminated a number of recent studies. Fortunately, the main conclusions of \sgcomment{most of} these studies remain supported by other data.  Yet this begs the question: When should we retire legacy data?
+Here we discuss the source of the batch effect and the ways in which these batch effects contaminated a number of recent studies. Fortunately, the main conclusions of most of these studies remain supported by other data.  Yet this begs the question: When should we retire legacy data?
 
 
 %\subsection{Imputation}
@@ -97,18 +99,7 @@ Here we discuss the source of the batch effect and the ways in which these batch
 %\sgcomment{Too wordy (also, readers of Nature genetics know about imputation!: Despite drastic reduction in sequencing costs, genotyping and imputation remain a more affordable and popular approach for large-scale cohorts.}
 
 
-
-
-
-
-
-
-
-
-
-\luke{cut paragraph to discussion}
-
-Combining data can be an issue when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
+Combining data can be an issue especially when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
 The errors in one dataset don't disappear when they are combined with another higher quality one. 
 Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
 Is it time to retire legacy data? 
@@ -118,14 +109,15 @@ Is it time to retire legacy data?
 
 			\section{Results}
 	\subsection{A peculiar mutational signature in Japan}			
-If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups. \sgcomment {Here again, you are a bit procedural. It's useful to explain to the reader the logical flow of how you got to doing what you are doing: Harris et al reported an excess of XYZ to XWZ mutations in some Japanese individuals. While trying to follow up on this observations in a larger cohort of XXX Japanese individuals, [[some info about cohort]], we did not find this particular signature.}
-However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. \sgcomment{These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium, ...}
+If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups. 
+%\sgcomment {Here again, you are a bit procedural. It's useful to explain to the reader the logical flow of how you got to doing what you are doing:} 
+Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in some Japanese individuals. 
+While trying to follow up on this observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
+However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
 
-Once mismatch sites were removed from the 1kGP data, the XYZ - W \sgcomment{I would call the effect by the name of the signature rather than harris et al -- more descriptive, less personal.} signal disappears \ref{Figure1} \sgcomment{usually you give a descriptie name to labels, latex will figure out the numbers!}, suggesting a technical artifact rather than a population structure effect. Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the XYZ mutational signature in 1kGP, with low-quality individuals showing elevated rates of the signature. (\sgcomment{show supplementary Figure where you did the correlations})
+Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with low-quality individuals showing elevated rates of the signature. (\sgcomment{show supplementary Figure where you did the correlations})
  
- Thus sequences with low mappability harbor mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
-
-
+ Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{Figure1.jpg}
@@ -141,17 +133,13 @@ There is a \todo{significant} enrichment in *AC${\rightarrow}$*CC mutations.
 \textbf{C} 
 Genome wide association of the average quality of mapped bases for the 104 Japanese individuals included in the 1000 Genomes Project. This GWA study identified $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual
 The same analysis was performed independently for each of the populations in the 1000 Genomes Project. }
- \label{Figure1}
+ \label{SFS}
 \end{figure}
 
-To further investigate	 the extent to which low quality individuals \sgcomment{low quality sequence data! "low quality individuals" (= deplorables?) can get you in trouble!}  were associated to spurious mutations, we performed a genome-wide association (GWA) study  \ref{Figure1}. \sgcomment{I would rather have: To identify SNPs that are associated with low quality, we performed }
-
-
-
-
+To identify SNPs that are associated with low quality, we performed, we performed a genome-wide association (GWA) study  \ref{SFS}. 
 GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
  
-Using the linear GWA study function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{Figure1}.  This GWA study included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
+Using the linear GWA study function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWA study included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 
 Despite removing the variants identified as being low quality, the signal persists. 
