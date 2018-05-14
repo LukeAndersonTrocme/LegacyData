@@ -93,9 +93,9 @@ In this paper, they proposed that not only is there a distinct mutational spectr
 One result was of particular interest the heterogeneously distributed signal found in a subset of Japanese individuals. 
 A mutational signature that is present unevenly across a population is unexpected because it suggested strong population structure; unlikely for a dense population living on an archipelago.
 
-While trying to follow up on this observation, we were unable to reproduce this particular observation in a different dataset. Tracing back the source of the discrepancy between the two datasets, we identified a strong and previously unreported batch effect in the 1000 Genomes Project data, and found that this batch effect led to spurious results in a number of recently published studies. 
+While trying to follow up on this observation, we were unable to reproduce this particular observation in a different dataset. Tracing back the source of the discrepancy between the two datasets, we identified a strong and previously unreported batch effect in the 1000 Genomes Project data, and found that this led to spurious results in a number of recently published studies. 
 
-Here we discuss the source of the batch effect and the ways in which these batch effects contaminated a number of recent studies. Fortunately, the main conclusions of most of these studies remain supported by other data.  Yet this begs the question: When should we retire legacy data?
+Here we discuss the source of the batch effect and the ways in which it contaminated a number of recent studies. Fortunately, the main conclusions of most of these studies remain supported by other data.  Yet this begs the question: When should we retire legacy data?
 
 
 %\subsection{Imputation}
@@ -110,7 +110,6 @@ However, combining data can be an issue especially when the quality of the data 
 The errors in one dataset don't disappear when they are combined with another higher quality one.
 This is rapidly becoming a relevant issue as newer technologies have lower error rates, and quality controls become more stringent.
 Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
-Instead of blindly combining old data with new data, is it time to retire legacy data that does not meet modern day sequencing quality thresholds? 
 
 %\sgcomment{As a style issue: you tend to write sentences without indicating the logical flow between them. It makes it hard to follow. }
 
@@ -145,14 +144,14 @@ The same analysis was performed independently for each of the populations in the
  \label{SFS}
 \end{figure}
 
-To identify SNPs that are associated with low quality, we performed, we performed a genome-wide association (GWA) study  \ref{SFS}. 
+To identify SNPs that are associated with low quality, we performed a genome-wide association (GWA) study  \ref{SFS}. 
 GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
  
 Using the linear GWA study function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWA study included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 
 Despite removing the variants identified as being low quality, the signal persists. 
-When we remove the variants significantly associated to low quality, the signal identified by Harris et. al (2017) the enrichment in *AC${\rightarrow}$*CC mutations. 
+When we remove the variants significantly associated to low quality, the enrichment in *AC${\rightarrow}$*CC mutations remains present, but \todo{less} significant. 
 When we remove individuals with average quality of mapped SNPs below 30, the signal goes away. 
 We suspect that this has to do with the lack of power we have for more rare alleles. 
 The lowest frequency variants that are significantly associated to quality are at 5\%. 
@@ -179,7 +178,9 @@ Comparing the results of each independent GWA study, we were able to identify ov
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
 
-\caption{Overlap of SNPs identified independently to be associated with quality. The populations that have the most low-quality individuals also have the most low-quality variants. What is interesting here, is that the same variants identified as being low quality independently in each population are found in other populations. }
+\caption{Overlap of SNPs identified independently to be associated with quality. 
+The populations that have the most low-quality individuals also have the most low-quality variants. 
+The same variants identified as being low quality independently in each population are found in other populations. }
   \label{Figure3}
 \end{figure*}
 
@@ -190,16 +191,16 @@ Comparing the results of each independent GWA study, we were able to identify ov
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWA studies that might have called these erroneous variants as being significantly correlated with some biological trait. 
 Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 6 recent publications that had found at least one of the variants to have reached genome wide significance in their study. 
 
-Five of these studies used the 1000 Genomes Project as the reference database for imputation and one used the 1000 Genomes Project cell cultures and sequence data. 
-They used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, allele frequency differences using reference populations. 
+Five of these studies used the 1kGP as the reference database for imputation and one used the 1kGP cell cultures and sequence data. 
+They used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
 They also removed rare alleles and alleles with high degrees of missingness. 
 Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. 
 
 			\section{Discussion}
 \subsection{Why do we care?}
 These SNPs matter because they reached genome wide significance for medically relevant traits. 
-Could lead to false diagnosis at worst, or spurious correlations at least. 
-Polygenic risk scores take into account all snps reaching significance, without much manual curation. 
+Including these variants in the GWAS catalogue could lead to false diagnosis at worst, or spurious correlations at least. 
+Polygenic risk scores take into account all SNPs reaching significance, without much manual curation. 
 It's likely that the variants we have identified are being included in these multi-locus risk scores.
 
 
@@ -230,10 +231,10 @@ The only way to distinguish some of these more covert false positives is to use 
 			\section{Conclusion}
 Our method identifies spurious mutations by correlating mutations with data quality metrics. 
 We propose including our quality control methods to identify possible false positives in sequencing data. 
-We have focused on the 1000 Genomes Project dataset as its quality metrics were feely available, however the issues of quality control are not limited to this one consortium. 
+We have focused on the 1000 Genomes Project dataset as its quality metrics were freely available, however the issues of quality control are not limited to this one consortium. 
 This study only used one dataset and one quality metric, but using this same approach can be used to identify more false positives in many more datasets. 
 
-As more and more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the amplification of false positives. 
+As more and more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the propagation of false positives. 
 These results bring forth many questions regarding the reliability of legacy datasets. 
 Moreover, since there are so many broad applications of imputation, it frames the question for reference data turnover. 
 
