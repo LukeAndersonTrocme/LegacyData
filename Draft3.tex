@@ -66,9 +66,13 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 
 %\sgcomment{This intro paragraph is much too vague -- it reads like general thoughts about genetics at large. We need to be much more concise. I would start with something like:}
 
-The last 5 years have seen a drastic increase in the amount and quality of human genomes sequence data. Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity project \cite{}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
+The last 5 years have seen a drastic increase in the amount and quality of human genomes sequence data. 
+Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity project \cite{}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
+Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
-Many of these large datasets comprise have been assembled over many years. The first sequenced genomes in the 1000 Genomes project, for example, were sequenced XX years ago, at a time when \sgcomment{blah blah blah}. Because of the extraordinary value of freely available data, this early data from the 1000 Genomes Project is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
+Many of these large datasets comprise have been assembled over many years. 
+The first sequenced genomes in the 1000 Genomes project, for example, were sequenced \todo{10} years ago, at a time when the accuracy of sequencing technologies was still being acertained. %\sgcomment{blah blah blah}. 
+Because of the extraordinary value of freely available data, this early data from the 1000 Genomes Project is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
 Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
 
@@ -77,8 +81,10 @@ Yet this data is far from perfect \sgcomment{cite papers that have pointed out i
 %A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 %\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
 Mutation rate at a given base pair has long been known to depend on the neighbouring nucleotides \cite{}. 
-Finer scale patterns have been reported in \cite{}. 
-\sgcomment {then define mutational signature (ideally, more of a biological definition), and move on to the Harris paper}
+Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
+Many mutational types are caused by environmental sources or by faulty DNA replication.
+Systematic mutational patterns like thymine dimers caused by ultraviolet light, are measurable by taking the sum of all the different types of mutations in an individual.
+%\sgcomment {then define mutational signature (ideally, more of a biological definition), and move on to the Harris paper}
 
 
 In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations.
@@ -99,11 +105,14 @@ Here we discuss the source of the batch effect and the ways in which these batch
 %\sgcomment{Too wordy (also, readers of Nature genetics know about imputation!: Despite drastic reduction in sequencing costs, genotyping and imputation remain a more affordable and popular approach for large-scale cohorts.}
 
 
-Combining data can be an issue especially when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
-The errors in one dataset don't disappear when they are combined with another higher quality one. 
+Datasets are often combined to increase power or diversity of a dataset.
+However, combining data can be an issue especially when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
+The errors in one dataset don't disappear when they are combined with another higher quality one.
+This is rapidly becoming a relevant issue as newer technologies have lower error rates, and quality controls become more stringent.
 Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
-Is it time to retire legacy data? 
-\sgcomment{As a style issue: you tend to write sentences without indicating the logical flow between them. It makes it hard to follow. }
+Instead of blindly combining old data with new data, is it time to retire legacy data that does not meet modern day sequencing quality thresholds? 
+
+%\sgcomment{As a style issue: you tend to write sentences without indicating the logical flow between them. It makes it hard to follow. }
 
 	
 
