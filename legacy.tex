@@ -69,20 +69,21 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 %\sgcomment{This intro paragraph is much too vague -- it reads like general thoughts about genetics at large. We need to be much more concise. I would start with something like:}
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
-Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity project \cite{}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
+Hapmap [\cite{}], the 1000 Genomes Project [\cite{}], and the Simons Diversity project [\cite{}], for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
 Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
 Many of these large datasets have been assembled over many years. 
-The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, at a time when sequencing technologies were still being . %\sgcomment{blah blah blah}. 
+The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, before most of the current best technologies and analysis practices were in place. 
 Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
-Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
+Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
+
 
 \subsection{Motivations}
 
 %A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 %\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
-Mutations can occur in the genome as a result of environmental inflictions as well as variation in genetic factors like DNA proofreading and repair \cite{}.
+Mutations can occur in the genome as a result of environmental inflictions as well as variation in genetic factors like DNA proofreading and repair [\cite{}].
 Many mutagens leave signatures that are specific to a genomic context \cite{}.
 This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation \cite{}.
 Thymine dimers caused by UV radiation were detected early on because they were highly specific and easy to study \cite.
@@ -90,14 +91,13 @@ However,  signatures caused by natural variations in the sequence of proteins in
 A large sample size can be used to increase statistical power to resolve some of these fine scale mutational signatures \cite{}.
 %Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
 
-In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations.
-Harris and Pritchard published a follow up study comparing how various ethnic groups differ from one another with respect to their mutational spectrum. 
-In this paper, they proposed that not only is there a distinct mutational spectrum difference in Europeans, but that many populations have their own mutational signatures.
-One result was of particular interest the heterogeneously distributed signal found in a subset of Japanese individuals. 
-A mutational signature that is present unevenly across a population is unexpected because it suggested strong population structure; unlikely for a dense population living on an archipelago.
+In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations. This strong population enrichment of a mutational signature suggests important genetic or environmental differences in the history of each population, and was replicated in a different cohort \cite{}.  
+Harris and Pritchard further identified distinct mutational spectra across a range of populations [\cite{}]. In particular, they identified an axis of variation within 1000 Genomes Japanese individuals. 
+Such an axis of variation is intriguing because differences in mutational signatures accumulate over many generations. A systematic difference among the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow. We therefore decided to follow up on this observation, by using a newly sequenced dataset \sgcomment{description of cohort. }
 
-While trying to follow up on this observation, we were unable to reproduce this particular observation in a different dataset. Tracing back the source of the discrepancy between the two datasets, we identified a strong and previously unreported batch effect in the 1000 Genomes Project data, and found that this led to spurious results in a number of recently published studies. 
+While we were unable to reproduce the heterogeneity among the Japanese population, we could trace back the source of the discrepancy between the two datasets and identified a strong and previously unreported batch effect in the 1000 Genomes Project data. We also found that this batch effect led to spurious results in a number of recently published studies. 
 
+\sgcomment{In section ..., we...}
 Here we discuss the source of the batch effect and the ways in which it contaminated a number of recent studies. Fortunately, the main conclusions of most of these studies remain supported by other data.  Yet this begs the question: When should we retire legacy data?
 
 
@@ -109,12 +109,6 @@ Here we discuss the source of the batch effect and the ways in which it contamin
 
 
 
-Many types of DNA sequencing machines have been available on the market over the past decade.
-Different types of sequencing technologies can have different technical limitations in quality control.
-This makes combining data an issue especially when multiple sequencing technologies are involved in the data production.
-Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
-The errors in one dataset do not disappear when they are combined with another higher quality one.
-The technical biases caused by legacy sequencing technology is becoming increasingly relevant as newer technologies produce data with lower error rates, and more stringent quality controls.
 
 
 %\sgcomment{As a style issue: you tend to write sentences without indicating the logical flow between them. It makes it hard to follow. }
@@ -245,6 +239,14 @@ This study only used one dataset and one quality metric, but using this same app
 As more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the propagation of false positives. 
 These results bring forth many questions regarding the reliability of legacy datasets. 
 Moreover, since there are so many broad applications of imputation, it frames the question for reference data turnover. 
+
+Many types of DNA sequencing machines have been available on the market over the past decade.
+Different types of sequencing technologies can have different technical limitations in quality control.
+This makes combining data an issue especially when multiple sequencing technologies are involved in the data production.
+Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
+The errors in one dataset do not disappear when they are combined with another higher quality one.
+The technical biases caused by legacy sequencing technology is becoming increasingly relevant as newer technologies produce data with lower error rates, and more stringent quality controls.
+
 
 
 
