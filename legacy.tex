@@ -18,6 +18,7 @@
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
+\newcommand{\alex}[1]{\textcolor{red}{Alex: #1}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE SETUP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,7 +73,7 @@ Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity proje
 Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
 Many of these large datasets have been assembled over many years. 
-The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, at a time when the accuracy of sequencing technologies was still being ascertained. %\sgcomment{blah blah blah}. 
+The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, at a time when sequencing technologies were still being . %\sgcomment{blah blah blah}. 
 Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
 Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
@@ -81,17 +82,17 @@ Yet this data is far from perfect \sgcomment{cite papers that have pointed out i
 
 %A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 %\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
-Mutations can occur in the genome as a result of environmental inflictions as well as genetic factors like DNA replication and repair \cite{}.
+Mutations can occur in the genome as a result of environmental inflictions as well as variation in genetic factors like DNA proofreading and repair \cite{}.
 Many mutagens leave signatures that are specific to a genomic context \cite{}.
 This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation \cite{}.
 Thymine dimers caused by UV radiation were detected early on because they were highly specific and easy to study \cite.
-However,  signatures caused by natural variations in the sequence of proteins involved in proofreading and repair are more difficult to study because they tend to occur less frequently \cite{}.
-A large sample size can be used to resolve some of these fine scale mutational signatures \cite{}.
+However,  signatures caused by natural variations in the sequence of proteins involved in proofreading and repair are more difficult to study because they tend to occur less frequently and are more subtle \cite{}.
+A large sample size can be used to increase statistical power to resolve some of these fine scale mutational signatures \cite{}.
 %Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
 
 In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations.
 Harris and Pritchard published a follow up study comparing how various ethnic groups differ from one another with respect to their mutational spectrum. 
-In this paper, they proposed that not only is there a distinct mutational spectrum difference in Europeans, but that these changes are present in most human populations. 
+In this paper, they proposed that not only is there a distinct mutational spectrum difference in Europeans, but that many populations have their own mutational signatures.
 One result was of particular interest the heterogeneously distributed signal found in a subset of Japanese individuals. 
 A mutational signature that is present unevenly across a population is unexpected because it suggested strong population structure; unlikely for a dense population living on an archipelago.
 
@@ -107,11 +108,14 @@ Here we discuss the source of the batch effect and the ways in which it contamin
 %\sgcomment{Too wordy (also, readers of Nature genetics know about imputation!: Despite drastic reduction in sequencing costs, genotyping and imputation remain a more affordable and popular approach for large-scale cohorts.}
 
 
-Datasets are often combined to increase power or diversity of a dataset.
-However, combining data can be an issue especially when the quality of the data produced can vary between sequencing technologies and even sequencing centres.
-The errors in one dataset don't disappear when they are combined with another higher quality one.
-This is rapidly becoming a relevant issue as newer technologies have lower error rates, and quality controls become more stringent.
+
+Many types of DNA sequencing machines have been available on the market over the past decade.
+Different types of sequencing technologies can have different technical limitations in quality control.
+This makes combining data an issue especially when multiple sequencing technologies are involved in the data production.
 Many of the legacy datasets produced using dated sequencing technologies have been known to contain a higher rate of false positives than their more recent counterparts.
+The errors in one dataset do not disappear when they are combined with another higher quality one.
+The technical biases caused by legacy sequencing technology is becoming increasingly relevant as newer technologies produce data with lower error rates, and more stringent quality controls.
+
 
 %\sgcomment{As a style issue: you tend to write sentences without indicating the logical flow between them. It makes it hard to follow. }
 
@@ -123,7 +127,8 @@ If two groups of individuals are sampled from the same population, we expect the
 %\sgcomment {Here again, you are a bit procedural. It's useful to explain to the reader the logical flow of how you got to doing what you are doing:} 
 Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in some Japanese individuals. 
 While trying to follow up on this observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
-However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
+However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. 
+These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
 
 Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with low-quality individuals showing elevated rates of the signature. (\sgcomment{show supplementary Figure where you did the correlations})
  
@@ -138,7 +143,7 @@ Crosses ( + ) are variants that reached genome wide significance in a GWA of seq
 The histogram on the left of the plot is the distribution of significant variants. 
 The lowest frequency variant able to reach genome wide significance is 5\%.
 \textbf{B} 
-Mutation spectrum of the 1048 variants that reached a genome wide significance with a p value less than  in a in a GWA of sequencing quality. 
+Mutation spectrum of the 1048 variants that reached a genome wide significance with a p value less than in a GWA of sequencing quality. 
 There is a \todo{significant} enrichment in *AC${\rightarrow}$*CC mutations. 
 \textbf{C} 
 Genome wide association of the average quality of mapped bases for the 104 Japanese individuals included in the 1000 Genomes Project. This GWA study identified $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual
@@ -152,6 +157,7 @@ GWA studies are commonly used to find genomic regions associated to biologically
 Using the linear GWA study function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWA study included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1000 Genomes Project.
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 
+\alex{Having trouble following the first three sentences}
 Despite removing the variants identified as being low quality, the signal persists. 
 When we remove the variants significantly associated to low quality, the enrichment in *AC${\rightarrow}$*CC mutations remains present, but \todo{less} significant. 
 When we remove individuals with average quality of mapped SNPs below 30, the signal goes away. 
@@ -236,7 +242,7 @@ We propose including our quality control methods to identify possible false posi
 We have focused on the 1000 Genomes Project dataset as its quality metrics were freely available, however the issues of quality control are not limited to this one consortium. 
 This study only used one dataset and one quality metric, but using this same approach can be used to identify more false positives in many more datasets. 
 
-As more and more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the propagation of false positives. 
+As more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the propagation of false positives. 
 These results bring forth many questions regarding the reliability of legacy datasets. 
 Moreover, since there are so many broad applications of imputation, it frames the question for reference data turnover. 
 

@@ -9,27 +9,21 @@ MyColour <- as.character(colors $hex)
 names(MyColour) <- colors $Pop
 
 #read the list of sig snps
-bad=read.table('~/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.POS.txt',col.names=c('CHR', 'BP'))
+#bad=read.table('~/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.POS.txt',col.names=c('CHR', 'BP'))
 
 SFS=data.frame()
 for(f in seq(1,nrow(pops))){
 pop=pops[f,]
-print(pop)
+print(as.character(pop))
 fname=paste('/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_',pop,'_sig6.assoc.linear',sep='')
-if (file.exists(fname)){
+
 freq=read.table(fname, header=F,, col.names=c('CHR','SNP','BP','A1','TEST','NMISS','BETA','STAT','P'))
-freq<-freq[which(as.numeric(freq$P) < 0.000001),]
 freq$Plog10<--log10(freq$P)
-if(nrow(freq)>0){
-f=merge(bad, freq,by=c('CHR', 'BP'))
-if(nrow(f)>0){
-sub=f[,c('CHR','BP','Plog10')]
+sub=freq[,c('CHR','BP','Plog10')]
 sub$Pop<-pop
 SFS=rbind(SFS,sub)
 }
-}
-}
-}
+
 
 SFS<-unique(SFS)
 NumPop<-as.data.frame(table(SFS$CHR,SFS$BP))
