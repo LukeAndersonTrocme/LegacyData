@@ -2,3 +2,13 @@
 *.log
 Draft3.pdf
 Draft3.synctex.gz
+
+legacy.aux
+
+legacy.out
+
+legacy.pdf
+
+legacy.suppinfo
+
+legacy.synctex.gz
