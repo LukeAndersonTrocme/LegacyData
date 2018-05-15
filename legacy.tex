@@ -67,13 +67,13 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 
 %\sgcomment{This intro paragraph is much too vague -- it reads like general thoughts about genetics at large. We need to be much more concise. I would start with something like:}
 
-The last 5 years have seen a drastic increase in the amount and quality of human genomes sequence data. 
+The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Hapmap \cite{}, the 1000 Genomes Project \cite{}, and the Simons Diversity project \cite{}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
 Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
-Many of these large datasets comprise have been assembled over many years. 
-The first sequenced genomes in the 1000 Genomes project, for example, were sequenced \todo{10} years ago, at a time when the accuracy of sequencing technologies was still being acertained. %\sgcomment{blah blah blah}. 
-Because of the extraordinary value of freely available data, this early data from the 1000 Genomes Project is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
+Many of these large datasets have been assembled over many years. 
+The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, at a time when the accuracy of sequencing technologies was still being ascertained. %\sgcomment{blah blah blah}. 
+Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
 Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
 
@@ -81,12 +81,13 @@ Yet this data is far from perfect \sgcomment{cite papers that have pointed out i
 
 %A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 %\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
-Mutation rate at a given base pair has long been known to depend on the neighbouring nucleotides \cite{}. 
-Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
-Many mutational types are caused by environmental sources or by faulty DNA replication.
-Systematic mutational patterns like thymine dimers caused by ultraviolet light, are measurable by taking the sum of all the different types of mutations in an individual.
-%\sgcomment {then define mutational signature (ideally, more of a biological definition), and move on to the Harris paper}
-
+Mutations can occur in the genome as a result of environmental inflictions as well as genetic factors like DNA replication and repair \cite{}.
+Many mutagens leave signatures that are specific to a genomic context \cite{}.
+This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation \cite{}.
+Thymine dimers caused by UV radiation were detected early on because they were highly specific and easy to study \cite.
+However,  signatures caused by natural variations in the sequence of proteins involved in proofreading and repair are more difficult to study because they tend to occur less frequently \cite{}.
+A large sample size can be used to resolve some of these fine scale mutational signatures \cite{}.
+%Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
 
 In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations.
 Harris and Pritchard published a follow up study comparing how various ethnic groups differ from one another with respect to their mutational spectrum. 
