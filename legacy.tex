@@ -37,6 +37,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE START
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{document}
 
 \maketitle
@@ -55,8 +56,8 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 	\subsection{Reference Cohorts}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
-Hapmap [\cite{}], the 1000 Genomes Project [\cite{}], and the Simons Diversity project [\cite{}], for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
-Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
+Hapmap \cite{HapMap2005}, the 1000 Genomes Project \cite{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \cite{Mallick2016}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
+Many more genomes are available indirectly through servers providing imputation services \cite{ProfJonathanMarchiniProfGoncaloAbecasisProfRichardDurbin2014} or variant frequency estimation \cite{Lek2016}. 
 
 Many of these large datasets have been assembled over several years using a variety of sequencing platforms. 
 The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced 10 years ago.
@@ -71,17 +72,16 @@ Here we point out how large and previously unreported batch effects in the early
 
 \subsection{Motivations}
 
-Subtle genome wide mutational signatures have been used as a diagnostic tool for cancers.
-Distinct types of mutations that occur more frequently in certain cancers can be used to identify the cause and mechanisms of cancer [\cite].
-Certain mutagens in tobacco smoke have been shown to preferentially bind to certain genomic motifs causing an excess of G to T transversions [\cite{}].
+Genome wide mutational signatures have been used as a diagnostic tool for cancers\cite{Pleasance2010,Shiraishi2015a}.
+Distinct types of mutations that occur more frequently in certain cancers can be used to identify the cause and mechanisms of cancer \cite{Pleasance2010,Shiraishi2015a}.
+Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \cite{Pleasance2010}.
 The excess of certain types of mutations can be measured as a genome wide mutational signature.
 This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation [\cite{}].
 While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity [\cite{}].
-Taking advantage of large cohorts can increase statistical power to resolve some of these fine scale mutational signatures [\cite{}].
-
+Large cohorts have recently been used to increase statistical power to resolve some of these fine scale mutational signatures.
 
 Genome wide mutational signatures are also observable on evolutionary scales by comparing the rates of mutations between populations. 
-In 2015, Harris et al reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations.
+In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations.
 This strong population enrichment of a mutational signature was replicated in a different cohort; suggests important genetic or environmental differences in the history of each population \cite{}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations [\cite{}]. 
 In particular, they identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals. 
@@ -89,11 +89,11 @@ Such an axis of variation is intriguing because differences in mutational signat
 A systematic difference among the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow. 
 We therefore decided to follow up on this observation, by using a newly sequenced dataset \sgcomment{description of cohort. }
 
-While we were unable to reproduce the heterogeneity among the Japanese population, we could trace back the source of the discrepancy between the two datasets and identified a strong and previously unreported batch effect in the 1kGP data. We also found that this batch effect led to spurious results in a number of recently published studies. 
+While we were unable to reproduce the heterogeneity among the Japanese population, we could trace back the source of the discrepancy between the two datasets and identified a strong and previously unreported batch effect in the 1kGP data. We also found that this batch effect led to spurious results in a number of recent publications. 
 
 This study is the result of an investigation in the quality of the 1kGP dataset. 
 To begin, we will discuss how we discovered these previously unreported batch effects in the 1kGP. 
-Next, we explore more broadly how low quality variants remain embedded in other populations of the 1kGP. 
+Next, we explore more broadly how low quality data remain embedded in other populations of the 1kGP. 
 Finally, we will discuss the source of the batch effect and the ways in which it contaminated a number of recent studies.
 Fortunately, the main conclusions of most of these studies remain supported by other data.
 Yet this begs the question: When should we retire legacy data?
@@ -101,64 +101,67 @@ Yet this begs the question: When should we retire legacy data?
 			\section{Results}
 	\subsection{A peculiar mutational signature in Japan}			
 If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups. 
-%\sgcomment {Here again, you are a bit procedural. It's useful to explain to the reader the logical flow of how you got to doing what you are doing:} 
-Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in some Japanese individuals. 
+Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in a portion of the Japanese individuals in the 1kGP. 
 While trying to follow up on this observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
 However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. 
 These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
 
-Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with low-quality individuals showing elevated rates of the signature. (\sgcomment{show supplementary Figure where you did the correlations})
- 
- Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
+Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. 
+Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature. 
+\sgcomment{show supplementary Figure where you did the correlations}
+Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{Figure1.jpg}
 \caption{
 \textbf{A} 
+Mutation spectrum of the 1048 variants that reached a genome wide significance with a p value less than $p < 10^{-6}$  in a GWAS of sequencing quality. 
+There is a 10 fold enrichment in *AC${\rightarrow}$*CC mutations. 
+\textbf{B} 
 Joint frequency spectrum plot of the Japanese from the 1kGP and a more recent dataset.
 Crosses ( + ) are variants that reached genome wide significance in a GWA of sequencing quality. 
 The histogram on the left of the plot is the distribution of significant variants. 
 The lowest frequency variant able to reach genome wide significance is 5\%.
-\textbf{B} 
-Mutation spectrum of the 1048 variants that reached a genome wide significance with a p value less than in a GWA of sequencing quality. 
-There is a \todo{significant} enrichment in *AC${\rightarrow}$*CC mutations. 
 \textbf{C} 
 Genome wide association of the average quality of mapped bases for the 104 Japanese individuals included in the 1kGP. This GWAS identified $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual
 The same analysis was performed independently for each of the populations in the 1kGP. }
  \label{SFS}
 \end{figure}
 
-To identify SNPs that are associated with low quality, we performed a genome-wide association (GWA) study  \ref{SFS}. 
-GWA studies are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis in a more unconventional way to identify regions of the genome that are associated to biologically irrelevant traits like SNPs associated to individuals with low quality.
+To identify SNPs that are associated with low quality, we performed a genome-wide association study (GWAS)  \ref{SFS}. 
+GWAS are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis to identify regions of the genome that are associated to sequencing quality.
  
 Using the linear GWAS function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 
-\alex{Having trouble following the first three sentences}
-Despite removing the variants identified as being low quality, the signal persists. 
-When we remove the variants significantly associated to low quality, the enrichment in *AC${\rightarrow}$*CC mutations remains present, but \todo{less} significant. 
-When we remove individuals with average quality of mapped SNPs below 30, the signal goes away. 
-We suspect that this has to do with the lack of power we have for more rare alleles. 
-The lowest frequency variants that are significantly associated to quality are at 5\%. 
-When we remove all the variants above 1\% in 1kGP but missing from the NAG data, the signal disappears.
-This suggests that while the GWA approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
+Since the GWAS we performed has a power limit at 5\% minor allele frequency (MAF), many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques.
+For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality metrics.
+The *AC${\rightarrow}$*CC mutational signal is limited to individuals with low quality sequencing data, as the removal of individuals with average qualities below 30 successfully removes the signal.
 
-One way to assess the validity of these unusual variants is to see if they are present in a higher quality dataset. Upon comparing the Japanese 1000 Genomes cohort to a higher quality and larger cohort, we identified \todo{000} more variants that are beyond the expected frequency spectrum deviation for individuals from the same population. 
+By taking advantage of the higher quality dataset, we were also able to get rid of this signal by filtering all the variants above 1\% in the 1kGP Japanese but missing from the NAG data.
+This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
 
 	\subsection{Sequencing quality over time}
-We turned our attention to the other populations in the 1kGP, we found that the sequencing done in phase 1 was more variable and overall tended to include lower quality sequencing data \ref{MapQual}.
-The sequencing quality of individuals increases over time \ref{MapQual}. 
-By 2011 the sequencing quality seems to level off, this also coincides with the phasing out of older sequencing technologies. 
+The average quality of sequencing data of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data \ref{MapQual}.
+This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centers.
+There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
+By 2011, older sequencing technologies are phased out.
+This coincides with the sequencing quality leveling off.
+
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
 
-\caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The x-axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. \textbf{B} Same data as in \textbf{A} except the x-axis is sorted by sequencing date. The colors indicate the sequencing centers that produced the data for each individual.}
+\caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The x-axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. \textbf{B} Same data as in \textbf{A} except the x-axis is sorted by sequencing date. The colours indicate the sequencing centers that produced the data for each individual.}
 \label{MapQual}
 \end{figure}
 
-
 	\subsection{Overlap of significant SNPs}
-Comparing the results of each independent GWAS, we were able to identify over \todo{0000} variants that were independently associated to low quality in multiple populations. This confirmation using more than one GWAS is a strongly suggests that these variants might not be genuine \ref{Figure3}. 
+
+We applied the same GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
+We found that most populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
+\todo{Supplemental Figures : all the GWAS results for each population}
+Comparing the results of each independent GWAS, we were able to identify over \todo{0000} variants that were independently associated to low quality in multiple populations  \ref{OverLap}. 
+This confirmation using more than one GWAS is a strongly suggests that these variants might not be genuine \ref{OverLap}.
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
@@ -166,14 +169,17 @@ Comparing the results of each independent GWAS, we were able to identify over \t
 \caption{Overlap of SNPs identified independently to be associated with quality. 
 The populations that have the most low-quality individuals also have the most low-quality variants. 
 The same variants identified as being low quality independently in each population are found in other populations. }
-  \label{Figure3}
+  \label{OverLap}
 \end{figure*}
 
 	\subsection{Imputation}
-~30\% of the SNPs we identified as being associated with low quality were found to be imputed using the Michigan Imputation Server. These should be removed from reference database.
+The state of the art imputations servers use a combination of many databases including many that are not freely available.
+For this reason, the details of the methods used to impute genomic data are not publicly available either.
+In order to investigate the proportion of variants that we've identified as being associated to quality that are being imputed, we submitted the genotype data from the 1kGP and imputed it using the Michigan Imputation Server.
+We found that \todo{~30\%} of the SNPs we identified as being associated with quality were imputed.
 
 	\subsection{Found to be included in other GWA studies}
-Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWA studies that might have called these erroneous variants as being significantly correlated with some biological trait. 
+Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have called these erroneous variants as being significantly correlated with some biological trait. 
 Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 6 recent publications that had found at least one of the variants to have reached genome wide significance in their study. 
 
 Five of these studies used the 1kGP as the reference database for imputation and one used the 1kGP cell cultures and sequence data. 
@@ -188,13 +194,24 @@ Including these variants in the GWAS catalogue could lead to false diagnosis at 
 Polygenic risk scores take into account all SNPs reaching significance, without much manual curation. 
 It's likely that the variants we have identified are being included in these multi-locus risk scores.
 
-
 Despite these variants reaching genome wide significance, the majority of researchers did not pursue these variants for further analysis.
 This is likely because these variants have no peak in LD that is characteristic of a biologically significant variant.
 
 \subsection{Recommendations}
 The most conservative approach would be to remove all individuals that don't meet the quality threshold as well as all the variants associated to low quality.
 In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been \todo{previously used by studies}. It is the minimum requirements for \todo{GATK variant calling} for them to have a minimum quality of 30.
+
+\subsection{Power limits and Quality Controls}
+If these variants are truly spurious, why were they not identified by the Hardy-Weinberg test of heterozygosity?
+\todo{how many hetd do you need to detect HWE significance?}
+We were able to identify many variants with frequencies below \todo{the power threshold for HWE}.
+However even the GWAS is limited by power as we were able to identify \todo{000} more variants that were missing in a higher quality dataset but present in over 1\% of the 1kGP Japanese data. 
+This suggests that while the GWAS we performed is a step in the right direction, the GWAS is not sufficient because the data is not reliable in the first place. 
+
+%\subsection{Technical Source of Error}
+%issues with PCR?
+%repetitive regions, GC bias...
+
 
 \subsection{Imputation}
 Imputation of genotype data is a probabilistic method that infers the bases of a given genome based on its similarity to a set of reference genomes.
@@ -211,7 +228,7 @@ To overcome this bias, reference databases are often combined to increase the sa
 Since these variants are present in more than one population from the 1kGP, they are more likely to be associated to biological traits as they would appear to be like any other variant that is shared among multiple populations. 
 The only way to distinguish some of these more covert false positives is to use statistical tests associating the quality metrics of each position relative to each individual. 
 
-\luke{due to the temporal nature of the batch effects, and because entire populations were sequenced in one centre on one day, the false positives are more likely to cluster with population structure or case/control?}
+%\luke{due to the temporal nature of the batch effects, and because entire populations were sequenced in one centre on one day, the false positives are more likely to cluster with population structure or case/control?}
 
 			\section{Conclusion}
 Our method identifies spurious mutations by correlating mutations with data quality metrics. 
@@ -275,7 +292,9 @@ Using the Michigan Imputation Server, we imputed the genotype data from 1kGP
 
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
-  
+ 
+\bibliography{/Users/luke/Dropbox/Work/PHD/BibTeX/Legacy.bib}
+
 \end{document}
 			
 
