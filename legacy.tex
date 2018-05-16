@@ -72,23 +72,31 @@ The last 5 years have seen a drastic increase in the amount and quality of human
 Hapmap [\cite{}], the 1000 Genomes Project [\cite{}], and the Simons Diversity project [\cite{}], for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
 Many more genomes are available indirectly through servers providing imputation services \cite{haplotype reference consortium} or variant frequency estimation \cite{GnomAD}. 
 
-Many of these large datasets have been assembled over many years. 
+Many of these large datasets have been assembled over several years. 
 The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced \todo{10} years ago, before most of the current best technologies and analysis practices were in place. 
 Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
 
-Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts. Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
+Yet this data is far from perfect \sgcomment{cite papers that have pointed out issues}. 
+This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts. 
+Here we point out how large and previously unreported batch effects in the early phases of the 1000 Genomes Project still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
 
 
 \subsection{Motivations}
 
 %A genome wide mutational signature can be measured by taking the sum of all the different types of mutations in an individual. 
 %\sgcomment{This is a procedural definition. You need a conceptual definition! Something like:} 
-Mutations can occur in the genome as a result of environmental inflictions as well as variation in genetic factors like DNA proofreading and repair [\cite{}].
-Many mutagens leave signatures that are specific to a genomic context \cite{}.
-This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation \cite{}.
-Thymine dimers caused by UV radiation were detected early on because they were highly specific and easy to study \cite.
-However,  signatures caused by natural variations in the sequence of proteins involved in proofreading and repair are more difficult to study because they tend to occur less frequently and are more subtle \cite{}.
-A large sample size can be used to increase statistical power to resolve some of these fine scale mutational signatures \cite{}.
+
+Mutations in the genome can be caused by exposure to a mutagen, defective DNA repair or errors in DNA replication.
+
+
+Mutation rates depend on environmental exposure as well as variation in genetic factors like DNA proofreading and repair [\cite{}].
+Some mutagens are more likely to affect a specific genomic context which therefore leaves a mutational signature [\cite{}].
+It has been shown that certain types of cancer have particular mutational profiles that can be used as a diagnostic tool [\cite{}]. 
+
+This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation [\cite{}].
+Thymine dimers caused by UV radiation were detected early on because they were highly specific and easy to study [\cite{}].
+However,  signatures caused by natural variations in the sequence of proteins involved in proofreading and repair are more difficult to study because they tend to occur less frequently and are more subtle [\cite{}].
+A large sample size can be used to increase statistical power to resolve some of these fine scale mutational signatures [\cite{}].
 %Finer scale patterns have been reported in \todo{MORE HERE} \cite{}. 
 
 In 2015, Harris et al reported a \todo{15\%} overrepresentation of the TCC to TTC mutation in European populations. This strong population enrichment of a mutational signature suggests important genetic or environmental differences in the history of each population, and was replicated in a different cohort \cite{}.  
