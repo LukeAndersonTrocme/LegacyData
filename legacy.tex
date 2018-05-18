@@ -100,16 +100,17 @@ Yet this begs the question: When should we retire legacy data?
 
 			\section{Results}
 	\subsection{A peculiar mutational signature in Japan}			
-If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups. 
-Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in a portion of the Japanese individuals in the 1kGP. 
-While trying to follow up on this observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
-However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. 
-These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
+ 
+Harris et al \cite{} reported a $XX\%$  excess of *AC${\rightarrow}$*CC mutations in a portion of the Japanese individuals in the 1kGP. 
+While trying to follow up on this interesting observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
+However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of single nucleotide polymorphisms (SNPs) that are private to one or the other cohort. 
+This is unexpected given the similarity of the two populations, and suggests a technical artifact rather than a population structure effect. 
+However, these mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
 
-Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. 
-Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature. 
+Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}. 
+Regressions against different individual-level quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair per individual was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature. 
 \sgcomment{show supplementary Figure where you did the correlations}
-Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
+Thus sequenced individuals with \sgcomment{low mappability harbour?} mutations that reproduce poorly across cohorts and exhibit a particular mutational signature. 
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{Figure1.jpg}
@@ -128,17 +129,21 @@ The same analysis was performed independently for each of the populations in the
  \label{SFS}
 \end{figure}
 
-To identify SNPs that are associated with low quality, we performed a genome-wide association study (GWAS)  \ref{SFS}. 
-GWAS are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis to identify regions of the genome that are associated to sequencing quality.
- 
-Using the linear GWAS function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
+To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality \ref{SFS}. Using the linear regression as implemented in PLINK, we were able to identify $625$ snips with $p < 10^{-8}$ and $1048$ snps with $ p < 10^{-6}.$ While identifying putative low-quality snps to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., the traditional genome-wide significance threshold might not be a good guide for filtering).  
+ This GWAS included 104 Japanese individuals, \todo{000} of which were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
+\sgcomment{Signal is enriched in GWAS snps, but residual signal remains because...}
 
-Since the GWAS we performed has a power limit at 5\% minor allele frequency (MAF), many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques.
-For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality metrics.
+
+
+A GWAS threshold of $10^{-6}$ means that variants of less than 5\% minor allele frequency  (MAF) cannot be significantly associated, even if they are only found in low-quality sequences. 
+They therefore remain unidentifiable using association techniques.
+For this reason, the *AC${\rightarrow}$*CC mutational signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality metrics.
 The *AC${\rightarrow}$*CC mutational signal is limited to individuals with low quality sequencing data, as the removal of individuals with average qualities below 30 successfully removes the signal.
 
-By taking advantage of the higher quality dataset, we were also able to get rid of this signal by filtering all the variants above 1\% in the 1kGP Japanese but missing from the NAG data.
+
+
+By taking advantage of the higher quality dataset, we were also able to get rid of this signal by filtering all the variants above 1\% in the 1kGP Japanese but missing from the NAG data. \sgcomment{redundant}
 This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
 
 	\subsection{Sequencing quality over time}
