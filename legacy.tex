@@ -72,43 +72,44 @@ Here we point out how large and previously unreported batch effects in the early
 
 \subsection{Motivations}
 
-Genome wide mutational signatures have been used as a diagnostic tool for cancers\cite{Pleasance2010,Shiraishi2015a}.
-Distinct types of mutations that occur more frequently in certain cancers can be used to identify the cause and mechanisms of cancer \cite{Pleasance2010,Shiraishi2015a}.
+Genome wide mutational signatures have been used as a diagnostic tool for cancers \cite{Pleasance2010,Shiraishi2015a}.
 Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \cite{Pleasance2010}.
-The excess of certain types of mutations can be measured as a genome wide mutational signature.
-This means that the neighbouring nucleotides of a mutation can be used to gain insight into the cause of a mutation [\cite{}].
+This means that the genomic context of a mutation can be used to gain insight into the cause of this mutation [\cite{}].
 While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity [\cite{}].
-Large cohorts have recently been used to increase statistical power to resolve some of these fine scale mutational signatures.
+Large cohorts have recently become available to increase statistical power to resolve some of these fine scale mutational signatures.
 
-Genome wide mutational signatures are also observable on evolutionary scales by comparing the rates of mutations between populations. 
-In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations.
-This strong population enrichment of a mutational signature was replicated in a different cohort; suggests important genetic or environmental differences in the history of each population \cite{}. 
+Fine scale mutational signatures are observable on evolutionary scales by comparing the rates of mutations between populations.
+In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 [\cite{}].
+This strong population enrichment of a mutational signature suggests important genetic or environmental differences in the history of each population [\cite{}]. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations [\cite{}]. 
 In particular, they identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals. 
 Such an axis of variation is intriguing because differences in mutational signatures accumulate over many generations. 
-A systematic difference among the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow. 
-We therefore decided to follow up on this observation, by using a newly sequenced dataset \sgcomment{description of cohort. }
+A systematic difference among the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
+We therefore decided to follow up on this observation, by using a newly sequenced dataset \sgcomment{description of cohort.}
 
-While we were unable to reproduce the heterogeneity among the Japanese population, we could trace back the source of the discrepancy between the two datasets and identified a strong and previously unreported batch effect in the 1kGP data. We also found that this batch effect led to spurious results in a number of recent publications. 
+While we were unable to reproduce the heterogeneity among the Japanese population, we could trace back the source of the discrepancy between the two datasets and identified a strong and previously unreported batch effect in the 1kGP data.
+We also found that this batch effect led to spurious results in a number of recent publications. 
 
 This study is the result of an investigation in the quality of the 1kGP dataset. 
 To begin, we will discuss how we discovered these previously unreported batch effects in the 1kGP. 
 Next, we explore more broadly how low quality data remain embedded in other populations of the 1kGP. 
-Finally, we will discuss the source of the batch effect and the ways in which it contaminated a number of recent studies.
+Finally, we will discuss the ways in which it contaminated a number of recent studies.
 Fortunately, the main conclusions of most of these studies remain supported by other data.
 Yet this begs the question: When should we retire legacy data?
 
 			\section{Results}
 	\subsection{A peculiar mutational signature in Japan}			
-If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups. 
-Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in a portion of the Japanese individuals in the 1kGP. 
-While trying to follow up on this observations in a larger cohort of 886 Japanese individuals, \todo{some info about cohort}, we did not find this particular signature.
-However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups. 
-These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium
+	
+Harris et al reported an excess of *AC${\rightarrow}$*CC mutations in a portion of the Japanese individuals in the 1kGP.
+While trying to follow up on this observations in a larger Japanese cohort individuals, we did not find this particular signature.
+However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of private single nucleotide polymorphisms (SNPs), only found in one of the two groups.
+If two groups of individuals are sampled from the same population, we expect there to be little deviation in allele frequencies between the two groups.
+Moreover, these mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium.
 
-Once mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect. 
-Regressions against different quality metrics provided by the 1kGP revealed that mean mapping quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature. 
-\sgcomment{show supplementary Figure where you did the correlations}
+When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}, suggesting a technical artifact rather than a population structure effect.
+Regressions against different quality metrics provided by the 1kGP revealed that mean quality per mapped base pair was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP.
+Individuals with low-quality data have elevated rates of the *AC${\rightarrow}$*CC signature. 
+\sgcomment{supplementary figure of correlations}
 Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 \begin{figure}
@@ -129,24 +130,28 @@ The same analysis was performed independently for each of the populations in the
 \end{figure}
 
 To identify SNPs that are associated with low quality, we performed a genome-wide association study (GWAS)  \ref{SFS}. 
-GWAS are commonly used to find genomic regions associated to biologically relevant traits. In this case, we are using this analysis to identify regions of the genome that are associated to sequencing quality.
- 
-Using the linear GWAS function offered by PLINK, we were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
-The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
+We used the mean quality of mapped bases of each individual as the association phenotype.
+Thus, variants that are only found in individuals with low quality data will display significant associations to quality. 
+We were able to identify $625\ \  p < 10^{-8}$ and $1048\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual \ref{SFS}.  
+This GWAS included 104 individuals, \todo{000} of them were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
+The variants that are associated to the quality of mapped bases have a 10 fold enrichment in *AC${\rightarrow}$*CC mutations. 
 
-Since the GWAS we performed has a power limit at 5\% minor allele frequency (MAF), many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques.
-For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality metrics.
-The *AC${\rightarrow}$*CC mutational signal is limited to individuals with low quality sequencing data, as the removal of individuals with average qualities below 30 successfully removes the signal.
+The GWAS has a power limit of 5\% minor allele frequency (MAF), many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques.
+For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality.
+The *AC${\rightarrow}$*CC mutational signal is limited to individuals with low quality sequencing data.
+Therefore, the removal of individuals with average qualities below 30 successfully removes the signal.
 
-By taking advantage of the higher quality dataset, we were also able to get rid of this signal by filtering all the variants above 1\% in the 1kGP Japanese but missing from the NAG data.
-This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts. 
+By taking advantage of the larger, higher quality dataset, we were also able to get rid of this signal by filtering all the variants above 1\% in the 1kGP Japanese but missing from the \todo{NAG} data.
+This suggests that while the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts.
+
+%Many of the populations in the 1kGP do not have higher quality counterparts which means that identifying questionably low quality data must be done ad hoc.
 
 	\subsection{Sequencing quality over time}
+The results of the GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
 The average quality of sequencing data of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data \ref{MapQual}.
-This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centers.
+This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centres.
 There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
-By 2011, older sequencing technologies are phased out.
-This coincides with the sequencing quality leveling off.
+By 2011, older sequencing technologies are phased out, and method development solidify, which coincides with the sequencing quality levelling off.
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
@@ -158,10 +163,9 @@ This coincides with the sequencing quality leveling off.
 	\subsection{Overlap of significant SNPs}
 
 We applied the same GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
-We found that most populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
+We found that 25 of the 26 populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
 \todo{Supplemental Figures : all the GWAS results for each population}
-Comparing the results of each independent GWAS, we were able to identify over \todo{0000} variants that were independently associated to low quality in multiple populations  \ref{OverLap}. 
-This confirmation using more than one GWAS is a strongly suggests that these variants might not be genuine \ref{OverLap}.
+Comparing the results of each independent GWAS, we were able to identify over 3625 variants that were independently associated to low quality in at least two populations  \ref{OverLap}. 
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
@@ -180,12 +184,54 @@ We found that \todo{~30\%} of the SNPs we identified as being associated with qu
 
 	\subsection{Found to be included in other GWA studies}
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have called these erroneous variants as being significantly correlated with some biological trait. 
-Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 6 recent publications that had found at least one of the variants to have reached genome wide significance in their study. 
+Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found 17 recent publications that had found at least one of the variants to have reached genome wide significance in their study.
 
-Five of these studies used the 1kGP as the reference database for imputation and one used the 1kGP cell cultures and sequence data. 
+These studies used the 1kGP as the reference database for imputation. %and one used the 1kGP cell cultures and sequence data. 
 They used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
 They also removed rare alleles and alleles with high degrees of missingness. 
 Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. 
+
+\begin{center}
+ \begin{tabular}{||c c c c||} 
+ \hline
+Author & Year & Journal & RSID \\ [0.5ex] 
+ \hline\hline
+Comuzzie AG &	2012	 &PLoS One &	rs9469457\\ 
+ \hline
+Smith JG &	2012	 & Circ Cardiovasc Genet	& rs7729539\\ 
+ \hline
+Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648\\ 
+ \hline
+Zeng Z	& 2014 &	Caries Res	& rs10495332\\ 
+ \hline
+Park SL & 	2015	 & PLoS One	& rs113626797\\ 
+ \hline
+Parmar PG &	2016	 & Circ Cardiovasc Genet	& rs12370001\\ 
+ \hline
+Spada J & 	2016	 & J Sleep Res &	rs12452225\\ 
+ \hline
+Astle WJ	& 2016 &	Cell	 & rs533229216\\ 
+ \hline
+ Ahola-Olli AV &	2017 &	Am J Hum Genet &	rs76842834\\ 
+ \hline
+Liu TC	& 2017 &	JCI Insight &	rs12481514\\ 
+ \hline
+  McKay JD & 2017 &	Nature Genetics & 	rs13191445\\ 
+ \hline
+Zhou H &	2017	 & JAMA Psychiatry &	rs11179306\\ 
+ \hline
+Tian C	& 2017	 &Nature Communications	 & rs67491322\\ 
+ \hline
+Qian DC	& 2017 &	BMC Genomics &	rs77576211\\ 
+ \hline
+Michailidou K	& 2017	 & Nature &	rs76092474\\ 
+ \hline
+& & & rs80274284, rs201130852,\\ 
+Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,\\ 
+& & & rs201255786, rs201761909\\ 
+ \hline
+ \end{tabular}
+\end{center}
 
 			\section{Discussion}
 \subsection{Why do we care?}
