@@ -26,7 +26,7 @@
 
 \author[1,2]{Luke Anderson-Trocm\'e}
 \author[1,2]{Mathieu Bourgey}
-\author[3]{Fumihiko Matsuda}
+\author[3]{Fumihiko Matsuda (and coauthors)}
 \author[1,2]{Simon Gravel}
 
 \affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
@@ -42,15 +42,16 @@
 
 \maketitle
 \begin{abstract}
-In investigating an unusual population genetics signal we identified a strong and previously unreported batch effect in the 1000 Genomes Project data.We also found that this batch effect led to spurious results in a number of recent publications. 
+In investigating an unusual population genetics signal we identified a strong and previously unreported batch effect in the 1000 Genomes Project data.
+We also found that this batch effect led to spurious results in a number of recent publications. 
 We identified spurious mutations by correlating mutations with data quality metrics.
 We then turned our attention to the rest of the 1000 Genomes populations and saw that there were similar batch effects in many of these populations.
 Some of these variants are being imputed onto genotype data and reach genome wide significance in recent publications.
 \end{abstract}
 
-			\section{Introduction}
+\section{Introduction}
 		
-	\subsection{Reference Cohorts}			
+\subsection{Reference Cohorts}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Hapmap \cite{HapMap2005}, the 1000 Genomes Project \cite{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \cite{Mallick2016}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
@@ -122,7 +123,7 @@ Moreover, these mismatches were maintained after filtering for low-quality regio
 
 When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}.
 Regressions against different individual-level quality metrics provided by the 1kGP revealed that mean quality per mapped base pair per individual was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. 
-Individuals with low-quality data showing elevated rates of the signature. \ref{PC1_Correlation}
+Individuals with low-quality data showing elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}). \sgcomment{fix ref to figs}
 Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality \ref{SFS}. 
@@ -184,40 +185,39 @@ They also removed rare alleles and alleles with high degrees of missingness.
 Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. 
 
 \begin{center}
- \begin{tabular}{||c c c c c||} 
+ \begin{tabular}{l l l r r} 
  \hline
 Author & Year & Journal & RSID & PMID \\ [0.5ex] 
- \hline\hline
-Comuzzie AG &	2012	 &PLoS One &	rs9469457&23251661\\ 
  \hline
+Comuzzie AG \emph{et al}, PLoS One (2012)  &	2012	 &PLoS One &	rs9469457&23251661\\ 
+ 
 Smith JG &	2012	 & Circ Cardiovasc Genet	& rs7729539&23166209\\ 
- \hline
+ 
 Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648&23527680\\ 
- \hline
+ 
 Zeng Z	& 2014 &	Caries Res	& rs10495332&24556642\\ 
- \hline
+ 
 Park SL & 	2015	 & PLoS One	& rs113626797&26053186\\ 
- \hline
+ 
 Parmar PG &	2016	 & Circ Cardiovasc Genet	& rs12370001&26969751\\ 
- \hline
+ 
 Spada J & 	2016	 & J Sleep Res &	rs12452225&27126917\\ 
- \hline
 Astle WJ	& 2016 &	Cell	 & rs533229216&27863252\\ 
- \hline
+ 
  Ahola-Olli AV &	2017 &	Am J Hum Genet &	rs76842834&27989323\\ 
- \hline
+ 
 Liu TC	& 2017 &	JCI Insight &	rs12481514&28352666\\ 
- \hline
+ 
   McKay JD & 2017 &	Nature Genetics & 	rs13191445&28604730\\ 
- \hline
+ 
 Zhou H &	2017	 & JAMA Psychiatry &	rs11179306&	29071344\\ 
- \hline
+ 
 Tian C	& 2017	 &Nature Communications	 & rs67491322&28928442\\
- \hline
+ 
 Qian DC	& 2017 &	BMC Genomics &	rs77576211&28927378\\ 
- \hline
+ 
 Michailidou K	& 2017	 & Nature &	rs76092474&29059683\\ 
- \hline
+ 
 & & & rs80274284, rs201130852,&\\
 Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
 & & & rs201255786, rs201761909&\\
@@ -336,7 +336,7 @@ We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
  \label{PC1_Correlation}
 \end{figure}
 
- 
+\bibliographystyle{plain}
 \bibliography{Legacy.bib}
 
 \end{document}
