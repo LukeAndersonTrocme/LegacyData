@@ -337,7 +337,7 @@ Each BAS file has metadata regarding each sequencing event for each sample.
 If a sample was sequenced more than once, we took the average of the each quality score from each sequencing instance. 
 The submission dates and sequencing centres for each sample in the analysis was available in the sequence index files.  
 This file also has multiple entries per sample, however, we were unable to match the individual sequencing runs between the bas files and the index file, which lead us to take the average of the quality scores and only kept the earliest sequencing date per sample. 
-The dates of the sequencing are only used to plot Figure. \todo{Average Quality of mapped bases: How was it calculated?}
+The dates of the sequencing are only used to plot Figure.
 
 \subsection{Data Availability}
 
@@ -355,7 +355,7 @@ Furthermore, only diallelic autosomal SNPs were considered, with missingness bel
 
 \subsection{Genome Wide Association}
 
-Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1kGP. We used the average quality of mapped bases per individual as the phenotype for the analysis. We also controlled for population structure by including the first 4 principle components of a PCA of each population using genotype data. \todo{NOT DONE YET}
+Using PLINK v1.90b4.4 we ran a linear genome wide association study independently for each population of the 1kGP. We used the average quality of mapped bases per individual as the phenotype for the analysis. We controlled for population structure by including the first 4 principle components of a PCA of each population with available genotype data, however, considering that population structure did not affect the number of variants associated to quality, and that not all populations had genotype data readily available, we did not include these in the final analysis. 
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum for each list of significant SNPs for each population.  

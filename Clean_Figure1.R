@@ -13,13 +13,6 @@ colnames(JPT)<-paste("JPT", colnames(JPT), sep = "_")
 NAG<-read.table(fnag, fill=T,skip=1,  skipNul = TRUE,colClasses = classes)
 colnames(NAG)<-paste("NAG", colnames(NAG), sep = "_")
 
-#HWE 10^-6
-NAG_hwe<-read.table('/Users/luke/genomes/genomes/NAG_4bedFiltered/NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
-JPT_hwe <- read.table('/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
-#ggplot(JPT_hwe, aes(x=V2, y=abs(log10(V8))) )+geom_point(shape='.')+facet_grid(~V1)+coord_flip()+theme_classic()+theme(axis.text.x=element_blank())+xlab('Position (bp)')+ylab('-log10(p) HWE disequilibrium')
-#ggsave('~/Documents/HWE_disequilibrium_JPT.jpg', height=5,width=5)
-hwe=merge(NAG_hwe[,c('V1','V2')], JPT_hwe[,c('V1','V2')], by=c('V1','V2'), all=T)
-
 #merge them together
 join<-merge(JPT[which(JPT$JPT_V6 <= 1),],
  			NAG[which(NAG$NAG_V6 <= 1),], 
@@ -38,7 +31,7 @@ write.table(j,'~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
 
 tab5rows <- read.table('/Users/luke/Documents/1FinalGWAS/1kGP_Chr2.4bed_filtered.assoc.linear', header = T, nrows = 5, row.names=NULL)
 classes <- sapply(tab5rows, class)
-GWAS_JPT<-read.table('/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
+GWAS_JPT<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
 GWAS_JPT$Plog10= -log10(GWAS_JPT$P)
 sig6<-GWAS_JPT[which(GWAS_JPT$Plog10 > 6),]
 
@@ -102,18 +95,20 @@ B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
 AB=plot_grid(A,B, rel_widths=c(1,5))
 #ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
 
-fname='/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_noNA.assoc.linear'
-tab5rows <- read.table(fname, header = TRUE, nrows = 5, row.names=NULL)
+fname='~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_noNA_Dup.assoc.linear'
+tab5rows <- read.table(fname, header = TRUE, nrows = 5)
 classes <- sapply(tab5rows, class)
 assoc<-read.table(fname, header=TRUE, colClasses= classes)
 assoc$Plog10=-log10(assoc$P)
+sig.6<-assoc[which(assoc$Plog10 > 6),]
+NotSig<-assoc[which(assoc$Plog10 < 6),]
 
-
-GWAS=ggplot(assoc, aes(x=BP, y = Plog10, color=as.factor(CHR)))+
+GWAS=ggplot(NotSig, aes(x=BP, y = Plog10, color=as.factor(CHR)))+
 facet_grid(~CHR, scales='free_x', space='free_x', switch='x')+
 scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
+geom_point(data=sig.6, aes(x=BP, y = Plog10,),color='black',shape=3)+
 geom_hline(yintercept = 8, color='red')+
 geom_hline(yintercept = 6, color='blue')+
 labs(y='-log10(p)', x='Chromosome')+
