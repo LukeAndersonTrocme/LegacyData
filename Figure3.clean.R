@@ -15,14 +15,14 @@ SFS=data.frame()
 for(f in seq(1,nrow(pops))){
 pop=pops[f,]
 print(as.character(pop))
-fname=paste('/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_',pop,'_sig6.assoc.linear',sep='')
-
+fname=paste('/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_',pop,'_INT_sig6.assoc.linear',sep='')
+if(file.info(fname)$size != 0){
 freq=read.table(fname, header=F,, col.names=c('CHR','SNP','BP','A1','TEST','NMISS','BETA','STAT','P'))
 freq$Plog10<--log10(freq$P)
 sub=freq[,c('CHR','BP','Plog10')]
 sub$Pop<-pop
 SFS=rbind(SFS,sub)
-}
+}}
 
 
 SFS<-unique(SFS)
