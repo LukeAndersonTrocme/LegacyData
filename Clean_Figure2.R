@@ -51,5 +51,5 @@ labs(y="Average quality of mapped bases")+geom_hline(yintercept=30, linetype=2, 
 c=ggplot(plt, aes(x= SUBMISSION.DATE, y= INSTRUMENT_MODEL,shape= INSTRUMENT_MODEL))+geom_point()+theme(axis.title.y=element_blank(),axis.line.y=element_blank())+labs(x="Sequencing Date")+ guides(shape=guide_legend(title="",label=F,override.aes = list(alpha = 0))) +
 scale_x_date(date_labels = "%Y",date_breaks = "1 year")+theme(axis.text.y=element_text(size=10,hjust=0))
 
-plot_grid(a,b,c, nrow=3, labels=c('A','B',''),rel_heights=c(4,4,1),align='v')
+d=plot_grid(a,b,c, nrow=3, labels=c('A','B',''),rel_heights=c(4,4,1),align='v')
 ggsave("~/Documents/QualityPaper/MapQualOverTime.jpg",d,height=11,width=8)

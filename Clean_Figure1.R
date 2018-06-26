@@ -31,7 +31,7 @@ write.table(j,'~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
 
 tab5rows <- read.table('/Users/luke/Documents/1FinalGWAS/1kGP_Chr2.4bed_filtered.assoc.linear', header = T, nrows = 5, row.names=NULL)
 classes <- sapply(tab5rows, class)
-GWAS_JPT<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
+GWAS_JPT<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
 GWAS_JPT$Plog10= -log10(GWAS_JPT$P)
 sig6<-GWAS_JPT[which(GWAS_JPT$Plog10 > 6),]
 
