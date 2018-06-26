@@ -12,3 +12,5 @@ legacy.pdf
 legacy.suppinfo
 
 legacy.synctex.gz
+
+*.vcf
