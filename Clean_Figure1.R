@@ -42,6 +42,8 @@ jj<-pltspect[complete.cases(pltspect),]
 
 SNP<-read.table('/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
 
+rSNP<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+
 ReverseComp <- function(x)
         chartr("ATGC","TACG",
         sapply(lapply(strsplit(x, NULL), rev), paste, collapse=""))
@@ -59,15 +61,28 @@ TG$Alt<-TG$RevAlt
 SNP<-rbind(AC,TG)
 SNP$Mut<-paste(SNP$Ref,'->', substr(SNP$Context,1,1),SNP$Alt,substr(SNP$Context,3,3),sep='')
 
+rSNP$Rev<-ReverseComp(as.character(rSNP$Context))
+rSNP$RevRef<-ReverseComp(as.character(rSNP$Ref))
+rSNP$RevAlt<-ReverseComp(as.character(rSNP$Alt))
+
+AC<-rSNP[which(rSNP$Ref %in% c('A','C')),]
+TG<-rSNP[which(rSNP$Ref %in% c('T','G')),]
+TG$Context<-TG$Rev
+TG$Ref<-TG$RevRef
+TG$Alt<-TG$RevAlt
+
+rSNP<-rbind(AC,TG)
+rSNP$Mut<-paste(rSNP$Ref,'->', substr(rSNP$Context,1,1),rSNP$Alt,substr(rSNP$Context,3,3),sep='')
+
 plt<-as.data.frame(table(SNP$Mut))
 plt$Start<-substr(plt$Var1,4,4)
 plt$End<-substr(plt$Var1,6,6)
 plt$Mut<-paste(substr(plt$Var1,1,3), substr(plt$Var1,5,5))
 
-##CHANGE THIS??
-m<-nrow(SNP)/96
-plt$Freq<-plt$Freq/m
-##CHANGE THIS??
+rplt<-as.data.frame(table(rSNP$Mut))
+rplt$Start<-substr(rplt$Var1,4,4)
+rplt$End<-substr(rplt$Var1,6,6)
+rplt$Mut<-paste(substr(rplt$Var1,1,3), substr(rplt$Var1,5,5))
 
 SFS=ggplot(data= pltspect, aes(x=NAG_V6, y=JPT_V6))+
 geom_bin2d(binwidth=c(1/884, 1/104))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
@@ -78,21 +93,52 @@ theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), a
 xlab(label="NAG")
 
 HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
+B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
 
-SPECT=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
+
+sig=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
-theme(plot.title = element_blank(),
-plot.subtitle = element_text(hjust = 0.5), 
-axis.title=element_blank(),
+theme(axis.title=element_blank(),
+axis.line=element_blank(),
 legend.position="bottom",
 strip.placement = "outside",
-strip.background=element_blank())+
-scale_fill_gradient(low='white', high='blue',
-guide = guide_legend(title = 'Enrichment',title.position = "top"))
+strip.background=element_blank(),
+panel.border = element_rect(colour = "black", fill=NA, size=1))+
+scale_fill_gradient2(low='red', mid='white', high='blue',
+guide = guide_legend(title = 'Count',title.position = "top"),
+limits=c(0,max(plt$Freq)))+labs(subtitle='Significant SNPs')
 
-A=plot_grid(SPECT,labels=c('A'))
-B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
-AB=plot_grid(A,B, rel_widths=c(1,5))
+notsig=ggplot(rplt, aes(x=End, y=Start, fill=Freq))+
+facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
+theme(axis.title=element_blank(),
+axis.line=element_blank(),
+legend.position="bottom",
+strip.placement = "outside",
+strip.background=element_blank(),strip.text=element_blank(),
+panel.border = element_rect(colour = "black", fill=NA, size=1))+
+scale_fill_gradient2(low='red', mid='white', high='blue',
+guide = guide_legend(title = 'Count',title.position = "top"),
+limits=c(0,max(plt$Freq)))+labs(subtitle='Non-Significant SNPs')
+
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(sig)
+
+            
+A=plot_grid(plot_grid(
+sig + theme(legend.position="none"),
+notsig + theme(legend.position="none"),
+rel_widths=c(1,0.77)),
+mylegend,
+nrow=2,rel_heights=c(1,0.1),labels=c('A'))
+
+AB=plot_grid(A,B, rel_widths=c(1,2.5))
 #ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
 
 fname='~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_noNA_Dup.assoc.linear'
@@ -120,6 +166,6 @@ axis.line.x=element_blank(),
 strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)
-# my office mate whom sits next to me is my boss! 
+
 fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
-ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=7,width=7)
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)
