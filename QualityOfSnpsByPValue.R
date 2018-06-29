@@ -19,32 +19,25 @@ names(meanQual)<-qualPop$Pop
 
 allPops<-data.frame()
 for(pop in unique(NamePop$Pop)){
-if(pop != 'BEB'){
-fname=paste('/Users/luke/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_',pop,'_Genotypes_1.txt', sep='')
-GT<-read.table(fname,header=F)
-names(GT)=c('Pos','Chr','Ref','Alt','Flip','Context', as.character(NamePop$Name))  
-cut=c('Chr','Pos',as.character(NamePop[which(NamePop$Pop == pop),]$Name))
-GT<-GT[cut]
+print(pop)	
+fname=paste('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_',pop,'.frq', sep='')
+frq <-read.table(fname)
+frq <-frq[which(frq$MAF > 0),]
+frq$Pop<-pop
 
-melt.GT<-melt(GT,id=c('Chr','Pos'))
-melt.GT<-melt.GT[which(melt.GT$value > 0),]
-frq<-as.data.frame(table(melt.GT$Chr, melt.GT$Pos))
-frq$Freq<-round(frq$Freq/(ncol(GT)-2), digits=3)
-frq <-frq[which(frq$Freq > 0),]
-
-GWAS<-read.table(paste('/Users/luke/Documents/GWAS_Qual/GWAS_Data/CI/GenomeWide_',pop,'_GWAS_Qual_ci_sig1.assoc.linear',sep=''),col.names=c('CHR','SNP','BP','A1','TEST','NMISS','BETA','SE','L95','U95','STAT','P'))
+GWAS<-read.table(paste('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_',pop,'_INT_ci_sig6.assoc.linear',sep=''),col.names=c('CHR','SNP','BP','A1','TEST','NMISS','BETA','SE','L95','U95','STAT','P'))
 GWAS $Plog10<--log10(GWAS $P)
-GWAS=merge(GWAS,frq, by.x=c('CHR', 'BP'), by.y=c('Var1','Var2'))
-GWAS=merge(GWAS, melt.GT, by.x=c('CHR', 'BP'), by.y=c('Chr','Pos'))
-GWAS=merge(GWAS,SubMeta, by.x='variable', by.y='Name')
+GWAS=merge(GWAS,frq, by='SNP')
+#GWAS=merge(GWAS, melt.GT, by.x=c('CHR', 'BP'), by.y=c('Chr','Pos'))
+GWAS=merge(GWAS,SubMeta, by.x='Pop', by.y='Name')
 GWAS=GWAS[,c('CHR','BP','SNP','BETA','Plog10','Freq','Pop','average_quality_of_mapped_bases')]
 
 G<-unique(GWAS[,c('CHR','BP','average_quality_of_mapped_bases','Freq','Plog10','Pop')])
 Mean<-aggregate(.~CHR+BP+Freq+Plog10+Pop, G,mean)
 allPops<-rbind(allPops,Mean)
 ggplot(Mean,aes(x= average_quality_of_mapped_bases, y=Plog10, color=Freq))+geom_point(shape=1)+ggtitle(pop)
-ggsave(paste('/Users/luke/Documents/GWAS_Qual/PvalueByQuality_',pop,'_1.tiff',sep=''),height=5,width=7)
-}}
+ggsave(paste('/Users/luke/Documents/GWAS_Qual/PvalueByQuality_',pop,'_Jun28.tiff',sep=''),height=5,width=7)
+}
 
 pl=list()
 for(pop in unique(NamePop$Pop)){

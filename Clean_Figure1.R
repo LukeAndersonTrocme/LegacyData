@@ -1,7 +1,7 @@
 library(ggplot2)
 library(colorspace)
 library(cowplot)
-f1kGP='/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered.freq.frq'
+f1kGP='~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT.frq' #/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered.freq.frq
 fnag='/Users/luke/genomes/genomes/NAG_4bedFiltered/NAG_GenomeWide.4bed_filtered.freq.frq'
 
 tab5rows <- read.table(fnag, header = TRUE, nrows = 5, row.names=NULL)
@@ -106,7 +106,7 @@ strip.background=element_blank(),
 panel.border = element_rect(colour = "black", fill=NA, size=1))+
 scale_fill_gradient2(low='red', mid='white', high='blue',
 guide = guide_legend(title = 'Count',title.position = "top"),
-limits=c(0,max(plt$Freq)))+labs(subtitle='Significant SNPs')
+limits=c(0,max(plt$Freq)))+labs(subtitle='Suspicious SNPs')
 
 notsig=ggplot(rplt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
@@ -118,7 +118,7 @@ strip.background=element_blank(),strip.text=element_blank(),
 panel.border = element_rect(colour = "black", fill=NA, size=1))+
 scale_fill_gradient2(low='red', mid='white', high='blue',
 guide = guide_legend(title = 'Count',title.position = "top"),
-limits=c(0,max(plt$Freq)))+labs(subtitle='Non-Significant SNPs')
+limits=c(0,max(plt$Freq)))+labs(subtitle='Control SNPs')
 
 #extract legend
 #https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
