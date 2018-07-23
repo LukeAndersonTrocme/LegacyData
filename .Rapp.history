@@ -1,38 +1,3 @@
-GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) coef(x)[4])
-heaD(GT.Qual[which(GT.Qual$Pop==pop),])
-head(GT.Qual[which(GT.Qual$Pop==pop),])
-stat[[1]]
-coef(stat[[1]])
-stat[[10]]
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])
-GT.Qual$intercept=''
-GT.Qual$beta=''
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])
-ggplt(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()+theme(axis.text=element_blank(), axis.ticks=element_blank())
-min(GT.Qual$intercept)
-min(GT.Qual[which(GT.Qual$Pop==pop),]$intercept)
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=as.numeric(intercept),y=beta))+geom_point()+theme(axis.text=element_blank(), axis.ticks=element_blank())
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=as.numeric(intercept),y=as.numeric(beta)))+geom_point()
-head(dfSums)
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-}
-warnings()
-ggplot(GT.Qual, aes(x=as.numeric(intercept),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3)
-head(GT.Qual)
-ggplot(GT.Qual[which(GT.Qual$Pop=='JPT'),], aes(x=as.numeric(intercept),y=as.numeric(beta)))+geom_point()
-ggplot(GT.Qual, aes(x=as.numeric(intercept),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free')
 str(GT.Qual)
 ggplot(GT.Qual, aes(x=reorder(as.numeric(Pos),Chr),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free')
 ggplot(GT.Qual, aes(x=reorder(as.numeric(Pos), beta),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3)+theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
@@ -411,3 +376,81 @@ ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= a
 ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()+scale_y_continuous(breaks=c(0,1))+labs(y='Genotype',x='Quality')
 ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()+scale_y_continuous(breaks=c(0,1))+labs(y='Genotype',x='Quality')+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)
 write.table(unique(Meta[c('Name','Pop', 'average_quality_of_mapped_bases')]), file='/Volumes/SpaceMan/QualityScoresPerID.txt')
+inFile <- file(description='/Users/luke/Documents/Regression/CHR22.Format_JPT.csv', ,open="r")
+colNames=c('Chr','Pos','Name','value','Pop','average_quality_of_mapped_bases','fixed')   #
+dataChunk <- read.table(inFile, nrows=chunkSize,col.names=colNames, sep=',')#
+PopSize <- length(unique(dataChunk$Name))#
+chunkSize <- chunkSize * PopSize#
+dataChunk <- read.table(inFile, nrows=chunkSize,col.names=colNames, sep=',')#
+print(head(dataChunk))
+index <- 0#
+counter <- 0#
+chunkSize <- 1000
+library(data.table)
+colNames=c('Chr','Pos','Name','value','Pop','average_quality_of_mapped_bases','fixed')   #
+dataChunk <- read.table(inFile, nrows=chunkSize,col.names=colNames, sep=',')#
+PopSize <- length(unique(dataChunk$Name))#
+chunkSize <- chunkSize * PopSize#
+dataChunk <- read.table(inFile, nrows=chunkSize,col.names=colNames, sep=',')#
+print(head(dataChunk))
+as.data.frame(table(dataChunk$Pos))
+inFile <- read.table('/Users/luke/Documents/Regression/CHR22.Format_JPT.csv',sep=',')
+inFile <- fread('/Users/luke/Documents/Regression/CHR22.Format_JPT.csv',sep=',')
+head(inFile)
+Positions<-unique(inFile$Pos)
+length(Positions)
+close(inFile)
+Input <- fread('/Users/luke/Documents/Regression/CHR22.Format_JPT.csv',sep=',')#
+Positions<-unique(Input $Pos)
+for(chunk in seq(1,length(Positions),100)){print(chunk)}
+for(chunk in seq(0,length(Positions),100)){print(chunk)}
+split(Positions, ceiling(seq_along(Positions)/100))
+chunks=split(Positions, ceiling(seq_along(Positions)/100))
+chunks[1]
+chunks[[1]]
+for(chunk in chunks){#
+	print('Yo')#
+	print(chunk)#
+}
+index <- 1#
+for(chunk in chunks){#
+print(paste('working on chunk :',index))#
+subChunk<-GT.Qual[which(GT.Qual$Pos %in% chunk),]	#
+stat <- with(GT.Qual, by(GT.Qual,Pos, function(x) #
+		glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
+#extract P value#
+less = unique(GT.Qual[,c('Chr','Pos','Pop')])#
+less$p = -log10(as.numeric(as.character(sapply(stat,function(x) summary(x)$coef[2,4]))))#
+#write results to file#
+if(index == 1){#
+	print('Writing to new Output')#
+	write.table(less,file=args[2], quote=F, row.names=F, append=FALSE)}#
+if(index > 1){#
+    print('Writing to existing Output')#
+    write.table(less,file=args[2], quote=F, row.names=F, append=TRUE)}#
+index <- index + 1#
+}
+chunks=split(Positions, ceiling(seq_along(Positions)/100))#
+index <- 1#
+for(chunk in chunks){#
+print(paste('working on chunk :',index))#
+subChunk<-Input[which(Input $Pos %in% chunk),]	#
+stat <- with(subChunk, by(subChunk,Pos, function(x) #
+		glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
+#extract P value#
+less = unique(subChunk[,c('Chr','Pos','Pop')])#
+less$p = -log10(as.numeric(as.character(sapply(stat,function(x) summary(x)$coef[2,4]))))#
+#write results to file#
+if(index == 1){#
+	print('Writing to new Output')#
+	write.table(less,file=args[2], quote=F, row.names=F, append=FALSE)}#
+if(index > 1){#
+    print('Writing to existing Output')#
+    write.table(less,file=args[2], quote=F, row.names=F, append=TRUE)}#
+index <- index + 1#
+}
+length(chunks)
+Logistic<-fread('~/Documents/Regression/CHR22.Regression_JPT.csv', header=T)
+ggplot(Logistic,aes(x=p), color='grey70')+geom_density()+theme_classic()
+library(ggplot2)
+ggplot(Logistic,aes(x=p), color='grey70')+geom_density()+theme_classic()
