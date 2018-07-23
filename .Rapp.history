@@ -1,188 +1,3 @@
-GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) coef(x)[4])
-heaD(GT.Qual[which(GT.Qual$Pop==pop),])
-head(GT.Qual[which(GT.Qual$Pop==pop),])
-stat[[1]]
-coef(stat[[1]])
-stat[[10]]
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])
-GT.Qual$intercept=''
-GT.Qual$beta=''
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])
-ggplt(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=intercept,y=beta))+geom_point()+theme(axis.text=element_blank(), axis.ticks=element_blank())
-min(GT.Qual$intercept)
-min(GT.Qual[which(GT.Qual$Pop==pop),]$intercept)
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=as.numeric(intercept),y=beta))+geom_point()+theme(axis.text=element_blank(), axis.ticks=element_blank())
-ggplot(GT.Qual[which(GT.Qual$Pop==pop),], aes(x=as.numeric(intercept),y=as.numeric(beta)))+geom_point()
-head(dfSums)
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-}
-warnings()
-ggplot(GT.Qual, aes(x=as.numeric(intercept),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3)
-head(GT.Qual)
-ggplot(GT.Qual[which(GT.Qual$Pop=='JPT'),], aes(x=as.numeric(intercept),y=as.numeric(beta)))+geom_point()
-ggplot(GT.Qual, aes(x=as.numeric(intercept),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free')
-str(GT.Qual)
-ggplot(GT.Qual, aes(x=reorder(as.numeric(Pos),Chr),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free')
-ggplot(GT.Qual, aes(x=reorder(as.numeric(Pos), beta),y=as.numeric(beta), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3)+theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
-GT.Qual$Pos<-as.numeric(as.character(GT.Qual$Pos))
-GT.Qual$beta<-as.numeric(as.character(GT.Qual$beta))
-GT.Qual$intercept<-as.numeric(as.character(GT.Qual$intercept))
-head(GT.Qual)
-ggplot(GT.Qual, aes(x=intercept,y=reorder(Pos, intercept), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3)+theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
-ggplot(GT.Qual, aes(x=intercept,y=reorder(Pos, intercept), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free.x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept,y=reorder(Pos, intercept), color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free_x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept,y=beta, color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=3, scales='free_x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept, color=Pop))+geom_histogram()+facet_wrap(.~Pop, ncol=3, scales='free_x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density(bins=10)+facet_wrap(.~Pop, ncol=3, scales='free_x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=3, scales='free_x')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=3, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=3, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=3, scales='free_y')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=3, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=1, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-stat[[1]]
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_violin()+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=intercept,y=_density_ fill=Pop))+geom_violin()+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=Pop,y=intercept fill=Pop))+geom_violin()+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=Pop,y=intercept, fill=Pop))+geom_violin()+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=Pop,y=intercept, fill=Pop))+geom_violin()+guides(fill=FALSE)
-head(GT.Qual[which(GT.Qual$intercept < 1000),])
-head(GT.Qual[which(GT.Qual$intercept < -1000),])
-head(GT.Qual[which(GT.Qual$intercept < -10000),])
-head(GT.Qual[which(GT.Qual$intercept < -100000),])
-nrow(GT.Qual[which(GT.Qual$intercept < -100000),])
-ggplot(GT.Qual[which(GT.Qual$intercept < -100000),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()+facet_wrap(.~Pos)
-table(GT.Qual[which(GT.Qual$intercept < -100000),]$value)
-table(GT.Qual[which(GT.Qual$intercept < -100000),]$value,GT.Qual[which(GT.Qual$intercept < -100000),]$Pos)
-GT.Qual<-merge(melt.GT, SubMeta, by.x='variable',by.y='Name')#
-#make it a factor#
-GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
-GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
-#####
-GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
-#####
-GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
-#Get number of alleles per position per population#
-dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame#
-GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
-GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]#
-GT.Qual$intercept=''#
-GT.Qual$beta=''
-head(GT.Qual[which(GT.Qual$Pop=='MSL'),])
-head(GT.Qual[which((GT.Qual$Pop=='MSL')&(GT.Qual$Pos==39722440)),])
-table(GT.Qual[which((GT.Qual$Pop=='MSL')&(GT.Qual$Pos==39722440)),]$value)
-ggplot(GT.Qual[which((GT.Qual$Pop=='MSL')&(GT.Qual$Pos==39722440)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-}#
-GT.Qual$Pos<-as.numeric(as.character(GT.Qual$Pos))#
-GT.Qual$beta<-as.numeric(as.character(GT.Qual$beta))#
-GT.Qual$intercept<-as.numeric(as.character(GT.Qual$intercept))
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=intercept,y=beta, color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)#
-ggsave('~/Documents/Regression/JPT_sig6_LogisticPerPop_interceptDensity.jpg')#
-ggplot(GT.Qual, aes(x=intercept,y=beta, color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=2, scales='free')+guides(color=FALSE)#
-ggsave('~/Documents/Regression/JPT_sig6_LogisticPerPop_interceptBeta.jpg')
-ggplot(GT.Qual, aes(x=intercept,y=beta, color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=2, scales='free')+guides(color=FALSE)+geom_vline(xintercept=0,color='grey70')#
-ggsave('~/Documents/Regression/JPT_sig6_LogisticPerPop_interceptBeta.jpg')
-ggplot(GT.Qual[which((GT.Qual$Pop=='MSL')&(GT.Qual$Pos==39722440)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()
-stat[[1]]
-stat[[100]]
-pop
-stat[100]
-stat[10]
-NorMeta<-read.table('~/genomes/genomes/1000GenomesQual_INT.pheno',col.names=c('ID','ID2','Quality'))
-head(NorMeta)
-NorMeta<-read.table('~/genomes/genomes/1000GenomesQual_INT.pheno',col.names=c('Name','ID','Quality'))
-SubMeta<-merge(SubMeta,NorMeta, by='Name')
-head(SubMeta)
-SubMeta<-unique(Meta[c('Name','Pop', 'average_quality_of_mapped_bases')])#
-SubMeta$BinQual<-0#
-SubMeta[which(SubMeta$average_quality_of_mapped_bases<30),]$BinQual<-1#
-##Transformed Quality Score#
-NorMeta<-read.table('~/genomes/genomes/1000GenomesQual_INT.pheno',col.names=c('Name','ID','Quality'))#
-SubMeta<-merge(SubMeta,NorMeta[,c('Name','Quality')], by='Name')
-head(SubMeta)
-GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
-GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
-GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
-#####
-GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
-#####
-GT.Qual $value<-as.numeric(as.character(GT.Qual $value))
-#Get number of alleles per position per population#
-dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame#
-GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
-GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]#
-GT.Qual$intercept=''#
-GT.Qual$beta=''#
-#
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ Quality, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-}#
-GT.Qual$Pos<-as.numeric(as.character(GT.Qual$Pos))#
-GT.Qual$beta<-as.numeric(as.character(GT.Qual$beta))#
-GT.Qual$intercept<-as.numeric(as.character(GT.Qual$intercept))
-head(GT.Qual)
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')+ggtitle('Density of Intercepts for \nLogistic Regression on GT by Quality')
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')+ggtitle('Density of Intercepts for \nLogistic Regression of Genotype by Quality')
-ggplot(GT.Qual, aes(x=intercept, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2, scales='free')+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')+ggtitle('Density of Intercepts for \nLogistic Regression of Genotype by Quality')#
-ggsave('~/Documents/Regression/JPT_sig6_LogisticPerPop_interceptDensity.jpg')#
-ggplot(GT.Qual, aes(x=intercept,y=beta, color=Pop))+geom_point()+facet_wrap(.~Pop, ncol=2, scales='free')+guides(color=FALSE)+geom_vline(xintercept=0,color='grey70')+ggtitle('Intercept by Beta')#
-ggsave('~/Documents/Regression/JPT_sig6_LogisticPerPop_interceptBeta.jpg')
-Hamming<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(Distance=sum(value != BinQual)) %>% as.data.frame
-head(Hamming)
-Hamming<-merge(Hamming, GT.Qual, by=c('Pos','Pop'))
-head(Hamming)
-Hamming<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(Distance=sum(value != BinQual)) %>% as.data.frame#
-Hamming<-merge(Hamming, unique(GT.Qual[,c('Chr','Pos','Pop')]), by=c('Pos','Pop'))
-head(Hamming)
-str(Hamming)
-ggplot(Hamming,aes(x=reorder(Pos,Chr),y=Distance,color=Pop))+geom_point()+facet_wrap(.~Pop)
-ggplot(Hamming,aes(x=reorder(Pos,Chr),y=Distance,color=Pop))+geom_point()+facet_wrap(.~Pop)+theme(axis.text.x=element_blank(),axis.ticks.x=element_blank())
-ggplot(Hamming,aes(x=Distance))+geom_point()+facet_grid(Pop~Pop)
-library(GGally)
-install.packages(GGally)
-install.packages('GGally')
-library(GGally)
-ggpairs(iris, aes(colour = Species, alpha = 0.4))
-ggpairs(Hamming, aes(colour = Pop, alpha = 0.4))
-Hsub<-Hamming[which(Hamming$Pop %in% c('JPT','YRI','PUR','GBR','CEU')),]
-ggpairs(Hsub, aes(colour = Pop, alpha = 0.4))
-Hsub<-droplevels(Hamming[which(Hamming$Pop %in% c('JPT','YRI','PUR','GBR','CEU')),])
-ggpairs(Hsub, aes(colour = Pop, alpha = 0.4))
-ggpairs(Hsub[,c('Distance')], aes(colour = Pop, alpha = 0.4))
 ggpairs(Hsub[,c('Distance','Pop')], aes(colour = Pop, alpha = 0.4))
 ggplot(Hamming,aes(x=Distance,color=Pop))+geom_denisty()+facet_wrap(.~Pop)+theme(axis.text.x=element_blank(),axis.ticks.x=element_blank())
 ggplot(Hamming,aes(x=Distance,color=Pop))+geom_density()+facet_wrap(.~Pop)+theme(axis.text.x=element_blank(),axis.ticks.x=element_blank())
@@ -411,3 +226,327 @@ ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= a
 ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()+scale_y_continuous(breaks=c(0,1))+labs(y='Genotype',x='Quality')
 ggplot(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos== 100033562)),], aes(x= average_quality_of_mapped_bases, y=value))+geom_point()+scale_y_continuous(breaks=c(0,1))+labs(y='Genotype',x='Quality')+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)
 write.table(unique(Meta[c('Name','Pop', 'average_quality_of_mapped_bases')]), file='/Volumes/SpaceMan/QualityScoresPerID.txt')
+GT<-read.table('/Users/luke/Documents/GitHub/QualityPaper/Clean_Logistic.R /Users/luke/Documents/PhD/data/CHR22.Genotypes\ 2.txt',header=F, colClasses= classes, nrow=100)
+GT<-read.table('/Users/luke/Documents/GitHub/QualityPaper/Clean_Logistic.R /Users/luke/Documents/PhD/data/CHR22.Genotypes 2.txt',header=F, colClasses= classes, nrow=100)
+GT<-read.table('/Users/luke/Documents/GitHub/QualityPaper/Clean_Logistic.R /Users/luke/Documents/PhD/data/CHR22.Genotypes2.txt',header=F, colClasses= classes, nrow=100)
+GT<-read.table('/Users/luke/Documents/GitHub/QualityPaper/Clean_Logistic.R /Users/luke/Documents/PhD/data/CHR22.Genotypes.txt',header=F, colClasses= classes, nrow=100)
+GT<-read.table('/Users/luke/Documents/PhD/data/CHR22.Genotypes 2.txt',header=F, colClasses= classes, nrow=100)
+GT<-read.table('/Users/luke/Documents/PhD/data/CHR22.Genotypes 2.txt',header=F, nrow=100)
+library(reshape2)
+#Pop and Ind Names #~/genomes/genomes/PopNames/Name.BigPop.Pop.txt#
+NamePop<-read.table('~/Documents/PhD/data/Name.BigPop.Pop.txt', col.names=c('Name', 'BigPop', 'Pop'))#
+NamePop<-NamePop[which(NamePop$Pop != 'NAG'),]#
+#
+#Quality per individual#
+Meta<-read.table("~/Dropbox/LukeTemp/1000GenomesMetaData.txt")#
+Meta$SUBMISSION.DATE<-as.Date(Meta$SUBMISSION.DATE, "%Y-%m-%d")  #
+SubMeta<-unique(Meta[c('Name','Pop', 'average_quality_of_mapped_bases')])#
+print('Welcome to the R script')
+names(GT)=c('Chr','Pos', as.character(NamePop$Name))#
+print('Table is Loaded')#
+#Melt, reshape#
+melt.GT<-melt(GT,id=c('Chr','Pos'))#
+rm(GT)#
+print('Table is Melted')#
+#Merge with Quality#
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')#
+rm(melt.GT)
+head(melt.GT)
+write.table(SubMeta,file='~/Dropbox/LukeTemp/SubMeta.txt')
+SubMeta <-read.table('~/Dropbox/LukeTemp/SubMeta.txt')
+print('Table is Loaded')#
+#Melt, reshape#
+melt.GT<-melt(GT,id=c('Chr','Pos'))#
+rm(GT)#
+print('Table is Melted')#
+#Merge with Quality#
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')#
+rm(melt.GT)#
+#make it a factor#
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]
+??ggplot2
+??%>%
+?%>%
+??pipe
+library(magrittr)
+dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame
+??group_by
+??group
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))
+dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame
+?group_by
+??group_by
+??group by
+??group
+head(table(GT.Qual$value, GT.Qual $Pos, GT.Qual $Pop))
+head(table(GT.Qual$value))
+head(GT.Qual$value)
+head(GT.Qual)
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
+melt.GT<-melt(GT,id=c('Chr','Pos'))
+GT<-read.table('/Users/luke/Documents/PhD/data/CHR22.Genotypes 2.txt',header=F, nrow=100)
+names(GT)=c('Chr','Pos', as.character(NamePop$Name))#
+print('Table is Loaded')#
+#Melt, reshape#
+melt.GT<-melt(GT,id=c('Chr','Pos'))#
+rm(GT)#
+print('Table is Melted')#
+#Merge with Quality#
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')#
+rm(melt.GT)#
+#make it a factor#
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value,Pos,Pop))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]
+head(table(GT.Qual$value))
+head(GT.Qual)
+head(SubMeta)
+head(GT)
+GT<-read.table('/Users/luke/Documents/PhD/data/CHR22.Genotypes 2.txt',header=F, nrow=100)
+head(GT)
+names(GT)=c('Chr','Pos', as.character(NamePop$Name))
+melt.GT<-melt(GT,id=c('Chr','Pos'))
+head(melt.GT)
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))
+head(GT.Qual)
+head(table(GT.Qual$value))
+head(table(GT.Qual$value,T.Qual$Pop))
+head(table(GT.Qual$value,GT.Qual$Pop))
+head(as.data.frame(table(GT.Qual$value,GT.Qual$Pop)))
+head(as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos)))
+names(dfSums)<-c('value','Pop','Pos','Freq')
+dfSums <-as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos))
+names(dfSums)<-c('value','Pop','Pos','Freq')
+head(dfSums)
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]
+head(GT.Qual)
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','average_quality_of_mapped_bases','Chr')]
+head(GT.Qual)
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ Quality, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ Quality, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])
+gtQual$value<-as.numeric(as.character(gtQual$value))
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','average_quality_of_mapped_bases','Chr','value')]
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums <-as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos))#
+names(dfSums)<-c('value','Pop','Pos','Freq')#
+#dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value,Pos,Pop))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]#
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','average_quality_of_mapped_bases','Chr','value')]#
+#
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ Quality, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])
+gtQual$value<-as.numeric(as.character(gtQual$value))
+head(GT.Qual)
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','average_quality_of_mapped_bases','Chr','value.x')]
+head(GT.Qual)
+gtQual$value<-as.numeric(as.character(gtQual$value.x))
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value.x))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ Quality, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value.x))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])
+gtQual$value<-as.numeric(as.character(gtQual$value.x))
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ average_quality_of_mapped_bases, data=x, family=binomial)))
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])
+head(stat[[20]])
+head(stat[[20]])
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
+#make it a factor#
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums <-as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos))#
+names(dfSums)<-c('value','Pop','Pos','Freq')#
+#dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value,Pos,Pop))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]#
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','Quality','Chr','value.x')]#
+#
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value.x))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value ~ Quality, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+head(GT.Qual)
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')
+#make it a factor#
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums <-as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos))#
+names(dfSums)<-c('value','Pop','Pos','Freq')#
+#dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value,Pos,Pop))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]#
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','Quality','Chr','value.x')]
+head(GT.Qual)
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','Quality','Chr','value.x')]
+GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')#
+#rm(melt.GT)#
+#make it a factor#
+GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
+GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
+#####
+GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
+#####
+GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
+#Get number of alleles per position per population#
+dfSums <-as.data.frame(table(GT.Qual$value,GT.Qual$Pop,GT.Qual$Pos))#
+names(dfSums)<-c('value','Pop','Pos','Freq')#
+#dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value,Pos,Pop))) %>% as.data.frame#
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]#
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','Quality','Chr','value.x')]
+head(GT.Qual)
+GT.Qual<-GT.Qual[,c('Pos','Pop','Name','average_quality_of_mapped_bases','Chr','value.x')]
+head(GT.Qual)
+GT.Qual$p=''#
+#For each pop#
+for(pop in unique(GT.Qual$Pop)){#
+	print(pop)#
+	#subset#
+gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
+gtQual$value<-as.numeric(as.character(gtQual$value.x))#
+#for each position, run glm#
+stat<-with(gtQual, #
+		by(gtQual, gtQual$Pos, #
+			function(x) glm(value.x ~ average_quality_of_mapped_bases, data=x, family=binomial)))#
+#extract P value					#
+GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) summary(x)$coef[2,4])				#
+}#
+GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
+head(stat[[1]])
+head(GT.Qual)
+test<-droplevels(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos=='16554752'))),])
+test<-droplevels(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos=='16554752')),])
+head(test)
+glm(value.x ~ average_quality_of_mapped_bases, data=test, family=binomial)
+head(test)
+ggplot(test, aes(x= average_quality_of_mapped_bases, y= value.x))+geom_point()
+library(ggplot2)
+ggplot(test, aes(x= average_quality_of_mapped_bases, y= value.x))+geom_point()
+head(dfSums)
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))
+head(GT.Qual)
+GT.Qual<-GT.Qual[which(GT.Qual$Freq>0),]
+head(GT.Qual)
+test<-droplevels(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos=='16554752')),])
+ggplot(test, aes(x= average_quality_of_mapped_bases, y= value.x))+geom_point()
+GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))
