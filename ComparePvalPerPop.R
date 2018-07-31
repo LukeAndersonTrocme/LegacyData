@@ -2,7 +2,7 @@
 library(ggplot2)
 library(cowplot)
 
-all<-read.table('~/Downloads/CHR22.Regression_ALL.csv', header=T)
+all<-read.table('~/Documents/Regression/CHR22.Regression_ALL.csv', header=T)
 all$Chr<-as.numeric(as.character(all$Chr))
 all$Pos<-as.numeric(as.character(all$Pos))
 all$p<-as.numeric(as.character(all$p))

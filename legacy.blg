@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: legacy.aux
+The style file: apalike.bst
+Illegal, another \bibstyle command---line 63 of file legacy.aux
+ : \bibstyle
+ :          {plain}
+I'm skipping whatever remains of this command
+Database file #1: Legacy.bib.bib
+Warning--I didn't find a database entry for ""
+You've used 8 entries,
+            1935 wiz_defined-function locations,
+            531 strings with 9020 characters,
+and the built_in function-call counts, 8832 in all, are:
+= -- 676
+> -- 1050
+< -- 4
++ -- 412
+- -- 412
+* -- 1016
+:= -- 1664
+add.period$ -- 23
+call.type$ -- 8
+change.case$ -- 246
+chr.to.int$ -- 8
+cite$ -- 8
+duplicate$ -- 107
+empty$ -- 213
+format.name$ -- 420
+if$ -- 1510
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 7
+newline$ -- 42
+num.names$ -- 24
+pop$ -- 227
+preamble$ -- 1
+purify$ -- 246
+quote$ -- 0
+skip$ -- 84
+stack$ -- 0
+substring$ -- 237
+swap$ -- 7
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 48
+warning$ -- 0
+while$ -- 28
+width$ -- 0
+write$ -- 103
+(There was 1 error message)

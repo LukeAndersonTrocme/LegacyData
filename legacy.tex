@@ -126,11 +126,14 @@ Regressions against different individual-level quality metrics provided by the 1
 Individuals with low-quality data showing elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}). \sgcomment{fix ref to figs}
 Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
-To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality \ref{SFS}. 
-Using the linear regression as implemented in PLINK, we were able to identify $625$ snips with $p < 10^{-8}$ and $1048$ snps with $ p < 10^{-6}.$ 
+To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality \ref{SFS}.
+\luke{NEW:} 
+Whereas the majority of GWAS use linear regression predicting a phenotype based on genotype, our method does the inverse.
+We are looking for loci where the genotypes are predictable based on the data quality scores.
+We were able to identify \todo{000} SNPs with $p < 10^{-8}$ and \todo{000} SNPs with $ p < 10^{-6}$.
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., the traditional genome-wide significance threshold might not be a good guide for filtering).  
- This GWAS included 104 Japanese individuals, \todo{000} of which were sequenced in phase 1 while the rest were sequenced in phase 3 of the 1kGP.
-The variants that are associated to the quality of mapped bases have a 10 fold enrichment in *AC${\rightarrow}$*CC mutations. 
+ %This GWAS included 104 Japanese individuals, 74 of which were sequenced in using the Genome Analyzer II while the rest were sequenced using the HiSeq 2000 of the 1kGP.
+The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 
 The signal is enriched in GWAS snps, but residual signal remains because our GWAS has a power limit of 5\% minor allele frequency (MAF) resulting in many rare alleles found in individuals with low-quality data remaining unidentifiable using association techniques.
 For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality.

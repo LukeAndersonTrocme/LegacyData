@@ -90,7 +90,7 @@ scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,
 scale_x_continuous(expand=c(0.01,0.01))+
 scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
-xlab(label="NAG")
+xlab(label="Nagahama")
 
 HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
@@ -141,20 +141,26 @@ nrow=2,rel_heights=c(1,0.1),labels=c('A'))
 AB=plot_grid(A,B, rel_widths=c(1,2.5))
 #ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
 
-fname='~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_noNA_Dup.assoc.linear'
-tab5rows <- read.table(fname, header = TRUE, nrows = 5)
-classes <- sapply(tab5rows, class)
-assoc<-read.table(fname, header=TRUE, colClasses= classes)
-assoc$Plog10=-log10(assoc$P)
-sig.6<-assoc[which(assoc$Plog10 > 6),]
-NotSig<-assoc[which(assoc$Plog10 < 6),]
+fileNames = list.files(path='/Volumes/gravel/luke_projects/1000Genomes/Regression/', pattern="*.Regression_JPT.csv", full.names = T)
+Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T)))
 
-GWAS=ggplot(NotSig, aes(x=BP, y = Plog10, color=as.factor(CHR)))+
-facet_grid(~CHR, scales='free_x', space='free_x', switch='x')+
+Reg<-Reg[which(Reg$Pos != 'Pos'),]
+Reg$Chr<-as.numeric(as.character(Reg$Chr))
+Reg$Pos<-as.numeric(as.character(Reg$Pos))
+Reg$dev<-as.numeric(as.character(Reg$dev))
+Reg$Pop=NULL
+Reg$p=NULL
+
+Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+sig.6<-Reg[which(Reg$plog10 > 6),]
+NotSig<-Reg[which(Reg$plog10 < 6),]
+
+GWAS=ggplot(NotSig, aes(x=Pos, y = plog10, color=as.factor(Chr)))+
+facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
 scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
-geom_point(data=sig.6, aes(x=BP, y = Plog10,),color='black',shape=3)+
+geom_point(data=sig.6, aes(x=Pos, y = plog10,),color='black',shape=3)+
 geom_hline(yintercept = 8, color='red')+
 geom_hline(yintercept = 6, color='blue')+
 labs(y='-log10(p)', x='Chromosome')+
@@ -168,4 +174,4 @@ strip.text.x = element_text(size = 6))+
 guides(color=F)
 
 fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
-ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)``
