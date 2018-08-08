@@ -1,46 +1,72 @@
 library(ggplot2)
 library(colorspace)
 library(cowplot)
-f1kGP='~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT.frq' #/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered.freq.frq
-fnag='/Users/luke/genomes/genomes/NAG_4bedFiltered/NAG_GenomeWide.4bed_filtered.freq.frq'
+library(data.table)
 
-tab5rows <- read.table(fnag, header = TRUE, nrows = 5, row.names=NULL)
-classes <- sapply(tab5rows, class)
-#Allele Frequency from JPT
-JPT<-read.table(f1kGP, fill=T,skip=1,  skipNul = TRUE,colClasses = classes)
-colnames(JPT)<-paste("JPT", colnames(JPT), sep = "_")
-#Allele Frequency from NAG
-NAG<-read.table(fnag, fill=T,skip=1,  skipNul = TRUE,colClasses = classes)
-colnames(NAG)<-paste("NAG", colnames(NAG), sep = "_")
+if(F){
+#f1kGP='~/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered.freq.frq'
+f1kGP='/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide_JPT_1.frq'
+fnag='~/genomes/genomes/NAG_4bedFiltered/NAG_GenomeWide.4bed_filtered.freq.frq'
+hweFile='/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_sig6.hwe'
+
+#Allele Frequency files
+JPT<-fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'), colClasses=c('numeric'))
+NAG<-fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'), colClasses=c('numeric'))
 
 #merge them together
-join<-merge(JPT[which(JPT$JPT_V6 <= 1),],
- 			NAG[which(NAG$NAG_V6 <= 1),], 
- 			by.x=c("JPT_V1","JPT_V2"), 
- 			by.y=c("NAG_V1","NAG_V2"), all=T)
+join<-merge(JPT[which(JPT$JPT_AF <= 1),],
+ 			NAG[which(NAG$NAG_AF <= 1),], 
+ 			by=c('CHROM','POS'), all=T)
 join[is.na(join)]<-0
+rm(NAG)
+rm(JPT)
 #REMOVE  HWE SITES
-join= join[! paste(join $JPT_V1, join $JPT_V2) %in% c(paste(hwe$V1,hwe$V2)), ]
+NAG_hwe<-fread('/Users/luke/genomes/genomes/NAG_4bedFiltered/NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
+JPT_hwe <- fread('/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
+hwe=merge(NAG_hwe[,c('V1','V2')], JPT_hwe[,c('V1','V2')], by=c('V1','V2'), all=T)
 
-join$sum<-join$JPT_V6 + join$NAG_V6
-j<-join[which((join$sum > 0.01) & (join$sum < 2)),]
+join= join[! paste(join$CHROM, join$POS) %in% c(paste(hwe$V1,hwe$V2)), ]
+join=join[,c('CHROM','POS','JPT_MAF','JPT_AF','NAG_MAF','NAG_AF')]
 
-j<-j[,c('JPT_V1', 'JPT_V2','JPT_V6', 'NAG_V6', 'sum')]
-write.table(j,'~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
-#j<-read.table('~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
+join$CHROM<-as.numeric(as.character(join$CHROM))
+join$POS<-as.numeric(as.character(join$POS))
+join$JPT_AF<-as.numeric(as.character(join$JPT_AF))
+join$JPT_MAF<-as.numeric(as.character(join$JPT_MAF))
+join$NAG_AF<-as.numeric(as.character(join$NAG_AF))
+join$NAG_MAF<-as.numeric(as.character(join$NAG_MAF))
+join<-join[complete.cases(join),]
 
-tab5rows <- read.table('/Users/luke/Documents/1FinalGWAS/1kGP_Chr2.4bed_filtered.assoc.linear', header = T, nrows = 5, row.names=NULL)
-classes <- sapply(tab5rows, class)
-GWAS_JPT<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_sig6.assoc.linear', header=F,colClasses = classes, col.names=names(tab5rows))
-GWAS_JPT$Plog10= -log10(GWAS_JPT$P)
-sig6<-GWAS_JPT[which(GWAS_JPT$Plog10 > 6),]
+write.table(join, '~/Documents/QualityPaper/join.txt')
+}
+join=fread('~/Documents/QualityPaper/join.txt')
 
+##JPT Manhattan
+if(f){
+dir='/Volumes/gravel-1/luke_projects/1000Genomes/Regression/'
+out='/Volumes/gravel-1/luke_projects/1000Genomes/MeanDev/'
 
-pltspect<-merge(j, sig6, by.x=c('JPT_V1', 'JPT_V2'), by.y=c('CHR','BP'), all.x=T)
+jptNames = list.files(path=dir,pattern='JPT', full.names = T)
+jReg = do.call(rbind, lapply(jptNames, function(x) fread(x, header=T, sep=' ')))
+jReg<-jReg[which(jReg$Pos != 'Pos'),]
+jReg$Chr<-as.numeric(as.character(jReg$Chr))
+jReg$Pos<-as.numeric(as.character(jReg$Pos))
+jReg$dev<-as.numeric(as.character(jReg$dev))
 
-jj<-pltspect[complete.cases(pltspect),]
+jReg$plog10 <- - pchisq(jReg$dev, 1, lower.tail=F, log.p=T)/log(10)
+jReg$p <- pchisq(jReg$dev, 1, lower.tail=F)
 
-SNP<-read.table('/Users/luke/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+sig.6<-jReg[which(jReg$plog10 >= 6),]
+sig.4<-jReg[which(jReg$plog10 >= 4),]
+NotSig<-jReg[which(jReg$plog10 < 6),]
+
+write.table(sig.6[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig6.Pos', quote=F, col.names=F, row.names=F)
+write.table(sig.4[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig4.Pos', quote=F, col.names=F, row.names=F)
+}
+#sig.6<-fread('~/Documents/Regression/JPT_sig6.Pos', col.names=c('CHR','POS'))
+sig.6$sig<-'Significant'
+
+#CONTEXT
+SNP<-read.table('~/Documents/Regression/JPT_sig6.Context', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
 
 rSNP<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
 
@@ -84,15 +110,19 @@ rplt$Start<-substr(rplt$Var1,4,4)
 rplt$End<-substr(rplt$Var1,6,6)
 rplt$Mut<-paste(substr(rplt$Var1,1,3), substr(rplt$Var1,5,5))
 
-SFS=ggplot(data= pltspect, aes(x=NAG_V6, y=JPT_V6))+
+#SFS
+join<-merge(join, sig.6, by.x=c('CHROM', 'POS'), by.y=c('CHR','POS'), all.x=T)
+jj<-join[complete.cases(join),]
+
+SFS=ggplot(data= join, aes(x=NAG_MAF, y=JPT_MAF))+
 geom_bin2d(binwidth=c(1/884, 1/104))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
-scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000'))+
+scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000,10000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000','10,000,000'))+
 scale_x_continuous(expand=c(0.01,0.01))+
 scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
 xlab(label="Nagahama")
 
-HIST=ggplot(jj, aes(x= JPT_V6))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_V6), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
+HIST=ggplot(jj, aes(x= JPT_MAF))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_MAF), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
 
 
@@ -143,6 +173,7 @@ AB=plot_grid(A,B, rel_widths=c(1,2.5))
 
 fileNames = list.files(path='/Volumes/gravel/luke_projects/1000Genomes/Regression/', pattern="*.Regression_JPT.csv", full.names = T)
 Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T)))
+Reg<-fread('/Volumes/gravel/luke_projects/1000Genomes/Regression/GenomeWide.Regression_JPT.csv')
 
 Reg<-Reg[which(Reg$Pos != 'Pos'),]
 Reg$Chr<-as.numeric(as.character(Reg$Chr))
@@ -174,4 +205,4 @@ strip.text.x = element_text(size = 6))+
 guides(color=F)
 
 fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
-ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)``
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)

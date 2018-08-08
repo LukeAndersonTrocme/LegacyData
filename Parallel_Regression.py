@@ -3,15 +3,14 @@ import sys, os
 import time
 
 chrom = sys.argv[1]
-global chrom
-
+path = sys.argv[2]
 def Bash_cmd(pop):
     print('Working on Pop : '+str(pop))
     #put your bash command below
-    input='~/Documents/Regression/CHR{0}.Format_{1}.csv.gz'.format(chrom,pop)
-    output='~/Documents/Regression/CHR{0}.Regression_{1}.csv'.format(chrom,pop)
+    input='{2}/Format/CHR{0}.Format_{1}.csv.gz'.format(chrom, pop, path)
+    output='{2}/Regression/CHR{0}.Regression_{1}.csv'.format(chrom, pop, path)
 
-    print(input)
+    print('Rscript ~/Documents/QualityPaper/JustStats.R {0} {1} {2}'.format(input, output, pop))
     os.system('Rscript ~/Documents/QualityPaper/JustStats.R {0} {1} {2}'.format(input, output, pop))
 
 if __name__ == '__main__':
