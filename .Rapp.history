@@ -1,106 +1,3 @@
-anova(stat[[30]], test="Chi")[1,5]
-anova(stat[[30]], test="Chi")[1,1]
-q=anova(stat[[30]], test="Chi")
-q[1,5]
-q[1]
-q[3]
-q[4]
-q[5]
-q[5,2]
-q[5,1]
-q[5]
-q[5,1]
-q[1,5]
-q[5][1]
-q[5][2]
-q[5][[1]]
-q[5][[1,2]]
-q[5][[1,1]]
-q[5][[2,1]]
-anova(stat[[30]], test="Chi")[5][[2,1]]
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ Quality, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) nova(x, test="Chi")[5][[2,1]])				#
-}
-dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame#
-GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
-GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]#
-GT.Qual$intercept=''#
-GT.Qual$beta=''#
-GT.Qual$p=''
-head(GT.Qual)
-#Merge with Quality#
-GT.Qual<-merge(SubMeta,melt.GT, by.y='variable',by.x='Name')#
-#make it a factor#
-GT.Qual$Pop<-as.factor(GT.Qual$Pop)#
-GT.Qual$Pos<-as.factor(GT.Qual$Pos)#
-#####
-GT.Qual$value<-gsub(2,1, GT.Qual$value) #collapse GT#
-#####
-GT.Qual $value<-as.numeric(as.character(GT.Qual $value))#
-#Get number of alleles per position per population#
-dfSums<-GT.Qual %>% group_by(Pos,Pop) %>% summarize(SumOver=length(table(value))) %>% as.data.frame#
-GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))#
-GT.Qual<-GT.Qual[which(GT.Qual$SumOver==2),]#
-GT.Qual$intercept=''#
-GT.Qual$beta=''#
-GT.Qual$p=''
-for(pop in unique(GT.Qual$Pop)){#
-gtQual<-droplevels(GT.Qual[which(GT.Qual$Pop==pop),])#
-gtQual$value<-as.numeric(as.character(gtQual$value))#
-print(pop)#
-stat<-with(gtQual, #
-		by(gtQual, gtQual$Pos, #
-			function(x) glm(value ~ Quality, data=x, family=binomial)))#
-GT.Qual[which(GT.Qual$Pop==pop),]$intercept<-sapply(stat,function(x) coef(x)[1])#
-GT.Qual[which(GT.Qual$Pop==pop),]$beta<-sapply(stat,function(x) coef(x)[2])			#
-GT.Qual[which(GT.Qual$Pop==pop),]$p<-sapply(stat,function(x) anova(x, test="Chi")[5][[2,1]])				#
-}
-warnings
-head(GT.Qual)
-GT.Qual$Plog10<--log10(GT.Qual$p)
-GT.Qual$Plog10<--log10(as.numeric(GT.Qual$p))
-head(GT.Qual)
-ggplot(GT.Qual, aes(x=Pop,y=Plog10, fill=Pop))+geom_violin()+guides(fill=FALSE)
-ggplot(GT.Qual, aes(x=Plog10, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2)+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')+ggtitle('Density of Intercepts for \nLogistic Regression of Genotype by Quality')
-head(qqnorm(GT.Qual$Plog10))
-qqnorm(GT.Qual$p, pch = 1, frame = FALSE)#
-qqline(GT.Qual$p, col = "steelblue", lwd = 2)
-qqnorm(GT.Qual$Plog10, pch = 1, frame = FALSE)#
-qqline(GT.Qual$Plog10, col = "steelblue", lwd = 2)
-stat[[30]]
-anova(stat[[30]], test="Chi")
-ggplot(GT.Qual, aes(x=Plog10, fill=Pop))+geom_density()+facet_wrap(.~Pop, ncol=2)+theme(axis.text.y=element_blank(), axis.ticks.y=element_blank(), axis.line=element_blank())+guides(fill=FALSE)+geom_vline(xintercept=0,color='grey70')
-ggplot(GT.Qual, aes(x=Pop,y=Plog10, fill=Pop))+geom_violin()+guides(fill=FALSE)
-anova(stat[[1]], test="Chi")
-glm(formula = value ~ Quality, data = gtQual[which(gtQual$Pos == )])
-head(gtQual)
-glm(formula = value ~ Quality, data = gtQual[which(gtQual$Pos == 100566606),], family=binomial)
-xx = gtQual[which(gtQual$Pos == 100566606)
-xx = gtQual[which(gtQual$Pos == 100566606),]
-xx
-head(xx)
-glm(formula = value ~ Quality + Chr, data = xx, family=binomial)
-str(xx)
-glm(formula = value ~ Quality + Chr, data = xx, family=binomial)
-head(xx)
-glm(formula = value ~ Quality + average_quality_of_mapped_bases, data = xx, family=binomial)
-foo = glm(formula = value ~ Quality + average_quality_of_mapped_bases, data = xx, family=binomial)
-stat(foo)
-summary(foo)
-foo = glm(formula = value ~ Quality, data = xx, family=binomial)
-summary(foo)
-summary(stat[[30]])
-anova(stat[[30]], test='Chi')
-head(xx)
-ggplot(xx, aes(x= Quality, y=value))+geom_point()
 pop
 summary(stat[[30]])[2]
 summary(stat[[30]])[1,2]
@@ -601,3 +498,109 @@ test<-droplevels(GT.Qual[which((GT.Qual$Pop=='JPT')&(GT.Qual$Pos=='16554752')),]
 ggplot(test, aes(x= average_quality_of_mapped_bases, y= value.x))+geom_point()
 GT.Qual<-merge(GT.Qual,dfSums,by=c('Pos','Pop'))
 >>>>>>> origin/master
+#load libraries#
+library(ggplot2)#
+library(cowplot)#
+library(data.table)#
+#pop names, used to read/write files#
+pops<-read.table('/Users/luke/Documents/MutSpect/WrapUpPlots/NamePop.txt')#
+#read colors per pop (used in 1kG Nature)#
+colors<-read.table("~/Dropbox/LukeTemp/NamePopBigPop_color.html.txt", comment.char='>',col.names=c('Pop','hex','BigPop'))#
+MyColour <- as.character(colors $hex)#
+names(MyColour) <- colors $Pop#
+#
+#read the list of sig snps#
+#bad=read.table('~/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.POS.txt',col.names=c('Chr', 'Pos'))#
+dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/GenomeWide.Regression_PUR.csv'#
+fileNames = list.files(path=dir, pattern=GenomeWide.Regression_*.csv, full.names = T)
+fileNames = list.files(path=dir, pattern='GenomeWide.Regression_*.csv', full.names = T)
+fileNames
+fileNames = list.files(path=dir, pattern='GenomeWide.Regression_', full.names = T)
+fileNames
+fileNames = list.files(path=dir, pattern='GenomeWide*', full.names = T)
+fileNames
+dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+fileNames = list.files(path=dir, pattern='GenomeWide', full.names = T)
+fileNames
+fileNames = list.files(path=dir, pattern='GenomeWide*sig.csv', full.names = T)
+fileNames
+fileNames = list.files(path=dir, pattern='sig.csv', full.names = T)
+fileNames
+fileNames = list.files(path=dir, pattern='sig.csv', full.names = T)
+fileNames
+Reg = do.call(rbind, lapply(fileNames, function(x) fread(x)))
+head(Reg)
+table(Reg$Chr)
+Reg<-Reg[which(Reg$Pos != 'Pos'),]#
+Reg$Chr<-as.numeric(as.character(Reg$Chr))#
+Reg$Pos<-as.numeric(as.character(Reg$Pos))#
+Reg$dev<-as.numeric(as.character(Reg$dev))
+Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+table(Reg$Chr)
+NumPop<-as.data.frame(table(Reg$Chr,Reg$Pos))#
+UnPop<-NumPop[which(NumPop$Freq==1),]#
+NumPop<-NumPop[which(NumPop$Freq>1),]
+m=merge(Reg,NumPop, by.y=c('Var1','Var2'), by.x=c('Chr','Pos'))
+head(Reg)
+head(NumPop)
+str(Reg)
+str(NumPop)
+NumPop$Var1<-as.numeric(as.character(NumPop$Var1))
+NumPop$Var2<-as.numeric(as.character(NumPop$Var2))
+m=merge(Reg,NumPop, by.y=c('Var1','Var2'), by.x=c('Chr','Pos'))
+n=as.data.frame(table(m$Pop))
+plt=merge(m,n,by.x='Pop',by.y='Var1')
+plt <- plt[with(plt, order(-Freq.x, as.numeric(Chr),as.numeric(Pos))),]
+plt$Pos <- factor(plt$Pos, levels = unique(plt$Pos))
+plt$nrow<-seq(length=nrow(plt))
+plt$Pcat<-4
+plt[which(plt$Plog10 <8),]$Pcat<-2
+plt[which((plt$Plog10 >8) & (plt$Plog10 <10)),]$Pcat<-3
+xaxis<-plt[!duplicated(plt[,c('Freq.x')]), ]
+xaxis<-xaxis[which(xaxis$Freq.x<11),]
+xaxis<-rbind(xaxis,tail(plt,1))
+p1=ggplot(plt, aes(x=Pos,y= reorder(Pop,-Freq.y), color=Pop, size=Pcat))+geom_point(shape=3)+theme_classic()+scale_size(breaks=c(2,3,4), range=c(1,3),labels=c('6-8','8-10','10+'), guide = guide_legend(direction = "horizontal"), name='-log10(p)')+scale_color_manual(breaks= plt$Pop,values = MyColour)+ylab('Populations')+ggtitle('Overlap of SNPs found to be Significant in Quality-GWAS')+theme(legend.position = c(0.85,0.95),legend.box.background = element_rect(colour = "black"), plot.title = element_text(hjust = 0.5), axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank(), plot.margin = unit(c(1,1,0,1), "cm"))+guides(color=F)#
+#
+p2=ggplot(plt, aes(x=Pos,y= Freq.x, group=1))+geom_hline(yintercept=1, color='grey', linetype=2)+geom_hline(yintercept=5, color='grey', linetype=2)+geom_hline(yintercept=10, color='grey', linetype=2)+geom_line()+theme_classic()+theme(plot.title = element_text(hjust = 0.5), plot.margin = unit(c(0,1,1,1), "cm"))+labs(x='SNPs ranked by frequency of occurence and genomic position', y='Frequency\nof Occurence')+scale_y_continuous(limits=c(0,16),breaks=c(1,5,10,15))+scale_x_discrete(expand=c(0.01,0),breaks=xaxis$Pos, labels=xaxis$nrow)#
+#
+p3=plot_grid(p1, p2, ncol=1, align="v", rel_heights = c(3, 1))
+p1
+head(plt)
+table(plt$Pcat)
+Reg<-Reg[which(Reg$plog10 >= 6),]
+NumPop<-as.data.frame(table(Reg$Chr,Reg$Pos))#
+UnPop<-NumPop[which(NumPop$Freq==1),]#
+NumPop<-NumPop[which(NumPop$Freq>1),]#
+NumPop$Var1<-as.numeric(as.character(NumPop$Var1))#
+NumPop$Var2<-as.numeric(as.character(NumPop$Var2))#
+#
+m=merge(Reg,NumPop, by.y=c('Var1','Var2'), by.x=c('Chr','Pos'))#
+n=as.data.frame(table(m$Pop))#
+plt=merge(m,n,by.x='Pop',by.y='Var1')#
+plt <- plt[with(plt, order(-Freq.x, as.numeric(Chr),as.numeric(Pos))),]#
+plt$Pos <- factor(plt$Pos, levels = unique(plt$Pos))#
+plt$nrow<-seq(length=nrow(plt))#
+plt$Pcat<-4#
+plt[which(plt$Plog10 <8),]$Pcat<-2#
+plt[which((plt$Plog10 >8) & (plt$Plog10 <10)),]$Pcat<-3#
+#
+xaxis<-plt[!duplicated(plt[,c('Freq.x')]), ]#
+xaxis<-xaxis[which(xaxis$Freq.x<11),]#
+xaxis<-rbind(xaxis,tail(plt,1))
+table(plt$Pcat)
+plt[which(plt$plog10 <8),]$Pcat<-2
+plt[which((plt$plog10 >8) & (plt$plog10 <10)),]$Pcat<-3
+table(plt$Pcat)
+p1=ggplot(plt, aes(x=Pos,y= reorder(Pop,-Freq.y), color=Pop, size=Pcat))+geom_point(shape=3)+theme_classic()+scale_size(breaks=c(2,3,4), range=c(1,3),labels=c('6-8','8-10','10+'), guide = guide_legend(direction = "horizontal"), name='-log10(p)')+scale_color_manual(breaks= plt$Pop,values = MyColour)+ylab('Populations')+ggtitle('Overlap of SNPs found to be Significant in Quality-GWAS')+theme(legend.position = c(0.85,0.95),legend.box.background = element_rect(colour = "black"), plot.title = element_text(hjust = 0.5), axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank(), plot.margin = unit(c(1,1,0,1), "cm"))+guides(color=F)#
+#
+p2=ggplot(plt, aes(x=Pos,y= Freq.x, group=1))+geom_hline(yintercept=1, color='grey', linetype=2)+geom_hline(yintercept=5, color='grey', linetype=2)+geom_hline(yintercept=10, color='grey', linetype=2)+geom_line()+theme_classic()+theme(plot.title = element_text(hjust = 0.5), plot.margin = unit(c(0,1,1,1), "cm"))+labs(x='SNPs ranked by frequency of occurence and genomic position', y='Frequency\nof Occurence')+scale_y_continuous(limits=c(0,16),breaks=c(1,5,10,15))+scale_x_discrete(expand=c(0.01,0),breaks=xaxis$Pos, labels=xaxis$nrow)#
+#
+p3=plot_grid(p1, p2, ncol=1, align="v", rel_heights = c(3, 1))
+p3
+dev.off()
+dev.off()
+p3
+head(plt)
+max(Freq.x)
+max(plt$Freq.x)
+ggsave('~/Documents/QualityPaper/SNPOverlap6.jpg',p3, height=9, width=9)

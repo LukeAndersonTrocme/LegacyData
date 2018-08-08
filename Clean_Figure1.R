@@ -122,7 +122,7 @@ scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
 xlab(label="Nagahama")
 
-HIST=ggplot(jj, aes(x= JPT_MAF))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(0,50,100))+geom_vline(xintercept=min(jj$JPT_MAF), linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
+HIST=ggplot(jj, aes(x= JPT_MAF))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(10,50,100))+geom_vline(xintercept=0.05, linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
 
 
@@ -168,11 +168,8 @@ rel_widths=c(1,0.77)),
 mylegend,
 nrow=2,rel_heights=c(1,0.1),labels=c('A'))
 
-AB=plot_grid(A,B, rel_widths=c(1,2.5))
-#ggsave('~/Documents/QualityPaper/NAG_JPT_SFS_GenomeWide_frq.jpg',p3, height=5,width=7)
+AB=plot_grid(A,B, rel_widths=c(1,2.7))
 
-fileNames = list.files(path='/Volumes/gravel/luke_projects/1000Genomes/Regression/', pattern="*.Regression_JPT.csv", full.names = T)
-Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T)))
 Reg<-fread('/Volumes/gravel/luke_projects/1000Genomes/Regression/GenomeWide.Regression_JPT.csv')
 
 Reg<-Reg[which(Reg$Pos != 'Pos'),]
@@ -192,8 +189,6 @@ scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
 geom_point(data=sig.6, aes(x=Pos, y = plog10,),color='black',shape=3)+
-geom_hline(yintercept = 8, color='red')+
-geom_hline(yintercept = 6, color='blue')+
 labs(y='-log10(p)', x='Chromosome')+
 theme(plot.title = element_text(hjust = 0.5), 
 plot.subtitle = element_text(hjust = 0.5), 
@@ -203,6 +198,7 @@ axis.line.x=element_blank(),
 strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)
+#geom_hline(yintercept = 8, color='red')+geom_hline(yintercept = 6, color='blue')+
 
 fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
-ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=10,width=10)
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=11,width=11)

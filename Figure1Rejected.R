@@ -42,3 +42,28 @@ j<-join[which((join$sum > 0.01) & (join$sum < 2)),]
 j<-j[,c('JPT_CHROM', 'JPT_POS','JPT_MAF', 'NAG_MAF', 'sum')]
 write.table(j,'~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
 #j<-read.table('~/Documents/MutSpect/WrapUpPlots/SFS_NAG_JPT_4bed.plot.txt')
+
+
+
+##Figure 3
+SFS=data.frame()
+for(f in seq(1,nrow(pops))){
+pop=pops[f,]
+print(as.character(pop))
+fileNames = list.files(path=dir, pattern=paste(pop), full.names = T)
+Reg = do.call(rbind, lapply(fileNames, function(x) fread(x)))
+print('Read')
+Reg<-Reg[which(Reg$Pos != 'Pos'),]
+Reg$Chr<-as.numeric(as.character(Reg$Chr))
+Reg$Pos<-as.numeric(as.character(Reg$Pos))
+Reg$dev<-as.numeric(as.character(Reg$dev))
+Reg$p=NULL
+print('Clean')
+Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+sig.6<-Reg[which(Reg$plog10 > 6),]
+rm(Reg)
+write.table(sig.6[,c('Chr','Pos','plog10', 'Pop')], paste('~/Documents/Regression/',pop,'_sig6.csv', sep=','))
+#SFS=rbind(SFS,sig.6[,c('Chr','Pos','plog10', 'Pop')])
+}
+
+

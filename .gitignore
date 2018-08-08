@@ -14,3 +14,11 @@ legacy.suppinfo
 legacy.synctex.gz
 
 *.vcf
+
+HWE.txt
+
+join.txt
+
+joinedAF.csv
+
+JoinedFrequency.txt
