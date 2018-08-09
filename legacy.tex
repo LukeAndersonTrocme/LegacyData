@@ -176,6 +176,21 @@ The same variants identified as being low quality independently in each populati
   \label{OverLap}
 \end{figure*}
 
+\subsection{Combined Test}
+To improve on the power of our test, we performed a test by combining the deviations from the null model for each SNP for each population.
+Each population will have it's own deviation from the null for each position in the genome.
+We computed the combined p value for each position by taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant.
+This resulted in an increase in the number of SNPs reaching genome wide significance to 3664. \ref{Manhattan}
+
+\begin{figure*}
+\includegraphics[width=\hsize,keepaspectratio]{ManhattanPlot.jpg}
+
+\caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
+There are 2007 and 3664 variants that reach p values greater than $ p < 10^{-8}$ and $ p < 10^{-6}$ respectively.
+Crosses ( + ) represent SNPs that reach a genome wide significance greater than $ p < 10^{-6}$, the circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+  \label{Manhattan}
+\end{figure*}
+
 	\subsection{Imputation}
 The state of the art imputations servers use a combination of many databases including many that are not freely available.
 For this reason, the details of the methods used to impute genomic data are not publicly available either.
