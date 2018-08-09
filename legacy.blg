@@ -2,51 +2,51 @@ This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: legacy.aux
 The style file: apalike.bst
-Illegal, another \bibstyle command---line 63 of file legacy.aux
+Illegal, another \bibstyle command---line 64 of file legacy.aux
  : \bibstyle
  :          {plain}
 I'm skipping whatever remains of this command
 Database file #1: Legacy.bib.bib
 Warning--I didn't find a database entry for ""
-You've used 8 entries,
+You've used 9 entries,
             1935 wiz_defined-function locations,
-            531 strings with 9020 characters,
-and the built_in function-call counts, 8832 in all, are:
-= -- 676
-> -- 1050
-< -- 4
-+ -- 412
-- -- 412
-* -- 1016
-:= -- 1664
-add.period$ -- 23
-call.type$ -- 8
-change.case$ -- 246
-chr.to.int$ -- 8
-cite$ -- 8
-duplicate$ -- 107
-empty$ -- 213
-format.name$ -- 420
-if$ -- 1510
+            538 strings with 9195 characters,
+and the built_in function-call counts, 9213 in all, are:
+= -- 716
+> -- 1057
+< -- 5
++ -- 414
+- -- 414
+* -- 1049
+:= -- 1728
+add.period$ -- 26
+call.type$ -- 9
+change.case$ -- 252
+chr.to.int$ -- 9
+cite$ -- 9
+duplicate$ -- 121
+empty$ -- 245
+format.name$ -- 423
+if$ -- 1585
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 7
-newline$ -- 42
-num.names$ -- 24
-pop$ -- 227
+missing$ -- 8
+newline$ -- 47
+num.names$ -- 27
+pop$ -- 230
 preamble$ -- 1
-purify$ -- 246
+purify$ -- 252
 quote$ -- 0
-skip$ -- 84
+skip$ -- 95
 stack$ -- 0
-substring$ -- 237
-swap$ -- 7
+substring$ -- 280
+swap$ -- 8
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 48
+type$ -- 54
 warning$ -- 0
-while$ -- 28
+while$ -- 32
 width$ -- 0
-write$ -- 103
+write$ -- 116
 (There was 1 error message)
