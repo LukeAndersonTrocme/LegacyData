@@ -79,6 +79,7 @@ Large cohorts have recently become available to increase statistical power to re
 
 Fine scale mutational signatures are observable on evolutionary scales by comparing the rates of mutations between populations.
 In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 [\cite{}].
+
 This strong population enrichment of a mutational signature suggests important genetic or environmental differences in the history of each population [\cite{}]. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations [\cite{}]. 
 In particular, they identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals. 
@@ -161,7 +162,6 @@ By 2011, older sequencing technologies are phased out, and method development so
 	\subsection{Overlap of significant SNPs}
 We applied the same GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
 We found that 24 of the 26 populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
-\todo{Supplemental Figures : all the GWAS results for each population}
 Comparing the results of each independent GWAS, we were able to identify over 3517 variants that were independently associated to low quality in at least two populations  \ref{OverLap}. 
 
 \begin{figure*}
@@ -224,32 +224,30 @@ Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
 \end{center}
 
 			\section{Discussion}
-\subsection{Why do we care?}
-These SNPs reached genome wide significance for medically relevant traits. 
-Including these variants in the GWAS catalogue could lead to false diagnosis at worst, or spurious correlations at least. 
-Polygenic risk scores take into account all SNPs reaching significance, without much manual curation. 
-It's likely that the variants we have identified are being included in these multi-locus risk scores.
+%\subsection{Why do we care?}
+The variants identified in this study are likely to be technical artifacts from legacy technology.
+If these sequencing platforms are no longer being used then it it likely that these artifacts are no longer being actively introduced in recent sequence data.
+However, because the 1kGP data is widely used as a reference database, these variants are being imputed onto new genotype data.
+We have shown that these variants have been significantly associated using traditional GWAS methods.
+However this is not the only method that would be affected by these false positives. 
+Polygenic risk scores, meta analyses and other methods that combine the scores of multiple variants might also include some of these variants in their analyses.
+The inclusion of these variants could also affect population genetics analyses that compare and contrast populations based on allele frequencies.
 
-Despite these variants reaching genome wide significance, the majority of researchers did not pursue these variants for further analysis.
-This is likely because these variants have no peak in LD that is characteristic of a biologically significant variant.
-
-\subsection{Recommendations}
+%\subsection{Recommendations}
 The most conservative approach would be to remove all individuals that don't meet the quality threshold as well as all the variants associated to low quality.
-In this case, we used a cut off of an average quality of mapped bases over 30. This threshold has been \todo{previously used by studies}. It is the minimum requirements for \todo{GATK variant calling} for them to have a minimum quality of 30.
+In this case, we used a cut off of an average quality of mapped bases over 30. It is the minimum requirements for \todo{GATK variant calling} for them to have a minimum quality of 30.
 
-\subsection{Power limits and Quality Controls}
+%\subsection{Power limits and Quality Controls}
 If these variants are truly spurious, why were they not identified by the Hardy-Weinberg test of heterozygosity?
 \todo{how many hetd do you need to detect HWE significance?}
 We were able to identify many variants with frequencies below \todo{the power threshold for HWE}.
-However even the GWAS is limited by power as we were able to identify \todo{000} more variants that were missing in a higher quality dataset but present in over 1\% of the 1kGP Japanese data. 
-This suggests that while the GWAS we performed is a step in the right direction, the GWAS is not sufficient because the data is not reliable in the first place. 
 
-\subsection{Technical Source of Error}
+%\subsection{Technical Source of Error}
 %B tail trimming  (Minoche et al. Genome Biology 2011)
 %issues with PCR?
 %repetitive regions, GC bias...
 
-\subsection{GWAS from other papers}
+%\subsection{GWAS from other papers}
 %The only way to distinguish some of these more covert false positives is to use statistical tests associating the quality metrics of each position relative to each individual. 
 
 
@@ -309,7 +307,7 @@ Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for
 The VCF file returned from the server was then used to search for the number of significant SNPs imputed.
 
 \section{Code Availability}
-\todo{here is where I will put my git hub}
+https://github.com/LukeAndersonTrocme/QualityPaper
 
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
@@ -318,7 +316,19 @@ We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{PC1_Correlation.jpg}
 \caption{Regressions against mean quality per mapped base pair per individual is an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature.  }
- \label{PC1_Correlation}
+\label{PC1_Correlation}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{RegressionPlot_mostSig2.jpg}
+\caption{Logistic regression of the most significantly associated SNP rs75254682 for the populations with significant association to quality.}
+\label{MostSig}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{RegressionPlot.jpg}
+\caption{Logistic regression of rs6057648 for the populations with significant association to quality.}
+\label{TwinsSNP}
 \end{figure}
 
 \bibliographystyle{plain}

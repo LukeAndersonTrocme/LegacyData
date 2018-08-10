@@ -5,6 +5,8 @@ library(data.table)
 library(ggplot2)
 library(multtest)
 
+rsID<-fread('/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide_Chr.Pos.rsID.txt')
+
 dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
 out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
 if(F){
@@ -32,12 +34,14 @@ fileNames = list.files(path= out,pattern='*_MeanDev.csv', full.names = T)
 Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T)))
 Reg$plog10 <- - pchisq(Reg$SumDev, Reg$Count, lower.tail=F, log.p=T)/log(10)
 Reg$p <- pchisq(Reg$SumDev, Reg$Count, lower.tail=F)
+Reg<-merge(Reg, rsID, by.x=c('Chr','Pos'), by.y=c('V1','V2'), all.x=T)
 
 sig.6<-Reg[which((Reg$plog10 >= 6)&(Reg$plog10 < 20)&(Reg$Count > 1)),]
 sig.20<-Reg[which((Reg$plog10 >= 20)&(Reg$Count > 1)),]
 sig.20$plog10=20
 NotSig<-Reg[which((Reg$plog10 < 6)&(Reg$Count > 1)),]
 
+write.table(Reg[which((Reg$plog10 >= 6)&(Reg$Count > 1)),], '~/Documents/QualityPaper/Significant6SNPs.txt', quote=F, row.names=F)
 
 ggplot(NotSig, aes(x=Pos, y = plog10, color=as.factor(Chr)))+
 facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
