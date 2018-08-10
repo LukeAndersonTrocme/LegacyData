@@ -162,7 +162,7 @@ By 2011, older sequencing technologies are phased out, and method development so
 We applied the same GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
 We found that 24 of the 26 populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
 \todo{Supplemental Figures : all the GWAS results for each population}
-Comparing the results of each independent GWAS, we were able to identify over 3493 variants that were independently associated to low quality in at least two populations  \ref{OverLap}. 
+Comparing the results of each independent GWAS, we were able to identify over 3517 variants that were independently associated to low quality in at least two populations  \ref{OverLap}. 
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
@@ -198,28 +198,34 @@ In order to investigate the proportion of variants that we've identified as bein
 We found that all of the SNPs we identified as being associated with quality were imputed.
 This suggests that the imputation reference panel includes individuals with low sequence quality, as well as the variants that have been shown to be associated to quality. 
 
-	\subsection{Found to be included in other GWA studies}
+	\subsection{Found to be included in other GWAS }
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have called these erroneous variants as being significantly correlated with some biological trait. 
-Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found \todo{000} recent publications that had found at least one of the variants to have reached genome wide significance in their study.
+Using the NHGRI-EBI Catalog of published genome-wide association studies we queried the rsIDs of the SNPs we identified as being low quality and found two recent publications that had found at least one of the variants to have reached genome wide significance in their study.
 
-These studies used the 1kGP as the reference database for imputation. %and one used the 1kGP cell cultures and sequence data. 
-They used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
+One of these studies genotyped individuals and imputed the data using the HapMapII as a reference  database for imputation. 
+The other study used the 1kGP sequence data directly.
+Both papers used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
 They also removed rare alleles and alleles with high degrees of missingness. 
-Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. 
+Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
+
+
 
 \begin{center}
  \begin{tabular}{l l l r r} 
  \hline
 Author & Year & Journal & RSID & PMID \\ [0.5ex] 
  \hline
-
+Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648&23527680\\ 
+ 
+Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
+& & & rs201255786, rs201761909&\\
  \hline
  \end{tabular}
 \end{center}
 
 			\section{Discussion}
 \subsection{Why do we care?}
-These SNPs matter because they reached genome wide significance for medically relevant traits. 
+These SNPs reached genome wide significance for medically relevant traits. 
 Including these variants in the GWAS catalogue could lead to false diagnosis at worst, or spurious correlations at least. 
 Polygenic risk scores take into account all SNPs reaching significance, without much manual curation. 
 It's likely that the variants we have identified are being included in these multi-locus risk scores.
