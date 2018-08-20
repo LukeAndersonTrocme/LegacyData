@@ -27,7 +27,8 @@
 \author[1,2]{Luke Anderson-Trocm\'e}
 \author[1,2]{Mathieu Bourgey}
 \author[1,2]{Rick Farouni}
-\author[3]{Fumihiko Matsuda (and coauthors)}
+\author[3]{Fumihiko Matsuda}
+\author[3]{Yoichiro Kamatani}
 \author[1,2]{Simon Gravel}
 
 \affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
@@ -56,13 +57,13 @@ Some of these variants are being imputed onto genotype data and reach genome wid
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Hapmap \cite{HapMap2005}, the 1000 Genomes Project \cite{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \cite{Mallick2016}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
-Many more genomes are available indirectly through servers providing imputation services \cite{ProfJonathanMarchiniProfGoncaloAbecasisProfRichardDurbin2014} or variant frequency estimation \cite{Lek2016}. 
+Many more genomes are available indirectly through servers providing imputation services \cite{ProfJonathanMarchiniProfGoncaloAbecasisProfRichardDurbin2014} or summary statistics for variant frequency estimation \cite{Lek2016}.
 
 Many of these large datasets have been assembled over several years using a variety of sequencing platforms. 
 The first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced 10 years ago.
 During this period, sequencing platforms were still being rapidly developed.
-This lead to heterogeneous sample preparations for many of the samples included in the dataset.
-Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications. 
+This lead to heterogeneous sample preparations and data quality for many of the samples included in the dataset.
+Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and a wide range of applications.
 
 Although, it is clear that the quality and accuracy of the 1kGP data has increased over the past decade. 
 This data is far from perfect, the publication from the second phase of the 1kGP describe technological and analytical improvements over its previous phases.
@@ -82,7 +83,7 @@ In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European
 A more in depth analysis of these subtle mutational signatures was recently released in preprint by Aikens, Johnson and Voight. \cite{}
 In their study they expanded the investigations of mutational signals in the 1kGP by investigations to broader sequence contexts and found differences in mutation profiles across populations. \cite{}
 
-This strong population enrichment of a mutational signature suggests important genetic or environmental differences in the history of each population \cite{Harris2015a}. 
+Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \cite{Harris2015a}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations \cite{Harris2017a}. 
 In particular, they identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals.
 In addition, multiple 7-mer mutational signatures were also identified by Aikens et. al in the same populations. \cite{}
@@ -126,18 +127,16 @@ However, when comparing the allele frequencies between the Japanese individuals 
 This is unexpected given the similarity of the two populations, and suggests a technical artifact rather than a population structure effect. 
 Moreover, these mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium.
 
-When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears \ref{SFS}.
+When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}).
 Regressions against different individual-level quality metrics provided by the 1kGP revealed that mean quality per mapped base pair per individual was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. 
-Individuals with low-quality data showing elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}).
-Thus sequences with low mappability harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
+Individuals with low-quality data show elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}).
+Thus sequences with low quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
-To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality \ref{SFS}.
-\luke{NEW:} 
+To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality (Figure \ref{SFS}).
 Whereas the majority of GWAS use linear regression predicting a phenotype based on genotype, our method does the inverse.
 We are looking for loci where the genotypes are predictable based on the data quality scores.
 We were able to identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
-While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., the traditional genome-wide significance threshold might not be a good guide for filtering).  
- %This GWAS included 104 Japanese individuals, 74 of which were sequenced in using the Genome Analyzer II while the rest were sequenced using the HiSeq 2000 of the 1kGP.
+While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., the traditional genome-wide significance threshold might not be a good guide for filtering). 
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations. 
 A slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations is also present.
 By taking the reverse complement of *AC${\rightarrow}$*CC is GT*${\rightarrow}$GG*, these three enrichments can be summarized as G**${\rightarrow}$GG*.
@@ -148,26 +147,26 @@ The *AC${\rightarrow}$*CC mutational signal is limited to individuals with low q
 Therefore, the removal of individuals with average qualities below 30 successfully removes the signal.
 While the GWAS approach can identify some of the low hanging bad apples, there are likely more of these false positives nested inside these legacy cohorts.
 
-%Many of the populations in the 1kGP do not have higher quality counterparts which means that identifying questionably low quality data must be done ad hoc.
-
 	\subsection{Sequencing quality over time}
-The results of the GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
-The average quality of sequencing data of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data \ref{MapQual}.
+The results of the logistic regression GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
+The average quality of sequencing data of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
 This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centres.
 There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
 By 2011, older sequencing technologies are phased out, and method development solidify, which coincides with the sequencing quality levelling off.
+It's clear that there are many covariates that could be used to identify spurious sites like sequencing date, sequencing technology or even the sequencing centre. 
+However, the average quality of mapped bases per individual appeared to be the best metric to identify spurious sites. 
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{MapQualOverTime.jpg}
 
-\caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The x-axis is ranked by populations with the lease to the most variance, followed by average mapping quality per individual. \textbf{B} Same data as in \textbf{A} except the x-axis is sorted by sequencing date. The colours indicate the sequencing centers that produced the data for each individual.}
+\caption{\textbf{A} The average mapping quality of each individual per population included in the 1000 Genomes sequencing project. The earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
 \label{MapQual}
 \end{figure}
 
 	\subsection{Overlap of significant SNPs}
-We applied the same GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
+We applied the same logistic regression GWAS approach on the other 1kGP populations as it appears to capture a large portion of problematic sites. 
 We found that 24 of the 26 populations in the 1kGP had SNPs significantly associated to the average quality of mapped bases per individual.
-Comparing the results of each independent GWAS, we were able to identify over 3517 variants that were independently associated to low quality in at least two populations  \ref{OverLap}. 
+Comparing the results of each independent GWAS, we were able to identify over 3517 variants that were independently associated to low quality in at least two populations  (Figure \ref{OverLap}). 
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
@@ -185,16 +184,7 @@ The same variants identified as being low quality independently in each populati
 To improve on the power of our test, we performed a test by combining the deviations from the null model for each SNP for each population.
 Each population will have it's own deviation from the null for each position in the genome.
 We computed the combined p value for each position by taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant.
-This resulted in an increase in the number of SNPs reaching genome wide significance to 3664. \ref{Manhattan}
-
-\begin{figure*}
-\includegraphics[width=\hsize,keepaspectratio]{ManhattanPlot.jpg}
-
-\caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
-There are 2007 and 3664 variants that reach p values greater than $ p < 10^{-8}$ and $ p < 10^{-6}$ respectively.
-Crosses ( + ) represent SNPs that reach a genome wide significance greater than $ p < 10^{-6}$, the circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
-  \label{Manhattan}
-\end{figure*}
+This resulted in an increase in the number of SNPs reaching genome wide significance to 3664 (Figure \ref{Manhattan}).
 
 \subsection{Imputation}
 The state of the art imputations servers use a combination of many databases including many that are not freely available.
@@ -213,26 +203,13 @@ Both papers used strict quality thresholds, including population genetic statist
 They also removed rare alleles and alleles with high degrees of missingness. 
 Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
 
-\begin{center}
- \begin{tabular}{l l l r r} 
- \hline
-Author & Year & Journal & RSID & PMID \\ [0.5ex] 
- \hline
-Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648&23527680\\ 
- 
-Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
-& & & rs201255786, rs201761909&\\
- \hline
- \end{tabular}
-\end{center}
-
 \section{Discussion}
 			
 \subsection{Twins Research Human Genetics}
 This paper identified SNPs associated to ADHD using a GWAS on quantitative measures of ADHD symptoms.
 While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below significance below $ p < 10^{-5}$.
 The data used was imputed genotype data using Hapmap II as the reference.
-One of the top 25 SNPs in the GWAS on ADHD was identified as being significantly associated to data quality.
+One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to data quality.\cite{} 
 
 While they are clear in reporting that these SNPs are not genome wide significant, one can imagine a meta-analysis using this dataset would include the false positive SNP we identified. 
 Furthermore, the approach they used to impute genotype data for GWAS is very common.
@@ -243,9 +220,9 @@ This paper used the raw BAM files from the 1kGP to identify EBV copy number by c
 They did PCR confirmation of EBV copy number using 7 samples from some of the populations, however all of these samples have relatively high quality data.
 They performed a GWAS on the EBV copy number and identified only one SNP with significance below $ p < 10^{-8}$. 
 However they reported the SNPs reading significance below $ p < 10^{-6}$. 
-Four of the SNPs in the top hits of the Asian populations we're identified by our regression against data quality. 
+Four of the SNPs in the top hits of the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) we're identified by our regression against data quality. \cite{} 
 
-The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphobastoid cell lines (LCLs).
+The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphobastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
 It's unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that perhaps different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced.
 Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. 			
@@ -263,7 +240,7 @@ The inclusion of these variants could also affect population genetics analyses t
 The most conservative approach would be to remove all individuals that don't meet the quality threshold as well as all the variants associated to low quality.
 In this case, we used a cut off of an average quality of mapped bases over 30. 
 It is the minimum requirements for \todo{GATK variant calling} for them to have a minimum quality of 30.
-
+Another approach is to remove all the sites that reach a significance below $ p < 10^{-6}$ in at least two populations or using the sites reaching a significance below $ p < 10^{-6}$ in the combined test. (See supplementary material for lists of SNPs)
 %\subsection{Power limits and Quality Controls}
 %If these variants are truly spurious, why were they not identified by the Hardy-Weinberg test of heterozygosity?
 %how many hetd do you need to detect HWE significance?
@@ -324,20 +301,37 @@ Furthermore, only diallelic autosomal SNPs were considered, with missingness bel
 Using an in-house R script, we performed a logistic regression using the glm package. \cite{[R and GLM]} We performed this statistical test independently for each population of the 1kGP. The deviations from the null model for each test was used to compute the chi-squared p value for each SNP for each population. Since each deviation follows a chi-squared distribution, the sum of the deviations also follow a chi-squared distribution. However, since not all SNPs are present in all populations, when computing the p values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
 
 \subsection{Mutation Spectrum}
-We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. 
-We also calculated the spectrum of triplets of a list the same number of randomly selected SNPs as a control.
+We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \cite{Harris2017a}
+We modified the methods as necessary for our purposes, scripts are available \href{https://github.com/LukeAndersonTrocme/QualityPaper}{here}. 
 
 \subsection{Imputation}
-Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for chromosomes 1 and 2. 
-The VCF file returned from the server was then used to search for the number of significant SNPs imputed.
+Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for chromosomes 1 and 2.
+We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} genotype data.
+The VCF file returned from the server was then downloaded and used to search for the number of significant SNPs successfully imputed.
 
 \section{Code Availability}
 https://github.com/LukeAndersonTrocme/QualityPaper
 
 \section{Acknowledgments}
-We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
- 
+We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
+
+
+\bibliographystyle{plain}
+\bibliography{Legacy.bib}
+
 \subsection{Supplementary Figures}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0}   	
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{ManhattanPlot.jpg}
+
+\caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
+There are 2007 and 3664 variants that reach p values greater than $ p < 10^{-8}$ and $ p < 10^{-6}$ respectively.
+Crosses ( + ) represent SNPs that reach a genome wide significance greater than $ p < 10^{-6}$, the circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+  \label{Manhattan}
+\end{figure}
+
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{PC1_Correlation.jpg}
 \caption{Regressions against mean quality per mapped base pair per individual is an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature.  }
@@ -356,8 +350,18 @@ We would like to thank Kelly Harris for sharing her mutation spectrum pipelines.
 \label{TwinsSNP}
 \end{figure}
 
-\bibliographystyle{plain}
-\bibliography{Legacy.bib}
 
 \end{document}
 			
+%\begin{center}
+ %\begin{tabular}{l l l r r} 
+ %\hline
+%Author & Year & Journal & RSID & PMID \\ [0.5ex] 
+ %\hline
+%Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648&23527680\\ 
+ 
+%Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
+%& & & rs201255786, rs201761909&\\
+%\hline
+%\end{tabular}
+%\end{center}
