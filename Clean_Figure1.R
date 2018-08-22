@@ -38,7 +38,7 @@ join<-join[complete.cases(join),]
 
 write.table(join, '~/Documents/QualityPaper/join.txt')
 }
-join=fread('~/Documents/QualityPaper/join.txt')
+join=fread('~/Documents/QualityPaper/Misc/join.txt')
 
 ##JPT Manhattan
 if(f){
@@ -112,6 +112,7 @@ rplt$Mut<-paste(substr(rplt$Var1,1,3), substr(rplt$Var1,5,5))
 
 #SFS
 join<-merge(join, sig.6, by.x=c('CHROM', 'POS'), by.y=c('CHR','POS'), all.x=T)
+join<-join[which((join$JPT_MAF!=0)&(join$NAG_MAF!=0)),] #remove fixed
 jj<-join[complete.cases(join),]
 
 SFS=ggplot(data= join, aes(x=NAG_MAF, y=JPT_MAF))+
@@ -180,6 +181,20 @@ Reg$Pop=NULL
 Reg$p=NULL
 
 Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+Reg$p<-pchisq(Reg$dev, 1, lower.tail=F)
+###########
+colnames(Reg)[c(1,2)]<-c('CHROM','POS')
+
+RegJoin<-left_join(Reg, join, by=c('CHROM','POS'))
+RegJoin<-RegJoin[which(RegJoin$JPT_MAF > 1/208),]
+
+ggplot(RegJoin, aes(sample=RegJoin$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT.jpg', height=5, width=7)
+
+ggplot(Reg, aes(sample=Reg$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_withSingles.jpg', height=5, width=7)
+##########
 sig.6<-Reg[which(Reg$plog10 > 6),]
 NotSig<-Reg[which(Reg$plog10 < 6),]
 
