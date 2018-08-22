@@ -32,3 +32,7 @@ sig$Name<-factor(sig$Name, levels=unique(sig$Name))
 ggplot(sig, aes(x=V6, y=V4.x, color=V5))+geom_point(shape=1)+facet_wrap(~Name,nrow=1)+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Quality', y='Genotype')+scale_y_continuous(breaks=c(0,1))+geom_vline(xintercept=30, color='grey60',linetype=3)+coord_flip()+scale_color_manual(breaks= sig$V5,values = MyColour)+guides(color=F)
 
 ggsave('~/Documents/QualityPaper/RegressionPlot_mostSig2.jpg',height=6,width=12)
+
+
+weird<-fread('~/Documents/QualityPaper/Misc/LowAFsig_Format.txt')
+ggplot(weird, aes(x=V6, y=V4))+facet_grid(.~V2)+geom_point()+coord_flip()+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme(axis.text.x=element_blank())+labs(x='Genotypes', y='Quality')

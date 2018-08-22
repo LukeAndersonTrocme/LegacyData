@@ -186,7 +186,7 @@ Reg$p<-pchisq(Reg$dev, 1, lower.tail=F)
 colnames(Reg)[c(1,2)]<-c('CHROM','POS')
 
 RegJoin<-left_join(Reg, join, by=c('CHROM','POS'))
-RegJoin<-RegJoin[which(RegJoin$JPT_MAF > 1/208),]
+#RegJoin<-RegJoin[which(RegJoin$JPT_MAF > 1/208),]
 
 ggplot(RegJoin, aes(sample=RegJoin$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
 
@@ -194,6 +194,18 @@ ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT.jpg', height=5, width=7)
 
 ggplot(Reg, aes(sample=Reg$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
 ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_withSingles.jpg', height=5, width=7)
+
+single<-RegJoin[which(RegJoin$JPT_MAF == 0.00480769),]
+ggplot(single, aes(sample= single$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justSingles.jpg', height=5, width=7)
+
+double<-RegJoin[which(RegJoin$JPT_MAF == 2*0.00480769),]
+ggplot(double, aes(sample= double$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justDouble.jpg', height=5, width=7)
+
+triple<-RegJoin[which(RegJoin$JPT_MAF == 3*0.00480769),]
+ggplot(triple, aes(sample= triple$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justTriple.jpg', height=5, width=7)
 ##########
 sig.6<-Reg[which(Reg$plog10 > 6),]
 NotSig<-Reg[which(Reg$plog10 < 6),]

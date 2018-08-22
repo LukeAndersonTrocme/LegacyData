@@ -5,8 +5,6 @@ library(data.table)
 library(ggplot2)
 library(multtest)
 
-rsID<-fread('/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide_Chr.Pos.rsID.txt')
-
 dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
 out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
 if(F){
@@ -29,12 +27,27 @@ for(chrom in seq(1,22)){
 	}
 }
 }
-fileNames = list.files(path= out,pattern='*_MeanDev.csv', full.names = T)
-	
-Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T)))
+
+rsID<-fread('/Users/luke/genomes/genomes/1kGP_4bedFiltered/1kGP_GenomeWide_Chr.Pos.rsID.txt')
+colnames(rsID)<-c('Chr','Pos','rsID')
+join=fread('~/Documents/QualityPaper/Misc/join.txt')
+join[,1] <- NULL
+colnames(join)[c(1,2)]<-c('Chr','Pos')
+
+join<-left_join(join, rsID, by=c('Chr','Pos'))
+rm(rsID)
+
+Reg = fread('/Volumes/gravel/luke_projects/1000Genomes/MeanDev/AllPops_deviance.csv')
+Reg$V1<-NULL
+
+Reg<-left_join(Reg, join, by=c('Chr','Pos'))
+rm(join)
+
 Reg$plog10 <- - pchisq(Reg$SumDev, Reg$Count, lower.tail=F, log.p=T)/log(10)
 Reg$p <- pchisq(Reg$SumDev, Reg$Count, lower.tail=F)
-Reg<-merge(Reg, rsID, by.x=c('Chr','Pos'), by.y=c('V1','V2'), all.x=T)
+
+write.table(Reg, file='~/Documents/QualityPaper/Misc/Reg.txt', quote=F, row.names=F)
+
 
 sig.6<-Reg[which((Reg$plog10 >= 6)&(Reg$plog10 < 20)&(Reg$Count > 1)),]
 sig.20<-Reg[which((Reg$plog10 >= 20)&(Reg$Count > 1)),]
