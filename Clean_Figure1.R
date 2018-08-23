@@ -13,7 +13,7 @@ hweFile='/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_sig6.hwe
 JPT<-fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'), colClasses=c('numeric'))
 NAG<-fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'), colClasses=c('numeric'))
 
-#merge them together
+#merge them together to get joint frequency spectrum
 join<-merge(JPT[which(JPT$JPT_AF <= 1),],
  			NAG[which(NAG$NAG_AF <= 1),], 
  			by=c('CHROM','POS'), all=T)
@@ -37,7 +37,7 @@ join$NAG_MAF<-as.numeric(as.character(join$NAG_MAF))
 join<-join[complete.cases(join),]
 
 write.table(join, '~/Documents/QualityPaper/join.txt')
-}
+} #make the joint frequency file
 join=fread('~/Documents/QualityPaper/Misc/join.txt')
 
 ##JPT Manhattan
@@ -65,28 +65,32 @@ write.table(sig.4[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig4.Pos', quote=
 #sig.6<-fread('~/Documents/Regression/JPT_sig6.Pos', col.names=c('CHR','POS'))
 sig.6$sig<-'Significant'
 
-#CONTEXT
+#CONTEXT Mutation Spectrum enrichment
+#test SNPs
 SNP<-read.table('~/Documents/Regression/JPT_sig6.Context', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
-
+#Random SNPs
 rSNP<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
-
+#function to get reverse complement
 ReverseComp <- function(x)
         chartr("ATGC","TACG",
         sapply(lapply(strsplit(x, NULL), rev), paste, collapse=""))
-
+#get reverse complement of context, ref and alt
 SNP$Rev<-ReverseComp(as.character(SNP$Context))
 SNP$RevRef<-ReverseComp(as.character(SNP$Ref))
 SNP$RevAlt<-ReverseComp(as.character(SNP$Alt))
-
+#only get one half (to fold over)
 AC<-SNP[which(SNP$Ref %in% c('A','C')),]
 TG<-SNP[which(SNP$Ref %in% c('T','G')),]
+#fold over
 TG$Context<-TG$Rev
 TG$Ref<-TG$RevRef
 TG$Alt<-TG$RevAlt
-
+#bind them together
 SNP<-rbind(AC,TG)
+#combine it all together to get a context
 SNP$Mut<-paste(SNP$Ref,'->', substr(SNP$Context,1,1),SNP$Alt,substr(SNP$Context,3,3),sep='')
 
+#do the same thing as above but for the random SNPs
 rSNP$Rev<-ReverseComp(as.character(rSNP$Context))
 rSNP$RevRef<-ReverseComp(as.character(rSNP$Ref))
 rSNP$RevAlt<-ReverseComp(as.character(rSNP$Alt))
@@ -100,6 +104,7 @@ TG$Alt<-TG$RevAlt
 rSNP<-rbind(AC,TG)
 rSNP$Mut<-paste(rSNP$Ref,'->', substr(rSNP$Context,1,1),rSNP$Alt,substr(rSNP$Context,3,3),sep='')
 
+#get the counts of each bin
 plt<-as.data.frame(table(SNP$Mut))
 plt$Start<-substr(plt$Var1,4,4)
 plt$End<-substr(plt$Var1,6,6)
