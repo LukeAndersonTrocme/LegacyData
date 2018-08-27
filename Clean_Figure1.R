@@ -42,10 +42,10 @@ join=fread('~/Documents/QualityPaper/Misc/join.txt')
 
 ##JPT Manhattan
 if(f){
-dir='/Volumes/gravel-1/luke_projects/1000Genomes/Regression/'
-out='/Volumes/gravel-1/luke_projects/1000Genomes/MeanDev/'
+dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
 
-jptNames = list.files(path=dir,pattern='JPT', full.names = T)
+jptNames = list.files(path=dir,pattern='_JPT_dev10.csv', full.names = T)
 jReg = do.call(rbind, lapply(jptNames, function(x) fread(x, header=T, sep=' ')))
 jReg<-jReg[which(jReg$Pos != 'Pos'),]
 jReg$Chr<-as.numeric(as.character(jReg$Chr))

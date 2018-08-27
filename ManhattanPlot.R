@@ -94,5 +94,21 @@ NoSingles$adjustedP.01 <- adj$TSBH_0.01
 adj.sig.05<-NoSingles[which((NoSingles$adjusted.05 >= -log10(0.05))&(NoSingles$Count > 1)),]
 adj.sig.01<-NoSingles[which((NoSingles$adjusted.01 >= -log10(0.01))&(NoSingles$Count > 1)),]
 
-write.table(adj.sig.05, '~/Documents/QualityPaper/Significant0.5SNPs_adjusted.txt', quote=F, row.names=F)
-write.table(adj.sig.01, '~/Documents/QualityPaper/Significant0.1SNPs_adjusted.txt', quote=F, row.names=F)
+write.table(adj.sig.05, 
+	'~/Documents/QualityPaper/Significant0.5SNPs_adjusted.txt', 
+	quote=F, row.names=F)
+write.table(adj.sig.01, 
+	'~/Documents/QualityPaper/Significant0.1SNPs_adjusted.txt', 
+	quote=F, row.names=F)
+write.table(adj.sig.05$rsID.y, 
+	'~/Documents/QualityPaper/Significant0.5SNPs_adjusted_rsID.txt', 
+	quote=F, row.names=F, col.names=F)
+write.table(adj.sig.01$rsID.y, 
+	'~/Documents/QualityPaper/Significant0.1SNPs_adjusted_rsID.txt', 
+	quote=F, row.names=F, col.names=F)
+write.table(adj.sig.05[,c('Chr','Pos')],
+	'~/Documents/QualityPaper/Significant0.5SNPs_adjusted_POS.txt', 
+	quote=F, row.names=F, col.names=F,  sep='\t')
+write.table(adj.sig.01[,c('Chr','Pos')], 
+	'~/Documents/QualityPaper/Significant0.1SNPs_adjusted_POS.txt', 
+	quote=F, row.names=F, col.names=F, sep='\t')

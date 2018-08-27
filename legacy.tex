@@ -114,6 +114,7 @@ While trying to follow up on this observations in a larger and more recent Japan
 However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 This is unexpected given the similarity of the two populations, and suggests a technical difference rather than a population structure effect. 
 Moreover, these mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium.
+Low frequency variants have little power to detect Hardy-Weinberg disequilibrium, in essence we would not expect any homozygous alternates for low frequency variants. 
 
 When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}).
 Regressions against different individual-level quality metrics provided by the 1kGP revealed that mean quality per mapped base pair per individual was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP:
@@ -150,7 +151,7 @@ However, the average quality of mapped bases per individual appeared to be the b
 
 \subsection{Overlap of significant SNPs}
 The reverse GWAS approach similarly identified mapping-quality--associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3664 SNPs were significant after a meta-analysis (taking the sum of the \sgcomment{squared?} deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
+Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3664 SNPs were significant after a meta-analysis (taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
 \sgcomment{Look at the frequency distributions of these SNPs in GnomAD}
 
 \begin{figure*}
@@ -165,20 +166,13 @@ The same variants identified as being low quality independently in each populati
   \label{OverLap}
 \end{figure*}
 
-\subsection{Combined Test}
-%To increase statistical power, we performed a meta-analysis, computing a combined p-value for each position by taking the sum of the \sgcomment{squared?} deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant.
-%To improve on the power of our test, we performed a test by combining the deviations from the null model for each SNP for each population.
-%Each population will have it's own deviation from the null for each position in the genome.
-%We computed the combined p value for each position by taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant.
-%This resulted in an increase in the number of SNPs reaching genome wide significance to 3664 (Figure \ref{Manhattan}).
-
 \subsection{Imputation}
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
-In order to investigate the proportion of variants that we've identified as being associated to quality that are being imputed, we submitted genotype data from low-quality 1kGP individuals to the Michigan Imputation Server, and found that all of the SNPs we identified as being associated with quality were imputed. 
-\sgcomment{All of them? How is it possible if we only submitted Japanese? Also, I thought that we had only submitted a couple of chromosomes.} 
-\luke{Submitted all of the 1kGP, queried the combined meta-analysis list of SNPs}
-This suggests that the imputation reference panel likely includes individuals with low sequence quality, and the dubious variants have not been removed. \sgcomment{It may be useful to impute some of the NAG data.} 
+In order to investigate the proportion of variants that we've identified as being associated to quality that are being imputed, we submitted genotype data from all of the 1kGP individuals to the Michigan Imputation Server, and found that all of the SNPs we identified as being associated with quality for chromosomes 1 and 2 were imputed. This suggests that the imputation reference panel likely includes individuals with low sequence quality, and the dubious variants have not been removed. 
+%\sgcomment{All of them? How is it possible if we only submitted Japanese? Also, I thought that we had only submitted a couple of chromosomes.} 
+%\luke{Submitted all of the 1kGP, queried the combined meta-analysis list of SNPs}
+\sgcomment{It may be useful to impute some of the NAG data.} 
 
 
 \subsection{Found to be included in other GWAS }
@@ -351,6 +345,11 @@ Crosses ( + ) represent SNPs that reach a genome wide significance greater than 
 \label{TwinsSNP}
 \end{figure}
 
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNP6_Singles.jpg}
+\caption{Significant SNPs found in only one population. The x-axis is sorted by genomic position.}
+\label{Singles}
+\end{figure}
 
 \end{document}
 			
