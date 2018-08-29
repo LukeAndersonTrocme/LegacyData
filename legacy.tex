@@ -130,7 +130,7 @@ These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* 
 
 Thus this mutational signal is heavily enriched in GWAS suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques. \sgcomment{do we excluse singletons? We should quantify how much reduction in signal we see.}
 %For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality. 
-The removal of individuals with average mapping quality below 30 successfully removes the *AC${\rightarrow}$*CC signal \sgcomment{How about the others?}.
+The removal of individuals with average mapping quality below 30 successfully removes the *AC${\rightarrow}$*CC signal observed \sgcomment{How about the others?}.
 For population genetic analyses, the removal of low-mapping quality individuals appears preferable to filtering. 
 
 	\subsection{Sequencing quality over time}
@@ -319,11 +319,19 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 \setcounter{figure}{0}   	
 
 \begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_adjusted.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
-There are 2007 and 3664 variants that reach p values greater than $ p < 10^{-8}$ and $ p < 10^{-6}$ respectively.
-Crosses ( + ) represent SNPs that reach a genome wide significance greater than $ p < 10^{-6}$, the circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+There are 3990 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini & Hochberg FDR adjustment. 
+The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+  \label{Manhattan}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/AllDeviances.jpg}
+
+\caption{Empirical distribution plots of the sum of deviances grouped by N, the number of populations included. The blue curve is the theoretical null reference chi squared distribution with $N$ degrees of freedom. Note $\sum_i^N  \chi^2_1= \chi^2_N$. The grey dotted line indicated the significance level of $10^{-5}$ for the respective distribution which happens to be very close to the adjusted p value threshold at 0.01 FDR. }
   \label{Manhattan}
 \end{figure}
 

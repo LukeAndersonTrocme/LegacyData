@@ -38,7 +38,7 @@ scale_colour_manual(values= MyColour, breaks=unique(plt$Group.1))+
 scale_x_discrete(expand=c(0.1,0))+scale_shape_manual(values=c(1,3))+
 guides(color=guide_legend(title="Population",
 override.aes = list(shape = 15, size=3),ncol=1),shape=F)+
-labs(title="Mapping Quality of each Population over Time",x="Populations ranked by Sequencing Date", y="Average quality of mapped bases")+
+labs(title="Data quality over time",x="Populations ranked by sequencing date", y="Average quality of mapped bases")+
 theme(plot.title = element_text(hjust= 0.5), 
 axis.text.x=element_blank(), axis.ticks.x=element_blank())+geom_hline(yintercept=30, linetype=2, color='grey')
 
@@ -48,8 +48,7 @@ guides(color=guide_legend(title="Sequencing\n    Center",
 override.aes = list(shape = 15, size=5)))+
 labs(y="Average quality of mapped bases")+geom_hline(yintercept=30, linetype=2, color='grey')+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),axis.ticks.x=element_blank(), axis.line.x=element_blank())
 
-c=ggplot(plt, aes(x= SUBMISSION.DATE, y= INSTRUMENT_MODEL,shape= INSTRUMENT_MODEL))+geom_point()+theme(axis.title.y=element_blank(),axis.line.y=element_blank())+labs(x="Sequencing Date")+ guides(shape=guide_legend(title="",label=F,override.aes = list(alpha = 0))) +
-scale_x_date(date_labels = "%Y",date_breaks = "1 year")+theme(axis.text.y=element_text(size=10,hjust=0))
+c=ggplot(plt, aes(x= SUBMISSION.DATE, y= INSTRUMENT_MODEL,shape= INSTRUMENT_MODEL))+geom_point()+theme(axis.line.y=element_blank())+labs(x="Individuals ranked by sequencing date", y='Sequencer')+ guides(shape=guide_legend(title="",label=F,override.aes = list(alpha = 0))) +scale_x_date(date_labels = "%Y",date_breaks = "1 year")+theme(axis.text.y=element_text(size=10,hjust=0))
 
 d=plot_grid(a,b,c, nrow=3, labels=c('A','B',''),rel_heights=c(4,4,1),align='v')
-ggsave("~/Documents/QualityPaper/MapQualOverTime.jpg",d,height=11,width=8)
+ggsave("~/Documents/QualityPaper/MapQualOverTime.jpg",d,height=14,width=9)

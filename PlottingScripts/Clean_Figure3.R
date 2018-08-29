@@ -35,21 +35,22 @@ plt$title = paste(plt$Pop, ' : ',plt$Freq.y)
 plt <- plt[with(plt, order(-Freq.x, as.numeric(Chr),as.numeric(Pos))),]
 plt$Pos <- factor(plt$Pos, levels = unique(plt$Pos))
 plt$nrow<-seq(length=nrow(plt))
-plt$Pcat<-10
-plt[which(plt$plog10 <8),]$Pcat<-1
-plt[which((plt$plog10 >8) & (plt$plog10 <10)),]$Pcat<-5
+plt$Pcat<-4
+plt[which(plt$plog10 <8),]$Pcat<-2
+plt[which((plt$plog10 >8) & (plt$plog10 <10)),]$Pcat<-3
 
 
 xaxis<-plt[!duplicated(plt[,c('Freq.x')]), ]
 xaxis<-xaxis[which(xaxis$Freq.x<11),]
 xaxis<-rbind(xaxis,tail(plt,1))
 
-p1=ggplot(plt, aes(x=Pos,y= reorder(title,-Freq.y), color=Pop, size=Pcat))+geom_point(shape=124)+theme_classic()+scale_size(breaks=c(2,3,4), range=c(1,3),labels=c('6-8','8-10','10+'), guide = guide_legend(direction = "horizontal"), name='-log10(p)')+scale_color_manual(breaks= plt$Pop,values = MyColour)+ylab('Populations')+ggtitle('Overlap of Significant SNPs')+theme(legend.position = c(0.85,0.95),legend.box.background = element_rect(colour = "black"), plot.title = element_text(hjust = 0.5), axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank(), plot.margin = unit(c(1,1,0,1), "cm"))+guides(color=F)
+p1=ggplot(plt, aes(x=Pos,y= reorder(title,-Freq.y), color=Pop, size=Pcat))+geom_point(shape=108)+theme_classic()+scale_size(breaks=c(2,3,4), range=c(1,3),labels=c('6-8','8-10','10+'), guide = guide_legend(direction = "horizontal"), name='-log10(p)')+scale_color_manual(breaks= plt$Pop,values = MyColour)+ylab('Population')+ggtitle('Overlap of Significant SNPs')+theme(legend.position = c(0.85,0.95),legend.box.background = element_rect(colour = "black"), plot.title = element_text(hjust = 0.5), axis.title.x=element_blank(),axis.text.x=element_blank(), axis.ticks.x=element_blank(), plot.margin = unit(c(1,1,0,1), "cm"))+guides(color=F)
 
-p2=ggplot(plt, aes(x=Pos,y= Freq.x, group=1))+geom_hline(yintercept=1, color='grey', linetype=2)+geom_hline(yintercept=5, color='grey', linetype=2)+geom_hline(yintercept=10, color='grey', linetype=2)+geom_line()+theme_classic()+theme(plot.title = element_text(hjust = 0.5), plot.margin = unit(c(0,1,1,1), "cm"))+labs(x='SNPs ranked by frequency of occurence and genomic position', y='Frequency\nof Occurence')+scale_y_continuous(limits=c(0,16),breaks=c(1,5,10,15))+scale_x_discrete(expand=c(0.01,0),breaks=xaxis$Pos, labels=xaxis$nrow)
+p2=ggplot(plt, aes(x=Pos,y= Freq.x, group=1))+geom_hline(yintercept=1, color='grey', linetype=2)+geom_hline(yintercept=5, color='grey', linetype=2)+geom_hline(yintercept=10, color='grey', linetype=2)+geom_line()+theme_classic()+theme(plot.title = element_text(hjust = 0.5), plot.margin = unit(c(0,1,1,1), "cm"))+labs(x='SNPs ranked by frequency of occurence and genomic position', y='Frequency\nof occurence')+scale_y_continuous(limits=c(0,16),breaks=c(1,5,10,15))+scale_x_discrete(expand=c(0.01,0),breaks=xaxis$Pos, labels=xaxis$nrow)
 
 p3=plot_grid(p1, p2, ncol=1, align="v", rel_heights = c(3, 1))
-ggsave('~/Documents/QualityPaper/SNPOverlap6.jpg',p3, height=9, width=9)
+ggsave('~/Documents/QualityPaper/Figures/SNPOverlap6.jpg',p3, height=9, width=9)
+ggsave('~/Documents/QualityPaper/Figures/SNPOverlap6.tiff',p3, height=9, width=9)
 
 h=ggplot(n, aes(x=reorder(Var1,-Freq), y=Freq, fill=Var1))+geom_bar(stat='identity')+coord_flip()+scale_y_reverse()+theme(axis.text.y=element_blank(), axis.title.y=element_blank(), axis.ticks=element_blank())+guides(fill=F)
 

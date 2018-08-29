@@ -91,6 +91,35 @@ adj <- as.data.frame(adjusted$adj[order(adjusted$index), ])
 NoSingles$adjusted.01 <- -log10(adj$TSBH_0.01)
 NoSingles$adjustedP.01 <- adj$TSBH_0.01
 
+#make min for dev
+#geom_vline(xintercept=
+#min(adj.sig.01[which(adj.sig.01$Count==df),]$SumDev),
+#color='grey60',linetype=2)+
+#labs(x=paste('df =',df), y='density')+
+
+MakePlot<-function(file){
+	ggplot(file, aes(x=SumDev))+
+				stat_function(aes(x=seq(0,10,
+				length=nrow(file))),fun=dchisq, 
+				args=list(df=df), color='blue')+
+				geom_density()+xlim(c(0,80))+
+				geom_vline(xintercept=
+				qchisq(0.000001, df=df, lower.tail=F),
+				color='grey60',linetype=2)+
+				labs(x='deviance', y='density',subtitle=paste('df =',df))
+}
+
+LP<-list()
+for(df in seq(2,26)){
+	file <- NoSingles[which(NoSingles$Count==df),]
+	LP[[df]] <- MakePlot(file)	
+	}
+
+pf <- grid.arrange(LP[[2]], LP[[3]],LP[[4]],LP[[5]],LP[[6]],LP[[7]],LP[[8]],LP[[9]],LP[[10]], LP[[11]],LP[[12]],LP[[13]],LP[[14]],LP[[15]],LP[[16]],LP[[17]],LP[[18]],LP[[19]],LP[[20]], LP[[21]],LP[[22]],LP[[23]], LP[[24]],LP[[25]],LP[[26]])
+
+ggsave('~/Documents/QualityPaper/Figures/AllDeviances.jpg',pf, height=16,width=22)
+ggsave('~/Documents/QualityPaper/Figures/AllDeviances.tiff',pf, height=16,width=22)
+	
 adj.sig.05<-NoSingles[which((NoSingles$adjusted.05 >= -log10(0.05))&(NoSingles$Count > 1)),]
 adj.sig.01<-NoSingles[which((NoSingles$adjusted.01 >= -log10(0.01))&(NoSingles$Count > 1)),]
 
