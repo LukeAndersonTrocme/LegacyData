@@ -128,10 +128,11 @@ While identifying putative low-quality SNPs to exclude, using a higher $p$-value
 The variants that are associated to the quality of mapped bases have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations.
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in low-mapping quality individuals.
 
-Thus this mutational signal is heavily enriched in GWAS suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques. \sgcomment{do we excluse singletons? We should quantify how much reduction in signal we see.}
+Thus this mutational signal is heavily enriched in GWAS suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques. 
+%\sgcomment{do we excluse singletons? We should quantify how much reduction in signal we see.}
 %For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality. 
-The removal of individuals with average mapping quality below 30 successfully removes the *AC${\rightarrow}$*CC signal observed \sgcomment{How about the others?}.
-For population genetic analyses, the removal of low-mapping quality individuals appears preferable to filtering. 
+The removal of individuals with average mapping quality below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged. 
+For population genetic analyses, the removal of individuals with low quality sequence data appears preferable to filtering positions. 
 
 	\subsection{Sequencing quality over time}
 The results of the logistic regression GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
@@ -140,8 +141,7 @@ This variability could be as a result of fluctuating sequence platform protocols
 There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
 By 2011, older sequencing technologies are phased out, and method development solidify, which coincides with the sequencing quality levelling off.
 It's clear that there are many covariates that could be used to identify spurious sites like sequencing date, sequencing technology or even the sequencing centre. 
-However, the average quality of mapped bases per individual appeared to be the best metric to identify spurious sites. \sgcomment{supplementary figures with the general regressions?}
-
+However, the average quality of mapped bases per individual appeared to be the best metric to identify spurious sites.
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
 
@@ -151,7 +151,7 @@ However, the average quality of mapped bases per individual appeared to be the b
 
 \subsection{Overlap of significant SNPs}
 The reverse GWAS approach similarly identified mapping-quality--associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3664 SNPs were significant after a meta-analysis (taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
+Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3990 SNPs were significant after a meta-analysis (taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
 \sgcomment{Look at the frequency distributions of these SNPs in GnomAD}
 
 \begin{figure*}
