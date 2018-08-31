@@ -91,6 +91,30 @@ adj <- as.data.frame(adjusted$adj[order(adjusted$index), ])
 NoSingles$adjusted.01 <- -log10(adj$TSBH_0.01)
 NoSingles$adjustedP.01 <- adj$TSBH_0.01
 
+sig.20<-NoSingles[which((NoSingles $adjusted.01 >= 20)&(NoSingles $Count > 1)),]
+sig.20$adjusted.01=20
+sig.19<-NoSingles[which((NoSingles $adjusted.01 < 20)&(NoSingles $Count > 1)),]
+
+ggplot(sig.19, aes(x=Pos, y = adjusted.01, color=as.factor(Chr)))+
+facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
+scale_fill_manual (values=getPalette(colourCount))+
+scale_y_continuous(expand=c(0,0))+
+geom_point(alpha=0.3, size=1)+theme_classic()+
+geom_point(data=sig.20, aes(x=Pos, y = adjusted.01,))+
+labs(y='-log10(p)', x='Chromosome')+
+theme(plot.title = element_text(hjust = 0.5), 
+plot.subtitle = element_text(hjust = 0.5), 
+axis.text.x=element_blank(), 
+axis.ticks.x=element_blank(),
+axis.line.x=element_blank(), 
+strip.background = element_blank(),
+strip.text.x = element_text(size = 6))+
+guides(color=F)+expand_limits(y=c(0,21))
+
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot.jpg', height=5, width=10)
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot.tiff', height=5, width=10)
+
+
 #make min for dev
 #geom_vline(xintercept=
 #min(adj.sig.01[which(adj.sig.01$Count==df),]$SumDev),
