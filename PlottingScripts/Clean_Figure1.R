@@ -13,7 +13,7 @@ hweFile='/Users/luke/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_sig6.hwe
 JPT<-fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'), colClasses=c('numeric'))
 NAG<-fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'), colClasses=c('numeric'))
 
-#merge them together
+#merge them together to get joint frequency spectrum
 join<-merge(JPT[which(JPT$JPT_AF <= 1),],
  			NAG[which(NAG$NAG_AF <= 1),], 
  			by=c('CHROM','POS'), all=T)
@@ -37,15 +37,15 @@ join$NAG_MAF<-as.numeric(as.character(join$NAG_MAF))
 join<-join[complete.cases(join),]
 
 write.table(join, '~/Documents/QualityPaper/join.txt')
-}
-join=fread('~/Documents/QualityPaper/join.txt')
+} #make the joint frequency file
+join=fread('~/Documents/QualityPaper/Misc/join.txt')
 
 ##JPT Manhattan
 if(f){
-dir='/Volumes/gravel-1/luke_projects/1000Genomes/Regression/'
-out='/Volumes/gravel-1/luke_projects/1000Genomes/MeanDev/'
+dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
 
-jptNames = list.files(path=dir,pattern='JPT', full.names = T)
+jptNames = list.files(path=dir,pattern='_JPT_dev10.csv', full.names = T)
 jReg = do.call(rbind, lapply(jptNames, function(x) fread(x, header=T, sep=' ')))
 jReg<-jReg[which(jReg$Pos != 'Pos'),]
 jReg$Chr<-as.numeric(as.character(jReg$Chr))
@@ -65,28 +65,32 @@ write.table(sig.4[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig4.Pos', quote=
 #sig.6<-fread('~/Documents/Regression/JPT_sig6.Pos', col.names=c('CHR','POS'))
 sig.6$sig<-'Significant'
 
-#CONTEXT
+#CONTEXT Mutation Spectrum enrichment
+#test SNPs
 SNP<-read.table('~/Documents/Regression/JPT_sig6.Context', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
-
+#Random SNPs
 rSNP<-read.table('~/Documents/GWAS_Qual/Final_GWAS/1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt', sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
-
+#function to get reverse complement
 ReverseComp <- function(x)
         chartr("ATGC","TACG",
         sapply(lapply(strsplit(x, NULL), rev), paste, collapse=""))
-
+#get reverse complement of context, ref and alt
 SNP$Rev<-ReverseComp(as.character(SNP$Context))
 SNP$RevRef<-ReverseComp(as.character(SNP$Ref))
 SNP$RevAlt<-ReverseComp(as.character(SNP$Alt))
-
+#only get one half (to fold over)
 AC<-SNP[which(SNP$Ref %in% c('A','C')),]
 TG<-SNP[which(SNP$Ref %in% c('T','G')),]
+#fold over
 TG$Context<-TG$Rev
 TG$Ref<-TG$RevRef
 TG$Alt<-TG$RevAlt
-
+#bind them together
 SNP<-rbind(AC,TG)
+#combine it all together to get a context
 SNP$Mut<-paste(SNP$Ref,'->', substr(SNP$Context,1,1),SNP$Alt,substr(SNP$Context,3,3),sep='')
 
+#do the same thing as above but for the random SNPs
 rSNP$Rev<-ReverseComp(as.character(rSNP$Context))
 rSNP$RevRef<-ReverseComp(as.character(rSNP$Ref))
 rSNP$RevAlt<-ReverseComp(as.character(rSNP$Alt))
@@ -100,6 +104,7 @@ TG$Alt<-TG$RevAlt
 rSNP<-rbind(AC,TG)
 rSNP$Mut<-paste(rSNP$Ref,'->', substr(rSNP$Context,1,1),rSNP$Alt,substr(rSNP$Context,3,3),sep='')
 
+#get the counts of each bin
 plt<-as.data.frame(table(SNP$Mut))
 plt$Start<-substr(plt$Var1,4,4)
 plt$End<-substr(plt$Var1,6,6)
@@ -112,6 +117,7 @@ rplt$Mut<-paste(substr(rplt$Var1,1,3), substr(rplt$Var1,5,5))
 
 #SFS
 join<-merge(join, sig.6, by.x=c('CHROM', 'POS'), by.y=c('CHR','POS'), all.x=T)
+join<-join[which((join$JPT_MAF!=0)&(join$NAG_MAF!=0)),] #remove fixed
 jj<-join[complete.cases(join),]
 
 SFS=ggplot(data= join, aes(x=NAG_MAF, y=JPT_MAF))+
@@ -180,6 +186,32 @@ Reg$Pop=NULL
 Reg$p=NULL
 
 Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+Reg$p<-pchisq(Reg$dev, 1, lower.tail=F)
+###########
+colnames(Reg)[c(1,2)]<-c('CHROM','POS')
+
+RegJoin<-left_join(Reg, join, by=c('CHROM','POS'))
+#RegJoin<-RegJoin[which(RegJoin$JPT_MAF > 1/208),]
+
+ggplot(RegJoin, aes(sample=RegJoin$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT.jpg', height=5, width=7)
+
+ggplot(Reg, aes(sample=Reg$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_withSingles.jpg', height=5, width=7)
+
+single<-RegJoin[which(RegJoin$JPT_MAF == 0.00480769),]
+ggplot(single, aes(sample= single$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justSingles.jpg', height=5, width=7)
+
+double<-RegJoin[which(RegJoin$JPT_MAF == 2*0.00480769),]
+ggplot(double, aes(sample= double$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justDouble.jpg', height=5, width=7)
+
+triple<-RegJoin[which(RegJoin$JPT_MAF == 3*0.00480769),]
+ggplot(triple, aes(sample= triple$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
+ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justTriple.jpg', height=5, width=7)
+##########
 sig.6<-Reg[which(Reg$plog10 > 6),]
 NotSig<-Reg[which(Reg$plog10 < 6),]
 

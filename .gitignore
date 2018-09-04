@@ -45,3 +45,26 @@ legacy.bbl
 33264017.txt
 
 legacy.bbl
+
+*.frq
+
+./sig/*
+
+
+*.csv
+
+*.txt
+
+Significant6SNPs_adjusted_published.rsID
+
+*.pos
+
+*.rsID
+
+Misc/CompareGwasNormINT (Autosaved).R
+
+Misc/Plot_Pubs.format.R
+
+Misc/CompareGwasNormINT (Autosaved).R
+
+*.tiff
