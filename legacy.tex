@@ -293,7 +293,7 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
 
 \subsection{Genome Wide Association Study}
-Using an in-house R script, we performed a logistic regression using the glm package. \cite{[R and GLM]} We performed this statistical test independently for each population of the 1kGP. The deviations from the null model for each test was used to compute the chi-squared p value for each SNP for each population. Since each deviation follows a chi-squared distribution, the sum of the deviations also follow a chi-squared distribution. However, since not all SNPs are present in all populations, when computing the p values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
+Using an in-house R script, we performed a logistic regression using the glm package. \cite{R,GLM} We performed this statistical test independently for each population of the 1kGP. The deviations from the null model for each test was used to compute the chi-squared p value for each SNP for each population. Since each deviation follows a chi-squared distribution, the sum of the deviations also follow a chi-squared distribution. However, since not all SNPs are present in all populations, when computing the p values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \cite{Harris2017a}
@@ -311,10 +311,10 @@ https://github.com/LukeAndersonTrocme/QualityPaper
 We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 
-\bibliographystyle{plain}
+%\bibliographystyle{plain}
 \bibliography{Legacy.bib}
 
-\subsection{Supplementary Figures}
+\section{Supplementary Figures}
 \renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0}   	
 
@@ -322,7 +322,7 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_adjusted.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
-There are 3990 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini & Hochberg FDR adjustment. 
+There are 3990 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
   \label{Manhattan}
 \end{figure}
