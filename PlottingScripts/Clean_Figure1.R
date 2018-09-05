@@ -38,8 +38,6 @@ join<-join[complete.cases(join),]
 
 write.table(join, '~/Documents/QualityPaper/join.txt')
 } #make the joint frequency file
-join=fread('~/Documents/QualityPaper/Misc/join.txt')
-
 ##JPT Manhattan
 if(f){
 dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
@@ -62,8 +60,7 @@ NotSig<-jReg[which(jReg$plog10 < 6),]
 write.table(sig.6[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig6.Pos', quote=F, col.names=F, row.names=F)
 write.table(sig.4[,c('Chr','Pos')],'~/Documents/Regression/JPT_sig4.Pos', quote=F, col.names=F, row.names=F)
 }
-#sig.6<-fread('~/Documents/Regression/JPT_sig6.Pos', col.names=c('CHR','POS'))
-sig.6$sig<-'Significant'
+
 
 #CONTEXT Mutation Spectrum enrichment
 #test SNPs
@@ -116,21 +113,24 @@ rplt$End<-substr(rplt$Var1,6,6)
 rplt$Mut<-paste(substr(rplt$Var1,1,3), substr(rplt$Var1,5,5))
 
 #SFS
+join=fread('~/Documents/QualityPaper/Misc/join.txt')
+sig.6<-fread('~/Documents/Regression/JPT_sig6.Pos', col.names=c('CHR','POS'))
+sig.6$sig<-'Significant'
 join<-merge(join, sig.6, by.x=c('CHROM', 'POS'), by.y=c('CHR','POS'), all.x=T)
-join<-join[which((join$JPT_MAF!=0)&(join$NAG_MAF!=0)),] #remove fixed
+join<-join[which(join$JPT_MAF + join$NAG_MAF != 0),] #remove fixed
 jj<-join[complete.cases(join),]
 
 SFS=ggplot(data= join, aes(x=NAG_MAF, y=JPT_MAF))+
 geom_bin2d(binwidth=c(1/884, 1/104))+geom_point(data=jj, size=0.8, alpha=0.7, shape=3)+
-scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000,10000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000','10,000,000'))+
+scale_fill_distiller(palette = "Spectral",trans = "log", breaks=c(1,10,100,1000,10000,100000,1000000),labels=c('1','10', '100', '1,000', '10,000', '100,000', '1,000,000'))+
 scale_x_continuous(expand=c(0.01,0.01))+
 scale_y_continuous(expand=c(0.01,0.01))+
 theme_classic()+theme(axis.line=element_blank(), axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())+
 xlab(label="Nagahama")
 
-HIST=ggplot(jj, aes(x= JPT_MAF))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(10,50,100))+geom_vline(xintercept=0.05, linetype=3)+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
-B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
+HIST=ggplot(jj, aes(x= JPT_MAF))+geom_histogram(binwidth=0.01, fill='grey')+theme_classic()+scale_x_continuous(limits=c(0,1),expand=c(0.01,0.01))+scale_y_reverse(expand=c(0.01,0.01), breaks=c(10,50,100))+coord_flip()+xlab('')+ylab('')+theme(axis.line=element_blank(),axis.text.x=element_text(angle=90))+xlab(label="1000 Genomes Project")
 
+B=plot_grid(HIST,SFS,nrow=1,rel_widths=c(1,5), align = 'h', labels=c('','B'))
 
 sig=ggplot(plt, aes(x=End, y=Start, fill=Freq))+
 facet_grid(Mut~., switch="y")+geom_tile()+theme_classic()+
@@ -174,7 +174,7 @@ rel_widths=c(1,0.77)),
 mylegend,
 nrow=2,rel_heights=c(1,0.1),labels=c('A'))
 
-AB=plot_grid(A,B, rel_widths=c(1,2.7))
+##GWAS
 
 Reg<-fread('/Volumes/gravel/luke_projects/1000Genomes/Regression/GenomeWide.Regression_JPT.csv')
 
@@ -187,6 +187,33 @@ Reg$p=NULL
 
 Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
 Reg$p<-pchisq(Reg$dev, 1, lower.tail=F)
+
+sig.6<-Reg[which(Reg$plog10 > 6),]
+NotSig<-Reg[which(Reg$plog10 < 6),]
+
+GWAS=ggplot(NotSig, aes(x=Pos, y = plog10, color=as.factor(Chr)))+
+facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
+scale_fill_manual (values=getPalette(colourCount))+
+scale_y_continuous(expand=c(0,0))+
+geom_point(alpha=0.3, size=1)+theme_classic()+
+geom_point(data=sig.6, aes(x=Pos, y = plog10,),color='black',shape=3)+
+labs(y='-log10(p)', x='Chromosome')+
+theme(plot.title = element_text(hjust = 0.5), 
+plot.subtitle = element_text(hjust = 0.5), 
+axis.text.x=element_blank(), 
+axis.ticks.x=element_blank(),
+axis.line.x=element_blank(), 
+strip.background = element_blank(),
+strip.text.x = element_text(size = 6))+
+guides(color=F)
+#geom_hline(yintercept = 8, color='red')+geom_hline(yintercept = 6, color='blue')+
+
+AB=plot_grid(A,B, rel_widths=c(1,2.7))
+fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
+ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=11,width=11)
+
+
+##QQ
 ###########
 colnames(Reg)[c(1,2)]<-c('CHROM','POS')
 
@@ -208,29 +235,4 @@ double<-RegJoin[which(RegJoin$JPT_MAF == 2*0.00480769),]
 ggplot(double, aes(sample= double$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
 ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justDouble.jpg', height=5, width=7)
 
-triple<-RegJoin[which(RegJoin$JPT_MAF == 3*0.00480769),]
-ggplot(triple, aes(sample= triple$dev))+stat_qq(distribution=stats::qchisq, dparams=list(df=1))+geom_qq_line(distribution=stats::qchisq, dparams=list(df=1))
-ggsave('~/Documents/QualityPaper/Figures/QQplot_JPT_justTriple.jpg', height=5, width=7)
 ##########
-sig.6<-Reg[which(Reg$plog10 > 6),]
-NotSig<-Reg[which(Reg$plog10 < 6),]
-
-GWAS=ggplot(NotSig, aes(x=Pos, y = plog10, color=as.factor(Chr)))+
-facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
-scale_fill_manual (values=getPalette(colourCount))+
-scale_y_continuous(expand=c(0,0))+
-geom_point(alpha=0.3, size=1)+theme_classic()+
-geom_point(data=sig.6, aes(x=Pos, y = plog10,),color='black',shape=3)+
-labs(y='-log10(p)', x='Chromosome')+
-theme(plot.title = element_text(hjust = 0.5), 
-plot.subtitle = element_text(hjust = 0.5), 
-axis.text.x=element_blank(), 
-axis.ticks.x=element_blank(),
-axis.line.x=element_blank(), 
-strip.background = element_blank(),
-strip.text.x = element_text(size = 6))+
-guides(color=F)
-#geom_hline(yintercept = 8, color='red')+geom_hline(yintercept = 6, color='blue')+
-
-fig1=plot_grid(AB, GWAS, ncol=1, rel_heights=c(2,1), labels=c('','C'))
-ggsave('~/Documents/QualityPaper/Figure1.jpg',fig1, height=11,width=11)
