@@ -99,7 +99,6 @@ There majority of the variants with significant associations to quality have the
 Joint frequency spectrum plot of the Japanese from the 1kGP and a more recent Nagahama dataset.
 Crosses ( + ) are variants that reached genome wide significance in a GWAS of sequencing quality. 
 The histogram on the left of the plot is the distribution of significant variants. 
-The dotted line is at 5\% allele frequency. 
 \textbf{C} 
 Genome wide association of the average quality of mapped bases for the 104 Japanese individuals included in the 1kGP. This GWAS identified $587\ \  p < 10^{-8}$ and $1034\ \ p < 10^{-6}$ SNPs that were associated to the average quality of SNPs mapped for an individual
 The same analysis was performed independently for each of the populations in the 1kGP. }
@@ -145,7 +144,7 @@ However, the average quality of mapped bases per individual appeared to be the b
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
 
-\caption{\textbf{A} \sgcomment{Don't forget to update the axis labels!} The average quality of mapped bases for each individual per population included in the 1000 Genomes sequencing project. The earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
+\caption{\textbf{A}The average quality of mapped bases for each individual per population included in the 1000 Genomes sequencing project. Individuals are ranked by the date of the earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
 \label{MapQual}
 \end{figure}
 
@@ -177,7 +176,7 @@ In order to investigate the proportion of variants that we've identified as bein
 
 \subsection{Found to be included in other GWAS }
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have reported these dubious variants as being significantly correlated with some biological trait. 
-The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had found at least one of the variants to have reached genome wide significance.
+The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had found variants to have either reached or nearly reached genome wide significance of $ p < 10^{-8}$.
 
 One of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation. \sgcomment{If they used HapMap, how did they get affected by the 1000 Genomes results?}
 The other study used the 1kGP sequence data and cell lines directly.
@@ -219,6 +218,7 @@ We have shown that these variants have been significantly associated using tradi
 However this is not the only method that would be affected by these false positives. 
 Polygenic risk scores, meta analyses and other methods that combine the scores of multiple variants might also include some of these variants in their analyses.
 The inclusion of these variants could also affect population genetics analyses that compare and contrast populations based on allele frequencies.
+luke{Multiple explanations for the signal, technical artifact, cell line artifact. The presence of these SNPs in the HapMap suggests a cell line effect, however with only 1\% of sites identified in 1kGP present in HapMap it's not a smoking gun.}
 
 \subsection{Recommendations}
 \sgcomment{needs some editing}
@@ -332,7 +332,7 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/AllDeviances.jpg}
 
 \caption{Empirical distribution plots of the sum of deviances grouped by N, the number of populations included. The blue curve is the theoretical null reference chi squared distribution with $N$ degrees of freedom. Note $\sum_i^N  \chi^2_1= \chi^2_N$. The grey dotted line indicated the significance level of $10^{-5}$ for the respective distribution which happens to be very close to the adjusted p value threshold at 0.01 FDR. }
-  \label{Manhattan}
+  \label{Deviations}
 \end{figure}
 
 \begin{figure}
