@@ -52,27 +52,27 @@ Recent reports have identified differences in the mutational spectra across huma
 \subsection{Reference Cohorts}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
-Hapmap \cite{HapMap2005}, the 1000 Genomes Project \cite{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \cite{Mallick2016}, for example, have made thousands of genomes publicly available for population and medical genetic analyses. 
-Many more genomes are available indirectly through servers providing imputation services \cite{ProfJonathanMarchiniProfGoncaloAbecasisProfRichardDurbin2014} or summary statistics for variant frequency estimation \cite{Lek2016}.
+The International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project \citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
+Many more genomes are available indirectly through servers providing imputation services \citep{ProfJonathanMarchiniProfGoncaloAbecasisProfRichardDurbin2014} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
-Because of the extraordinary value of freely available data, this early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions. However, the first sequenced genomes in the 1000 Genomes project (1kGP), for example, were sequenced 10 years ago. Since then, sequencing platforms have rapidly improved. The second phase of the 1kGP describe multiple technological and analytical improvements over its earlier phases \cite{}. This led to heterogeneous sample preparations and data quality for many of the samples included in the dataset.
+Because of the extraordinary value of freely available data, this early data from the 1000 Genomes project (1kGP) is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions. However, the first sequenced genomes in the 1kGP, for example, were sequenced 10 years ago. Since then, sequencing platforms have rapidly improved. The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{}. This led to heterogeneous sample preparations and data quality for many of the samples included in the dataset.
 
 Even though it is intuitively clear that such batch effects have the potential to confound analyses, the usefulness and ubiquity of the 1kGP data makes such issues particularly insidious.   This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts. 
 Here we point out how large and previously unreported batch effects in the early phases of the 1kGP that still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.  
 
 \subsection{Motivations}
 
-Different mutagenic processes preferentially affect different DNA motifs. Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \cite{Pleasance2010}. Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of `signatures' of different mutational processes\cite{Pleasance2010}. 
-Such genome wide mutational signatures have been used as a diagnostic tool for cancers \cite{Pleasance2010,Shiraishi2015a}.
+Different mutagenic processes preferentially affect different DNA motifs. Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \citep{Pleasance2010}. Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of `signatures' of different mutational processes\citep{Pleasance2010}. 
+Such genome wide mutational signatures have been used as a diagnostic tool for cancers \citep{Pleasance2010,Shiraishi2015a}.
 
-%While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity \cite{Pleasance2010}.
+%While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity \citep{Pleasance2010}.
 %Large cohorts have recently become available to increase statistical power to resolve some of these finer scale mutational signatures.
 
 Differences in mutational signatures across human populations have recently been reported.
-In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 \cite{Harris2015a}. 
+In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 \citep{Harris2015a}. 
 
-Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \cite{Harris2015a}. 
-Harris and Pritchard further identified distinct mutational spectra across a range of populations \cite{Harris2017a}, which were further studied in \cite{Voight}
+Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a}. 
+Harris and Pritchard further identified distinct mutational spectra across a range of populations \citep{Harris2017a}, which were further studied in \citep{Voight}
  
  In particular, both studies  identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals.
 This heterogeneity is intriguing because differences in mutational signatures accumulate over many generations.
@@ -108,7 +108,7 @@ The same analysis was performed independently for each of the populations in the
 			\section{Results}
 	\subsection{A peculiar mutational signature in Japan}			
 	
-Harris and Pritchard reported an excess of a 3-mer *AC${\rightarrow}$*CC mutational pattern in a portion of the Japanese individuals in the 1kGP.\cite{Harris2015a}
+Harris and Pritchard reported an excess of a 3-mer *AC${\rightarrow}$*CC mutational pattern in a portion of the Japanese individuals in the 1kGP.\citep{Harris2015a}
 While trying to follow up on this observations in a larger and more recent Japanese cohort, we did not find this particular signature.
 However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 This is unexpected given the similarity of the two populations, and suggests a technical difference rather than a population structure effect. 
@@ -191,7 +191,7 @@ Despite using the state of the art quality controls, these erroneous variants ma
 This paper identified SNPs associated to ADHD using a GWAS on quantitative measures of ADHD symptoms.
 While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below significance below $ p < 10^{-5}$.
 The data used was imputed genotype data using Hapmap II as the reference.
-One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to data quality.\cite{} 
+One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to data quality.\citep{} 
 
 While they are clear in reporting that these SNPs are not genome wide significant, one can imagine a meta-analysis using this dataset would include the false positive SNP we identified. 
 Furthermore, the approach they used to impute genotype data for GWAS is very common.
@@ -202,7 +202,7 @@ This paper used the raw BAM files from the 1kGP to identify EBV copy number by c
 They did PCR confirmation of EBV copy number using 7 samples from some of the populations, however all of these samples have relatively high quality data.
 They performed a GWAS on the EBV copy number and identified only one SNP with significance below $ p < 10^{-8}$. 
 However they reported the SNPs reading significance below $ p < 10^{-6}$. 
-Four of the SNPs in the top hits of the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) we're identified by our regression against data quality. \cite{} 
+Four of the SNPs in the top hits of the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) we're identified by our regression against data quality. \citep{} 
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphobastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
@@ -293,10 +293,10 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
 
 \subsection{Genome Wide Association Study}
-Using an in-house R script, we performed a logistic regression using the glm package. \cite{R,GLM} We performed this statistical test independently for each population of the 1kGP. The deviations from the null model for each test was used to compute the chi-squared p value for each SNP for each population. Since each deviation follows a chi-squared distribution, the sum of the deviations also follow a chi-squared distribution. However, since not all SNPs are present in all populations, when computing the p values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
+Using an in-house R script, we performed a logistic regression using the glm package. \citep{R,GLM} We performed this statistical test independently for each population of the 1kGP. The deviations from the null model for each test was used to compute the chi-squared p value for each SNP for each population. Since each deviation follows a chi-squared distribution, the sum of the deviations also follow a chi-squared distribution. However, since not all SNPs are present in all populations, when computing the p values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
 
 \subsection{Mutation Spectrum}
-We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \cite{Harris2017a}
+We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}
 We modified the methods as necessary for our purposes, scripts are available \href{https://github.com/LukeAndersonTrocme/QualityPaper}{here}. 
 
 \subsection{Imputation}

@@ -15,6 +15,7 @@ Meta$SUBMISSION.DATE<-as.Date(Meta$SUBMISSION.DATE, "%Y-%m-%d")
 NamePop<-read.table("~/bin/smaller_mut_spectrum_pipeline/1000genomes_phase3_sample_IDs_BigPop_NAG.txt")
 NamePop<-NamePop[,c(1,2,3)]
 names(NamePop)<-c('Name', 'BigPop', 'Pop')
+
 ##Name of OutLiers
 CutOffIDs<-read.table("/Users/luke/Documents/MutSpect/OutputFiles/PCA_cutoff/CutOffID.txt")
 CutOffIDs$Out<-'OutLiers'
@@ -31,59 +32,42 @@ colnames(count)[1]<- "Mut_type"
 tot.count <- sapply(seq(2,ncol(count),2), function(i) {
   rowMeans(count[,c(i, i+1)], na.rm=T)})
   
-colnames(tot.count)<-NamePop$Pop #adds the POP name to the column
+colnames(tot.count)<-NamePop$BigPop #adds the POP name to the column
 
 tot.count <- prop.table(as.matrix(tot.count),2)
 tot.count <- tot.count[ , apply(tot.count, 2, var) != 0]
 
-pop.count<-tot.count[, grep('JPT', colnames(tot.count))]
-colnames(pop.count)<-NamePop[which(NamePop$Pop == 'JPT'),]$Name
+pop.count<-tot.count[, grep('EAS', colnames(tot.count))]
+
+EAS <- c('JPT','CHS','CHB','CDX','KHV')
+colnames(pop.count)<-NamePop[which(NamePop$BigPop == 'EAS'),]$Name
+pop.count<-pop.count[, -grep('NAG', colnames(pop.count))]
+
+
 pop.pca = prcomp(t(pop.count), scale=T)
 pop.pca.scores = as.data.frame(pop.pca$x)[,1:5]
 pop.pca.scores$Name<-rownames(pop.pca.scores)
 
 plot<-merge(pop.pca.scores, Meta, by='Name')
-									
-									
-r1=lm(plot$average_quality_of_mapped_bases ~ plot$PC1, plot)
-t1=paste("Adj R2 = ",signif(summary(r1)$adj.r.squared, 3),
-                     " P =",signif(summary(r1)$coef[2,4], 3))
+plot$Out<-gsub('OutLiers', 'Outliers',plot$Out)
 
-p1<-ggplot(plot, aes(x= average_quality_of_mapped_bases, y=plot$PC1))+
-geom_point()+geom_smooth(method = "lm", se = FALSE,size=0.5)+
-theme_classic()+labs(subtitle=t1, y='PC1',x='Average quality of mapped bases')+
-theme(plot.title = element_text(hjust= 0.5),plot.subtitle = element_text(hjust= 0.5))
+p1 <- ggplot(plot, aes(x= average_quality_of_mapped_bases, y=PC1, color=Pop, shape=Out))+
+geom_point()+theme_classic()+labs(y='PC1',x='Average quality of mapped bases')+scale_colour_manual(values= MyColour)+guides(color=F, shape=F)#+geom_smooth(method = "lm", se = FALSE,size=0.5)
 
-r2=lm(as.numeric(as.POSIXct(plot$SUBMISSION.DATE)) ~ plot$PC1, plot)
-t2=paste("Adj R2 = ",signif(summary(r2)$adj.r.squared, 3),
-                     " P =",signif(summary(r2)$coef[2,4], 3))
+p2<-ggplot(plot, aes(x= SUBMISSION.DATE, y=plot$PC1, color=Pop, shape=Out))+
+geom_point()+theme_classic()+labs(y='PC1',x='Submission date')+scale_colour_manual(values= MyColour)+guides(color=F, shape=F)
 
-p2<-ggplot(plot, aes(x= SUBMISSION.DATE, y=plot$PC1))+
-geom_point()+geom_smooth(method = "lm", se = FALSE,size=0.5)+
-theme_classic()+labs(subtitle=t2, y='PC1',x='Submission date')+
-theme(plot.title = element_text(hjust= 0.5),plot.subtitle = element_text(hjust= 0.5))
-
-r3=lm(plot$mean_insert_size ~ plot$PC1, plot)
-t3=paste("Adj R2 = ",signif(summary(r3)$adj.r.squared, 3),
-                     " P =",signif(summary(r3)$coef[2,4], 3))
                      
-p3<-ggplot(plot, aes(x= mean_insert_size, y=plot$PC1))+
-geom_point()+geom_smooth(method = "lm", se = FALSE,size=0.5)+
-theme_classic()+labs(subtitle=t3,y='PC1',x='Mean insert size')+
-theme(plot.title = element_text(hjust= 0.5),plot.subtitle = element_text(hjust= 0.5))
+p3<-ggplot(plot, aes(x= mean_insert_size, y=plot$PC1, color=Pop, shape=Out))+
+geom_point()+theme_classic()+labs(y='PC1',x='Mean insert size')+scale_colour_manual(values= MyColour)+guides(color=F, shape=F)
 
-r4=lm(plot$X._of_mismatched_bases ~ plot$PC1, plot)
-t4=paste("Adj R2 = ",signif(summary(r4)$adj.r.squared, 3),
-                     " P =",signif(summary(r4)$coef[2,4], 3))
-p4<-ggplot(plot, aes(x=X._of_mismatched_bases, y=plot$PC1))+
-geom_point()+geom_smooth(method = "lm", se = FALSE,size=0.5)+
-theme_classic()+labs(subtitle=t4,x='Number of mismatched bases',y='PC1')+
-theme(plot.title = element_text(hjust= 0.5),plot.subtitle = element_text(hjust= 0.5))+scale_x_reverse()
+p4<-ggplot(plot, aes(x=X._of_mismatched_bases, y=plot$PC1, color=Pop, shape=Out))+
+geom_point()+theme_classic()+labs(x='Number of mismatched bases',y='PC1')+scale_x_reverse()+scale_colour_manual(values= MyColour)+guides(shape=guide_legend(title=""),color=guide_legend(title="Population"))
 
-pf<-plot_grid(p1,p2,p3,p4, labels=c('A','B','C','D'), ncol=2)
+pf<-plot_grid(p1,p2,p3,p4, labels=c('A','B','C','D'), nrow=1,rel_widths=c(1,1,1,1.2))
 
-ggsave('~/Documents/QualityPaper/Figures/PC1_Correlation.jpg',pf,height=8,width=11)
-ggsave('~/Documents/QualityPaper/Figures/PC1_Correlation.tiff',pf,height=8,width=11)
+ggsave('~/Documents/QualityPaper/Figures/PC1_Correlation.jpg',pf,height=6,width=14)
+ggsave('~/Documents/QualityPaper/Figures/PC1_Correlation.tiff',pf,height=6,width=14)
 
 pt<-plot[,c('Name','PC1','X._total_reads','X._mapped_reads_properly_paired','mean_insert_size','insert_size_median_absolute_deviation','STUDY_ID','ANALYSIS_GROUP','Transitions','Hom_ref','X._total_bases','X._mapped_reads','X._of_mismatched_bases','X._mapped_reads_paired_in_sequencing','median_insert_size','X._duplicate_bases')]
 pt<-unique(melt(pt, id=c('Name','PC1')))
