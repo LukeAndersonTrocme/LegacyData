@@ -67,9 +67,7 @@ Certain mutagens in tobacco smoke, for example, have been shown to preferentiall
 Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
 Such genome wide mutational signatures have been used as a diagnostic tool for cancers \citep{Alexandrov2013,Shiraishi2015a}.
 
-%While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity \citep{Pleasance2010}.
-%Large cohorts have recently become available to increase statistical power to resolve some of these finer scale mutational signatures.
-
+While certain mutagens have very distinct mutational signatures, others are more subtle and require much larger datasets to identify because they tend to occur less frequently and with less genomic specificity \citep{Pleasance2010}.
 Differences in mutational signatures across human populations have recently been reported.
 In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
 Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
@@ -121,7 +119,7 @@ Regressions against different individual-level quality metrics provided by the 1
 Individuals with low mapping quality show elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}).
 Thus sequences with low quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
-To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a reverse genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality (Figure \ref{SFS}).
+To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome-wide association study (GWAS) in the JPT for SNPs that correlate strongly with low quality (Figure \ref{SFS}).
 Whereas the majority of GWAS use linear regression predicting a phenotype based on genotype, we are looking for loci where the genotypes are predictable based on the data quality scores.
 This approach identifies 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
@@ -129,10 +127,8 @@ The variants that are associated to the quality of mapped bases have an enrichme
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in low-mapping quality individuals.
 
 Thus this mutational signal is heavily enriched in GWAS suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low-quality data remain unidentifiable using association techniques. 
-
-%For this reason, the heterogeneously distributed signal persisted in the 1kGP Japanese even after filtering the variants that were significantly associated to quality. 
 The removal of individuals with average mapping quality below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged. 
-For population genetic analyses, the removal of individuals with low quality sequence data appears preferable to filtering positions. 
+For population genetic analyses, the removal of individuals with low quality sequence data appears preferable to filtering positions.
 
 	\subsection{Sequencing quality over time}
 The results of the logistic regression GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
@@ -150,8 +146,8 @@ However, the average quality of mapped bases per individual appeared to be the b
 \end{figure}
 
 \subsection{Overlap of significant SNPs}
-The reverse GWAS approach similarly identified mapping-quality--associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3990 SNPs were statistically significant after a \luke{meta-analysis} (taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
+The GWAS approach similarly identified mapping-quality--associated SNPs in 24 of the 26 populations in the 1kGP.
+Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}), and 3990 SNPs were statistically significant after a \luke{combined analysis} (taking the sum of the deviations from each population and adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant), as shown on Figure \ref{Manhattan}.  
 \sgcomment{Look at the frequency distributions of these SNPs in GnomAD}
 
 \begin{figure*}
@@ -172,36 +168,30 @@ From the perspective of researchers, they act as black-box imputation machines t
 In order to investigate the proportion of variants that we have identified as being associated to quality that are being imputed, we submitted genotype data from all of the 1kGP individuals to the Michigan Imputation Server.
 We found that all of the SNPs we identified as being associated with quality for chromosomes 1 and 2 were imputed. 
 This suggests that the imputation reference panel likely includes individuals with low sequence quality, and the dubious variants have not been removed. 
-%\sgcomment{All of them? How is it possible if we only submitted Japanese? Also, I thought that we had only submitted a couple of chromosomes.} 
-%\luke{Submitted all of the 1kGP, queried the combined meta-analysis list of SNPs}
-\sgcomment{It may be useful to impute some of the NAG data.} 
+%\sgcomment{It may be useful to impute some of the NAG data.} 
 
 
 \subsection{Found to be included in other GWAS }
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have reported these dubious variants as being significantly correlated with some biological trait. 
 The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had found variants to have either reached or nearly reached genome wide significance of $ p < 10^{-8}$.
 
-One of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation. \sgcomment{If they used HapMap, how did they get affected by the 1000 Genomes results?}
+One of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
 The other study used the 1kGP sequence data and cell lines directly.
 Both papers used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
 They also removed rare alleles and alleles with high degrees of missingness. 
 Despite using the state of the art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
 
 \section{Discussion}
-			
-%\subsection{Twins Research Human Genetics}
-%\sgcomment{Had we ever discusssed that these GWAS hits were not genome-wide significant?}
-This paper identified SNPs associated to ADHD using a GWAS on quantitative measures of ADHD symptoms.
+
+One paper identified SNPs associated to ADHD using a GWAS on quantitative measures of ADHD symptoms.
 While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below significance below $ p < 10^{-5}$.
 The data used was imputed genotype data using Hapmap II as the reference.
 One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to data quality \citep{Ebejer2013}.
+While they are clear in reporting that these SNPs are not genome wide significant, one can imagine a meta-analysis using this dataset would include the false positive SNP we identified.
+Finding some of these SNPs in imputed HapMap data was unexpected, however, not impossible considering that HapMap and 1kGP shared many samples.
+We found that roughly 1\% of the SNPs associated to quality were found in HapMap,  rs6057648 is among those found in HapMap.
 
-While they are clear in reporting that these SNPs are not genome wide significant, one can imagine a meta-analysis using this dataset would include the false positive SNP we identified. 
-Furthermore, the approach they used to impute genotype data for GWAS is very common.
-%A literature search of the keywords 'GWAS Genotype Imputation' yielded 19,300 results. \sgcomment{What is this about??}
-
-%\subsection{PLos One}
-This paper used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV.
+Another paper used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV.
 They did PCR confirmation of EBV copy number using 7 samples from some of the populations, however all of these samples have relatively high quality data.
 They performed a GWAS on the EBV copy number and identified only one SNP with significance below $ p < 10^{-8}$. 
 However they reported the SNPs reading significance below $ p < 10^{-6}$. 
@@ -213,52 +203,45 @@ It is unclear what exactly might be causing the association to EBV copy number a
 Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. 			
 
 \subsection{Technical Artifact}
-\sgcomment{needs some editing}
-The variants identified in this study are likely to be technical artifacts from legacy technology.\citep{Minoche2011} \luke{<-citation} 
+\luke{edited}
+The variants identified in this study are likely to be technical artifacts from legacy technology.
+Different sequencing technologies will have different error profiles. 
+A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011}.
+The quality of sequencing data decreases along the length of the read.
+These regions of low quality at the ends of reads are know as B-tails.
+The same report found that the GAII also had much higher rates of reads with B-tails.
+However, many variant calling algorithms will discard reads with high error rates \citep{Minoche2011}.
+There are indeed multiple explanations for the signal. 
+The presence of these SNPs in the HapMap suggests a cell line effect, however this result is not very convincing with only 1\% of sites identified in 1kGP present in HapMap.
+Indeed, further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal. 
+
 If these sequencing platforms are no longer being used then it it likely that these artifacts are no longer being actively introduced in recent sequence data.
 However, because the 1kGP data is widely used as a reference database, these variants are being imputed onto new genotype data.
 We have shown that these variants have been significantly associated using traditional GWAS methods.
 However this is not the only method that would be affected by these false positives. 
 Polygenic risk scores, meta analyses and other methods that combine the scores of multiple variants might also include some of these variants in their analyses.
 The inclusion of these variants could also affect population genetics analyses that compare and contrast populations based on allele frequencies.
-luke{Multiple explanations for the signal, technical artifact, cell line artifact. The presence of these SNPs in the HapMap suggests a cell line effect, however with only 1\% of sites identified in 1kGP present in HapMap it's not a smoking gun.}
 
 
 \subsection{Recommendations}
-\sgcomment{needs some editing}
-The most conservative approach would be to remove all individuals that do not meet the quality threshold as well as all the variants associated to low quality.
+\luke{edited}
+While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet the current quality standards.
+A conservative approach would be to remove all individuals that do not meet the quality threshold as well as all the variants associated to low quality.
 In this case, we used a cut-off of an average quality of mapped bases over 30.
 Another approach is to remove all the sites that reach a significance below $ p < 10^{-6}$ in at least two populations or using the sites reaching a significance below $ p < 10^{-6}$ in the combined test. (See supplementary material for lists of SNPs)
-%\subsection{Power limits and Quality Controls}
-%If these variants are truly spurious, why were they not identified by the Hardy-Weinberg test of heterozygosity?
-%how many hetd do you need to detect HWE significance?
-%We were able to identify many variants with frequencies below \todo{the power threshold for HWE}.
-
-%\subsection{Technical Source of Error}
-%B tail trimming  (Minoche et al. Genome Biology 2011)
-%issues with PCR?
-%repetitive regions, GC bias...
 
 \section{Conclusion}
 
-On a technical front, we were surprised that strong correlations between SNPs and technical covariates in the 1kGP project had not been identified before. The reverse GWAS approach is rather straightforward, and should probably be a standard in a variety of -omics studies. 
+On a technical front, we were surprised that strong correlations between SNPs and technical covariates in the 1kGP project had not been identified before. 
+The GWAS approach is rather straightforward, and should probably be a standard in a variety of -omics studies. 
 
-More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data. Given rapid technological progress, the focus of genomic research is naturally on the data generation side. However, cleaning up is also important to avoid generating spurious results. The present findings suggest that a substantial fraction of the final release of the 1kGP project is overdue for removal or re-sequencing. 
+More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data. 
+Given rapid technological progress, the focus of genomic research is naturally on the data generation side. However, cleaning up is also important to avoid generating spurious results. 
+The present findings suggest that a substantial fraction of the final release of the 1kGP project is overdue for removal or re-sequencing. 
 
-Somewhat embarrassingly, we have not identified the precise mechanism through which the technical artifact was introduced: we have ruled out neither cell-line, sequencer, nor algorithmic artifact. Given that modern platforms seem to have resolved this technical issue but that recent studies continue being affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while the sequencing forensics investigation can take place.     
+Somewhat embarrassingly, we have not identified the precise mechanism through which the technical artifact was introduced: we have ruled out neither cell-line, sequencer, nor algorithmic artifact. 
+Given that modern platforms seem to have resolved this technical issue but that recent studies continue being affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while the sequencing forensics investigation can take place.     
 
-
-%but evidence points to the fact that the artifact disappeared in the later stages of the 1kGP, and does not corrupt more recent data.   
- 
-%As more large scale genotyping efforts are being imputed on the same legacy datasets, we must scrutinize the quality of the reference databases to avoid the propagation of false positives. 
-%These results bring forth many questions regarding the reliability of legacy datasets. 
-%Moreover, since there are so many broad applications of imputation, it frames the question for reference data turnover. 
-
-
-%Our method identifies spurious mutations by correlating mutations with data quality metrics. 
-%We propose including our quality control methods to identify possible false positives in sequencing data. 
-%We have focused on the 1000 Genomes Project dataset as its quality metrics were freely available, however the issues of quality control are not limited to this one consortium. 
-%This study only used one dataset and one quality metric, but using this same approach can be used to identify more false positives in many more datasets. 
 
 \section{Methods}
 \subsection{Metadata}
@@ -310,8 +293,6 @@ https://github.com/LukeAndersonTrocme/QualityPaper
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
-
-%\bibliographystyle{plain}
 \bibliography{Legacy.bib}
 
 \section{Supplementary Figures}
