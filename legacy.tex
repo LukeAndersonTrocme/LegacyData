@@ -19,6 +19,9 @@
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
 \newcommand{\alex}[1]{\textcolor{red}{Alex: #1}}
+
+%\newcommand{\qq}{m}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ARTICLE SETUP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -206,13 +209,11 @@ Further investigations in the source of the issue could be done using the raw se
 \luke{edited}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
 Different sequencing technologies will have different error profiles. 
-A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011}.
-The quality of sequencing data decreases along the length of the read.
-These regions of low quality at the ends of reads are know as B-tails.
-The same report found that the GAII also had much higher rates of reads with B-tails.
-However, many variant calling algorithms will discard reads with high error rates \citep{Minoche2011}.
-There are indeed multiple explanations for the signal. 
-The presence of these SNPs in the HapMap suggests a cell line effect, however this result is not very convincing with only 1\% of sites identified in 1kGP present in HapMap.
+A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011}, with e.g. different patterns of quality decrease along reads (known as B-tails). Differences in read quality in turn require for different calling pipelines. 
+
+We were not able to pinpoint the precise technical source of the discrepancy. Sequencer-specific errors would be expected to be absent from Hapmap, which was sequenced with an entirely different platform. \sgcomment{Check that is sanger, if so, say so}. We find that \sgcomment{$99\%$--check} of the suspicious snps are indeed absent from HapMap, which is consistent with the expected false positive rate in our test.   
+  
+The presence of some of these SNPs in HapMap suggests a cell line effect, however this result is not very convincing with only 1\% of sites identified in 1kGP present in HapMap.
 Indeed, further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal. 
 
 If these sequencing platforms are no longer being used then it it likely that these artifacts are no longer being actively introduced in recent sequence data.
@@ -268,12 +269,12 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
 
 \subsection{Genome Wide Association Study}
-Using a custom-made R script, we performed a logistic regression using the glm package \citep{RDevelopmentCoreTeam2016}.
-We ran the regression independently on data for each genomic locus and population independently for each of the 26 populations of the 1kGP.
-For each of the 26 populations and for each locus, we formulated a null hypothesis that the quality variable is not associated with genotype, that is, the slope  coefficient of the simple logistic regression is zero. 
-$H_{0}: \beta_{1}=0$.  
-To test the null-hypothesis we used the chi square likelihood ratio test statistic (the deviance) as a measure of the marginal important of the quality variable. 
-The deviance test statistics is approximately chi-square distributed with one degrees of freedom.  
+We performed logistic regression using the R glm package \citep{RDevelopmentCoreTeam2016}.
+We ran the regression independently for each genomic locus and each of the 26 populations of the 1kGP.
+For each of the 26 populations and for each locus, we formulated a null hypothesis that the quality variable is not associated with genotype, that is, the slope  coefficient of the simple logistic regression is zero. \sgcomment{define $\beta_1$ or not mention? 
+$H_{0}: \beta_{1}=0$  }.  
+To test the null hypothesis, we used the chi square likelihood ratio test statistic (the deviance) as a measure of the marginal importance of the average quality of mapped bases. 
+The deviance test statistic is approximately chi-square distributed with one degrees of freedom.  
 The deviations from the null model for each test was used to compute the chi-squared \textit{p}-value for each SNP for each population.
 To test whether the quality variable is associated with genotype across all populations, we used the sum of the deviances across the populations.
 However, since not all SNPs are present in all populations, when computing the \textit{p}-values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
