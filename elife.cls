@@ -3,7 +3,7 @@
 % Created by Overleaf (writeLaTeX).
 %
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{elife}[2017/03/07, v1.2]
+\ProvidesClass{elife}[2018/06/03, v1.6]
 
 \RequirePackage[english]{babel}
 
@@ -318,23 +318,38 @@
 \setcounter{figsupp}{0}
 \newcounter{data}
 \setcounter{data}{0}
+%% Added videos 2018/06/03
+\newcounter{video}
+\setcounter{video}{0}
+\newcounter{videosupp}
+\setcounter{videosupp}{0}
 \def\supplist{}
 
 \RequirePackage{newfile}
 \newoutputstream{suppinfo}
 \openoutputfile{\jobname.suppinfo}{suppinfo}
 
+\newcommand{\video}[1]{%
+  \refstepcounter{video}%
+  \bigskip%
+  \noindent{\small\textbf{Video \arabic{video}.} #1\par}%
+  \bigskip
+}
 
 \AtBeginEnvironment{figure}{%
   \setcounter{figsupp}{0}
   \setcounter{data}{0}
-  \newcommand{\figsupp}[2]{%
+  \setcounter{videosupp}{0}
+  %% Updated 2017/06/30 to allow optional argument
+  \newcommand{\figsupp}[3][]{%
     \refstepcounter{figsupp}%
-    {\small\textbf{Figure~\thefigure--Figure supplement \arabic{figsupp}.} #1}\par
+    {%
+    \ifstrequal{#1}{none}{}{%
+      \small\textbf{Figure~\thefigure--Figure supplement \arabic{figsupp}.} \ifstrempty{#1}{#2}{#1}}}\par
     \addtostream{suppinfo}{%
       \noindent\protect\begin{minipage}{\linewidth}
-      \protect #2\noexpand\par
-      \textbf{Figure \thefigure--Figure supplement \arabic{figsupp}.} #1\noexpand\par
+      \protect #3\noexpand\par
+      \textbf{Figure \thefigure--Figure supplement \arabic{figsupp}.} #2\noexpand\par
       \vskip8pt
       \protect\end{minipage}
       \vskip16pt
@@ -343,6 +358,20 @@
   \newcommand{\figdata}[1]{%
     \refstepcounter{data}
     {\small\textbf{Figure~\thefigure--source data \arabic{data}.} #1}\par
+  }
+  %% Added 2018/06/03
+  \newcommand{\videosupp}[1]{%
+    \refstepcounter{videosupp}
+    {\small\textbf{Figure~\thefigure--video \arabic{videosupp}.} #1}\par
+  }
+}
+
+\AtBeginEnvironment{table}{%
+  \setcounter{data}{0}
+  \setcounter{videosupp}{0}
+  \newcommand{\tabledata}[1]{%
+    \refstepcounter{data}
+    {\small\textbf{Table~\thetable--source data \arabic{data}.} #1}\par
   }
 }
 
@@ -375,9 +404,29 @@
 
 % Other desired commands
 \renewcommand{\equationautorefname}{Eq.}
+%% Added autoref support for \figsupp, \figdata, \video, \videosupp
+\newcommand{\figsuppautorefname}{Figure Supplement}
+\newcommand{\dataautorefname}{source data}
+\newcommand{\videoautorefname}{Video}
+\newcommand{\videosuppautorefname}{video}
+\newcommand{\FIGSUPP}[2][]{%
+  \ifstrequal{#1}{}{}{\autoref{fig:#1}--}\autoref{figsupp:#2}%
+}
+\newcommand{\FIGDATA}[2][]{%
+  \ifstrequal{#1}{}{}{\autoref{fig:#1}--}\autoref{figdata:#2}%
+}
+\newcommand{\TABLEDATA}[2][]{%
+  \ifstrequal{#1}{}{}{\autoref{tab:#1}--}\autoref{tabdata:#2}%
+}
+\newcommand{\VIDEOSUPP}[2][]{%
+  \ifstrequal{#1}{}{}{\autoref{fig:#1}--}\autoref{videosupp:#2}%
+}
 \newcommand{\FIG}[1]{\autoref{fig:#1}}
 \newcommand{\TABLE}[1]{\autoref{tab:#1}}
+\newcommand{\VIDEO}[1]{\autoref{video:#1}}
 \newcommand{\EQ}[1]{\autoref{eq:#1}}
 \newcommand{\BOX}[1]{\autoref{box:#1}}
 \let\oldautoref\autoref
 \renewcommand{\autoref}[1]{\emph{\textbf{\oldautoref{#1}}}}
+
+\endinput
