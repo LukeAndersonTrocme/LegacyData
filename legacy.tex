@@ -158,7 +158,7 @@ However, the average quality of mapped bases per individual appeared to be the b
 \end{figure}
 
 The GWAS approach similarly identified mapping-quality--associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}). We wanted a test statistic to represent the association across all populations, to do that we summed across the deviations from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs, as shown on Figure \ref{Manhattan}.
+Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}). We wanted a test statistic to represent the association across all populations, to do that we summed across the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs, as shown on Figure \ref{Manhattan}.
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
@@ -274,21 +274,28 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
 
 \subsection{Genome wide simple logistic regression analysis}
-We fitted a simple logistic regression independently for each combination of genomic locus $s$ and population $p$ using the R glm package\citep{RDevelopmentCoreTeam2016}. The simple logistic model can be expressed as such.
-
+We ran a simple logistic regression independently for each combination of genomic locus $s$ and population $p$ using the R glm package\citep{RDevelopmentCoreTeam2016}. The model we fitted to each subset of data can be expressed as such.
 \begin{align*}
 {logit}{E(Y_{s'p'i})} &= \beta_{0}^{(sp)} + \beta_{1}^{(sp)} Q_{p'i}
 \\
 \textit{for}\quad i &= 1,\hdots, n_{p'}
 \end{align*}
-where $Y_{spi}$ is a Bernouli random variable denoting the genotype of individual $i$ in population $p$ at genomic locus $s$. In the model, the regression coefficient $\beta_{0}^{(sp)}$ represents the baseline allele frequency in population $p$, the slope coefficient $\beta_{1}^{(sp)}$ denotes the association to average quality of mapped bases $Q_{p}$ to genotype $Y_{sp}$. We run a total of $K (= \sum_{s=1}^S P_s)$ regressions where $ P_s$, ranging from 2 to 26, is the number of populations with a segregating variant for genomic locus $s$.
+Here $Y_{spi}$ is a Bernouli random variable denoting the genotype of individual $i$ in population $p$ at genomic locus $s$. 
+In the model, the regression coefficient $\beta_{0}^{(sp)}$ represents the baseline allele frequency in population $p$, the slope coefficient $\beta_{1}^{(sp)}$ denotes the association to average quality of mapped bases $Q_{p}$ to genotype $Y_{sp}$. 
+We run a total of $K (= \sum_{s=1}^S P_s)$ regressions, where $S$ is the \todo{total number of genomic loci} , and $P_s$ is the number of populations with a segregating variant for locus $s$. In the data, $P_s$ ranges from 2 to 26 since not all SNPs were present in all populations and loci where only a single variant was observed were filtered out.
 
-For each combination of of the 26 populations and for each locus, we formulated a null hypothesis that the quality variable is not associated with genotype, that is, the slope  coefficient of the simple logistic regression is zero. $H_{0}: \beta_{1}=0$.
-To test the null hypothesis, we used the chi square likelihood ratio test statistic (the deviance) as a measure of the marginal importance of the average quality of mapped bases. 
+For each of the $K$ regressions, we formulated a null hypothesis $H_{0}: \beta_{1}^{(sp)}=0$. That is, the average quality of mapped bases $Q_{p}$ variable is not associated with genotype $Y_{sp}$.
+In other words, the slope coefficient of the simple logistic regression is zero.
+To test the null hypothesis, we used the chi-square likelihood ratio test statistic (the deviance) as a measure of the marginal importance of adding $Q_{p}$ in the model. 
 The deviance test statistic is approximately chi-square distributed with one degrees of freedom.  
-The deviations from the null model for each test was used to compute the chi-squared \textit{p}-value for each SNP for each population.
-To test whether the quality variable is associated with genotype across all populations, we used the sum of the deviances across the populations.
-However, since not all SNPs are present in all populations, when computing the \textit{p}-values for the summed deviations, the degrees of freedom were adjusted to the number of populations tested. 
+
+To obtain a population-wide measure of association for each locus across its respective $P_s$ populations, we summed the $P_s$ deviances for each $s$. The resulting test statistic $T_s$ is chi-squared distributed with $P_s$ degrees of freedom (i.e. $T_s \sim \chi^2_{P_s}$), see Figure \ref{Deviances}.
+The observed summed deviances were used to compute the \textit{p}-value for each locus.
+
+
+Given the large number of \textit{p}-values of which there are $S$ of them, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values
+\citep{Benjamini2006}.
+By using a very conservative nominal Type-I error rate $\alpha = 0.01$, a total of 3990 loci were found to be statistically significance. See supplementary file {here}. \luke{make this file}
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}
@@ -316,7 +323,7 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_adjusted.jpg}
 
-\caption{Manhattan plot of the -log10 p values for the combined test using the deviations from each population of the 1kGP. 
+\caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
 There are 3990 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
   \label{Manhattan}
