@@ -272,6 +272,7 @@ We reproduced the quality control pipelines used by Harris et. al as they applie
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
 The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} was used to remove low quality regions of the genome , highly conserved regions were removed using the \href{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/phastConsElements100way.txt.gz}{phastCons100way} mask file and highly repetitive regions were also removed using the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file from RepeatMasker. 
 Furthermore, only diallelic autosomal SNPs were considered, with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9.
+In total, 59,272,030 SNPs passed our quality controls. 
 
 \subsection{Genome wide association study}
 We ran a simple logistic regression independently for each combination of genomic locus $s$ and population $p$ using the R glm package\citep{RDevelopmentCoreTeam2016}. The model we fitted to each subset of data can be expressed as such.
@@ -282,7 +283,7 @@ We ran a simple logistic regression independently for each combination of genomi
 \end{align*}
 Here $Y_{spi}$ is a Bernoulli random variable denoting the genotype of individual $i$ in population $p$ at genomic locus $s$. 
 In the model, the regression coefficient $\beta_{0}^{(sp)}$ represents the baseline allele frequency in population $p$, the slope coefficient $\beta_{1}^{(sp)}$ denotes the association to average quality of mapped bases $Q_{p}$ to genotype $Y_{sp}$. 
-We run a total of $K (= \sum_{s=1}^S P_s)$ regressions, where $S$ is the \todo{total number of genomic loci} , and $P_s$ is the number of populations with a segregating variant for locus $s$. In the data, $P_s$ ranges from 2 to 26 since not all SNPs were present in all populations and loci where only a single variant was observed were filtered out.
+We run a total of $K (= \sum_{s=1}^S P_s)$ regressions, where $S$ is the total number of genomic loci, and $P_s$ is the number of populations with a segregating variant for locus $s$. In the data, $P_s$ ranges from 2 to 26 since not all SNPs were present in all populations and loci where only a single variant was observed were filtered out.
 
 For each of the $K$ regressions, we formulated a null hypothesis $H_{0}: \beta_{1}^{(sp)}=0$. That is, the average quality of mapped bases $Q_{p}$ variable is not associated with genotype $Y_{sp}$.
 In other words, the slope coefficient of the simple logistic regression is zero.
