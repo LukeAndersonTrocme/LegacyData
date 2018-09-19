@@ -5,14 +5,16 @@ library(data.table)
 library(ggplot2)
 library(multtest)
 
-dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
-out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
+#dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+#out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
+dir='~/Documents/Regression/'
+out='~/Documents/Regression/'
 
 if(F){ #this is the loop that took the mean of the deviances
-for(chrom in seq(1,22)){
+for(chrom in seq(1,3)){
 	print(chrom)
 	#read in the regressions for each pop
-	fileNames = list.files(path=dir,pattern=paste("CHR",chrom,".Regression",sep=''), full.names = T)
+	fileNames = list.files(path=dir,pattern=paste("CHR",chrom,"_indels.Regression",sep=''), full.names = T)
 	if(length(fileNames) != 0){
 	Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T, sep=' ')))
 	
@@ -26,7 +28,7 @@ for(chrom in seq(1,22)){
 	#taking the sum of the deviances (mean is to take into account the DF)
 	Reg <- Reg %>% group_by(Chr,Pos) %>% summarize(SumDev = sum(dev), MeanDev = mean(dev), Count = n())
 	
-	write.table(Reg,paste(out,chrom,'_MeanDev.csv',sep=''))
+	write.table(Reg,paste(out,chrom,'indels_MeanDev.csv',sep=''))
 	}
 }
 }
