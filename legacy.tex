@@ -77,9 +77,9 @@ Certain mutagens in tobacco smoke, for example, have been shown to preferentiall
 Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
 Such genome wide mutational signatures have been used as diagnostic tools for cancers \citep{Alexandrov2013,Shiraishi2015a}.
 
-While certain mutagens have very distinct mutational signatures, others are more subtle and require much larger datasets to identify because they tend to occur less frequently and with less genomic specificity \citep{Pleasance2010}.
+While certain mutagens have very distinct mutational signatures, others are more subtle and require much larger datasets to identify because they tend to occur less frequently and with less genomic specificity \citep{Pleasance2010}. \sgcomment{Missing logical link}
 Differences in mutational signatures across human populations have recently been reported.
-In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations; this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
+In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
 Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
  
@@ -88,8 +88,8 @@ This heterogeneity is intriguing because differences in mutational signatures ac
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
 We therefore decided to follow up on this observation, by using a newly sequenced dataset \sgcomment{description of cohort.}
 
-While we were unable to reproduce the heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a batch effect in the 1kGP data that we were not previously aware of.
-We also found that this batch effect led to spurious results in a additional recent publications as a consequence of biased imputation.
+While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a batch effect in the 1kGP data that we were not previously aware of.
+We also found that this batch effect led to spurious imputation results which found their way in recent publications.
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/Figure1.jpg}
@@ -107,30 +107,29 @@ The same analysis was performed independently for each of the populations in the
  \label{SFS}
 \end{figure}
 
-			\section{Results}
-%The results section is organized as follows.
-First, we explore the mutational signal found in the 1kGP Japanese population and methods by which we can identify this technical artifact.
-Next, we expand our analysis to the other populations in the 1kGP and identify lists of SNPs whose validity is highly debatable.
-Finally, we investigate how these SNPs have impacted modern genomics analyses. 
-We report that major imputation servers impute the dubious SNPs. 
-We also identify two publications that report such SNPs as genome-wide significant or nearly significant hits.   
+ 
 			
+
+\section{Results}
+We first attempt to reproduce the original signal and identify problematic variants in the JPT cohort from the 1000 genomes project. 
+Next, we expand our analysis to the other populations in the 1kGP and identify lists of suspicious SNPs.
+Finally, we investigate how these SNPs have impacted modern genomics analyses.  
 			
-	\subsection{A peculiar mutational signature in Japan}			
+\subsection{A peculiar mutational signature in Japan}			
 	
-Harris and Pritchard reported an excess of a 3-mer *AC${\rightarrow}$*CC mutational pattern in a portion of the Japanese individuals in the 1kGP \citep{Harris2015a}.
+Harris and Pritchard reported an excess of a 3-mer *AC${\rightarrow}$*CC mutational pattern in a portion of the Japanese individuals in the 1kGP \citep{Harris2015a} \sgcomment{That would be 2017, no?}.
 While trying to follow up on this observations in a larger and more recent Japanese cohort, we did not find this particular signature.
 However, when comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed an unusually large number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 This is unexpected given the similarity of the two populations, and suggests a technical difference rather than a population structure effect. 
-Moreover, these mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium.
-Low frequency variants have little power to detect Hardy-Weinberg disequilibrium, and in essence we would not expect any homozygous alternates for low frequency variants. 
+These mismatches were maintained after filtering for low-quality regions of the human genome and standard metrics such as Hardy-Weinberg equilibrium.
+Low frequency variants have little power to detect Hardy-Weinberg disequilibrium, and in essence we would not expect any homozygous alternates for low frequency variants. \sgcomment{this sentence needs work}
 
 When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}).
 Regressions against different individual-level quality metrics provided by the 1kGP revealed that mean quality per mapped base pair per individual was an excellent correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP:
 Individuals with low mapping quality show elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}).
 Thus, sequences with low quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
-To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome wide simple logistic regression analysis (GWLR) in the JPT for SNPs that correlate strongly with low quality (Figure \ref{SFS}).
+To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a genome wide simple logistic regression analysis (GWLR) \sgcomment{I don't like this name} in the JPT for SNPs that correlate strongly with low quality (Figure \ref{SFS}).
 Traditionally, genome wide association studies use linear regression by predicting a phenotype based on genotype. 
 In this case, we are looking for loci where the genotypes are predictable based on the data quality scores.
 This approach identifies 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
@@ -147,9 +146,8 @@ The results of the GWLR performed on the Japanese from the 1kGP lead us to consi
 The average quality of sequencing data of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
 This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centres.
 There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
-By 2011, older sequencing technologies were phased out, and method development solidify, which coincides with the sequencing quality levelling off.
-It is clear that there are many covariates that could be used to identify spurious sites such as sequencing date, sequencing technology or even the sequencing centre. 
-However, the average quality of mapped bases per individual appeared to be the best metric to identify spurious sites.
+By 2011, older sequencing technologies were phased out and methods became more consistent, resulting in higher and more uniform quality.
+Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases per individual because it best correlated with mismatched sites across Japanese cohorts.
 
 \begin{figure}
 \includegraphics[width=0.95\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
@@ -159,7 +157,7 @@ However, the average quality of mapped bases per individual appeared to be the b
 \end{figure}
 
 The GWAS approach similarly identified mapping-quality-associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}). We wanted a test statistic to represent the association across all populations; to do that we summed across the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs, as shown on Figure \ref{Manhattan}.
+Over 3517 variants were independently associated to low quality in at least two populations  (Figure \ref{OverLap}). We wanted a test statistic to represent the association across all populations; to do that we summed across the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs (Figure \ref{Manhattan}).
 
 \begin{figure*}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
@@ -176,9 +174,9 @@ The same variants identified as being low quality independently in each populati
 \subsection{Suspicious SNPs impact modern genomics analyses}
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
-In order to investigate the proportion of variants that we have identified as being associated to quality that are being imputed, we submitted genotype data from all of the 1kGP individuals to the Michigan Imputation Server.
-We found that all of the SNPs we identified as being associated with quality for chromosomes 1 and 2 were imputed. 
-This suggests that the imputation reference panel likely includes individuals with low sequence quality, and the dubious variants have not been removed. 
+In order to investigate the proportion of variants that we have identified as being associated to quality that are being imputed, we submitted genotype data from chomosomes 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
+We found that all the SNPs we identified as being associated with quality for chromosomes 1 and 2 were imputed back into these individuals. 
+This suggests that the imputation reference panel likely includes individuals with low sequence quality, and will be imputed in individuals who most closely match the low-quality individual. 
 
 
 Once we identified SNPs that were clearly associated with low quality, we searched the literature for any GWAS that might have reported these dubious variants as being significantly correlated with some biological trait. 
