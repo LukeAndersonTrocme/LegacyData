@@ -5,14 +5,16 @@ library(data.table)
 library(ggplot2)
 library(multtest)
 
-dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
-out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
+#dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+#out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
+dir='~/Documents/Regression/'
+out='~/Documents/Regression/'
 
 if(F){ #this is the loop that took the mean of the deviances
-for(chrom in seq(1,22)){
+for(chrom in seq(4,22)){
 	print(chrom)
 	#read in the regressions for each pop
-	fileNames = list.files(path=dir,pattern=paste("CHR",chrom,".Regression",sep=''), full.names = T)
+	fileNames = list.files(path=dir,pattern=paste("CHR",chrom,"_indels.Regression",sep=''), full.names = T)
 	if(length(fileNames) != 0){
 	Reg = do.call(rbind, lapply(fileNames, function(x) read.table(x, header=T, sep=' ')))
 	
@@ -26,7 +28,7 @@ for(chrom in seq(1,22)){
 	#taking the sum of the deviances (mean is to take into account the DF)
 	Reg <- Reg %>% group_by(Chr,Pos) %>% summarize(SumDev = sum(dev), MeanDev = mean(dev), Count = n())
 	
-	write.table(Reg,paste(out,chrom,'_MeanDev.csv',sep=''))
+	write.table(Reg,paste(out,chrom,'indels_MeanDev.csv',sep=''))
 	}
 }
 }
@@ -51,7 +53,8 @@ rm(singles)
 rm(doubles)
 
 #read in mean deviances for all pops
-Reg <- fread('/Volumes/gravel/luke_projects/1000Genomes/MeanDev/AllPops_Dev.csv', fill=T)
+Reg <- fread('/Users/luke/Documents/Regression/ALL_indels_MeanDev.csv', fill=T)
+#Reg <- fread('/Volumes/gravel/luke_projects/1000Genomes/MeanDev/AllPops_Dev.csv', fill=T)
 colnames(Reg)<-c('V1','Chr','Pos','SumDev','MeanDev','Count')
 
 #had duplicate headers, so had to remove them and reset columns to numeric
@@ -71,7 +74,7 @@ Reg$plog10 <- - pchisq(Reg$SumDev, Reg$Count, lower.tail=F, log.p=T)/log(10)
 Reg$p <- pchisq(Reg$SumDev, Reg$Count, lower.tail=F)
 
 #write the table to make it easier to load later on
-write.table(Reg, file='~/Documents/QualityPaper/Misc/Reg.txt', quote=F, row.names=F)
+write.table(Reg, file='~/Documents/QualityPaper/Misc/Reg_indels.txt', quote=F, row.names=F)
 #Reg <- fread('~/Documents/QualityPaper/Misc/Reg.txt')
 
 #this removes the singletons
@@ -100,7 +103,8 @@ facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
 scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
-geom_point(data=sig.20, aes(x=Pos, y = adjusted.01,))+
+geom_point(data=sig.20, aes(x=Pos, y = adjusted.01),shape=1)+
+geom_hline(yintercept=-log10(0.01), color='blue')+
 labs(y='-log10(p)', x='Chromosome')+
 theme(plot.title = element_text(hjust = 0.5), 
 plot.subtitle = element_text(hjust = 0.5), 
@@ -111,8 +115,8 @@ strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)+expand_limits(y=c(0,21))
 
-ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot.jpg', height=5, width=10)
-ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot.tiff', height=5, width=10)
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot_indels.jpg', height=5, width=10)
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot_indels.tiff', height=5, width=10)
 
 
 #make min for dev
@@ -134,12 +138,12 @@ MakePlot<-function(file){
 }
 
 LP<-list()
-for(df in seq(2,26)){
+for(df in seq(1,26)){
 	file <- NoSingles[which(NoSingles$Count==df),]
 	LP[[df]] <- MakePlot(file)	
 	}
 
-pf <- grid.arrange(LP[[2]], LP[[3]],LP[[4]],LP[[5]],LP[[6]],LP[[7]],LP[[8]],LP[[9]],LP[[10]], LP[[11]],LP[[12]],LP[[13]],LP[[14]],LP[[15]],LP[[16]],LP[[17]],LP[[18]],LP[[19]],LP[[20]], LP[[21]],LP[[22]],LP[[23]], LP[[24]],LP[[25]],LP[[26]])
+pf <- grid.arrange(LP[[1]],LP[[2]], LP[[3]],LP[[4]],LP[[5]],LP[[6]],LP[[7]],LP[[8]],LP[[9]],LP[[10]], LP[[11]],LP[[12]],LP[[13]],LP[[14]],LP[[15]],LP[[16]],LP[[17]],LP[[18]],LP[[19]],LP[[20]], LP[[21]],LP[[22]],LP[[23]], LP[[24]],LP[[25]],LP[[26]])
 
 ggsave('~/Documents/QualityPaper/Figures/AllDeviances.jpg',pf, height=16,width=22)
 ggsave('~/Documents/QualityPaper/Figures/AllDeviances.tiff',pf, height=16,width=22)
@@ -165,3 +169,8 @@ write.table(adj.sig.05[,c('Chr','Pos')],
 write.table(adj.sig.01[,c('Chr','Pos')], 
 	'~/Documents/QualityPaper/Significant0.1SNPs_adjusted_POS.txt', 
 	quote=F, row.names=F, col.names=F, sep='\t')
+
+##indels
+write.table(adj.sig.01[which(is.na(adj.sig.01$rsID.y)==F),]$rsID.y, 
+	'~/Documents/QualityPaper/Significant0.1INDELs_adjusted_rsID.txt', 
+	quote=F, row.names=F, col.names=F)

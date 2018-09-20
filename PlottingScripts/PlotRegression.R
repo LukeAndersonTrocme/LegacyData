@@ -51,3 +51,17 @@ sig$Name<-paste(sig$V5, '\n -log10(p) :',round(sig$V4.y, digits=2))
 ggplot(snp, aes(x=V6, y=V4, color=V5))+geom_point(shape=1)+facet_wrap(~V5,nrow=3)+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Quality', y='Genotype')+scale_y_continuous(breaks=c(0,1))+geom_vline(xintercept=30, color='grey60',linetype=3)+scale_color_manual(breaks= snp$V5,values = MyColour)+guides(color=F)
 
 ggsave('~/Documents/QualityPaper/RegressionPlot.jpg',height=5,width=5)
+
+
+##Indel
+
+snp<-read.table('~/Documents/Regression/Chr1_149214891.txt',sep=',')
+#dev<-read.table('/Users/luke/Documents/QualityPaper/sig/57694260.deviance.txt')
+#dev$p<-- pchisq(dev$V4, 1, lower.tail=F, log.p=T)/log(10)
+#dev<-dev[which(dev$p>6),]
+#sig<-merge(snp, dev, by.x=c('V1','V2','V5'), by.y=c('V1','V2','V3'))
+#sig$Name<-paste(sig$V5, '\n -log10(p) :',round(sig$V4.y, digits=2))
+
+ggplot(snp, aes(x=V6, y=V4, color=V5))+geom_point(shape=1)+facet_wrap(~V5,ncol=1, strip.position="right")+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Quality', y='Genotype')+scale_y_continuous(breaks=c(0,1))+geom_vline(xintercept=30, color='grey60',linetype=3)+scale_color_manual(breaks= snp$V5,values = MyColour)+guides(color=F)
+
+ggsave('~/Documents/QualityPaper/Figures/RegressionPlot_Indels.jpg',height=10,width=5)
