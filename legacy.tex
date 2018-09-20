@@ -146,9 +146,9 @@ The removal of individuals with $Q$ below 30 successfully removes the *AC${\righ
 For population genetic analyses, the removal of individuals with low $Q$ appears preferable to filtering positions.
 
 	\subsection{Identifying Suspicious SNPs in the 1kGP}
-The results of the \textit{reverse} GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
+The results of the reverse GWAS performed on the Japanese from the 1kGP lead us to consider whether any other populations in the 1kGP also had similar issues with data quality.
 The $Q$ of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
-This variability could be as a result of fluctuating sequence platform protocols or variation between sequencing centres.
+This variability could be as a result of \sgcomment{could result from?} fluctuating sequence platform protocols or variation between sequencing centres.
 There were a number of protocols used to prepare the samples for sequencing, as well as a number of sequencing technologies used over the course of the data production.
 
 
@@ -164,8 +164,8 @@ Among the many covariates that could be used to identify spurious sites, such as
 \label{MapQual}
 \end{figure}
 
-The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP.
-Over 3517 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs and 1134 statistically significant insertions and deletions (indels), as shown on Figure \ref{Manhattan} and Figure \ref{indel_Manhattan}.
+The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
+Over 3517 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs and 1134 statistically significant insertions and deletions (indels), as shown on Figure \ref{Manhattan} and Figure \ref{indel_Manhattan} \sgcomment{figure missing for me}.
 
 
 \begin{figure*}
@@ -186,15 +186,15 @@ From the perspective of researchers, they act as black-box imputation machines t
 
 
 \sgcomment{In order to -> To, in general} In order to investigate the proportion of variants that we have identified as being associated to $Q$ that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that all of the \sgomment{"all of the" -> "all the" } SNPs we identified as being associated with $Q$ were imputed back in the samples. 
+We found that all of the \sgcomment{"all of the" -> "all the" } SNPs we identified as being associated with $Q$ were imputed back in the samples. 
 This suggests that the imputation reference panel likely includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
 
 Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait. 
-The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had found variants to have either reached or nearly reached genome wide significance of $ p < 10^{-8}$.
+The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had found variants to have either reached or nearly reached genome wide significance of $ p < 10^{-8}$. \sgcomment{This is misleading! Neither has reached $10^-8$}
 
 One of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
 The other study used the 1kGP sequence data and cell lines directly.
-Both papers used strict quality thresholds, including population genetic statistical tests such as the Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
+Both papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
 They also removed rare alleles and alleles with high degrees of missingness. 
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
 
