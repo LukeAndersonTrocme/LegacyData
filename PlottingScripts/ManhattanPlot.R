@@ -4,7 +4,7 @@ library(magrittr)
 library(data.table)
 library(ggplot2)
 library(multtest)
-
+library(cowplot)
 #dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
 #out='/Volumes/gravel/luke_projects/1000Genomes/MeanDev/'
 dir='~/Documents/Regression/'
@@ -143,7 +143,15 @@ for(df in seq(1,26)){
 	LP[[df]] <- MakePlot(file)	
 	}
 
-pf <- grid.arrange(LP[[1]],LP[[2]], LP[[3]],LP[[4]],LP[[5]],LP[[6]],LP[[7]],LP[[8]],LP[[9]],LP[[10]], LP[[11]],LP[[12]],LP[[13]],LP[[14]],LP[[15]],LP[[16]],LP[[17]],LP[[18]],LP[[19]],LP[[20]], LP[[21]],LP[[22]],LP[[23]], LP[[24]],LP[[25]],LP[[26]])
+pf <- plot_grid(
+		plot_grid(LP[[1]],LP[[2]], LP[[3]],LP[[4]],LP[[5]],LP[[6]],nrow=1),
+		plot_grid(LP[[7]],LP[[8]],LP[[9]],LP[[10]],LP[[11]],nrow=1),
+		plot_grid(LP[[12]],LP[[13]],LP[[14]],LP[[15]],LP[[16]],nrow=1),
+		plot_grid(LP[[17]],LP[[18]],LP[[19]],LP[[20]],LP[[21]],nrow=1), 
+		plot_grid(LP[[22]],LP[[23]],LP[[24]],LP[[25]],LP[[26]],nrow=1),ncol=1)
+
+ggsave('~/Documents/QualityPaper/Figures/AllDeviances_1-26.jpg',pf, height=16,width=22)
+ggsave('~/Documents/QualityPaper/Figures/AllDeviances_1-26.tiff',pf, height=16,width=22)
 
 ggsave('~/Documents/QualityPaper/Figures/AllDeviances.jpg',pf, height=16,width=22)
 ggsave('~/Documents/QualityPaper/Figures/AllDeviances.tiff',pf, height=16,width=22)
