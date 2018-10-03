@@ -215,7 +215,7 @@ Four of the SNPs in the top hits for the Asian populations (rs200655768, rs18420
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
 It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced.
-Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. 			
+Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. \sgcomment{this could be cleaned up} 			
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
@@ -376,13 +376,13 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNP6_Singles.jpg}
-\caption{Significant SNPs found in only one population. The x-axis is sorted by genomic position.}
+\caption{SNPs associated with $Q$ in a single population. The x-axis is sorted by genomic position.}
 \label{Singles}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
-\caption{Site frequency spectrum of suspicious SNPs found in HapMap and GnomAD. The blue dot in the HapMap plot is the joint frequency of a variant from a published GWAS. There are 42 suspicious SNPs present in the HapMap database and 162 suspicious SNPs present in the GnomAD database.}
+\caption{Frequencies of $Q$-associated SNPs shared between 1000G and either HapMap or GnomAD. The blue dot in the HapMap plot is the is the variant reported in \citep{Mandage2017}, as discussed in the text. There are 42 such SNPs in HapMap and 162 in the GnomAD.}
 \label{HapMap_GnomAD}
 \end{figure}
 
