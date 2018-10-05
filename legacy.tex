@@ -315,7 +315,12 @@ We modified the methods as necessary for our purposes, scripts are available \hr
 \subsection{Imputation}
 Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for chromosomes 1 and 2.
 We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} genotype data.
-The VCF file returned from the server was then downloaded and used to search for the number of significant SNPs successfully imputed.
+The VCF file returned from the server was then downloaded and used to search for the number of significant SNPs successfully imputed. 
+
+\subsection{Frequencies of SNPs in other datasets}
+Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 42 SNPs in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
+
+Similarly, using the allele frequencies from GnomAD, we were able to extract 164 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
 
 \section{Code Availability}
 https://github.com/LukeAndersonTrocme/QualityPaper
