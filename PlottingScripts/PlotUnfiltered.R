@@ -39,3 +39,6 @@ axis.line.x=element_blank(),
 strip.background = element_blank(),
 strip.text.x = element_text(size = 6))+
 guides(color=F)+expand_limits(y=c(0,21))
+
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot_NOT.jpg', height=5, width=10)
+ggsave('~/Documents/QualityPaper/Figures/ManhattanPlot_NOT.tiff', height=5, width=10)
