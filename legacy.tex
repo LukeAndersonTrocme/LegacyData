@@ -161,10 +161,10 @@ To account for the large number of tests we performed a two-stage Benjamini \& H
 \luke{is this more appropriate for the methods section?}
 
 \begin{table}[h]
-\begin{tabular}{l  l  l}
-                      & \textbf{Repeat}  & \textbf{Non-Repeat}       \\ \cline{2-3} 
-\textbf{SNP}  & 2207 & 3839 \\ \cline{2-3} 
-\textbf{INDEL} & 750  & 1175 \\ \cline{2-3}
+\begin{tabular}{l  r r}
+                      & {Repeat}  & {Non-Repeat}       \\ \hline
+{SNP}  & 2207 & 3839 \\  
+{INDEL} & 750  & 1175 \\ \hline
 \end{tabular}
 \caption{Number of statistically significant variants per category}
 \label{sigTable}
@@ -222,8 +222,7 @@ Four of the SNPs in the top hits for the Asian populations (rs200655768, rs18420
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
-It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced.
-Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. \sgcomment{this could be cleaned up} 			
+It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. Given that the bias appears to have been resolved in later stages of the project using updated sequencing platforms, we did not pursue this line of investigation. 		
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
