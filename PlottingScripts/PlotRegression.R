@@ -65,3 +65,19 @@ snp<-read.table('~/Documents/Regression/Chr1_149214891.txt',sep=',')
 ggplot(snp, aes(x=V6, y=V4, color=V5))+geom_point(shape=1)+facet_wrap(~V5,ncol=1, strip.position="right")+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Quality', y='Genotype')+scale_y_continuous(breaks=c(0,1))+geom_vline(xintercept=30, color='grey60',linetype=3)+scale_color_manual(breaks= snp$V5,values = MyColour)+guides(color=F)
 
 ggsave('~/Documents/QualityPaper/Figures/RegressionPlot_Indels.jpg',height=10,width=5)
+
+
+###DIABETES
+snp<-read.table('~/Documents/QualityPaper/sig/Chr8_19816934_Diabetes.txt',sep=',')
+dev<-read.table('~/Documents/QualityPaper/sig/Chr8_19816934_Diabetes_dev.txt')
+dev$p<-- pchisq(dev$V4, 1, lower.tail=F, log.p=T)/log(10)
+dev<-dev[which(dev$p>6),]
+sig<-merge(snp, dev, by.x=c('V2','V5'), by.y=c('V2','V3'))
+sig$Name<-paste(sig$V5, '\n -log10(p) :',round(sig$p, digits=2))
+
+ggplot(sig, aes(x=V6, y=V4.x, color=V5))+geom_point(shape=1)+facet_wrap(~Name,ncol=2, strip.position='right')+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Average quality of mapped bases', y='Presence of Alternate Allele')+scale_y_continuous(breaks=c(0,1))+theme(strip.text.y = element_text(angle = 0))+geom_vline(xintercept=30, color='grey60',linetype=3)+scale_color_manual(breaks= sig$V5,values = MyColour)+guides(color=F)
+
+ggplot(sig, aes(x=V6, y=V4.x, color=V5))+geom_point(shape=1)+facet_wrap(~Name,nrow=3)+geom_smooth(method = "glm",     method.args = list(family = "binomial"), se = FALSE,size=0.5)+theme_classic()+labs(x='Quality', y='Genotype')+scale_y_continuous(breaks=c(0,1))+geom_vline(xintercept=30, color='grey60',linetype=3)+scale_color_manual(breaks= snp$V5,values = MyColour)+guides(color=F)
+
+ggsave('~/Documents/QualityPaper/RegressionPlot_diabetes.jpg',height=11,width=8)
+ggsave('~/Documents/QualityPaper/RegressionPlot_diabetes.tiff',height=11,width=8)

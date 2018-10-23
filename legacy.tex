@@ -26,7 +26,6 @@
 %%% ARTICLE SETUP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Legacy Data Confounds Genomics Studies}
-%\title{Batch Effects in the 1000 Genomes Project Data Confound Modern Genomics Studies}
 
 \author[1,2]{Luke Anderson-Trocm\'e}
 \author[1,2]{Rick Farouni}
@@ -151,12 +150,25 @@ The results of the reverse GWAS performed on the Japanese from the 1kGP lead us 
 The $Q$ of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
 This variability could result from evolving sequence platform and protocols or variation between sequencing centres.
 
-
-
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
+The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
+Over 3517 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
+To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
+To account for the large number of tests we performed a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
+\sgcomment{We should discuss significance threshold and FDR!}
+\luke{is this more appropriate for the methods section?}
 
+\begin{table}[h]
+\begin{tabular}{l  l  l}
+                      & \textbf{Repeat}  & \textbf{Non-Repeat}       \\ \cline{2-3} 
+\textbf{SNP}  & 2207 & 3839 \\ \cline{2-3} 
+\textbf{INDEL} & 750  & 1175 \\ \cline{2-3}
+\end{tabular}
+\caption{Number of statistically significant variants per category}
+\label{sigTable}
+\end{table}
 
 \begin{figure}
 \includegraphics[width=0.95\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
@@ -165,11 +177,7 @@ Among the many covariates that could be used to identify spurious sites, such as
 \label{MapQual}
 \end{figure}
 
-The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
-Over 3517 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified 3990 statistically significant SNPs and 1134 statistically significant insertions and deletions (indels) (Figure \ref{Manhattan} and Figure \ref{indels_Manhattan}). \sgcomment{We should discuss significance threshold and FDR!}
-
-
-\begin{figure*}
+\begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
 
 \caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$. 
@@ -179,7 +187,7 @@ The line plot underneath shows the number of populations for which a variant has
 The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$. 
 The same variants identified as being low quality independently in each population are found in other populations. }
   \label{OverLap}
-\end{figure*}
+\end{figure}
 
 \subsection{Suspicious SNPs impact modern genomics analyses}
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
@@ -306,7 +314,7 @@ The observed summed deviances were used to compute the \textit{p}-value for each
 
 
 Given the large number of tests (of which there are $S$), the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
-By using a nominal Type-I error rate $\alpha = 0.01$, a total of 3990 SNPs and 1134 indels were found to be statistically significance. See supplementary file {here}. \luke{make this file}
+By using a nominal Type-I error rate $\alpha = 0.01$, a total of 7971 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}
@@ -337,21 +345,39 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 \setcounter{figure}{0}   	
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_adjusted.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_NORepeat_SNPs.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 3990 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 3839 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
-  \label{Manhattan}
+ \label{NRS_Manhattan}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_indels.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_NORepeat_Indels.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 1134 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 1175 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
-  \label{indels_Manhattan}
+ \label{NRI_Manhattan}
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Repeat_SNPs.jpg}
+
+\caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
+There are 2207 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+\label{RS_Manhattan}
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Repeat_Indels.jpg}
+
+\caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
+There are 750 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+The circles ( o ) are SNPs that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
+ \label{RI_Manhattan}
 \end{figure}
 
 \begin{figure}[h]
@@ -374,6 +400,12 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 \end{figure}
 
 \begin{figure}[h]
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot_diabetes.jpg}
+\caption{Logistic regression of rs301 to the average quality per mapped bases $Q$.}
+\label{DiabetesSNP}
+\end{figure}
+
+\begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot.jpg}
 \caption{Logistic regression of rs6057648 for the populations with significant association to the average quality per mapped bases $Q$.}
 \label{TwinsSNP}
@@ -392,16 +424,3 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 \end{figure}
 
 \end{document}
-			
-%\begin{center}
- %\begin{tabular}{l l l r r} 
- %\hline
-%Author & Year & Journal & RSID & PMID \\ [0.5ex] 
- %\hline
-%Ebejer JL	& 2013	 & Twin Res Hum Genet & 	rs6057648&23527680\\ 
- 
-%Mandage R &	2017	 & PLoS One	 & rs200655768, rs184202621,&28654678\\
-%& & & rs201255786, rs201761909&\\
-%\hline
-%\end{tabular}
-%\end{center}
