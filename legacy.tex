@@ -219,10 +219,7 @@ Four of the SNPs in the top hits for the Asian populations (rs200655768, rs18420
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
-It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. Given that the bias appears to have been resolved in later stages of the project using updated sequencing platforms, we did not pursue this line of investigation. 		
-
-%%%meeting stuff
-%Association with EBV strain raises the question of whether it's a cell line artifact, but the fact that it also correlates with sequencing tech makes it less likely.
+It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. Given that the bias appears to have been resolved in later stages of the project using updated sequencing platforms, we did not pursue this line of investigation. 
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
@@ -288,8 +285,19 @@ We reproduced the quality control pipelines used by Harris et. al as they applie
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
 The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} was used to remove low quality regions of the genome , highly conserved regions were removed using the \href{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/phastConsElements100way.txt.gz}{phastCons100way} mask file and highly repetitive regions were also removed using the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file from RepeatMasker. 
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 we're considered.
-In total, 57,838,849 diallelic autosomal SNPs passed our quality controls for the mutation spectrum analysis and reverse GWAS. 
-We also ran the same reverse GWAS separately on 2,952,684 insertions and deletions that passed the same quality controls.
+In total, 57,838,849 diallelic autosomal SNPs passed our quality controls for the mutation spectrum analysis.
+
+For the reverse GWAS we used less stringent quality controls to broaden the scope of our analysis. The only filtration used was the application of the  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} which resulted in \todo{number} of SNPs and  \todo{2,952,684} insertions and deletions that passed the same quality controls. We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
+
+\begin{table}[h]
+\begin{tabular}{l  r r}
+                      & {Repeat}  & {Non-Repeat}       \\ \hline
+{SNP}  & \todo{number} & \todo{number}  \\  
+{INDEL} & \todo{number}   & \todo{number}  \\ \hline
+\end{tabular}
+\caption{Number of variants included in the analysis per category}
+\label{totTable}
+\end{table}
 
 \subsection{Genome wide association study}
 We ran a simple logistic regression independently for each combination of genomic locus $s$ and population $p$ using the R glm package\citep{RDevelopmentCoreTeam2016}. The model we fitted to each subset of data can be expressed as such.
@@ -325,9 +333,9 @@ We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/v
 The VCF file returned from the server was then downloaded and used to search for the number of significant SNPs successfully imputed. 
 
 \subsection{Frequencies of SNPs in other datasets}
-Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 42 SNPs in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
+Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these \todo{42} SNPs in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
 
-Similarly, using the allele frequencies from GnomAD, we were able to extract 164 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
+Similarly, using the allele frequencies from GnomAD, we were able to extract \todo{164} sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
 
 \section{Code Availability}
 https://github.com/LukeAndersonTrocme/QualityPaper
@@ -382,7 +390,7 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/AllDeviances.jpg}
 
-\caption{Empirical distribution plots of the sum of deviances grouped by N, the number of populations included. The blue curve is the theoretical null reference chi squared distribution with $N$ degrees of freedom. Note $\sum_i^N  \chi^2_1= \chi^2_N$. The grey dotted line indicates the significance level of $10^{-5}$ for the respective distribution which happens to be very close to the adjusted \textit{p}-value threshold at 0.01 FDR. }
+\caption{Empirical distribution plots of the sum of deviances for Non-Repeat SNPs grouped by N, the number of populations included. The blue curve is the theoretical null reference chi squared distribution with $N$ degrees of freedom. Note $\sum_i^N  \chi^2_1= \chi^2_N$. The grey dotted line indicates the significance level of $10^{-5}$ for the respective distribution which happens to be very close to the adjusted \textit{p}-value threshold at 0.01 FDR. }
 \label{Deviances}
 \end{figure}
 
