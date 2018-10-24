@@ -154,11 +154,9 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
 The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
-Over 3517 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
+Over \todo{3517} variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
 To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
 To account for the large number of tests we performed a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
-\sgcomment{We should discuss significance threshold and FDR!}
-\luke{is this more appropriate for the methods section?}
 
 \begin{table}[h]
 \begin{tabular}{l  l  l}
@@ -180,7 +178,7 @@ To account for the large number of tests we performed a two-stage Benjamini \& H
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
 
-\caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$. 
+\caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$.\luke{update figure with all variants} 
 The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
 The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
 The line plot underneath shows the number of populations for which a variant has reached significance.
@@ -193,21 +191,20 @@ The same variants identified as being low quality independently in each populati
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-
 In general, to investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
 We found that all the SNPs we identified as being associated with $Q$ were imputed back in the samples. 
 This suggests that the imputation reference panel likely includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
 
 Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait, even though there is no particular reason for these SNPS to be associated with phenotypes.
-The NHGRI-EBI Catalog of published genome-wide association studies identified two recent publications that had reported these variants as close to the genome-wide significant threshold.
-One of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
+The NHGRI-EBI Catalog of published genome-wide association studies identified \todo{three} recent publications that had reported these variants as close to the genome-wide significant threshold.
+Two of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
 The other study used the 1kGP sequence data and cell lines directly.
-Both papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds. 
-They also removed rare alleles and alleles with high degrees of missingness. 
+All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
 
 \section{Discussion}
-One of these studies, which identified SNPs associated to ADHD symptoms, used HapMap as a reference panel, rather than 1000 Genomes \citep{Ebejer2013}. The variant identified is among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
+Two of these studies, which identified SNPs associated to ADHD symptoms and metabolic traits respectively, used HapMap as a reference panel, rather than 1000 Genomes \citep{Ebejer2013}. \todo{The variants identified} are among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
 %While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below a significance threshold of $ p < 10^{-5}$.
 %The data used was imputed genotype data using Hapmap II as the reference.
 %One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to $Q$ .
@@ -218,12 +215,15 @@ One of these studies, which identified SNPs associated to ADHD symptoms, used Ha
 The second study used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
 Based on GWAS on the EBV copy number, the study reports only one SNP with significance below $ p < 10^{-8}$, as well as \sgcomment{number} SNPs with $ p < 10^{-6}$. 
 Four of the SNPs in the top hits for the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) were identified by our regression against $Q$. The study further confirmed EBV copy number estimation using PCR on 7 samples, but all of them had high $Q$.
- 
+
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
 It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced.
 Further investigations in the source of the issue could be done using the raw sequence data from the 1kGP along with the per sample per base quality metrics. \sgcomment{this could be cleaned up} 			
+
+%%%meeting stuff
+%Association with EBV strain raises the question of whether it's a cell line artifact, but the fact that it also correlates with sequencing tech makes it less likely.
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
@@ -424,3 +424,11 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 \end{figure}
 
 \end{document}
+
+
+%not necessarily all fake SNPs, there;s this bias, in most cases we expect them not to be real, there's a small chance that they are real
+%could be false posittive, or have a strong calling bias
+%majority of them don't reproduce, but a small portion of them do reproduce and should be looked at with care
+
+%if the SNP was imputed with HapMap maybe it is real, but if this SNP is imputed using the other database, it might throw things off.
+
