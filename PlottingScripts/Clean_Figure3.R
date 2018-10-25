@@ -11,9 +11,11 @@ names(MyColour) <- colors $Pop
 
 #read the list of sig snps
 #bad=read.table('~/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.POS.txt',col.names=c('Chr', 'Pos'))
-dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
-fileNames = list.files(path=dir, pattern='dev10.csv', full.names = T)
-Reg = do.call(rbind, lapply(fileNames, function(x) fread(x)))
+#dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
+#fileNames = list.files(path=dir, pattern='dev10.csv', full.names = T)
+#Reg = do.call(rbind, lapply(fileNames, function(x) fread(x)))
+
+Reg<- fread('/Users/luke/Documents/QualityPaper/Misc/AllRegressionsOver10.txt')
 Reg<-Reg[which(Reg$Pos != 'Pos'),]
 Reg$Chr<-as.numeric(as.character(Reg$Chr))
 Reg$Pos<-as.numeric(as.character(Reg$Pos))

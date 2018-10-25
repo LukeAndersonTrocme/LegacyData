@@ -143,7 +143,9 @@ These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* 
 
 Thus, this mutational signal is heavily enriched in suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques. 
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged. 
-For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. For other analyses, removing suspicious SNPs may be adequate. \sgcomment{Lists of suspicious SNPs and low-quality individuals is provided as supplementary material.}
+For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
+For other analyses, removing suspicious SNPs may be adequate. 
+Lists of suspicious SNPs and low-quality individuals is provided as supplementary material.
 
 	\subsection{Identifying Suspicious SNPs in the 1kGP}
 The results of the reverse GWAS performed on the Japanese from the 1kGP lead us to consider whether other populations in the 1kGP exhibited similar artefacts.
@@ -204,7 +206,17 @@ They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
 
 \section{Discussion}
-Two of these studies, which identified SNPs associated to ADHD symptoms and metabolic traits respectively, used HapMap as a reference panel, rather than 1000 Genomes \citep{Ebejer2013}. \todo{The variants identified} are among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
+Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
+The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data.
+It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
+However, considering that there are only \todo{number} suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
+One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}.
+Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real.
+It is clear that the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
+For example, if the SNP was imputed with HapMap maybe it is real, but if this same SNP is imputed using the 1kGP, it might be imputed improperly.
+
+
+%\todo{The variants identified} are among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
 %While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below a significance threshold of $ p < 10^{-5}$.
 %The data used was imputed genotype data using Hapmap II as the reference.
 %One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to $Q$ .
@@ -219,7 +231,8 @@ Four of the SNPs in the top hits for the Asian populations (rs200655768, rs18420
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
-It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. Given that the bias appears to have been resolved in later stages of the project using updated sequencing platforms, we did not pursue this line of investigation. 
+It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. 
+Given that the bias appears to have been resolved in later stages of the project using updated sequencing platforms, we did not pursue this line of investigation. 
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
@@ -287,15 +300,15 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 we're considered.
 In total, 57,838,849 diallelic autosomal SNPs passed our quality controls for the mutation spectrum analysis.
 
-For the reverse GWAS we used less stringent quality controls to broaden the scope of our analysis. The only filtration used was the application of the  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} which resulted in \todo{number} of SNPs and  \todo{2,952,684} insertions and deletions that passed the same quality controls. We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
+For the reverse GWAS we used less stringent quality controls to broaden the scope of our analysis. The only filtration used was the application of the  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} which resulted in a total of 80,971,616 variants ($S$) included in the test (see Table \ref{totTable}). We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
 
 \begin{table}[h]
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & \todo{number} & \todo{number}  \\  
-{INDEL} & \todo{number}   & \todo{number}  \\ \hline
+{SNP}  & 22,651,762 & 51,643,590  \\  
+{INDEL} &  2,176,825  & 4,499,439 \\ \hline
 \end{tabular}
-\caption{Number of variants included in the analysis per category}
+\caption{Number of variants included in the analysis by category}
 \label{totTable}
 \end{table}
 
@@ -426,16 +439,9 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
-\caption{Frequencies of $Q$-associated SNPs shared between 1000G and either HapMap or GnomAD. The blue dot in the HapMap plot is the is the variant reported in \citep{Mandage2017}, as discussed in the text. There are 42 such SNPs in HapMap and 162 in the GnomAD.}
+\caption{Frequencies of $Q$-associated SNPs shared between 1000G and either HapMap or GnomAD. The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such SNPs in HapMap and 186 in the GnomAD.}
 \label{HapMap_GnomAD}
 \end{figure}
 
 \end{document}
-
-
-%not necessarily all fake SNPs, there;s this bias, in most cases we expect them not to be real, there's a small chance that they are real
-%could be false posittive, or have a strong calling bias
-%majority of them don't reproduce, but a small portion of them do reproduce and should be looked at with care
-
-%if the SNP was imputed with HapMap maybe it is real, but if this SNP is imputed using the other database, it might throw things off.
 

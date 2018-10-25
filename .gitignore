@@ -69,3 +69,7 @@ Misc/CompareGwasNormINT (Autosaved).R
 
 *.tiff
 .DS_Store
+
+*.zip
+
+*.bed

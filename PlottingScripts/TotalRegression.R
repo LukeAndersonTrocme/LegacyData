@@ -50,17 +50,19 @@ Regression <- left_join(Regression, rsID, by=c('Chr','Pos'))
 
 write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv',row.names=F)
 
+Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
+
 Repeat_Indels <- Regression[which(Regression$Indel=='yes' 
 								& Regression$Repeat=='yes'),]
 
 NORepeat_Indels <- Regression[which(Regression$Indel=='yes' 
-								& is.na(Regression$Repeat),]
+								& is.na(Regression$Repeat)),]
 								
 Repeat_SNPs <- Regression[which(is.na(Regression$Indel) 
 								& Regression$Repeat=='yes'),]
 								
 NORepeat_SNPs <- Regression[which(is.na(Regression$Indel) 
-								& is.na(Regression$Repeat),]			
+								& is.na(Regression$Repeat)),]			
 
 ##RICK Adjustment
 # two-stage Benjamini & Hochberg (2006) step-up FDR-controlling
@@ -113,6 +115,8 @@ ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
 ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
 
 write.table(df[which(df$log10P_0.01>-log10(0.01)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
+
+write.table(df[which(df$log10P_0.01>-log10(0.01)),c('Chr','Pos')], file=paste('~/Documents/QualityPaper/sig/',Name,'_POS.txt',sep=''), quote=F, col.names=F, row.names=F)
 }
 
 makePlot(Repeat_Indels, 'Repeat_Indels')
