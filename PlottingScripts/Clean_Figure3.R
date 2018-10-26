@@ -76,4 +76,4 @@ plt1[which(plt1$plog10 <8),]$Pcat<-1
 plt1[which((plt1$plog10 >8) & (plt1$plog10 <10)),]$Pcat<-5
 
 ggplot(plt1, aes(x=Pos,y= reorder(Pop,-Freq.y), color=Pop, size=Pcat))+geom_point(shape=124)+theme_classic()+scale_size(breaks=c(2,3,4), range=c(1,3),labels=c('6-8','8-10','10+'), guide = guide_legend(direction = "horizontal"), name='-log10(p)')+scale_color_manual(breaks= plt$Pop,values = MyColour)+ylab('Populations')+ggtitle('Overlap of SNPs found to be Significant in Quality-GWAS')+theme(legend.position = c(0.85,0.95),legend.box.background = element_rect(colour = "black"), plot.title = element_text(hjust = 0.5), axis.title.x=element_blank(), plot.margin = unit(c(1,1,0,1), "cm"))+guides(color=F)+scale_x_discrete(expand=c(0.01,0), breaks= xaxis$Pos, labels=xaxis$Chr)
-ggsave('~/Documents/QualityPaper/SNP6_Singles.jpg', height=9, width=9)
+ggsave('~/Documents/QualityPaper/SNP6_Singles.jpg', height=10, width=10)
