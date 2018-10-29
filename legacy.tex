@@ -51,20 +51,19 @@ Recent reports have identified differences in the mutational spectra across huma
 \end{abstract}
 
 \section{Introduction}
-		
-\subsection{Batch Effects in Aging Reference Cohort Data}			
+
+\sgcomment{Check time concordance throughout}		
+%\subsection{Batch Effects in Aging Reference Cohort Data}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Reference cohorts such as the International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project \citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
 Many more genomes are available indirectly through servers providing imputation services \citep{HapMap2005} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
-Because of the extraordinary value of freely available data, this early data from the 1000 Genomes project (1kGP) is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions. 
-However, the first sequenced genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved. 
-The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012}. 
-This led to heterogeneous sample preparations and data quality for many of the samples included in the dataset.
+The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved. 
+Yet, because of the extraordinary value of freely available data, early data from the 1000 Genomes project (1kGP) is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions. 
+The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012}, leading to heterogeneous sample preparations and data quality.
 
-
-Even though it is intuitively clear that such batch effects have the potential to confound analyses, the usefulness and ubiquity of the 1kGP data make such issues particularly insidious.   
+Even though such batch effects clearly have the potential to confound analyses, the usefulness and ubiquity of the 1kGP data make such issues particularly insidious.   
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
 Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.
 
@@ -74,7 +73,7 @@ Here we point out how large and previously unreported batch effects in the early
 Some mutagenic processes will affect different DNA motifs. 
 Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \citep{Pfeifer2002,Pleasance2010}. 
 Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
-Such genome wide mutational signatures have been used as diagnostic tools for cancers \citep{Alexandrov2013,Shiraishi2015a}.
+Such genome-wide mutational signatures have been used as diagnostic tools for cancers \citep{Alexandrov2013,Shiraishi2015a}.
 
 In addition to somatic mutational signatures, there has been recent interest in population variation in germline mutational signatures which can be revealed in large sequencing panels. 
 In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
@@ -87,7 +86,7 @@ A systematic difference within the Japanese population would suggest sustained e
 We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals. 
 
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
-In addition to creating biases in mutational signatures, this artefactt leads to spurious imputation results which found their way in recent publications.
+In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in recent publications.
 
 
 The results section is organized as follows.
@@ -118,47 +117,42 @@ The same analysis was performed independently for each of the populations in the
 			
 \subsection{A peculiar mutational signature in Japan}			
 	
-Harris and Pritchard reported an excess of a 3-mer *AC${\rightarrow}$*CC mutational pattern in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
+Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\rightarrow}$*CC in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-
-These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests.
-Whereas Hardy-Weinberg testing is efficient at detecting high frequency spurious variants, it has little power to filter out rare variants which, in aggregate, can contribute to mutational signatures.
-
-
-When mismatch sites were removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}).
-Regressions against different individual-level quality metrics provided by the 1kGP revealed that average quality of mapped bases  $Q$ per individual was a strong correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP:
-Individuals with low $Q$ show elevated rates of the signature (see Supplementary Figure \ref{PC1_Correlation}).
-Thus, sequences with low quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
+These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests \sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. %Even though some of the mismatched variants are at low frequency in the 1kGP, and thus can evade Hardy-Weinberg detection, but many are at high enough frequency that HW detection   
+%Whereas Hardy-Weinberg testing is efficient at detecting high frequency spurious variants, it has little power to filter out rare variants which, in aggregate, can contribute to mutational signatures.
 
 
-To identify SNPs that are likely to reproduce poorly across cohorts (without having access to a second cohort), we performed a reverse genome wide association study (GWAS) in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
-Traditionally, genome wide association studies use linear regression of a phenotype on a genotype. 
-Here we use logistic regression of the genotypes on a quantitative measure of quality (i.e., the genotype is the dependent variable).
-This approach identifies 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
+When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). The average quality of mapped bases  $Q$ per individual stood out as a strong correlate (\sgcomment {p value?}): Individuals with low $Q$ show elevated rates of the signature .
+Thus, sequences with low mapping quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
+
+
+To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
+Traditionally, genome wide association studies use genotypes as the independent variable. 
+Here we perform a "reverse GWAS", in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable.
+We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations.
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
 
-Thus, this mutational signal is heavily enriched in suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques. 
-The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged. 
+Thus, this mutational signal is heavily enriched in suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques\sgcomment{You have to give some details or point to the results!}. 
+The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged \sgcomment{You have to give some details or point to the results!}. 
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses, removing suspicious SNPs may be adequate. 
 Lists of suspicious SNPs and low-quality individuals is provided as supplementary material.
 
-	\subsection{Identifying Suspicious SNPs in the 1kGP}
-The results of the reverse GWAS performed on the Japanese from the 1kGP lead us to consider whether other populations in the 1kGP exhibited similar artefacts.
-The $Q$ of individuals over time shows that the sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
-This variability could result from evolving sequence platform and protocols or variation between sequencing centres.
-
+	%\subsection{Identifying Suspicious SNPs in the 1kGP}
+The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
+This variability could result from evolving sequence platform and protocols or variation between sequencing centres. 
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
-Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
+%Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
-The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
-Over \todo{3517} variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
-To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
-To account for the large number of tests we performed a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
+We therefore performed the reverse GWAS approach in all populations, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected \sgcomment{quantify!}.
+Over \todo{3517} variants were independently associated to low $Q$ in at least two populations  \sgcomment{At what threshold?}(Figure \ref{OverLap}). 
+To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}):
+To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
 
 \begin{table}[h]
 \begin{tabular}{l  r r}
@@ -166,14 +160,14 @@ To account for the large number of tests we performed a two-stage Benjamini \& H
 {SNP}  & 2207 & 3839 \\  
 {INDEL} & 750  & 1175 \\ \hline
 \end{tabular}
-\caption{Number of statistically significant variants per category}
+\caption{Number of statistically significant variants per category \sgcomment{Repeat/Non-repeat is super ambiguous need to clarify!}}
 \label{sigTable}
 \end{table}
 
 \begin{figure}
 \includegraphics[width=0.95\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
 
-\caption{\textbf{A}The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. Individuals are ranked by the date of the earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
+\caption{\textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. Individuals are ranked by the date of the earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
 \label{MapQual}
 \end{figure}
 
@@ -193,9 +187,9 @@ The same variants identified as being low quality independently in each populati
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-In general, to investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that all the SNPs we identified as being associated with $Q$ were imputed back in the samples. 
-This suggests that the imputation reference panel likely includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
+To investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
+We found that all the SNPs associated with $Q$ were imputed back in the samples. 
+This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
 
 Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait, even though there is no particular reason for these SNPS to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified \todo{three} recent publications that had reported these variants as close to the genome-wide significant threshold.
@@ -203,18 +197,22 @@ Two of these studies genotyped individuals and imputed the data using the HapMap
 The other study used the 1kGP sequence data and cell lines directly.
 All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
+Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. \sgcomment{This is \emph{very} misleading, and wrong. We should discuss. }
+
+\sgcomment{Where are all your results comparing with Hapmap, etc? These should be in results.}
+
+
 
 \section{Discussion}
 Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
-The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data.
+The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data \sgcomment{comma splice}.
 It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
 However, considering that there are only \todo{number} suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
-One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}.
-Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real.
-It is clear that the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
+One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}).
+Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real \sgcomment{check style}.
+\sgcomment{It is clear that -- see Strunk-White} the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
 For example, if the SNP was imputed with HapMap maybe it is real, but if this same SNP is imputed using the 1kGP, it might be imputed improperly.
-
+\sgcomment{This paragraph reads as wishy washy. }
 
 %\todo{The variants identified} are among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
 %While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below a significance threshold of $ p < 10^{-5}$.
