@@ -156,7 +156,7 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
 The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
-Over \todo{3517} variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
+Over 3826 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
 To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
 To account for the large number of tests we performed a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
 
@@ -180,7 +180,7 @@ To account for the large number of tests we performed a two-stage Benjamini \& H
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
 
-\caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$.\luke{update figure with all variants} 
+\caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$.
 The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
 The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
 The line plot underneath shows the number of populations for which a variant has reached significance.
@@ -194,13 +194,13 @@ The state of the art imputation servers use a combination of many databases incl
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
 In general, to investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that all the SNPs we identified as being associated with $Q$ were imputed back in the samples. 
+We found that \todo{all} the SNPs we identified as being associated with $Q$ were imputed back in the samples. 
 This suggests that the imputation reference panel likely includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
 
-Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait, even though there is no particular reason for these SNPS to be associated with phenotypes.
-The NHGRI-EBI Catalog of published genome-wide association studies identified \todo{three} recent publications that had reported these variants as close to the genome-wide significant threshold.
+Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these SNPS to be associated with phenotypes.
+The NHGRI-EBI Catalog of published genome-wide association studies identified three recent publications that had reported these variants as close to or above the genome-wide significant threshold.
 Two of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
-The other study used the 1kGP sequence data and cell lines directly.
+The third study used the 1kGP sequence data and cell lines directly.
 All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits.
@@ -209,7 +209,7 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
 The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data.
 It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
-However, considering that there are only \todo{number} suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
+However, considering that there are only 70 suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
 One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}.
 Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real.
 It is clear that the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
@@ -346,9 +346,9 @@ We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/v
 The VCF file returned from the server was then downloaded and used to search for the number of significant SNPs successfully imputed. 
 
 \subsection{Frequencies of SNPs in other datasets}
-Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these \todo{42} SNPs in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
+Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 70 SNPs in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
 
-Similarly, using the allele frequencies from GnomAD, we were able to extract \todo{164} sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
+Similarly, using the allele frequencies from GnomAD, we were able to extract 186 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
 
 \section{Code Availability}
 https://github.com/LukeAndersonTrocme/QualityPaper
