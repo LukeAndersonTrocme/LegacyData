@@ -81,3 +81,5 @@ sig/OLD/GenomeWide_sig0.01.vcf.gz.tbi
 sig/GenomeWide_sig0.01.vcf.gz
 
 sig/GenomeWide_sig0.01.vcf.gz.tbi
+
+*.gz
