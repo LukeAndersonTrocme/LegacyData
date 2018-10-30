@@ -9,6 +9,8 @@ colors<-read.table("~/Dropbox/LukeTemp/NamePopBigPop_color.html.txt", comment.ch
 MyColour <- as.character(colors $hex)
 names(MyColour) <- colors $Pop
 
+phase1=c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
+
 #read the list of sig snps
 #bad=read.table('~/Documents/1FinalGWAS/1kGP_GenomeWide.4bed_filtered_sig6.POS.txt',col.names=c('Chr', 'Pos'))
 #dir='/Volumes/gravel/luke_projects/1000Genomes/Regression/'
@@ -32,8 +34,9 @@ NumPop$Var2<-as.numeric(as.character(NumPop$Var2))
 
 m=merge(Reg,NumPop, by.y=c('Var1','Var2'), by.x=c('Chr','Pos'))
 n=as.data.frame(table(m$Pop))
-plt=merge(m,n,by.x='Pop',by.y='Var1')
+plt=unique(merge(m,n,by.x='Pop',by.y='Var1'))
 plt$title = paste(plt$Pop, ' : ',plt$Freq.y)
+plt[which(plt$Pop %in% phase1),]$title = paste('*',plt[which(plt$Pop %in% phase1),]$title)
 plt <- plt[with(plt, order(-Freq.x, as.numeric(Chr),as.numeric(Pos))),]
 plt$Pos <- factor(plt$Pos, levels = unique(plt$Pos))
 plt$nrow<-seq(length=nrow(plt))

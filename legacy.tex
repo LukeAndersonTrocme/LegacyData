@@ -121,7 +121,8 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests \sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. %Even though some of the mismatched variants are at low frequency in the 1kGP, and thus can evade Hardy-Weinberg detection, but many are at high enough frequency that HW detection   
+These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests \sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. 
+%Even though some of the mismatched variants are at low frequency in the 1kGP, and thus can evade Hardy-Weinberg detection, but many are at high enough frequency that HW detection   
 %Whereas Hardy-Weinberg testing is efficient at detecting high frequency spurious variants, it has little power to filter out rare variants which, in aggregate, can contribute to mutational signatures.
 
 
@@ -149,25 +150,21 @@ This variability could result from evolving sequence platform and protocols or v
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 %Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
-<<<<<<< HEAD
-The GWAS approach similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected.
-Over 3826 variants were independently associated to low $Q$ in at least two populations  (Figure \ref{OverLap}). 
-To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
-To account for the large number of tests we performed a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
-=======
-We therefore performed the reverse GWAS approach in all populations, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected \sgcomment{quantify!}.
-Over \todo{3517} variants were independently associated to low $Q$ in at least two populations  \sgcomment{At what threshold?}(Figure \ref{OverLap}). 
-To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 7971 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Table \ref{sigTable}, Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}):
-To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}.
->>>>>>> 0303eb4fb94935e3da7d00b7364aa2aa294f983c
+We therefore performed the reverse GWAS approach in all populations, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
+% \sgcomment{quantify!}
+Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}). 
+To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
+We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable})
+To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 
+\luke{doing a final update on these values. Repeat entries, rerunning final adjustment with unique positions.}
 \begin{table}[h]
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 2207 & 3839 \\  
-{INDEL} & 750  & 1175 \\ \hline
+{SNP}  & 2207 & 6919 \\  
+{INDEL} & 750  & 2017 \\ \hline
 \end{tabular}
-\caption{Number of statistically significant variants per category \sgcomment{Repeat/Non-repeat is super ambiguous need to clarify!}}
+\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately.}
 \label{sigTable}
 \end{table}
 
@@ -184,6 +181,7 @@ To account for the large number of tests, we used a two-stage Benjamini \& Hochb
 \caption{Overlap of SNPs identified independently to be associated with average quality of mapped bases $Q$.
 The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
 The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
+Phase 1 populations are marked by a star ( * ).
 The line plot underneath shows the number of populations for which a variant has reached significance.
 The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$. 
 The same variants identified as being low quality independently in each population are found in other populations. }
@@ -194,15 +192,9 @@ The same variants identified as being low quality independently in each populati
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-<<<<<<< HEAD
-In general, to investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that \todo{all} the SNPs we identified as being associated with $Q$ were imputed back in the samples. 
-This suggests that the imputation reference panel likely includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
-=======
 To investigate the proportion of suspicious SNPs that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that all the SNPs associated with $Q$ were imputed back in the samples. 
+We found that 11\% of the SNPs associated with $Q$ were imputed back in the samples. 
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
->>>>>>> 0303eb4fb94935e3da7d00b7364aa2aa294f983c
 
 Once we identified SNPs that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these SNPS to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified three recent publications that had reported these variants as close to or above the genome-wide significant threshold.
@@ -210,31 +202,16 @@ Two of these studies genotyped individuals and imputed the data using the HapMap
 The third study used the 1kGP sequence data and cell lines directly.
 All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for biological traits. \sgcomment{This is \emph{very} misleading, and wrong. We should discuss. }
+Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits. 
+\sgcomment{This is \emph{very} misleading, and wrong. We should discuss. }
+\luke{Agreed, that sentence slipped by, there was another sentence like that in the discussion that I had fixed. Although the 3rd paper's SNP has $p < 10^{-11}$ }
 
-\sgcomment{Where are all your results comparing with Hapmap, etc? These should be in results.}
 
+We searched other databases to see if the suspicious variants had been sequenced in different cohorts.
+70 of these variants were present in HapMap and 186 in GnomAD (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
+These variants include the two variants found in the studies that imputed genotypes using HapMap.
+With our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations.
 
-
-\section{Discussion}
-Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
-The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data \sgcomment{comma splice}.
-It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
-<<<<<<< HEAD
-However, considering that there are only 70 suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
-One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}.
-Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real.
-It is clear that the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
-=======
-However, considering that there are only \todo{number} suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
-One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}).
-Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real, however we cannot discount the chance that they are real \sgcomment{check style}.
-\sgcomment{It is clear that -- see Strunk-White} the majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
->>>>>>> 0303eb4fb94935e3da7d00b7364aa2aa294f983c
-For example, if the SNP was imputed with HapMap maybe it is real, but if this same SNP is imputed using the 1kGP, it might be imputed improperly.
-\sgcomment{This paragraph reads as wishy washy. }
-
-%\todo{The variants identified} are among the \sgcomment{roughly $1\%$ this is a bit sloppy -- clarify} of suspicious SNPS that are concordant between hapmap and 1000 Genomes data, consistent with it being a false positive association.
 %While none of their SNPs reached significance below $ p < 10^{-8}$, they reported their results below a significance threshold of $ p < 10^{-5}$.
 %The data used was imputed genotype data using Hapmap II as the reference.
 %One of the top 25 SNPs in the GWAS on ADHD (rs6057648) was identified as being significantly associated to $Q$ .
@@ -242,8 +219,23 @@ For example, if the SNP was imputed with HapMap maybe it is real, but if this sa
 %Finding some of these SNPs in HapMap data was unexpected, however, not impossible considering that HapMap and 1kGP shared many samples.
 %We found that roughly 1\% of the SNPs associated to $Q$ were found in HapMap; rs6057648 is among those found in HapMap.
 
+\section{Discussion}
+Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
+The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data \sgcomment{comma splice}.
+It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
+
+However, considering that there are only 70 suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
+One of the SNPs was imputed solely using the CEU population of HapMap, and this population shows no significant association to quality for that SNP (Figure \ref{DiabetesSNP}).
+Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real; however we cannot discount the chance that they are real.
+%\sgcomment{check style}
+%\sgcomment{It is clear that -- see Strunk-White} 
+The majority of these variants do not reproduce in other datasets, but a small portion of them do reproduce and should be looked at with care. 
+For example, if the SNP was imputed with HapMap maybe it is real, but if this same SNP is imputed using the 1kGP, it might be imputed improperly.
+\sgcomment{This paragraph reads as wishy washy. }
+\luke{Agreed, I'm not sure what we're trying to say here.}
+
 The second study used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
-Based on GWAS on the EBV copy number, the study reports only one SNP with significance below $ p < 10^{-8}$, as well as \sgcomment{number} SNPs with $ p < 10^{-6}$. 
+Based on GWAS on the EBV copy number, the study reports only one SNP with significance below $ p < 10^{-8}$, as well as 104 SNPs in the range of $p < 10^{-7}$ to $ p < 10^{-6}$. 
 Four of the SNPs in the top hits for the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) were identified by our regression against $Q$. The study further confirmed EBV copy number estimation using PCR on 7 samples, but all of them had high $Q$.
 
 
@@ -262,8 +254,8 @@ We were not able to pinpoint the precise technical source of the discrepancy.
 Sequencer-specific errors would be expected to be absent from Hapmap, which was sequenced using a combination of array based technologies and PCR targeted sequencing \citep{HapMap2005}. 
 We find that $99\%$ of the suspicious SNPs are indeed absent from HapMap, which is consistent with the expected false positive rate in our test.
   
-The presence of some of these SNPs in HapMap suggests a cell line effect; although, this result is not very convincing with only 42 variants of sites identified in 1kGP present in HapMap (Figure \ref{HapMap_GnomAD}).
-We also note that 164 of the suspicious variants are present in the GnomAD database (Figure \ref{HapMap_GnomAD}).
+The presence of some of these SNPs in HapMap suggests a cell line effect; although, this result is not very convincing with only 70 variants of sites identified in 1kGP present in HapMap (Figure \ref{HapMap_GnomAD}).
+We also note that 186 of the suspicious variants are present in the GnomAD database (Figure \ref{HapMap_GnomAD}).
 Indeed, further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal.
 
 If these sequencing platforms are no longer being used, then it it likely that these artifacts are no longer being actively introduced in recent sequence data.
@@ -352,7 +344,7 @@ The observed summed deviances were used to compute the \textit{p}-value for each
 
 
 Given the large number of tests (of which there are $S$), the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
-By using a nominal Type-I error rate $\alpha = 0.01$, a total of 7971 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
+By using a nominal Type-I error rate $\alpha = 0.01$, a total of 10756 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum of triplets for the list of significant SNPs for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}

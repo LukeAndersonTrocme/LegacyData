@@ -52,17 +52,17 @@ write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegre
 
 Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
 
-Repeat_Indels <- Regression[which(Regression$Indel=='yes' 
-								& Regression$Repeat=='yes'),]
+Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
+								& Regression$Repeat=='yes'),])
 
-NORepeat_Indels <- Regression[which(Regression$Indel=='yes' 
-								& is.na(Regression$Repeat)),]
+NORepeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
+								& is.na(Regression$Repeat)),])
 								
-Repeat_SNPs <- Regression[which(is.na(Regression$Indel) 
-								& Regression$Repeat=='yes'),]
+Repeat_SNPs <- unique(Regression[which(is.na(Regression$Indel) 
+								& Regression$Repeat=='yes'),])
 								
-NORepeat_SNPs <- Regression[which(is.na(Regression$Indel) 
-								& is.na(Regression$Repeat)),]			
+NORepeat_SNPs <- unique(Regression[which(is.na(Regression$Indel) 
+								& is.na(Regression$Repeat)),])			
 
 ##RICK Adjustment
 # two-stage Benjamini & Hochberg (2006) step-up FDR-controlling
@@ -132,10 +132,10 @@ ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
 
 }
 
-makePlot(Repeat_Indels, 'Repeat_Indels')
-makePlot(NORepeat_Indels, 'NORepeat_Indels')
-makePlot(Repeat_SNPs, 'Repeat_SNPs')
-makePlot(NORepeat_SNPs, 'NORepeat_SNPs')
+makePlot(Repeat_Indels, 'Repeat Indels')
+makePlot(NORepeat_Indels, 'Non Repeat Indels')
+makePlot(Repeat_SNPs, 'Repeat SNPs')
+makePlot(NORepeat_SNPs, 'Non Repeat SNPs')
 
 ########## find sig in catalogue
 
