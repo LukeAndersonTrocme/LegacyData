@@ -83,10 +83,25 @@ NORepeat_Indels <-TSBH(NORepeat_Indels)
 Repeat_SNPs <-TSBH(Repeat_SNPs)
 NORepeat_SNPs <-TSBH(NORepeat_SNPs)
 
-write.table(Repeat_Indels, file='/Users/luke/Documents/QualityPaper/Misc/Repeat_Indels.csv',row.names=F)
-write.table(NORepeat_Indels, file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_Indels.csv',row.names=F)	
-write.table(Repeat_SNPs, file='/Users/luke/Documents/QualityPaper/Misc/Repeat_SNPs.csv',row.names=F)	
-write.table(NORepeat_SNPs, file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_SNPs.csv',row.names=F)
+write.table(Repeat_Indels, 
+file='/Users/luke/Documents/QualityPaper/Misc/Repeat_Indels.csv',row.names=F)
+write.table(NORepeat_Indels, 
+file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_Indels.csv',row.names=F)	
+write.table(Repeat_SNPs, 
+file='/Users/luke/Documents/QualityPaper/Misc/Repeat_SNPs.csv',row.names=F	
+write.table(NORepeat_SNPs, 
+file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_SNPs.csv',row.names=F)
+
+writeSig <- function(df, Name){
+write.table(df[which(df$log10P_0.01>-log10(0.01)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
+
+write.table(df[which(df$log10P_0.01>-log10(0.01)),c('Chr','Pos')], file=paste('~/Documents/QualityPaper/sig/',Name,'_POS.txt',sep=''), quote=F, col.names=F, row.names=F)
+}
+
+writeSig(Repeat_Indels, 'Repeat_Indels')
+writeSig(NORepeat_Indels, 'NORepeat_Indels')
+writeSig(Repeat_SNPs, 'Repeat_SNPs')
+writeSig(NORepeat_SNPs, 'NORepeat_SNPs')
 
 makePlot <- function(df,Name){
 sig.20<-df[which((df $log10P_0.01 >= 20)&(df $Count > 1)),]
@@ -114,17 +129,12 @@ dir='~/Documents/QualityPaper/Figures/ManhattanPlot_'
 ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
 ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
 
-write.table(df[which(df$log10P_0.01>-log10(0.01)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
 
-write.table(df[which(df$log10P_0.01>-log10(0.01)),c('Chr','Pos')], file=paste('~/Documents/QualityPaper/sig/',Name,'_POS.txt',sep=''), quote=F, col.names=F, row.names=F)
 }
 
 makePlot(Repeat_Indels, 'Repeat_Indels')
-
 makePlot(NORepeat_Indels, 'NORepeat_Indels')
-
 makePlot(Repeat_SNPs, 'Repeat_SNPs')
-
 makePlot(NORepeat_SNPs, 'NORepeat_SNPs')
 
 ########## find sig in catalogue
