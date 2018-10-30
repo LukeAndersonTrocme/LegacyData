@@ -221,7 +221,7 @@ With our FDR type-I error rate of $\alpha = 0.01$, these variants could be expla
 
 \section{Discussion}
 Two of these studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
-The HapMap project and 1000 Genomes project shared some cell lines, however used different sequencing platforms to produce the data \sgcomment{comma splice}.
+The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
 It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
 
 However, considering that there are only 70 suspicious SNPS that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
@@ -419,7 +419,7 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/PC1_Correlation.jpg}
-\caption{Regressions against the average quality per mapped bases $Q$ per individual is the best correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature.  }
+\caption{\sgcomment{not regressions}Regressions against the average quality per mapped bases $Q$ per individual is the best correlate with prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP, with individuals with low-quality data showing elevated rates of the signature.  }
 \label{PC1_Correlation}
 \end{figure}
 
@@ -449,7 +449,7 @@ The circles ( o ) are SNPs that reached values greater than 20, for clarity we i
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
-\caption{Frequencies of $Q$-associated SNPs shared between 1000G and either HapMap or GnomAD. The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such SNPs in HapMap and 186 in the GnomAD.}
+\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such SNPs in HapMap and 186 in the GnomAD.}
 \label{HapMap_GnomAD}
 \end{figure}
 
