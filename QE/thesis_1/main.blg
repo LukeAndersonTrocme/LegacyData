@@ -1,0 +1,64 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: main-blx.bib
+Database file #2: Legacy.bib
+Biblatex version: 3.3
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 15 entries,
+            6256 wiz_defined-function locations,
+            1332 strings with 36851 characters,
+and the built_in function-call counts, 393871 in all, are:
+= -- 36130
+> -- 3482
+< -- 332
++ -- 13595
+- -- 1863
+* -- 33232
+:= -- 52361
+add.period$ -- 0
+call.type$ -- 15
+change.case$ -- 153
+chr.to.int$ -- 31
+cite$ -- 28
+duplicate$ -- 39298
+empty$ -- 31878
+format.name$ -- 3767
+if$ -- 73144
+int.to.chr$ -- 0
+int.to.str$ -- 30
+missing$ -- 0
+newline$ -- 2170
+num.names$ -- 580
+pop$ -- 7810
+preamble$ -- 1
+purify$ -- 743
+quote$ -- 0
+skip$ -- 3531
+stack$ -- 0
+substring$ -- 74101
+swap$ -- 6147
+text.length$ -- 623
+text.prefix$ -- 14
+top$ -- 1
+type$ -- 498
+warning$ -- 0
+while$ -- 6157
+width$ -- 0
+write$ -- 2156

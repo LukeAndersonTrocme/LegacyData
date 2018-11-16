@@ -1,0 +1,2435 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\sortlist[entry]{nyt/global/}
+  \entry{1000GenomesProjectConsortium2010}{article}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={{1000 Genomes Project Consortium}},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \keyw{Calibration,Chromosomes,Computational Biology,DNA,DNA Mutational
+  Analysis,DNA: methods,Evolution,Female,Genetic,Genetic Association
+  Studies,Genetic Variation,Genetic Variation: genetics,Genetic:
+  genetics,Genetics,Genome,Genome-Wide Association Study,Genomics,Genomics:
+  methods,Genotype,Haplotypes,Haplotypes: genetics,Human,Human:
+  genetics,Humans,Male,Mitochondrial,Mitochondrial:
+  genetics,Molecular,Mutation,Mutation: genetics,Pilot
+  Projects,Polymorphism,Population,Population: methods,Recombination,Sample
+  Size,Selection,Sequence Alignment,Sequence Analysis,Single Nucleotide,Single
+  Nucleotide: genetics,Y,Y: genetics}
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2010}
+    \field{sortinit}{1}
+    \field{sortinithash}{1}
+    \field{abstract}{%
+    The 1000 Genomes Project aims to provide a deep characterization of human
+  genome sequence variation as a foundation for investigating the relationship
+  between genotype and phenotype. Here we present results of the pilot phase of
+  the project, designed to develop and compare different strategies for
+  genome-wide sequencing with high-throughput platforms. We undertook three
+  projects: low-coverage whole-genome sequencing of 179 individuals from four
+  populations; high-coverage sequencing of two mother-father-child trios; and
+  exon-targeted sequencing of 697 individuals from seven populations. We
+  describe the location, allele frequency and local haplotype structure of
+  approximately 15 million single nucleotide polymorphisms, 1 million short
+  insertions and deletions, and 20,000 structural variants, most of which were
+  previously undescribed. We show that, because we have catalogued the vast
+  majority of common variation, over 95{\%} of the currently accessible
+  variants found in any individual are present in this data set. On average,
+  each person is found to carry approximately 250 to 300 loss-of-function
+  variants in annotated genes and 50 to 100 variants previously implicated in
+  inherited disorders. We demonstrate how these results can be used to inform
+  association and functional studies. From the two trios, we directly estimate
+  the rate of de novo germline base substitution mutations to be approximately
+  10(-8) per base pair per generation. We explore the data with regard to
+  signatures of natural selection, and identify a marked reduction of genetic
+  variation in the neighbourhood of genes, due to selection at linked sites.
+  These methods and public data will support the next phase of human genetic
+  research.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature09534
+    \endverb
+    \verb{eprint}
+    \verb 1302.2710v1
+    \endverb
+    \field{isbn}{0028-0836}
+    \field{issn}{1476-4687}
+    \field{number}{7319}
+    \field{pages}{1061\bibrangedash 73}
+    \field{title}{{A map of human genome variation from population-scale
+  sequencing.}}
+    \verb{url}
+    \verb http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=3042601{\&}
+    \verb tool=pmcentrez{\&}rendertype=abstract
+    \endverb
+    \field{volume}{467}
+    \field{journaltitle}{Nature}
+    \field{eprinttype}{arXiv}
+    \field{year}{2010}
+  \endentry
+
+  \entry{The1000GenomesProjectConsortium2012}{article}{}
+    \name{author}{1}{}{%
+      {{hash=G}{%
+         family={{1000 Genomes Project Consortium}},
+         familyi={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{G1}
+    \strng{fullhash}{G1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2012}
+    \field{sortinit}{1}
+    \field{sortinithash}{1}
+    \field{abstract}{%
+    By characterizing the geographic and functional spectrum of human genetic
+  variation, the 1000 Genomes Project aims to build a resource to help to
+  understand the genetic contribution to disease. Here we describe the genomes
+  of 1,092 individuals from 14 populations, constructed using a combination of
+  low-coverage whole-genome and exome sequencing. By developing methods to
+  integrate information across several algorithms and diverse data sources, we
+  provide a validated haplotype map of 38|[thinsp]|million single nucleotide
+  polymorphisms, 1.4|[thinsp]|million short insertions and deletions, and more
+  than 14,000 larger deletions. We show that individuals from different
+  populations carry different profiles of rare and common variants, and that
+  low-frequency variants show substantial geographic differentiation, which is
+  further increased by the action of purifying selection. We show that
+  evolutionary conservation and coding consequence are key determinants of the
+  strength of purifying selection, that rare-variant load varies substantially
+  across biological pathways, and that each individual contains hundreds of
+  rare non-coding variants at conserved sites, such as motif-disrupting changes
+  in transcription-factor-binding sites. This resource, which captures up to
+  98{\%} of accessible single nucleotide polymorphisms at a frequency of 1{\%}
+  in related populations, enables analysis of common and low-frequency variants
+  in individuals from diverse, including admixed, populations.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature11632
+    \endverb
+    \field{isbn}{2011051703}
+    \field{pages}{0\bibrangedash 9}
+    \field{title}{{An integrated map of genetic variation}}
+    \field{volume}{135}
+    \field{journaltitle}{Nature}
+    \field{year}{2012}
+  \endentry
+
+  \entry{Aikens2018}{article}{}
+    \name{author}{3}{}{%
+      {{hash=ARC}{%
+         family={Aikens},
+         familyi={A\bibinitperiod},
+         given={Rachael\bibnamedelima C},
+         giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=JKE}{%
+         family={Johnson},
+         familyi={J\bibinitperiod},
+         given={Kelsey\bibnamedelima E},
+         giveni={K\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=VBF}{%
+         family={Voight},
+         familyi={V\bibinitperiod},
+         given={Benjamin\bibnamedelima F},
+         giveni={B\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ARCJKEVBF1}
+    \strng{fullhash}{ARCJKEVBF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2018}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{abstract}{%
+    Our understanding of mutation rate helps us build evolutionary models and
+  make sense of genetic variation. Recent work indicates that the frequencies
+  of specific mutation types have been elevated in Europe, and that many more,
+  subtler signatures of global polymorphism variation may yet remain
+  unidentified. Here, we present an analysis of the 1,000 Genomes Project
+  (phase 3), suggesting additional putative signatures of mutation rate
+  variation across populations and the extent to which they are shaped by local
+  sequence context. First, we compiled a list of the most significantly
+  variable polymorphism types in a cross-continental statistical test.
+  Clustering polymorphisms together, we observed four sets of substitution
+  types that showed similar trends of relative mutation rate across
+  populations, and describe the patterns of these mutational clusters among
+  continental groups. For the majority of these signatures, we found that a
+  single flanking base pair of sequence context was sufficient to determine the
+  majority of enrichment or depletion of a mutation type. However, local
+  genetic context up to 2-3 base pairs away contributes additional variability,
+  and helps to interpret a previously noted enrichment of certain polymorphism
+  types in some East Asian groups. Building our understanding of mutation rate
+  in this way can help us to construct more accurate evolutionary models and
+  better understand the mechanisms that underlie genetic change.%
+    }
+    \field{title}{{Signals of variation in human mutation rate at multiple
+  levels of sequence context}}
+    \verb{url}
+    \verb http://biorxiv.org/content/early/2018/08/04/385096.abstract
+    \endverb
+    \field{journaltitle}{bioRxiv}
+    \field{year}{2018}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{Alexandrov2013}{article}{}
+    \name{author}{70}{}{%
+      {{hash=ALB}{%
+         family={Alexandrov},
+         familyi={A\bibinitperiod},
+         given={Ludmil\bibnamedelima B.},
+         giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=NZS}{%
+         family={Nik-Zainal},
+         familyi={N\bibinitperiod-Z\bibinitperiod},
+         given={Serena},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WDC}{%
+         family={Wedge},
+         familyi={W\bibinitperiod},
+         given={David\bibnamedelima C.},
+         giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=ASA}{%
+         family={Aparicio},
+         familyi={A\bibinitperiod},
+         given={Samuel\bibnamedelima A.J.R.},
+         giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Behjati},
+         familyi={B\bibinitperiod},
+         given={Sam},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BAV}{%
+         family={Biankin},
+         familyi={B\bibinitperiod},
+         given={Andrew\bibnamedelima V.},
+         giveni={A\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=BGR}{%
+         family={Bignell},
+         familyi={B\bibinitperiod},
+         given={Graham\bibnamedelima R.},
+         giveni={G\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=BN}{%
+         family={Bolli},
+         familyi={B\bibinitperiod},
+         given={Niccol{\`{o}}},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Borg},
+         familyi={B\bibinitperiod},
+         given={Ake},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BDAL}{%
+         family={B{\o}rresen-Dale},
+         familyi={B\bibinitperiod-D\bibinitperiod},
+         given={Anne\bibnamedelima Lise},
+         giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Boyault},
+         familyi={B\bibinitperiod},
+         given={Sandrine},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BB}{%
+         family={Burkhardt},
+         familyi={B\bibinitperiod},
+         given={Birgit},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=BAP}{%
+         family={Butler},
+         familyi={B\bibinitperiod},
+         given={Adam\bibnamedelima P.},
+         giveni={A\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=CC}{%
+         family={Caldas},
+         familyi={C\bibinitperiod},
+         given={Carlos},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=DHR}{%
+         family={Davies},
+         familyi={D\bibinitperiod},
+         given={Helen\bibnamedelima R.},
+         giveni={H\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=DC}{%
+         family={Desmedt},
+         familyi={D\bibinitperiod},
+         given={Christine},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=ER}{%
+         family={Eils},
+         familyi={E\bibinitperiod},
+         given={Roland},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=EJE}{%
+         family={Eyfj{\"{o}}rd},
+         familyi={E\bibinitperiod},
+         given={J{\'{o}}runn\bibnamedelima Erla},
+         giveni={J\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=FJA}{%
+         family={Foekens},
+         familyi={F\bibinitperiod},
+         given={John\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Greaves},
+         familyi={G\bibinitperiod},
+         given={Mel},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HF}{%
+         family={Hosoda},
+         familyi={H\bibinitperiod},
+         given={Fumie},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=HB}{%
+         family={Hutter},
+         familyi={H\bibinitperiod},
+         given={Barbara},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=IT}{%
+         family={Ilicic},
+         familyi={I\bibinitperiod},
+         given={Tomislav},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=IS}{%
+         family={Imbeaud},
+         familyi={I\bibinitperiod},
+         given={Sandrine},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=IM}{%
+         family={Imielinsk},
+         familyi={I\bibinitperiod},
+         given={Marcin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=JN}{%
+         family={J{\"{a}}ger},
+         familyi={J\bibinitperiod},
+         given={Natalie},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=JDT}{%
+         family={Jones},
+         familyi={J\bibinitperiod},
+         given={David\bibnamedelima T.W.},
+         giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Jonas},
+         familyi={J\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Knappskog},
+         familyi={K\bibinitperiod},
+         given={Stian},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Koo},
+         familyi={K\bibinitperiod},
+         given={Marcel},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LSR}{%
+         family={Lakhani},
+         familyi={L\bibinitperiod},
+         given={Sunil\bibnamedelima R.},
+         giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=LOC}{%
+         family={L{\'{o}}pez-Ot{\'{i}}n},
+         familyi={L\bibinitperiod-O\bibinitperiod},
+         given={Carlos},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Martin},
+         familyi={M\bibinitperiod},
+         given={Sancha},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MNC}{%
+         family={Munshi},
+         familyi={M\bibinitperiod},
+         given={Nikhil\bibnamedelima C.},
+         giveni={N\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=NH}{%
+         family={Nakamura},
+         familyi={N\bibinitperiod},
+         given={Hiromi},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=NPA}{%
+         family={Northcott},
+         familyi={N\bibinitperiod},
+         given={Paul\bibnamedelima A.},
+         giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Pajic},
+         familyi={P\bibinitperiod},
+         given={Marina},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=PE}{%
+         family={Papaemmanuil},
+         familyi={P\bibinitperiod},
+         given={Elli},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=PA}{%
+         family={Paradiso},
+         familyi={P\bibinitperiod},
+         given={Angelo},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PJV}{%
+         family={Pearson},
+         familyi={P\bibinitperiod},
+         given={John\bibnamedelima V.},
+         giveni={J\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=PXS}{%
+         family={Puente},
+         familyi={P\bibinitperiod},
+         given={Xose\bibnamedelima S.},
+         giveni={X\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=RK}{%
+         family={Raine},
+         familyi={R\bibinitperiod},
+         given={Keiran},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Ramakrishna},
+         familyi={R\bibinitperiod},
+         given={Manasa},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RAL}{%
+         family={Richardson},
+         familyi={R\bibinitperiod},
+         given={Andrea\bibnamedelima L.},
+         giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=RJ}{%
+         family={Richter},
+         familyi={R\bibinitperiod},
+         given={Julia},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Rosenstiel},
+         familyi={R\bibinitperiod},
+         given={Philip},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Schlesner},
+         familyi={S\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=STN}{%
+         family={Schumacher},
+         familyi={S\bibinitperiod},
+         given={Ton\bibnamedelima N.},
+         giveni={T\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=SPN}{%
+         family={Span},
+         familyi={S\bibinitperiod},
+         given={Paul\bibnamedelima N.},
+         giveni={P\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=TJW}{%
+         family={Teague},
+         familyi={T\bibinitperiod},
+         given={Jon\bibnamedelima W.},
+         giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=TY}{%
+         family={Totoki},
+         familyi={T\bibinitperiod},
+         given={Yasushi},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=TAN}{%
+         family={Tutt},
+         familyi={T\bibinitperiod},
+         given={Andrew\bibnamedelima N.J.},
+         giveni={A\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=VMR}{%
+         family={Vald{\'{e}}s-Mas},
+         familyi={V\bibinitperiod-M\bibinitperiod},
+         given={Rafael},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=VMM}{%
+         family={{Van Buuren}},
+         familyi={V\bibinitperiod},
+         given={Marit\bibnamedelima M.},
+         giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=VL}{%
+         family={{Van 'T Veer}},
+         familyi={V\bibinitperiod},
+         given={Laura},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=VSA}{%
+         family={Vincent-Salomon},
+         familyi={V\bibinitperiod-S\bibinitperiod},
+         given={Anne},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=WN}{%
+         family={Waddell},
+         familyi={W\bibinitperiod},
+         given={Nicola},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=YLR}{%
+         family={Yates},
+         familyi={Y\bibinitperiod},
+         given={Lucy\bibnamedelima R.},
+         giveni={L\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=ZRJ}{%
+         family={Zucman-Rossi},
+         familyi={Z\bibinitperiod-R\bibinitperiod},
+         given={Jessica},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=AP}{%
+         family={{Andrew Futreal}},
+         familyi={A\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=MU}{%
+         family={McDermott},
+         familyi={M\bibinitperiod},
+         given={Ultan},
+         giveni={U\bibinitperiod},
+      }}%
+      {{hash=LP}{%
+         family={Lichter},
+         familyi={L\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Meyerson},
+         familyi={M\bibinitperiod},
+         given={Matthew},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GSM}{%
+         family={Grimmond},
+         familyi={G\bibinitperiod},
+         given={Sean\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Siebert},
+         familyi={S\bibinitperiod},
+         given={Reiner},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=CE}{%
+         family={Campo},
+         familyi={C\bibinitperiod},
+         given={El{\'{i}}as},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=ST}{%
+         family={Shibata},
+         familyi={S\bibinitperiod},
+         given={Tatsuhiro},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=PSM}{%
+         family={Pfister},
+         familyi={P\bibinitperiod},
+         given={Stefan\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=CPJ}{%
+         family={Campbell},
+         familyi={C\bibinitperiod},
+         given={Peter\bibnamedelima J.},
+         giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=SMR}{%
+         family={Stratton},
+         familyi={S\bibinitperiod},
+         given={Michael\bibnamedelima R.},
+         giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ALB+1}
+  \strng{fullhash}{ALBNZSWDCASABSBAVBGRBNBABDALBSBBBAPCCDHRDCEREJEFJAGMHFHBITISIMJNJDTJDKSKMLSRLOCMSMNCNHNPAPMPEPAPJVPXSRKRMRALRJRPSMSTNSPNTJWTYTANVMRVMMVLVSAWNYLRZRJAPMULPMMGSMSRCESTPSMCPJSMR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{abstract}{%
+    All cancers are caused by somatic mutations; however, understanding of the
+  biological processes generating these mutations is limited. The catalogue of
+  somatic mutations from a cancer genome bears the signatures of the mutational
+  processes that have been operative. Here we analysed 4,938,362 mutations from
+  7,042 cancers and extracted more than 20 distinct mutational signatures. Some
+  are present in many cancer types, notably a signature attributed to the
+  APOBEC family of cytidine deaminases, whereas others are confined to a single
+  cancer class. Certain signatures are associated with age of the patient at
+  cancer diagnosis, known mutagenic exposures or defects in DNA maintenance,
+  but many are of cryptic origin. In addition to these genome-wide mutational
+  signatures, hypermutation localized to small genomic regions, 'kataegis', is
+  found in many cancer types. The results reveal the diversity of mutational
+  processes underlying the development of cancer, with potential implications
+  for understanding of cancer aetiology, prevention and therapy.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature12477
+    \endverb
+    \verb{eprint}
+    \verb NIHMS150003
+    \endverb
+    \field{isbn}{1476-4687 (Electronic)$\backslash$r0028-0836 (Linking)}
+    \field{issn}{00280836}
+    \field{number}{7463}
+    \field{pages}{415\bibrangedash 421}
+    \field{title}{{Signatures of mutational processes in human cancer}}
+    \field{volume}{500}
+    \field{journaltitle}{Nature}
+    \field{eprinttype}{arXiv}
+    \field{year}{2013}
+  \endentry
+
+  \entry{VanDijk2014}{article}{}
+    \name{author}{4}{}{%
+      {{hash=vDEL}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Dijk},
+         familyi={D\bibinitperiod},
+         given={Erwin\bibnamedelima L.},
+         giveni={E\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=AH}{%
+         family={Auger},
+         familyi={A\bibinitperiod},
+         given={H{\'{e}}l{\`{e}}ne},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=JY}{%
+         family={Jaszczyszyn},
+         familyi={J\bibinitperiod},
+         given={Yan},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=TC}{%
+         family={Thermes},
+         familyi={T\bibinitperiod},
+         given={Claude},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DELv+1}
+    \strng{fullhash}{DELvAHJYTC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2014}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \field{abstract}{%
+    Ten years ago next-generation sequencing (NGS) technologies appeared on the
+  market. During the past decade, tremendous progress has been made in terms of
+  speed, read length, and throughput, along with a sharp reduction in per-base
+  cost. Together, these advances democratized NGS and paved the way for the
+  development of a large number of novel NGS applications in basic science as
+  well as in translational research areas such as clinical diagnostics,
+  agrigenomics, and forensic science. Here we provide an overview of the
+  evolution of NGS and discuss the most significant improvements in sequencing
+  technologies and library preparation protocols. We also explore the current
+  landscape of NGS applications and provide a perspective for future
+  developments. ?? 2014 Elsevier Ltd.%
+    }
+    \verb{doi}
+    \verb 10.1016/j.tig.2014.07.001
+    \endverb
+    \verb{eprint}
+    \verb arXiv:1312.0570v2
+    \endverb
+    \field{isbn}{01689525}
+    \field{issn}{01689525}
+    \field{number}{9}
+    \field{pages}{418\bibrangedash 426}
+    \field{title}{{Ten years of next-generation sequencing technology}}
+    \verb{url}
+    \verb http://linkinghub.elsevier.com/retrieve/pii/S0168952514001127
+    \endverb
+    \field{volume}{30}
+    \field{journaltitle}{Trends in Genetics}
+    \field{eprinttype}{arXiv}
+    \field{year}{2014}
+  \endentry
+
+  \entry{Harris2015a}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HK}{%
+         family={Harris},
+         familyi={H\bibinitperiod},
+         given={Kelley},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HK1}
+    \strng{fullhash}{HK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2015}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{abstract}{%
+    As humans dispersed out of Africa they adapted to new environmental
+  challenges, including changes in exposure to mutagenic solar radiation.
+  Humans in temperate latitudes have acquired light skin that is relatively
+  transparent to UV light, and some evidence suggests that their DNA damage
+  response pathways have also experienced local adaptation. This raises the
+  possibility that different populations have experienced different selective
+  pressures affecting genome integrity. Here, I present evidence that the rate
+  of a particular mutation type has recently increased in the European
+  population, rising in frequency by 50{\%} during the 40,000-80,000 y since
+  Europeans began diverging from Asians. A comparison of SNPs private to
+  Africa, Asia, and Europe in the 1000 Genomes data reveals that private
+  European variation is enriched for the transition 5'-TCC-3' → 5'-TTC-3'.
+  Although it is not clear whether UV played a causal role in changing the
+  European mutational spectrum, 5'-TCC-3' → 5'-TTC-3' is known to be the most
+  common somatic mutation present in melanoma skin cancers, as well as the
+  mutation most frequently induced in vitro by UV. Regardless of its causality,
+  this change indicates that DNA replication fidelity has not remained stable
+  even since the origin of modern humans and might have changed numerous times
+  during our recent evolutionary history.%
+    }
+    \verb{doi}
+    \verb 10.1073/pnas.1418652112
+    \endverb
+    \field{issn}{0027-8424}
+    \field{number}{11}
+    \field{pages}{3439\bibrangedash 3444}
+    \field{title}{{Evidence for recent, population-specific evolution of the
+  human mutation rate}}
+    \verb{url}
+    \verb http://www.pnas.org/lookup/doi/10.1073/pnas.1418652112
+    \endverb
+    \field{volume}{112}
+    \verb{file}
+    \verb :Users/luke/Dropbox/Work/PHD/Writing/PNAS-2015-Harris-3439-44.pdf:pdf
+    \endverb
+    \field{journaltitle}{Proceedings of the National Academy of Sciences}
+    \field{year}{2015}
+  \endentry
+
+  \entry{Harris2017a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=HK}{%
+         family={Harris},
+         familyi={H\bibinitperiod},
+         given={Kelley},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=PJK}{%
+         family={Pritchard},
+         familyi={P\bibinitperiod},
+         given={Jonathan\bibnamedelima K.},
+         giveni={J\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HKPJK1}
+    \strng{fullhash}{HKPJK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2017}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{abstract}{%
+    {\textless}p{\textgreater}DNA is a remarkably precise medium for copying
+  and storing biological information. This high fidelity results from the
+  action of hundreds of genes involved in replication, proofreading, and damage
+  repair. Evolutionary theory suggests that in such a system, selection has
+  limited ability to remove genetic variants that change mutation rates by
+  small amounts or in specific sequence contexts. Consistent with this, using
+  SNV variation as a proxy for mutational input, we report here that mutational
+  spectra differ substantially among species, human continental groups and even
+  some closely related populations. Close examination of one signal, an
+  increased TCC→TTC mutation rate in Europeans, indicates a burst of
+  mutations from about 15,000 to 2000 years ago, perhaps due to the appearance,
+  drift, and ultimate elimination of a genetic modifier of mutation rate. Our
+  results suggest that mutation rates can evolve markedly over short
+  evolutionary timescales and suggest the possibility of mapping mutational
+  modifiers.{\textless}/p{\textgreater}%
+    }
+    \verb{doi}
+    \verb 10.7554/eLife.24284
+    \endverb
+    \field{issn}{2050084X}
+    \field{title}{{Rapid evolution of the human mutation spectrum}}
+    \field{volume}{6}
+    \field{journaltitle}{eLife}
+    \field{year}{2017}
+  \endentry
+
+  \entry{HapMap2005}{article}{}
+    \name{author}{1}{}{%
+      {{hash=I}{%
+         family={{International HapMap Consortium}},
+         familyi={I\bibinitperiod},
+      }}%
+    }
+    \keyw{Chromosomes,DNA,Gene Frequency,Gene Frequency:
+  genetics,Genetic,Genetic: genetics,Genome,Haplotypes,Haplotypes:
+  genetics,Human,Humans,Linkage Disequilibrium,Linkage Disequilibrium:
+  genetics,Mitochondrial,Mitochondrial:
+  genetics,Polymorphism,Recombination,Selection,Single Nucleotide,Single
+  Nucleotide: genetics,Y,Y: genetics}
+    \strng{namehash}{I1}
+    \strng{fullhash}{I1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2005}
+    \field{sortinit}{I}
+    \field{sortinithash}{I}
+    \field{abstract}{%
+    Inherited genetic variation has a critical but as yet largely
+  uncharacterized role in human disease. Here we report a public database of
+  common variation in the human genome: more than one million single nucleotide
+  polymorphisms (SNPs) for which accurate and complete genotypes have been
+  obtained in 269 DNA samples from four populations, including ten 500-kilobase
+  regions in which essentially all information about common DNA variation has
+  been extracted. These data document the generality of recombination hotspots,
+  a block-like structure of linkage disequilibrium and low haplotype diversity,
+  leading to substantial correlations of SNPs with many of their neighbours. We
+  show how the HapMap resource can guide the design and analysis of genetic
+  association studies, shed light on structural variation and recombination,
+  and identify loci that may have been subject to natural selection during
+  human evolution.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature04226
+    \endverb
+    \field{isbn}{1476-4687 (Electronic)$\backslash$r0028-0836 (Linking)}
+    \field{issn}{1476-4687}
+    \field{number}{7063}
+    \field{pages}{1299\bibrangedash 320}
+    \field{title}{{A haplotype map of the human genome.}}
+    \verb{url}
+    \verb http://www.ncbi.nlm.nih.gov/pubmed/16255080
+    \endverb
+    \field{volume}{437}
+    \field{journaltitle}{Nature}
+    \field{year}{2005}
+  \endentry
+
+  \entry{Lek2016}{article}{}
+    \name{author}{79}{}{%
+      {{hash=LM}{%
+         family={Lek},
+         familyi={L\bibinitperiod},
+         given={Monkol},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KKJ}{%
+         family={Karczewski},
+         familyi={K\bibinitperiod},
+         given={Konrad\bibnamedelima J.},
+         giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=MEV}{%
+         family={Minikel},
+         familyi={M\bibinitperiod},
+         given={Eric\bibnamedelima V.},
+         giveni={E\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=SKE}{%
+         family={Samocha},
+         familyi={S\bibinitperiod},
+         given={Kaitlin\bibnamedelima E.},
+         giveni={K\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Banks},
+         familyi={B\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=FT}{%
+         family={Fennell},
+         familyi={F\bibinitperiod},
+         given={Timothy},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=OLAH}{%
+         family={O'Donnell-Luria},
+         familyi={O\bibinitperiod-L\bibinitperiod},
+         given={Anne\bibnamedelima H.},
+         giveni={A\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=WJS}{%
+         family={Ware},
+         familyi={W\bibinitperiod},
+         given={James\bibnamedelima S.},
+         giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=HAJ}{%
+         family={Hill},
+         familyi={H\bibinitperiod},
+         given={Andrew\bibnamedelima J.},
+         giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=CBB}{%
+         family={Cummings},
+         familyi={C\bibinitperiod},
+         given={Beryl\bibnamedelima B.},
+         giveni={B\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=TT}{%
+         family={Tukiainen},
+         familyi={T\bibinitperiod},
+         given={Taru},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=BDP}{%
+         family={Birnbaum},
+         familyi={B\bibinitperiod},
+         given={Daniel\bibnamedelima P.},
+         giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=KJA}{%
+         family={Kosmicki},
+         familyi={K\bibinitperiod},
+         given={Jack\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=DLE}{%
+         family={Duncan},
+         familyi={D\bibinitperiod},
+         given={Laramie\bibnamedelima E.},
+         giveni={L\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=EK}{%
+         family={Estrada},
+         familyi={E\bibinitperiod},
+         given={Karol},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=ZF}{%
+         family={Zhao},
+         familyi={Z\bibinitperiod},
+         given={Fengmei},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=ZJ}{%
+         family={Zou},
+         familyi={Z\bibinitperiod},
+         given={James},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=PHE}{%
+         family={Pierce-Hoffman},
+         familyi={P\bibinitperiod-H\bibinitperiod},
+         given={Emma},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Berghout},
+         familyi={B\bibinitperiod},
+         given={Joanne},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=CDN}{%
+         family={Cooper},
+         familyi={C\bibinitperiod},
+         given={David\bibnamedelima N.},
+         giveni={D\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=DN}{%
+         family={Deflaux},
+         familyi={D\bibinitperiod},
+         given={Nicole},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=DM}{%
+         family={DePristo},
+         familyi={D\bibinitperiod},
+         given={Mark},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DR}{%
+         family={Do},
+         familyi={D\bibinitperiod},
+         given={Ron},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=FJ}{%
+         family={Flannick},
+         familyi={F\bibinitperiod},
+         given={Jason},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=FM}{%
+         family={Fromer},
+         familyi={F\bibinitperiod},
+         given={Menachem},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GL}{%
+         family={Gauthier},
+         familyi={G\bibinitperiod},
+         given={Laura},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=GJ}{%
+         family={Goldstein},
+         familyi={G\bibinitperiod},
+         given={Jackie},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=GN}{%
+         family={Gupta},
+         familyi={G\bibinitperiod},
+         given={Namrata},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=HD}{%
+         family={Howrigan},
+         familyi={H\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Kiezun},
+         familyi={K\bibinitperiod},
+         given={Adam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KMI}{%
+         family={Kurki},
+         familyi={K\bibinitperiod},
+         given={Mitja\bibnamedelima I.},
+         giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod},
+      }}%
+      {{hash=MAL}{%
+         family={Moonshine},
+         familyi={M\bibinitperiod},
+         given={Ami\bibnamedelima Levy},
+         giveni={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=NP}{%
+         family={Natarajan},
+         familyi={N\bibinitperiod},
+         given={Pradeep},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=OL}{%
+         family={Orozco},
+         familyi={O\bibinitperiod},
+         given={Lorena},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=PGM}{%
+         family={Peloso},
+         familyi={P\bibinitperiod},
+         given={Gina\bibnamedelima M.},
+         giveni={G\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=PR}{%
+         family={Poplin},
+         familyi={P\bibinitperiod},
+         given={Ryan},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=RMA}{%
+         family={Rivas},
+         familyi={R\bibinitperiod},
+         given={Manuel\bibnamedelima A.},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=RRV}{%
+         family={Ruano-Rubio},
+         familyi={R\bibinitperiod-R\bibinitperiod},
+         given={Valentin},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=RSA}{%
+         family={Rose},
+         familyi={R\bibinitperiod},
+         given={Samuel\bibnamedelima A.},
+         giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=RDM}{%
+         family={Ruderfer},
+         familyi={R\bibinitperiod},
+         given={Douglas\bibnamedelima M.},
+         giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SK}{%
+         family={Shakir},
+         familyi={S\bibinitperiod},
+         given={Khalid},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=SPD}{%
+         family={Stenson},
+         familyi={S\bibinitperiod},
+         given={Peter\bibnamedelima D.},
+         giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SC}{%
+         family={Stevens},
+         familyi={S\bibinitperiod},
+         given={Christine},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=TBP}{%
+         family={Thomas},
+         familyi={T\bibinitperiod},
+         given={Brett\bibnamedelima P.},
+         giveni={B\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=TG}{%
+         family={Tiao},
+         familyi={T\bibinitperiod},
+         given={Grace},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=TLMT}{%
+         family={Tusie-Luna},
+         familyi={T\bibinitperiod-L\bibinitperiod},
+         given={Maria\bibnamedelima T.},
+         giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=WB}{%
+         family={Weisburd},
+         familyi={W\bibinitperiod},
+         given={Ben},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=WHH}{%
+         family={Won},
+         familyi={W\bibinitperiod},
+         given={Hong\bibnamedelima Hee},
+         giveni={H\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=YD}{%
+         family={Yu},
+         familyi={Y\bibinitperiod},
+         given={Dongmei},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=ADM}{%
+         family={Altshuler},
+         familyi={A\bibinitperiod},
+         given={David\bibnamedelima M.},
+         giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=AD}{%
+         family={Ardissino},
+         familyi={A\bibinitperiod},
+         given={Diego},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Boehnke},
+         familyi={B\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DJ}{%
+         family={Danesh},
+         familyi={D\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=DS}{%
+         family={Donnelly},
+         familyi={D\bibinitperiod},
+         given={Stacey},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=ER}{%
+         family={Elosua},
+         familyi={E\bibinitperiod},
+         given={Roberto},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=FJC}{%
+         family={Florez},
+         familyi={F\bibinitperiod},
+         given={Jose\bibnamedelima C.},
+         giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=GSB}{%
+         family={Gabriel},
+         familyi={G\bibinitperiod},
+         given={Stacey\bibnamedelima B.},
+         giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=GG}{%
+         family={Getz},
+         familyi={G\bibinitperiod},
+         given={Gad},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=GSJ}{%
+         family={Glatt},
+         familyi={G\bibinitperiod},
+         given={Stephen\bibnamedelima J.},
+         giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=HCM}{%
+         family={Hultman},
+         familyi={H\bibinitperiod},
+         given={Christina\bibnamedelima M.},
+         giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Kathiresan},
+         familyi={K\bibinitperiod},
+         given={Sekar},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Laakso},
+         familyi={L\bibinitperiod},
+         given={Markku},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={McCarroll},
+         familyi={M\bibinitperiod},
+         given={Steven},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MMI}{%
+         family={McCarthy},
+         familyi={M\bibinitperiod},
+         given={Mark\bibnamedelima I.},
+         giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={McGovern},
+         familyi={M\bibinitperiod},
+         given={Dermot},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=MR}{%
+         family={McPherson},
+         familyi={M\bibinitperiod},
+         given={Ruth},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=NBM}{%
+         family={Neale},
+         familyi={N\bibinitperiod},
+         given={Benjamin\bibnamedelima M.},
+         giveni={B\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=PA}{%
+         family={Palotie},
+         familyi={P\bibinitperiod},
+         given={Aarno},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PSM}{%
+         family={Purcell},
+         familyi={P\bibinitperiod},
+         given={Shaun\bibnamedelima M.},
+         giveni={S\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Saleheen},
+         familyi={S\bibinitperiod},
+         given={Danish},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=SJM}{%
+         family={Scharf},
+         familyi={S\bibinitperiod},
+         given={Jeremiah\bibnamedelima M.},
+         giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Sklar},
+         familyi={S\bibinitperiod},
+         given={Pamela},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SPF}{%
+         family={Sullivan},
+         familyi={S\bibinitperiod},
+         given={Patrick\bibnamedelima F.},
+         giveni={P\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=TJ}{%
+         family={Tuomilehto},
+         familyi={T\bibinitperiod},
+         given={Jaakko},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=TMT}{%
+         family={Tsuang},
+         familyi={T\bibinitperiod},
+         given={Ming\bibnamedelima T.},
+         giveni={M\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=WHC}{%
+         family={Watkins},
+         familyi={W\bibinitperiod},
+         given={Hugh\bibnamedelima C.},
+         giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=WJG}{%
+         family={Wilson},
+         familyi={W\bibinitperiod},
+         given={James\bibnamedelima G.},
+         giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=DMJ}{%
+         family={Daly},
+         familyi={D\bibinitperiod},
+         given={Mark\bibnamedelima J.},
+         giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=MDG}{%
+         family={MacArthur},
+         familyi={M\bibinitperiod},
+         given={Daniel\bibnamedelima G.},
+         giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LM+1}
+  \strng{fullhash}{LMKKJMEVSKEBEFTOLAHWJSHAJCBBTTBDPKJADLEEKZFZJPHEBJCDNDNDMDRFJFMGLGJGNHDKAKMIMALNPOLPGMPRRMARRVRSARDMSKSPDSCTBPTGTLMTWBWHHYDADMADBMDJDSERFJCGSBGGGSJHCMKSLMMSMMIMDMRNBMPAPSMSDSJMSPSPFTJTMTWHCWJGDMJMDG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2016}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \field{abstract}{%
+    Large-scale reference data sets of human genetic variation are critical for
+  the medical and functional interpretation of DNA sequence changes. Here we
+  describe the aggregation and analysis of high-quality exome (protein-coding
+  region) sequence data for 60,706 individuals of diverse ethnicities. The
+  resulting catalogue of human genetic diversity has unprecedented resolution,
+  with an average of one variant every eight bases of coding sequence and the
+  presence of widespread mutational recurrence. The deep catalogue of variation
+  provided by the Exome Aggregation Consortium (ExAC) can be used to calculate
+  objective metrics of pathogenicity for sequence variants, and to identify
+  genes subject to strong selection against various classes of mutation; we
+  identify 3,230 genes with near-complete depletion of truncating variants,
+  79{\%} of which have no currently established human disease phenotype.
+  Finally, we show that these data can be used for the efficient filtering of
+  candidate disease-causing variants, and for the discovery of human knockout
+  variants in protein-coding genes.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature19057
+    \endverb
+    \verb{eprint}
+    \verb 030338
+    \endverb
+    \field{isbn}{0000000000000}
+    \field{issn}{14764687}
+    \field{number}{7616}
+    \field{pages}{285\bibrangedash 291}
+    \field{title}{{Analysis of protein-coding genetic variation in 60,706
+  humans}}
+    \field{volume}{536}
+    \field{journaltitle}{Nature}
+    \field{eprinttype}{arXiv}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Mallick2016}{article}{}
+    \name{author}{79}{}{%
+      {{hash=MS}{%
+         family={Mallick},
+         familyi={M\bibinitperiod},
+         given={Swapan},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Li},
+         familyi={L\bibinitperiod},
+         given={Heng},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Lipson},
+         familyi={L\bibinitperiod},
+         given={Mark},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MI}{%
+         family={Mathieson},
+         familyi={M\bibinitperiod},
+         given={Iain},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Gymrek},
+         familyi={G\bibinitperiod},
+         given={Melissa},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RF}{%
+         family={Racimo},
+         familyi={R\bibinitperiod},
+         given={Fernando},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=ZM}{%
+         family={Zhao},
+         familyi={Z\bibinitperiod},
+         given={Mengyao},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CN}{%
+         family={Chennagiri},
+         familyi={C\bibinitperiod},
+         given={Niru},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=NS}{%
+         family={Nordenfelt},
+         familyi={N\bibinitperiod},
+         given={Susanne},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=TA}{%
+         family={Tandon},
+         familyi={T\bibinitperiod},
+         given={Arti},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Skoglund},
+         familyi={S\bibinitperiod},
+         given={Pontus},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=LI}{%
+         family={Lazaridis},
+         familyi={L\bibinitperiod},
+         given={Iosif},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Sankararaman},
+         familyi={S\bibinitperiod},
+         given={Sriram},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=FQ}{%
+         family={Fu},
+         familyi={F\bibinitperiod},
+         given={Qiaomei},
+         giveni={Q\bibinitperiod},
+      }}%
+      {{hash=RN}{%
+         family={Rohland},
+         familyi={R\bibinitperiod},
+         given={Nadin},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=RG}{%
+         family={Renaud},
+         familyi={R\bibinitperiod},
+         given={Gabriel},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=EY}{%
+         family={Erlich},
+         familyi={E\bibinitperiod},
+         given={Yaniv},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=WT}{%
+         family={Willems},
+         familyi={W\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GC}{%
+         family={Gallo},
+         familyi={G\bibinitperiod},
+         given={Carla},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=SJP}{%
+         family={Spence},
+         familyi={S\bibinitperiod},
+         given={Jeffrey\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=SYS}{%
+         family={Song},
+         familyi={S\bibinitperiod},
+         given={Yun\bibnamedelima S.},
+         giveni={Y\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=PG}{%
+         family={Poletti},
+         familyi={P\bibinitperiod},
+         given={Giovanni},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=BF}{%
+         family={Balloux},
+         familyi={B\bibinitperiod},
+         given={Francois},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=VG}{%
+         family={{Van Driem}},
+         familyi={V\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=DP}{%
+         family={{De Knijff}},
+         familyi={D\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=RIG}{%
+         family={Romero},
+         familyi={R\bibinitperiod},
+         given={Irene\bibnamedelima Gallego},
+         giveni={I\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=JAR}{%
+         family={Jha},
+         familyi={J\bibinitperiod},
+         given={Aashish\bibnamedelima R.},
+         giveni={A\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=BDM}{%
+         family={Behar},
+         familyi={B\bibinitperiod},
+         given={Doron\bibnamedelima M.},
+         giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=BCM}{%
+         family={Bravi},
+         familyi={B\bibinitperiod},
+         given={Claudio\bibnamedelima M.},
+         giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=CC}{%
+         family={Capelli},
+         familyi={C\bibinitperiod},
+         given={Cristian},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=HT}{%
+         family={Hervig},
+         familyi={H\bibinitperiod},
+         given={Tor},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=MEA}{%
+         family={Moreno-Estrada},
+         familyi={M\bibinitperiod-E\bibinitperiod},
+         given={Andres},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=POL}{%
+         family={Posukh},
+         familyi={P\bibinitperiod},
+         given={Olga\bibnamedelima L.},
+         giveni={O\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Balanovska},
+         familyi={B\bibinitperiod},
+         given={Elena},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=BO}{%
+         family={Balanovsky},
+         familyi={B\bibinitperiod},
+         given={Oleg},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=KYS}{%
+         family={Karachanak-Yankova},
+         familyi={K\bibinitperiod-Y\bibinitperiod},
+         given={Sena},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SH}{%
+         family={Sahakyan},
+         familyi={S\bibinitperiod},
+         given={Hovhannes},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=TD}{%
+         family={Toncheva},
+         familyi={T\bibinitperiod},
+         given={Draga},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=YL}{%
+         family={Yepiskoposyan},
+         familyi={Y\bibinitperiod},
+         given={Levon},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TSC}{%
+         family={Tyler-Smith},
+         familyi={T\bibinitperiod-S\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=XY}{%
+         family={Xue},
+         familyi={X\bibinitperiod},
+         given={Yali},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=AMS}{%
+         family={Abdullah},
+         familyi={A\bibinitperiod},
+         given={M.\bibnamedelima Syafiq},
+         giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=RLA}{%
+         family={Ruiz-Linares},
+         familyi={R\bibinitperiod-L\bibinitperiod},
+         given={Andres},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BCM}{%
+         family={Beall},
+         familyi={B\bibinitperiod},
+         given={Cynthia\bibnamedelima M.},
+         giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=DA}{%
+         family={{Di Rienzo}},
+         familyi={D\bibinitperiod},
+         given={Anna},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=JC}{%
+         family={Jeong},
+         familyi={J\bibinitperiod},
+         given={Choongwon},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=SEB}{%
+         family={Starikovskaya},
+         familyi={S\bibinitperiod},
+         given={Elena\bibnamedelima B.},
+         giveni={E\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=ME}{%
+         family={Metspalu},
+         familyi={M\bibinitperiod},
+         given={Ene},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=PJ}{%
+         family={Parik},
+         familyi={P\bibinitperiod},
+         given={J{\"{u}}ri},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=VR}{%
+         family={Villems},
+         familyi={V\bibinitperiod},
+         given={Richard},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=HBM}{%
+         family={Henn},
+         familyi={H\bibinitperiod},
+         given={Brenna\bibnamedelima M.},
+         giveni={B\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=HU}{%
+         family={Hodoglugil},
+         familyi={H\bibinitperiod},
+         given={Ugur},
+         giveni={U\bibinitperiod},
+      }}%
+      {{hash=MR}{%
+         family={Mahley},
+         familyi={M\bibinitperiod},
+         given={Robert},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Sajantila},
+         familyi={S\bibinitperiod},
+         given={Antti},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Stamatoyannopoulos},
+         familyi={S\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=WJT}{%
+         family={Wee},
+         familyi={W\bibinitperiod},
+         given={Joseph\bibnamedelima T.S.},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={Khusainova},
+         familyi={K\bibinitperiod},
+         given={Rita},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=KE}{%
+         family={Khusnutdinova},
+         familyi={K\bibinitperiod},
+         given={Elza},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=LS}{%
+         family={Litvinov},
+         familyi={L\bibinitperiod},
+         given={Sergey},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=AG}{%
+         family={Ayodo},
+         familyi={A\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Comas},
+         familyi={C\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=HMF}{%
+         family={Hammer},
+         familyi={H\bibinitperiod},
+         given={Michael\bibnamedelima F.},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=KT}{%
+         family={Kivisild},
+         familyi={K\bibinitperiod},
+         given={Toomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=KW}{%
+         family={Klitz},
+         familyi={K\bibinitperiod},
+         given={William},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=WCA}{%
+         family={Winkler},
+         familyi={W\bibinitperiod},
+         given={Cheryl\bibnamedelima A.},
+         giveni={C\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=LD}{%
+         family={Labuda},
+         familyi={L\bibinitperiod},
+         given={Damian},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bamshad},
+         familyi={B\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=JLB}{%
+         family={Jorde},
+         familyi={J\bibinitperiod},
+         given={Lynn\bibnamedelima B.},
+         giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=TSA}{%
+         family={Tishkoff},
+         familyi={T\bibinitperiod},
+         given={Sarah\bibnamedelima A.},
+         giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=WWS}{%
+         family={Watkins},
+         familyi={W\bibinitperiod},
+         given={W.\bibnamedelima Scott},
+         giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Metspalu},
+         familyi={M\bibinitperiod},
+         given={Mait},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=DS}{%
+         family={Dryomov},
+         familyi={D\bibinitperiod},
+         given={Stanislav},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Sukernik},
+         familyi={S\bibinitperiod},
+         given={Rem},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SL}{%
+         family={Singh},
+         familyi={S\bibinitperiod},
+         given={Lalji},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TK}{%
+         family={Thangaraj},
+         familyi={T\bibinitperiod},
+         given={Kumarasamy},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Pa{\"{a}}bo},
+         familyi={P\bibinitperiod},
+         given={Svante},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=KJ}{%
+         family={Kelso},
+         familyi={K\bibinitperiod},
+         given={Janet},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=PN}{%
+         family={Patterson},
+         familyi={P\bibinitperiod},
+         given={Nick},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=RD}{%
+         family={Reich},
+         familyi={R\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MS+1}
+  \strng{fullhash}{MSLHLMMIGMRFZMCNNSTASPLISSFQRNRGEYWTGCSJPSYSPGBFVGDPRIGJARBDMBCMCCHTMEAPOLBEBOKYSSHTDYLTSCXYAMSRLABCMDAJCSEBMEPJVRHBMHUMRSASGWJTKRKELSAGCDHMFKTKWWCALDBMJLBTSAWWSMMDSSRSLTKPSKJPNRD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2016}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{abstract}{%
+    Here we report the Simons Genome Diversity Project data set: high quality
+  genomes from 300 individuals from 142 diverse populations. These genomes
+  include at least 5.8 million base pairs that are not present in the human
+  reference genome. Our analysis reveals key features of the landscape of human
+  genome variation, including that the rate of accumulation of mutations has
+  accelerated by about 5{\%} in non-Africans compared to Africans since
+  divergence. We show that the ancestors of some pairs of present-day human
+  populations were substantially separated by 100,000 years ago, well before
+  the archaeologically attested onset of behavioural modernity. We also
+  demonstrate that indigenous Australians, New Guineans and Andamanese do not
+  derive substantial ancestry from an early dispersal of modern humans;
+  instead, their modern human ancestry is consistent with coming from the same
+  source as that of other non-Africans.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature18964
+    \endverb
+    \verb{eprint}
+    \verb NIHMS150003
+    \endverb
+    \field{isbn}{0008-5472 (Print)$\backslash$r0008-5472 (Linking)}
+    \field{issn}{14764687}
+    \field{number}{7624}
+    \field{pages}{201\bibrangedash 206}
+    \field{title}{{The Simons Genome Diversity Project: 300 genomes from 142
+  diverse populations}}
+    \field{volume}{538}
+    \field{journaltitle}{Nature}
+    \field{eprinttype}{arXiv}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Mathieson2017a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=MI}{%
+         family={Mathieson},
+         familyi={M\bibinitperiod},
+         given={Iain},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=RD}{%
+         family={Reich},
+         familyi={R\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MIRD1}
+    \strng{fullhash}{MIRD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2017}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{abstract}{%
+    Mutations occur at vastly different rates across the genome, and
+  populations, leading to differences in the spectrum of segregating
+  polymorphisms. Here, we investigate variation in the rare variant spectrum in
+  a sample of human genomes representing all major world populations. We find
+  at least two distinct signatures of variation. One, consistent with a
+  previously reported signature is characterized by an increased rate of
+  TCC{\textgreater}TTC mutations in people from Western Eurasia and South Asia,
+  likely related to differences in the rate, or efficiency of repair, of damage
+  due to deamination of methylated guanine. We describe the geographic extent
+  of this signature and show that it is detectable in the genomes of ancient,
+  but not archaic humans. The second signature is private to certain Native
+  American populations, and is concentrated at CpG sites. We show that this
+  signature is not driven by differences in the CpG mutation rate, but is a
+  result of the fact that highly mutable CpG sites are more likely to undergo
+  multiple independent mutations across human populations, and the spectrum of
+  such mutations is highly sensitive to recent demography. Both of these
+  effects dramatically affect the spectrum of rare variants across human
+  populations, and should be taken into account when using mutational clocks to
+  make inference about demography. [ABSTRACT FROM AUTHOR]%
+    }
+    \verb{doi}
+    \verb 10.1371/journal.pgen.1006581
+    \endverb
+    \field{isbn}{1111111111}
+    \field{issn}{15537404}
+    \field{number}{2}
+    \field{title}{{Differences in the rare variant spectrum among human
+  populations}}
+    \field{volume}{13}
+    \field{journaltitle}{PLoS Genetics}
+    \field{year}{2017}
+  \endentry
+
+  \entry{Pfeifer2002}{article}{}
+    \name{author}{6}{}{%
+      {{hash=PGP}{%
+         family={Pfeifer},
+         familyi={P\bibinitperiod},
+         given={Gerd\bibnamedelima P.},
+         giveni={G\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=DMF}{%
+         family={Denissenko},
+         familyi={D\bibinitperiod},
+         given={Mikhail\bibnamedelima F.},
+         giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=OM}{%
+         family={Olivier},
+         familyi={O\bibinitperiod},
+         given={Magali},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=TN}{%
+         family={Tretyakova},
+         familyi={T\bibinitperiod},
+         given={Natalia},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=HSS}{%
+         family={Hecht},
+         familyi={H\bibinitperiod},
+         given={Stephen\bibnamedelima S.},
+         giveni={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Hainaut},
+         familyi={H\bibinitperiod},
+         given={Pierre},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \keyw{Carcinogens,Cigarette smoke,DNA damage,Lung cancer,p53}
+    \strng{namehash}{PGP+1}
+    \strng{fullhash}{PGPDMFOMTNHSSHP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2002}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{abstract}{%
+    It is estimated that cigarette smoking kills over 1 000 000 people each
+  year by causing lung cancer as well as many other neoplasmas. p53 mutations
+  are frequent in tobacco-related cancers and the mutation load is often higher
+  in cancers from smokers than from nonsmokers. In lung cancers, the p53
+  mutational patterns are different between smokers and nonsmokers with an
+  excess of G to T transversions in smoking-associated cancers. The prevalence
+  of G to T transversions is 30{\%} in smokers' lung cancer but only 12{\%} in
+  lung cancers of nonsmokers. A similar trend exists, albeit less marked, in
+  laryngeal cancers and in head and neck cancers. This type of mutation is
+  infrequent in most other tumors aside from hepatocellular carcinoma. At
+  several p53 mutational hotspots common to all cancers, such as codons 248 and
+  273, a large fraction of the mutations are G to T events in lung cancers but
+  are almost exclusively G to A transitions in non-tobacco-related cancers. Two
+  important classes of tobacco smoke carcinogens are the polycyclic aromatic
+  hydrocarbons (PAH) and the nicotine-derived nitrosamines. Recent studies have
+  indicated that there is a strong coincidence of G to T transversion hotspots
+  in lung cancers and sites of preferential formation of PAH adducts along the
+  p53 gene. Endogenously methylated CpG dinucleotides are the preferred sites
+  for G to T transversions, accounting for more than 50{\%} of such mutations
+  in lung tumors. The same dinucleotide, when present within CpG-methylated
+  mutational reporter genes, is the target of G to T transversion hotspots in
+  cells exposed to the model PAH compound benzo[a]pyrene-7,8-diol-9,10-epoxide.
+  As summarized here, a number of other tobacco smoke carcinogens also can
+  cause G to T transversion mutations. The available data suggest that p53
+  mutations in lung cancers can be attributed to direct DNA damage from
+  cigarette smoke carcinogens rather than to selection of pre-existing
+  endogenous mutations.%
+    }
+    \verb{doi}
+    \verb 10.1038/sj.onc.1205803
+    \endverb
+    \field{isbn}{0950-9232 (Print)}
+    \field{issn}{09509232}
+    \field{number}{6}
+    \field{pages}{7435\bibrangedash 7451}
+    \field{title}{{Tobacco smoke carcinogens, DNA damage and p53 mutations in
+  smoking-associated cancers}}
+    \field{volume}{21-48}
+    \field{journaltitle}{Oncogene}
+    \field{year}{2002}
+  \endentry
+
+  \entry{Pleasance2010}{article}{}
+    \name{author}{40}{}{%
+      {{hash=PED}{%
+         family={Pleasance},
+         familyi={P\bibinitperiod},
+         given={Erin\bibnamedelima D.},
+         giveni={E\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SPJ}{%
+         family={Stephens},
+         familyi={S\bibinitperiod},
+         given={Philip\bibnamedelima J.},
+         giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=OS}{%
+         family={O'Meara},
+         familyi={O\bibinitperiod},
+         given={Sarah},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MDJ}{%
+         family={McBride},
+         familyi={M\bibinitperiod},
+         given={David\bibnamedelima J.},
+         giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Meynert},
+         familyi={M\bibinitperiod},
+         given={Alison},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Jones},
+         familyi={J\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=LML}{%
+         family={Lin},
+         familyi={L\bibinitperiod},
+         given={Meng\bibnamedelima Lay},
+         giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=BD}{%
+         family={Beare},
+         familyi={B\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=LKW}{%
+         family={Lau},
+         familyi={L\bibinitperiod},
+         given={King\bibnamedelima Wai},
+         giveni={K\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=GC}{%
+         family={Greenman},
+         familyi={G\bibinitperiod},
+         given={Chris},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=VI}{%
+         family={Varela},
+         familyi={V\bibinitperiod},
+         given={Ignacio},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=NZS}{%
+         family={Nik-Zainal},
+         familyi={N\bibinitperiod-Z\bibinitperiod},
+         given={Serena},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=DHR}{%
+         family={Davies},
+         familyi={D\bibinitperiod},
+         given={Helen\bibnamedelima R.},
+         giveni={H\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=OGR}{%
+         family={Ord{\~{o}}ez},
+         familyi={O\bibinitperiod},
+         given={Gonzalo\bibnamedelima R.},
+         giveni={G\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=MLJ}{%
+         family={Mudie},
+         familyi={M\bibinitperiod},
+         given={Laura\bibnamedelima J.},
+         giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=LC}{%
+         family={Latimer},
+         familyi={L\bibinitperiod},
+         given={Calli},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=ES}{%
+         family={Edkins},
+         familyi={E\bibinitperiod},
+         given={Sarah},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SL}{%
+         family={Stebbings},
+         familyi={S\bibinitperiod},
+         given={Lucy},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=CL}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Lina},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=JM}{%
+         family={Jia},
+         familyi={J\bibinitperiod},
+         given={Mingming},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LC}{%
+         family={Leroy},
+         familyi={L\bibinitperiod},
+         given={Catherine},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=MJ}{%
+         family={Marshall},
+         familyi={M\bibinitperiod},
+         given={John},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Menzies},
+         familyi={M\bibinitperiod},
+         given={Andrew},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Butler},
+         familyi={B\bibinitperiod},
+         given={Adam},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=TJW}{%
+         family={Teague},
+         familyi={T\bibinitperiod},
+         given={Jon\bibnamedelima W.},
+         giveni={J\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=MJ}{%
+         family={Mangion},
+         familyi={M\bibinitperiod},
+         given={Jonathon},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SYA}{%
+         family={Sun},
+         familyi={S\bibinitperiod},
+         given={Yongming\bibnamedelima A.},
+         giveni={Y\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=MSF}{%
+         family={McLaughlin},
+         familyi={M\bibinitperiod},
+         given={Stephen\bibnamedelima F.},
+         giveni={S\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=PHE}{%
+         family={Peckham},
+         familyi={P\bibinitperiod},
+         given={Heather\bibnamedelima E.},
+         giveni={H\bibinitperiod\bibinitdelim E\bibinitperiod},
+      }}%
+      {{hash=TEF}{%
+         family={Tsung},
+         familyi={T\bibinitperiod},
+         given={Eric\bibnamedelima F.},
+         giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=CGL}{%
+         family={Costa},
+         familyi={C\bibinitperiod},
+         given={Gina\bibnamedelima L.},
+         giveni={G\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=LCC}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Clarence\bibnamedelima C.},
+         giveni={C\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=MJD}{%
+         family={Minna},
+         familyi={M\bibinitperiod},
+         given={John\bibnamedelima D.},
+         giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=GA}{%
+         family={Gazdar},
+         familyi={G\bibinitperiod},
+         given={Adi},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Birney},
+         familyi={B\bibinitperiod},
+         given={Ewan},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=RMD}{%
+         family={Rhodes},
+         familyi={R\bibinitperiod},
+         given={Michael\bibnamedelima D.},
+         giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=MKJ}{%
+         family={McKernan},
+         familyi={M\bibinitperiod},
+         given={Kevin\bibnamedelima J.},
+         giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=SMR}{%
+         family={Stratton},
+         familyi={S\bibinitperiod},
+         given={Michael\bibnamedelima R.},
+         giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=FPA}{%
+         family={Futreal},
+         familyi={F\bibinitperiod},
+         given={P.\bibnamedelima Andrew},
+         giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=CPJ}{%
+         family={Campbell},
+         familyi={C\bibinitperiod},
+         given={Peter\bibnamedelima J.},
+         giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PED+1}
+  \strng{fullhash}{PEDSPJOSMDJMAJDLMLBDLKWGCVINZSDHROGRMLJLCESSLCLJMLCMJMABATJWMJSYAMSFPHETEFCGLLCCMJDGABERMDMKJSMRFPACPJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2010}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{abstract}{%
+    Cancer is driven by mutation. Worldwide, tobacco smoking is the principal
+  lifestyle exposure that causes cancer, exerting carcinogenicity through
+  {\textgreater}60 chemicals that bind and mutate DNA. Using massively parallel
+  sequencing technology, we sequenced a small-cell lung cancer cell line,
+  NCI-H209, to explore the mutational burden associated with tobacco smoking. A
+  total of 22,910 somatic substitutions were identified, including 134 in
+  coding exons. Multiple mutation signatures testify to the cocktail of
+  carcinogens in tobacco smoke and their proclivities for particular bases and
+  surrounding sequence context. Effects of transcription-coupled repair and a
+  second, more general, expression-linked repair pathway were evident. We
+  identified a tandem duplication that duplicates exons 3-8 of CHD7 in frame,
+  and another two lines carrying PVT1-CHD7 fusion genes, indicating that CHD7
+  may be recurrently rearranged in this disease. These findings illustrate the
+  potential for next-generation sequencing to provide unprecedented insights
+  into mutational processes, cellular repair pathways and gene networks
+  associated with cancer.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature08629
+    \endverb
+    \field{isbn}{1476-4687 (Electronic)$\backslash$r0028-0836 (Linking)}
+    \field{issn}{00280836}
+    \field{number}{7278}
+    \field{pages}{184\bibrangedash 190}
+    \field{title}{{A small-cell lung cancer genome with complex signatures of
+  tobacco exposure}}
+    \field{volume}{463}
+    \field{journaltitle}{Nature}
+    \field{year}{2010}
+  \endentry
+
+  \entry{Shiraishi2015a}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SY}{%
+         family={Shiraishi},
+         familyi={S\bibinitperiod},
+         given={Yuichi},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=TG}{%
+         family={Tremmel},
+         familyi={T\bibinitperiod},
+         given={Georg},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Miyano},
+         familyi={M\bibinitperiod},
+         given={Satoru},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Stephens},
+         familyi={S\bibinitperiod},
+         given={Matthew},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SY+1}
+    \strng{fullhash}{SYTGMSSM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2015}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{abstract}{%
+    Recent advances in sequencing technologies have enabled the production of
+  massive amounts of data on somatic mutations from cancer genomes. These data
+  have led to the detection of characteristic patterns of somatic mutations or
+  ``mutation signatures{\&}{\#}039;{\&}{\#}039; at an unprecedented resolution,
+  with the potential for new insights into the causes and mechanisms of
+  tumorigenesis. Here we present new methods for modelling, identifying and
+  visualizing such mutation signatures. Our methods greatly simplify mutation
+  signature models compared with existing approaches, reducing the number of
+  parameters by orders of magnitude even while increasing the contextual
+  factors (e.g. the number of flanking bases) that are accounted for. This
+  improves both sensitivity and robustness of inferred signatures. We also
+  provide a new intuitive way to visualize the signatures, analogous to the use
+  of sequence logos to visualize transcription factor binding sites. We
+  illustrate our new method on somatic mutation data from urothelial carcinoma
+  of the upper urinary tract, and a larger dataset from 30 diverse cancer
+  types. The results illustrate several important features of our methods,
+  including the ability of our new visualization tool to clearly highlight the
+  key features of each signature, the improved robustness of signature
+  inferences from small sample sizes, and more detailed inference of signature
+  characteristics such as strand biases and sequence context effects at the
+  base two positions 5{\&}{\#}039; to the mutated site. The overall framework
+  of our work is based on probabilistic models that are closely connected with
+  ``mixed-membership models{\&}{\#}039;{\&}{\#}039; which are widely used in
+  population genetic admixture analysis, and in machine learning for document
+  clustering. We argue that recognizing these relationships should help improve
+  understanding of mutation signature extraction problems, and suggests ways to
+  further improve the statistical methods. Our methods are implemented in an R
+  package pmsignature (https://github.com/friend1ws/pmsignature) and a web
+  application available at
+  https://friend1ws.shinyapps.io/pmsignature{\_}shiny/.%
+    }
+    \verb{doi}
+    \verb 10.1371/journal.pgen.1005657
+    \endverb
+    \verb{eprint}
+    \verb /dx.doi.org/10.1101/019901
+    \endverb
+    \field{isbn}{1553-7404 (Electronic)$\backslash$r1553-7390 (Linking)}
+    \field{issn}{15537404}
+    \field{number}{12}
+    \field{title}{{A Simple Model-Based Approach to Inferring and Visualizing
+  Cancer Mutation Signatures}}
+    \field{volume}{11}
+    \field{journaltitle}{PLoS Genetics}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{http:}
+    \field{year}{2015}
+  \endentry
+\endsortlist
+\endinput
