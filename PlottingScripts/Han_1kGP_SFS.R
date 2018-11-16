@@ -3,14 +3,41 @@ library(data.table)
 library(ggplot2)
 library(reshape2)
 
+Reg<- fread('/Users/luke/Documents/QualityPaper/Misc/AllRegressionsOver10.txt')
+Reg<-Reg[which(Reg$Pos != 'Pos'),]
+Reg$Chr<-as.numeric(as.character(Reg$Chr))
+Reg$Pos<-as.numeric(as.character(Reg$Pos))
+Reg$dev<-as.numeric(as.character(Reg$dev))
+Reg$plog10 <- - pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+Reg<-Reg[which(Reg$plog10 >= 6),]
+RegCH<-Reg[which(Reg$Pop == 'CHS' | Reg$Pop == 'CHB'),]
+
+write.table(RegCH[,c('Chr','Pos')],'/Users/luke/Documents/QualityPaper/sig/CHINESE_pos.txt', quote=F, col.names=F, row.names=F)
+
+awkPos<-fread('/Users/luke/Documents/QualityPaper/sig/Total_Sig_awk_POS.txt')
+
+Overlap<- unique(RegCH[which(RegCH$Pos %in% awkPos$V2),c('Chr','Pos')])
+
 Qual<-fread('~/Dropbox/LukeTemp/SubMeta.txt')
 Qual$V1<-NULL
 
 Han<- fread('~/genomes/genomes/Han90/83_Han_Sig.frq')
+Han$V1 <- as.numeric(Han$V1)
+Han$V2 <- as.numeric(Han$V2)
 
-KGP<- fread('~/Documents/QualityPaper/SigVCF/1kGP_90Han_shared.frq')
 
-plt<-unique(merge(Han, KGP, by=c('V1','V2'), all=T))
+KGP1 <- read.table('/Users/luke/Documents/QualityPaper/SigVCF/1kGP_GenomeWide_83Han.frq',
+					sep="\t",fill=TRUE,col.names=paste("V",1:8,sep=''), skip=1)
+KGP <- read.table('~/Documents/QualityPaper/SigVCF/1kGP_90Han_shared.frq',
+					sep="\t",fill=TRUE,col.names=paste("V",1:8,sep=''), skip=1)
+					
+KGP2 <- unique(merge(KGP, Overlap, by.x=c('V1','V2'), by.y=c('Chr','Pos')))
+KGP2 <- unique(merge(KGP1, Reg, by.x=c('V1','V2'), by.y=c('Chr','Pos')))
+
+plt<-unique(merge(Han, KGP2, by=c('V1','V2'), all=T))
+
+plt[which(is.na(plt$V6.x)),]$V6.x <- 0
+plt[which(is.na(plt$V6.y)),]$V6.y <- 0
 
 ggplot(plt, aes(x=V6.x, y=V6.y))+geom_bin2d(binwidth=c(1/83,1/83))+scale_fill_distiller(palette = "Spectral")+labs(x='high depth',y='1kGP')+theme_classic()
 
