@@ -303,10 +303,7 @@ Combining the ancestral locations of these individuals with the three dimensiona
 These preliminary results are very promising as they appear to capture the geographic and genetic clustering of the Quebec population.
 
 
-\begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/Genizon_BalSac_mapsInMaps4.jpg}
-\label{UMAP}
-\end{figure}
+
 
 
 \section{Future Directions}
@@ -329,57 +326,63 @@ French genome data is obtainable through Dr. Christian Dina, one of our collabor
 
 \chapter{Estimating mutation rates}
 
+Mutation rate estimations are necessary for understanding the timing of evolutionary processes and events.
+Neutral mutations are expected to arise at a constant rate in the genome, and can therefore be used as an evolutionary clock that can be used to estimate divergence times (Moorjani, 2016). 
+The basic equation of mutation rate is $N / LM$ where N is the number of mutations, L is the length of the region and M is the number of generations. (Narasimah, 2016)
+Estimating mutation rates in humans has proven to be difficult for a number of reasons.
+Mutation rates vary across the genome as some regions are more conserved than others. 
+Mutation rates also vary over time.
+Shorter branches within the Ape family compared to other primates suggests a "hominoid rate slowdown" whereby mutation rates decreased in apes. (Moorjani, 2016; Scally, 2012)
+More recent studies have found that mutation rates vary among human populations. (Harris, 2015, Harris Pritchard2017)
+Converting the mutation rate per generation to a yearly rate is also met with difficulties when estimating average human generation time.
+Generation times are known to vary among current populations, and likely varied over longer time spans (Henn, Moorjani, 2016)
+
 \section{Review of current methods and limitations}
 
-Mutation rates are important for understanding the timing of evolutionary processes.
-It is used as an evolutionary clock if you assume a constant accumulation rate of neutral mutations.
-The basic equation of mutation rate is $N / LM$ where N is the number of mutations, L is the length of the region and M is the number of generations.
-Estimating mutation rates in humans has proven to be difficult for a number of reasons.
-[list of reasons here]
+The first human mutation rates were estimated by Haldane (1935) using the rates of children born with rare diseases from unaffected parents.
+However, once sequence data became available, estimates were based on phylogenetic data and fossil records.
+By using fossil record dating as an estimate for coalescence time $t$ and the sequence divergence $d$ between two species as the number of mutation that have occurred over that time span, mutation rates $\mu$ can be estimated as $\mu = 2d/t$ (Scally, 2012). 
+Using this method with the time of divergence of Chimps and Humans, the mutation rates are estimated to be around $1\times10^{-9}$ up to $2.5\times10^{-8}$ (Takahata, 1997; Scally, 2012; Moorjani, 2016, Narasimah, 2016).
+The limitations of this approach are numerous, ranging from accuracy of fossil record dating, to estimating the average generation time for chimps and humans over millions of years.
 
-Three main categories of methods :
+Instead of using distant ancestry and fossil records, another more direct approach to estimating mutation rates is to sequence the genomes of parents and offspring. 
+This approach tends to give lower estimates compared to phylogenetic approach ($1-1.25\times10^{-8}$) (Narasimah, 2016).
+This rate is less than half of the rates estimated from phylogenies (Shendure, 2015). 
+One issue with trio sequencing for mutation rates is that false-positive rates of sequencing technologies are difficult to account for considering how low the true mutation rate is.
+Another issue is that the samples used for sequencing are not zygotes.
+This leaves room for germline mosaicisms to artificially increase the number of mutations observed in a generation.
 
-\subsection{Phylogenetic method :} Chimp vs human estimates $2.5\times10^{-8}$ but limitations about the number of generations that separate the two species. Based on fossil evidence.
-
-\subsection{Trio method :} One generation using trio sequencing. 
-Tend to give lower estimates compared to phylogenetic approach. ($1-1.25\times10^{-8}$)
-
-Pedigree approaches are simple in and direct approaches for per generation estimates but are met with several limitations.
-Sex bias : fathers germline mutations increase with age and could be different among men.
-Difficulty distinguishing difference between mosaicism and germline/somatic mutations.
-
-Using Trio : sequencing tech limitations in error rates.
-Mosaicism in parent or postzygotic mutations in child.
-Father's age : spermatogenesis cell division.
-Different types of mutations occur at different rates (and changes with age)
-
-Converting per generation to per year is also difficult. 
-Current approach is to divide generation rate by age of reproduction. (assumes same reproductive age for all pops over all time)
-Estimates may only be accurate to the population studied. 
-
-Mutational signatures specific to populations suggest recent changes in mutation rates. 
-
-One possible solution is to limit estimates to CpG sites as they appear to have more consistent mutation rates across primates. *(but apparently no diff in paternal age for CpG transitions vs other mutations)
-
-\subsection{Population genetics method : }
-Estimates around $1.6-1.7\times10^{-8}$
-
-Taking advantage of founder populations with known pedigrees can get better estimates of mutation rates over multiuple generations.
-Identify mutations in regions of autozygosity and count the number of generations that separate these segments. 
-Reduces errors from somatic mutations. 
-\subsection{Approach and methods for new calculation}
+Most recently, methods for estimating mutation rates using population genetics are increasingly being used.
+These approaches expand on the theory behind trio sequencing by including more distantly related individuals.
+One approach involves autozygous segments observed in a founder population with a known pedigree (Campbell, 2012).
+These segments shared by multiple individuals are compared and mutations in these segments are then used in combination with the number of generations separating two individuals (Campbell, 2012).
+Palamara et al. (2015) describe an even more generalized method by identifying IBD segments and inferring number of generations using coalescent theory.
+This method then regresses the number of mutations observed per base against the time of most recent common ancestor.
+The slope of the regression is the mutation rate per generation.
+Applying this method to 498 individuals from 250 families, they measured a mutation rate of ($2.08\times10^{-8}$).
+This method is able to infer the genotyping false-positive rate as the intercept of the regression line.
+The major limitation to this method comes from the coalescence estimations.
 
 \subsection{Apply state of the art methods to new data}
+For the third chapter of my thesis I plan on exploring mutation rate estimations using the combination of sequence data and phylogenetic data from the Quebec population.
+One preliminary objective might be to replicate the population genetics methods described above by Palamara et al. and Campbell et al..
+Knowing that mutation rates can vary across populations, applying these methods to a new dataset may in itself be worthy of publication.
 
-\subsection{can we do better?}
-Estimating mutation rate spatially across the genome.
-Using IBD and Genealogy to better estimate the number of generations.
+Considering the deep phylogenetic data available for the Quebec population, we may be able to improve on the Palamara method by acquiring more accurate estimates of generation time separating two IBD segments.
+Indeed, by linking individuals to the phylogenetic tree of the Quebec population, we could estimate the most recent common ancestor for a given segment of the genome. 
+
+
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %----------------------------------------------------------------------------------------
 
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/Genizon_BalSac_mapsInMaps4.jpg}
+\label{UMAP}
+\end{figure}
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/5Clusters.png}
