@@ -142,72 +142,62 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 
 \mainmatter % Begin numeric (1,2,3...) page numbering
-
 \pagestyle{thesis} % Return the page headers back to the "thesis" style
 
-
 \section{Introduction}
-
-\subsection{Serial Founder Effects}
-Human expansion out of Africa (OOA) is estimated to have occurred between 45,000 and 60,000 years ago, and resulted in a significant loss of diversity in the populations the colonized new habitats (Henn, 2012). 
-This loss of diversity is the result of a population bottleneck from a small group leaving a source population. 
-Estimates of the parameters of this bottleneck using sequence data and modelling population dynamics range from 2,500 to as low as 450 individuals (Eller, 2004; Fagundes, 2007).
-However, as humans expanded into new habitats, each new colony was founded by small groups leading to successive bottlenecks and reduction in diversity.
-This trend is still apparent in modern humans, with distance from Africa being correlated with loss of genetic diversity (Ramachandran, 2005).
-Bottlenecks can drastically change the allele frequencies within the population, which can lead to rapid divergence (Rosenberg, 2002; Charlesworth, 2003).
-Moreover, because of the limited population size, inbreeding will have impacts on heterozygosity.
-Accounting for population divergence and population specific allele frequencies are necessary for disease phenotype association tests (Gravel, 2010).
-
-Mutational patterns in founder populations have recently become possible to measure, and useful for quantifying changes in mutation rates, as well as demographic histories of populations.
-
-Studying recent founder events can lead to better understanding of the mechanisms and dynamics of historical founder events. 
+Human expansion out of Africa (OOA) is estimated to have occurred between 45,000 and 60,000 years ago (Henn, 2012). 
+As humans expanded into new habitats, each new colony was founded by a smaller group departing a larger, more diverse source population.
+The impacts of the OOA bottleneck are still measurable in modern human populations, with distance from Africa being strongly correlated with decreasing genetic diversity (Ramachandran, 2005).
 
 
+Bottlenecks can drastically change the allele frequencies within a population and lead to rapid divergences (Rosenberg, 2002; Charlesworth, 2003).
+Rare alleles in the source population can increase significantly in frequency or even become fixed in the founder population.
+Isolation over time can lead to increased diversity between small populations, while the diversity within may remain relatively low. 
+For this reason, migration between populations can increase the genetic diversity of both populations.
 
+
+Recent events of admixture are tractable with genomic analyses like identity by descent (IBD) mapping and coalescence estimations (Baharian, 2016).
+However, recombination over time will fragment haplotypes eventually making it difficult to determine their ancestry.
+Despite this, a population will retain a unique set of alleles at frequencies waxing and waning over time.
+These allele frequencies can be used to estimate demographic histories of multiple populations (Gravel, 2010). 
+
+Many disease or phenotype association tests are susceptible to spurious results caused by population structure.
+In order to properly account for this, a better understanding of human demographic history is needed (Gravel, 2010).
+Moreover, studying recent founder populations can lead to better understanding of the mechanisms and dynamics of historical founder events. 
+
+%The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data.
+%As a result of decreasing costs per sample, research centres are now able to perform genomic studies involving larger and larger cohorts.
+%Need, A. C. & Goldstein, D. B. Next generation disparities in human genomics: concerns and remedies. Trends Genet. 25, 489?494 (2009).
+%These large scale genomics studies have increased statistical power to a point where we can resolve fine scale mutational signatures observable on evolutionary scales by comparing the frequencies of mutations between populations.
+%These mutational patterns are useful for inferring population demographic histories, as well as variation in the human mutation rate.
+
+
+%Estimates of the parameters of this OOA bottleneck using sequence data and modelling population dynamics range from 2,500 to as low as 450 individuals founding Europe and Asia (Eller, 2004; Fagundes, 2007).
 \subsection{Thesis proposal}
-Aim : Investigating mutational patterns in founder populations. 
-Characterizing the genetic diversity of founder populations. 
 
-Hypothesis : 
-Founder effects will influence the mutational signatures of a population leading to unique patterns in populations that can be used to infer demographic histories.
+The aim of this PhD project is to study the genomics of founder populations to infer mutational signatures, demographic history, population structure and mutation rates.
+\textbf{Our hypotheses are }: \textbf{1}. An unusual mutational patterns observed in Japan is not reproducible and is the result of a technical artifact.
+\textbf{2}. Quebec has more structure than would be expected from a series of founder events which can be accounted for by ancestral population structure predating the founder events.
+\textbf{3}. Leveraging the deep phylogenetic records from Quebec in combination with sequence data can improve the estimates of human mutation rates.
 
-Combining genetic, genealogical and geographic data can explain the population structure observed today, recreating historical demographics.
-
-This project will be broken down into three chapters :
-
-1. Unique signature in Japan
-Identify the source of the mutational pattern in Japanese population. 
-
-2. Characterize the genetic diversity of the Quebec population (a case study)
-Explain population structure. Using Fst and UMAP/GEO.
-
-3. Explore mutation rate in Quebec population
-apply existing methods of estimating human mutation rate.
-can we do better? combine data to improve estimation. 
-
-\subsection{mutational signatures}
-Some mutagenic processes will affect different DNA motifs. 
-Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \citep{Pfeifer2002,Pleasance2010}. 
-Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
-Such genome-wide mutational signatures have been used as diagnostic tools for cancers \citep{Alexandrov2013,Shiraishi2015a}.
-
-In addition to somatic mutational signatures, there has been recent interest in population variation in germline mutational signatures which can be revealed in large sequencing panels. 
-In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
-Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
-Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
- 
- In particular, both studies  identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals.
-This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
-A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals. 
-
+%Combining genetic, genealogical and geographic data can explain the population structure observed today, recreating historical demographics.
+%This project will be broken down into three chapters :
+%1. Unique signature in Japan
+%Identify the source of the mutational pattern in Japanese population. 
+%2. Characterize the genetic diversity of the Quebec population (a case study)
+%Explain population structure. Using Fst and UMAP/GEO.
+%3. Explore mutation rate in Quebec population
+%apply existing methods of estimating human mutation rate.
+%can we do better? combine data to improve estimation. 
 
 \chapter{A curious mutational signature in Japan}
+
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Reference cohorts such as the International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project \citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
 Many more genomes are available indirectly through servers providing imputation services \citep{HapMap2005} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
-The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved. 
+The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. 
+Since then, sequencing platforms have rapidly improved. 
 Yet, because of the extraordinary value of freely available data, early data from the 1000 Genomes project (1kGP) is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions. 
 The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012}, leading to heterogeneous sample preparations and data quality.
 
@@ -215,7 +205,19 @@ Even though such batch effects clearly have the potential to confound analyses, 
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
 Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.
 
-\section{summary of results from paper}
+
+\subsection{Mutational Signatures}
+There has been recent interest in population variation in germline mutational signatures which can be revealed in large sequencing panels. 
+In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
+Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
+Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
+ 
+In particular, both studies  identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals.
+This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
+A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
+We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals. 
+
+\section{Results}
 Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\rightarrow}$*CC in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
@@ -226,16 +228,20 @@ To identify SNPs that are likely to reproduce poorly across cohorts without havi
 Traditionally, genome wide association studies use genotypes as the independent variable. 
 Here we perform a "reverse GWAS", in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
+The variants that are associated to $Q$ have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations.
+These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
 
-
-link to manuscript
+The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
+This variability could result from evolving sequence platform and protocols or variation between sequencing centres. 
+By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
+We performed the reverse GWAS approach in all populations and identified 3826 variants that were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}). 
 
 \chapter{Characterization of the Quebec population}
 
 \section{Brief History of Quebec}
-The Quebec population was founded over four centuries ago from \~8,500 settlers from France.
+The Quebec population was founded over four centuries ago from around 8500 settlers from France.
 This small number of settlers are the direct ancestors of the great majority of Quebec's population of 7 million.
-In population genetics, a founder effect is characterized by a small number of founders from a larger source population giving rise to a population expansion.
+In population genetics, a founder effect is characterized by a small number of founders from a larger source population giving rise to a population expansion.[***NEEDS WORK***]
 This tends to increased homozygosity and rapidly shift allele frequencies compared to the source population.
 
 The north east of Quebec (e.g. Saguenay-Lac-Saint-Jean and Charlevoix) displays higher rates of some rare genetic diseases and increased homozygosity which is suggestive of a severe founder effect. (Gagnon, 2000)
@@ -356,7 +362,7 @@ Most recently, methods for estimating mutation rates using population genetics a
 These approaches expand on the theory behind trio sequencing by including more distantly related individuals.
 One approach involves autozygous segments observed in a founder population with a known pedigree (Campbell, 2012).
 These segments shared by multiple individuals are compared and mutations in these segments are then used in combination with the number of generations separating two individuals (Campbell, 2012).
-Palamara et al. (2015) describe an even more generalized method by identifying IBD segments and inferring number of generations using coalescent theory.
+Palamara et al. (2015) describe an even more generalized method by identifying IBD segments and inferring number of generations using coalescent theory (Baharian 2016).
 This method then regresses the number of mutations observed per base against the time of most recent common ancestor.
 The slope of the regression is the mutation rate per generation.
 Applying this method to 498 individuals from 250 families, they measured a mutation rate of ($2.08\times10^{-8}$).
@@ -369,7 +375,9 @@ One preliminary objective might be to replicate the population genetics methods 
 Knowing that mutation rates can vary across populations, applying these methods to a new dataset may in itself be worthy of publication.
 
 Considering the deep phylogenetic data available for the Quebec population, we may be able to improve on the Palamara method by acquiring more accurate estimates of generation time separating two IBD segments.
-Indeed, by linking individuals to the phylogenetic tree of the Quebec population, we could estimate the most recent common ancestor for a given segment of the genome. 
+Indeed, by linking individuals to the phylogenetic tree of the Quebec population, we could estimate the most recent common ancestor for a given segment of the genome.
+By grouping IBD segments according to genomic regions (e.g. coding, CpG, etc.) and running the analysis separately would provide us with a more detailed view of the genome wide mutation rate in humans.
+
 
 
 
