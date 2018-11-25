@@ -144,10 +144,20 @@ chapterinoneline, % Uncomment to place the chapter title next to the number on o
 \mainmatter % Begin numeric (1,2,3...) page numberingc
 \pagestyle{thesis} % Return the page headers back to the "thesis" style
 
+\newgeometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=2cm, % Inner margin
+	outer=2cm, % Outer margin
+	bindingoffset=0cm, % Binding offset
+	top=3cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+	
 \section{Introduction}
-The human genome is composed of a mosaic of ancestral genetic material passed on for millennia.
+The human genome is composed of a mosaic of ancestral genetic material that has been passed on for millennia.
 This pattern of interconnected relatedness is beginning to unveil humanity's rich and complex history.
-Human expansion out of Africa (OOA) is estimated to have occurred between 45,000 and 60,000 years ago \citep{Henn2012}. 
+For example, sequence data estimates that Human expansion out of Africa (OOA) occurred between 45,000 and 60,000 years ago \citep{Henn2012}. 
 As humans expanded into new habitats, each new colony was founded by a smaller group departing a larger, more diverse source population.
 The impacts of the OOA bottleneck are still measurable, as distance from Africa is strongly correlated with decreasing genetic diversity \citep{Ramachandran2005}.
 
@@ -163,14 +173,19 @@ These allele frequencies can then be used to estimate demographic histories of m
 
 Many disease or phenotype association tests are susceptible to spurious results caused by population structure.
 In order to properly account for this, a better understanding of human demographic history is needed \citep{Gravel2011}.
-Moreover, studying recent founder populations can lead to better understanding of the mechanisms and dynamics of historical founder events. 
+Moreover, studying recent founder populations can lead to a better understanding of the mechanisms and dynamics of historical founder events. 
 
 \subsection{Thesis proposal}
 The aim of this PhD project is to study the genomics of founder populations to infer population specific mutational signatures, demographic history and mutation rates.
-\textbf{Our hypotheses are}: \textbf{1}. An unusual non reproducible mutational pattern observed in Japan is the result of a technical artifact.
-\textbf{2}. The heterogeneity of Quebec's population structure can be accounted for by ancestral population structure predating the colonization of Canada.
+\textbf{Our hypotheses are}: 
+
+\textbf{1}. Using higher quality data can clarify the nature of the mutational pattern observed in Japan. Alternatively, the mutational pattern may be a technical artifact unique to the original data.
+
+\textbf{2}. The heterogeneity of Quebec's population structure can be accounted for both by a series of founder events and ancestral population structure predating the colonization of Canada.
+
 \textbf{3}. Leveraging phylogenetic records in combination with sequence data can improve the estimates of mutation rates.
 \vfill
+\restoregeometry 
 \chapter{Mutational signatures in Japan}
 
 \subsection{Batch Effects in Aging Reference Cohort Data}	
@@ -190,10 +205,10 @@ Here we point out how large and previously unreported batch effects in the early
 \subsection{Mutational Signatures}
 There has been recent interest in population variation in germline mutational signatures which can be revealed in large sequencing panels. 
 In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
-Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
+Strong population enrichments of a mutational signature suggest important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
  
-In particular, both studies  identified a heterogeneous mutational signature within 1000 Genomes Japanese individuals.
+In particular, both studies  identified a heterogeneous mutational signature within 1000 Genomes Project (1kGP) Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
 We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals. 
@@ -206,7 +221,7 @@ When comparing the allele frequencies between the Japanese individuals from the 
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
 These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests.
 \subsection{Reverse GWAS}
-To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the Japanese from the 1kGP (JPT) for variants that associate strongly with low average quality of mapped bases ($Q$) (Figure \ref{SFS}).
+To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study on the Japanese from the 1kGP (JPT) for variants that associate strongly with low average quality of mapped bases ($Q$) (Figure \ref{SFS}).
 Traditionally, genome wide association studies use genotypes as the independent variable. 
 Here we perform a "reverse GWAS", in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$.
@@ -224,37 +239,38 @@ Two of these studies genotyped individuals and imputed the data using the HapMap
 The third study used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits.
 
-The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
-It is possible that that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
+The HapMap project and 1kGP shared some cell lines but used different sequencing platforms to produce the data.
+It is possible that a cell line artifact may have produced the same suspicious SNPs in the two sequencing projects.
 
-\subsection{Recommendations}
-A conservative approach would be to remove all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$.
-In this case, we used a cut-off of $Q$ over 30.
-Another approach is to remove all the sites that reach a significance below $ p < 10^{-6}$ in at least two populations.
+\section{Conclusion}
+The genome wide simple logistic regression analysis approach is rather straightforward, and could be a standard in a variety of -omics studies.
+Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
+However, cleaning up data is also important to avoid generating spurious results. 
+The present findings suggest that a substantial fraction of the final release of the 1kGP project is overdue for removal or re-sequencing. 
 \vfill
+
 \chapter{Population structure of Quebec}
 
 \section{Brief history of Quebec}
-The Quebec population was founded over four centuries ago from around 8500 settlers from France \citep{Bherer2011,Laberge2005}.
-This small number of settlers are the direct ancestors of the great majority of Quebec's population of 7 million.
+The French-Canadian population of Quebec was founded over four centuries ago from around 8500 settlers from France \citep{Bherer2011,Laberge2005}.
+This small number of settlers are the direct ancestors of the majority of Quebec's population of 7 million.
 Moreover, ancestral contributions of these settlers across the Saint-Lawrence valley is uneven, whereby two thirds of the modern gene pool is attributed to the first 2600 founders \citep{Gagnon2001, Laberge2005}.
 While the rates of consanguineous unions in Quebec were not higher than in Europe, small population sizes and isolation over time led to increased distant consanguinity \citep{Laberge2005}.
 
-The North-East of Quebec is characterized historically as being more isolated with higher emigration rates compared to Western Quebec.
-Saguenay-Lac-Saint-Jean and Charlevoix also display higher rates of some rare genetic diseases as well increased homozygosity compared to Western Quebec \citep{Gagnon2001}.
-Variation of disease prevalence across the Saint-Lawrence valley indicate that population structure fluctuates across geographic regions \citep{Gagnon2001}.
-Indeed, this pattern of genetic diversity is attributed to a number of factors like concentration of founders, native ancestry and geographic isolation \citep{Gagnon2001,Laberge2005,Bherer2011}.
+The North-East of Quebec is characterized historically as being more isolated with lower immigration rates compared to Western Quebec.
+Saguenay-Lac-Saint-Jean and Charlevoix also display higher rates of some rare genetic diseases as well as increased homozygosity compared to Western Quebec \citep{Gagnon2001}.
+Variation of disease prevalence across the Saint-Lawrence valley indicate that population structure varies across geographic regions \citep{Gagnon2001}.
+Indeed, this pattern of genetic diversity is attributed to a number of factors like variation in native ancestry, geographic isolation and concentration of founders.\citep{Gagnon2001,Laberge2005,Bherer2011}.
+
 The founders of Quebec are not all from the same regions in France.
-In the seventeenth-century, while France was evenly populated, there were not many marriages across great distances \citep{Laberge2005}.
-French settlers came from regions around Paris and Atlantic port towns.
-Each group of settlers carried a distinct gene pool and founded a region of 'Nouvelle-France'.
-The population structure from each of these regions in France provides initial diversity despite small population sizes \citep{Laberge2005}.
-Moreover, Native American ancestry has been estimated to be around 1\% among these settlements \citep{Moreau2013}.
+In the seventeenth-century, while France consisted of a network of small densely populated towns, there were not many marriages across great distances \citep{Laberge2005}.
+Thus, the French settlers from regions around Paris and Atlantic port towns provide initial population structure \citep{Laberge2005}.
+Moreover, Native American ancestry has been estimated to be around 1\% among French-Canadians. \citep{Moreau2013}.
 
 \subsection{A case study of founder populations}
 
-Many populations experienced founder effects as humans expanded out of Africa and populated the continents.
-Studying examples of founder effects in human populations are a great way to improve our understanding of human demographic histories.
+Many populations experienced founder effects as humans expanded out of Africa and populated the other continents.
+Studying examples of founder effects in human populations is a great way to improve our understanding of human demographic histories.
 The Quebec population is an good case study for population genetics for multiple reasons.
 The source population of this bottleneck is still present, which may not be the case for more ancient migration events. 
 Comparing allele frequencies between France and Quebec can determine more accurately the nature of the colonization.
@@ -272,43 +288,45 @@ Alternatively, the heterogeneity of the founder effect in the Quebec population 
 
 \section{Materials and Methods}
 
-While the deep-genealogical data has been studied for over a decade, linking the genealogy to genetic data has only been done with relatively small sample sizes \citep{Gagnon2001,Roy-Gagnon2011}.
-The aim of the second chapter of this thesis will be to examine the genetic structure of the Quebec population using more recent and larger genomic datasets in combination with the deep-genealogical and geographical data. 
+While the deep genealogical data has been studied for over a decade, linking the genealogy to genetic data has only been done with relatively small sample sizes \citep{Gagnon2001,Roy-Gagnon2011}.
+The aim of the second chapter of this thesis will be to examine the genetic structure of the Quebec population using more recent and larger genomic datasets in combination with the deep genealogical and geographical data. 
 Recently developed methodologies will also be of use to further characterize this genomic landscape.
 
 We plan on using two main cohorts for this chapter. 
 The Genizon cohort has 9961 samples from Quebec, genotyped on a variety of chips.
-While this data has yet to be published, it has required a fair amount of cleaning and processing to account for the different genotyping chips used.
-One key advantage of using this data is that we already have consent to link 516 individuals to genealogical records.
-We will also include data from the Cartagene project which has over 12,000 sequenced Quebecers.
+While this data has yet to be published, our first contribution has been cleaning and processing these data to account for the different genotyping chips used.
+One key advantage of using this cohort is that we already linked 516 individuals to the BALSAC genealogical records.
+We will also include data from the Cartagene project which will soon have over 12,000 genotyped Quebecers.
 
-The BALSAC database is a genealogical tree of the French-Canadian Quebec population.
+The BALSAC database is a genealogical tree of predominantly French-Canadian Quebecers.
 It was compiled from birth, marriage and death certificates from the Catholic Church.
 Because of the major role the Church played in French-Canadian society, these records are remarkably detailed and comprehensive.
-As mentioned above, 516 individuals from the Genizon cohort have been genotyped and are linked to this genealogy.
 
 \subsection{Founder effect or Ancient population structure?}
 Using Fst statistics we can infer the relative differences between sub-populations of Quebec (see \citep{Roy-Gagnon2011}).
-Dominic Nelson has written software that can produce single locus forward simulations of the Quebec population using the genealogical data from BALSAC.
+Dominic Nelson, a graduate student from the Gravel lab, has written software that can produce single locus forward simulations of the Quebec population using the genealogical data from BALSAC.
 These simulations can be used to produce estimated differences between sub-populations resulting purely from a founder effect.
-Comparing the Fst statistics between the real data and simulations will determine if the structure observed in Quebec is the result of preserved genetic structure from France or the result of drift from founder events.
+Comparing the Fst statistics between the real data and simulations will allow us to partition the variation as the result of preserved genetic structure from France or of drift from founder events.
 
-\section{Results : the geography of genetics}
+\section{Preliminary Results}
+
+\subsection{The geography of genetics}
 
 Preliminary analyses of the Genizon dataset are in agreement with previous work.
-In collaboration with Alex Diaz-Papkovich, we performed a UMAP projection of the Genizon genotype data \citep{mcinnes2018umap,diaz2018}.
-This method takes the first 20 principle components of the data as input and reduces this high dimensional data preserving both local and global structure (see \citep{diaz2018} and \citep{mcinnes2018umap}).
-This projection shows significant population structure within the Quebec population. 
+In collaboration with another graduate student from the Gravel lab, Alex Diaz-Papkovich, we performed a UMAP projection of the Genizon genotype data \citep{mcinnes2018umap,diaz2018}.
+This method takes the first $n$ principal components of genetic data as input ($n = 20$ in this case) and reduces this high dimensional data to a lower dimension that preserves the high dimensional topology.
+UMAP has been shown to outperform dimension reduction techniques like tSNE both computationally and at preserving both local and global population structure \citep{diaz2018, mcinnes2018umap}.
+This projection shows significant population structure in Quebec (Figure \ref{UMAP}). 
 
-We colored these plots based on the three dimensional coordinates of the UMAP projection space (X,Y,Z) converted to three dimensional color space (R,G,B).
+We colored this plot based on the three dimensional coordinates of the UMAP projection space (X,Y,Z) converted to three dimensional color space (R,G,B) (Figure \ref{UMAP}).
 Therefore, Individuals with similar color are closer to each other in the projection and presumably share more recent ancestry.
 To link the genetic data to geographic coordinates, we used the marriage locations of the ancestors of those linked to the BALSAC database.
-Combining the ancestral locations of these individuals with the three dimensional UMAP coloring scheme, geographic clustering of the sub-populations becomes apparent.
+The ancestral locations of these individuals in combination with the three dimensional UMAP coloring scheme show geographic clustering of the sub-populations becomes apparent.
 Five genetic clusters are visible in the UMAP projection, these clusters also appear to be geographically linked.
 This is in agreement with what Roy-Gagnon observed \citep{Roy-Gagnon2011}.
 These preliminary results are very promising as they appear to capture the geographic and genetic clustering of the Quebec population.
 
-\section{Future directions}
+\section{Future Goals}
 While Fst gives a good estimate of genome wide past coalescent rates, we plan on analyzing IBD segments as they can provide us with more detailed insight of demographic history \citep{Charlesworth2003, Ralph2013, Baharian2016}.
 Because Fst takes in all polymorphisms as input for the statistic, it does not distinguish between recent and more ancient common ancestry \citep{Ralph2013}.
 Analysis of IBD segments shared among individuals from Quebec can be useful for reconstructing the recent structure of relatedness.
@@ -320,6 +338,7 @@ Quebec on the other hand has a much more recent history that may be easier to tr
 
 While studying the French-Canadian populations on their own can provide a detailed historical inference of demographics, including samples from other European populations can provide more context.
 We plan on expanding the current analyses to include data from French individuals which could be used to confirm the results from the Fst analysis as well as provide insight into which regions in France are source populations to regions in Quebec.
+If our hypothesis is correct, we expect French data projected onto the preserved embeddings from Figure \ref{UMAP} to cluster with the distinct sub-groups of Quebec.
 Dr. Christian Dina in the University of Nantes in France has expressed interest in sharing French genomics data for this project.
 \clearpage
 
@@ -363,11 +382,12 @@ Applying this method to 498 individuals from 250 families, they measured a mutat
 \subsection{Applying new methods to new data}
 The aim of the third chapter of this thesis will be to explore mutation rate estimations using a combination of sequence data and genealogical data from the French-Canadian population.
 One preliminary objective might be to replicate the population genetics methods described above by Palamara et al. and Campbell et al. \citep{Palamara2015,Campbell2012}.
-Knowing that mutation rates can vary across populations, applying these methods to a new dataset may in itself be worthy of publication.
+There remains much controversy over mutation rate estimations and applying each of these methods to the same dataset would be a useful comparison.
 
-Considering the deep genealogical records available for the French-Canadian population, we may be able to improve on the Palamara method by acquiring more accurate estimates of generation time separating two IBD segments.
+Considering the deep genealogical records available for the French-Canadian population, we may be able to improve on the Palamara method by acquiring more precise estimates of generation time separating two IBD segments.
 Indeed, by linking individuals to the phylogenetic tree of the Quebec population, we may be able to better estimate the most recent common ancestor for a given segment of the genome.
-Furthermore, by grouping IBD segments according to genomic regions (e.g. coding, CpG, etc.) and running the analysis separately would provide us with a more detailed view of the genome wide mutation rate in humans.
+In addition, we expect French-Canadians to share long IBD segments as a result of the relatively recent bottleneck, which increases the power for this method.
+Furthermore, by grouping IBD segments according to genomic regions (e.g. coding, CpG islands, etc.) and running the analysis separately would provide us with a more detailed view of the genome wide mutation rate in humans.
 
 
 %----------------------------------------------------------------------------------------
