@@ -126,3 +126,6 @@ QE/thesis_1/main.bbl
 *.bbl
 *.blg
 QE/thesis_1/main.bbl
+*.aux
+*.out
+*.xml

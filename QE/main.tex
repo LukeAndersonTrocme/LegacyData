@@ -45,7 +45,7 @@ chapterinoneline, % Uncomment to place the chapter title next to the number on o
 
 \usepackage[backend=bibtex, style=numeric, natbib=true, sorting=none]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
-\addbibresource{QE_bib2.bib} % The filename of the bibliography
+\addbibresource{QE_bib.bib} % The filename of the bibliography
 
 \usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
 
@@ -252,7 +252,7 @@ The present findings suggest that a substantial fraction of the final release of
 \chapter{Population structure of Quebec}
 
 \section{Brief history of Quebec}
-The French-Canadian population of Quebec was founded over four centuries ago from around 8500 settlers from France \citep{Bherer2011,Laberge2005}.
+The French-Canadian population of Quebec was founded over four centuries ago from \textasciitilde 8500 settlers from France \citep{Bherer2011,Laberge2005}.
 This small number of settlers are the direct ancestors of the majority of Quebec's population of 7 million.
 Moreover, ancestral contributions of these settlers across the Saint-Lawrence valley is uneven, whereby two thirds of the modern gene pool is attributed to the first 2600 founders \citep{Gagnon2001, Laberge2005}.
 While the rates of consanguineous unions in Quebec were not higher than in Europe, small population sizes and isolation over time led to increased distant consanguinity \citep{Laberge2005}.
@@ -265,7 +265,7 @@ Indeed, this pattern of genetic diversity is attributed to a number of factors l
 The founders of Quebec are not all from the same regions in France.
 In the seventeenth-century, while France consisted of a network of small densely populated towns, there were not many marriages across great distances \citep{Laberge2005}.
 Thus, the French settlers from regions around Paris and Atlantic port towns provide initial population structure \citep{Laberge2005}.
-Moreover, Native American ancestry has been estimated to be around 1\% among French-Canadians. \citep{Moreau2013}.
+Another source of genetic diversity in the French-Canadian population is an estimated 1\% Native American ancestry \citep{Moreau2013}.
 
 \subsection{A case study of founder populations}
 
@@ -277,6 +277,7 @@ Comparing allele frequencies between France and Quebec can determine more accura
 The French-Canadian population also has deep genealogical records that span four centuries and includes over 3 million entries.
 Quebec is not the only recent founder population, but it is among the largest and in combination with its rich genealogical records, it makes it an excellent cohort to study the impact of founder events \citep{Larmuseau2013,Bherer2011,Gagnon2001,Roy-Gagnon2011}.
 
+\subsection{Previous studies of Quebec population structure}
 There have been several studies in the past few decades that have examined the population structure of Quebec.
 By analyzing the genealogical data they described distinct sub-populations and inferred the relative contribution of founders \citep{Gagnon2001, Bherer2011}.
 Genotype data used to analyze linkage disequilibrium and homozygosity has also revealed significant structure measurable today \citep{ Roy-Gagnon2011}.
@@ -287,7 +288,7 @@ While this study included 140 genotyped individuals - a small sample by today's 
 Alternatively, the heterogeneity of the founder effect in the Quebec population could be explained by a series of separate founder events influenced by variation in the relative isolation, and migration between settlements \citep{Gagnon2001,Laberge2005}.
 
 \section{Materials and Methods}
-
+\subsection{Genetic and genealogical data}
 While the deep genealogical data has been studied for over a decade, linking the genealogy to genetic data has only been done with relatively small sample sizes \citep{Gagnon2001,Roy-Gagnon2011}.
 The aim of the second chapter of this thesis will be to examine the genetic structure of the Quebec population using more recent and larger genomic datasets in combination with the deep genealogical and geographical data. 
 Recently developed methodologies will also be of use to further characterize this genomic landscape.
@@ -302,13 +303,13 @@ The BALSAC database is a genealogical tree of predominantly French-Canadian Queb
 It was compiled from birth, marriage and death certificates from the Catholic Church.
 Because of the major role the Church played in French-Canadian society, these records are remarkably detailed and comprehensive.
 
-\subsection{Founder effect or Ancient population structure?}
+\subsection{Founder effect or ancient population structure?}
 Using Fst statistics we can infer the relative differences between sub-populations of Quebec (see \citep{Roy-Gagnon2011}).
 Dominic Nelson, a graduate student from the Gravel lab, has written software that can produce single locus forward simulations of the Quebec population using the genealogical data from BALSAC.
 These simulations can be used to produce estimated differences between sub-populations resulting purely from a founder effect.
 Comparing the Fst statistics between the real data and simulations will allow us to partition the variation as the result of preserved genetic structure from France or of drift from founder events.
 
-\section{Preliminary Results}
+\section{Preliminary results}
 
 \subsection{The geography of genetics}
 
@@ -326,7 +327,7 @@ Five genetic clusters are visible in the UMAP projection, these clusters also ap
 This is in agreement with what Roy-Gagnon observed \citep{Roy-Gagnon2011}.
 These preliminary results are very promising as they appear to capture the geographic and genetic clustering of the Quebec population.
 
-\section{Future Goals}
+\section{Goals}
 While Fst gives a good estimate of genome wide past coalescent rates, we plan on analyzing IBD segments as they can provide us with more detailed insight of demographic history \citep{Charlesworth2003, Ralph2013, Baharian2016}.
 Because Fst takes in all polymorphisms as input for the statistic, it does not distinguish between recent and more ancient common ancestry \citep{Ralph2013}.
 Analysis of IBD segments shared among individuals from Quebec can be useful for reconstructing the recent structure of relatedness.
@@ -356,18 +357,21 @@ In addition, more recent studies have found that mutation rates can even vary am
 
 \section{Review of current methods and limitations}
 
+%\subsection{Phylogenetic methods}
 The first human mutation rates were estimated by Haldane (1935) using the rates of children born with rare diseases from unaffected parents \citep{Haldane1935}.
 However, once sequence data became available, estimates were based on phylogenetic data and fossil records.
 By using fossil record dating as an estimate for coalescence time $t$ and the sequence divergence $d$ between two species as the number of mutation that have occurred over that time span, mutation rates $\mu$ can be estimated as $\mu = 2d/t$ \citep{Scally2012}. 
 Using this method with the time of divergence of Chimps and Humans of 6 to 10 million years, the mutation rates are estimated to be around $1\times10^{-9}$ up to $2.5\times10^{-8}$ \citep{Takahata1997, Scally2012, Moorjani2016, Narasimhan2016}.
 The limitations of this approach are numerous, ranging from accuracy of fossil record dating, to estimating the average generation time for chimps and humans over millions of years.
 
+%\subsection{Direct methods}
 Instead of using distant ancestry and fossil records, another more direct approach to estimating mutation rates is to sequence the genomes of parents and offspring. 
 This approach tends to give estimates that are less than half of the rate compared to the phylogenetic approach ($1-1.25\times10^{-8}$) \citep{Shendure2015,Narasimhan2016}.
 One issue with trio sequencing for mutation rates is that false-positive rates of sequencing technologies are difficult to account for considering how low the true mutation rate is.
 Another issue is that the samples used for sequencing are not zygotes.
 This leaves room for germline mosaicisms to artificially increase the number of mutations observed in a generation.
 
+%\subsection{Population genetics methods}
 Methods for estimating mutation rates using population genetics are increasingly being used.
 These approaches expand on the theory behind trio sequencing by including more distantly related individuals.
 One approach involves autozygous segments observed in a founder population with a known pedigree \citep{Campbell2012}.
@@ -379,7 +383,8 @@ The slope of the regression is the mutation rate per generation and the intercep
 Applying this method to 498 individuals from 250 families, they measured a mutation rate of ($2.08\times10^{-8}$).
 %The major limitation to this method comes from the coalescence estimations.
 
-\subsection{Applying new methods to new data}
+\section{Goals}
+%\subsection{Applying new methods to new data}
 The aim of the third chapter of this thesis will be to explore mutation rate estimations using a combination of sequence data and genealogical data from the French-Canadian population.
 One preliminary objective might be to replicate the population genetics methods described above by Palamara et al. and Campbell et al. \citep{Palamara2015,Campbell2012}.
 There remains much controversy over mutation rate estimations and applying each of these methods to the same dataset would be a useful comparison.

@@ -84,7 +84,7 @@
       <file>main-blx.bib</file>
     </requires>
     <requires type="editable">
-      <file>QE_bib2.bib</file>
+      <file>QE_bib.bib</file>
     </requires>
     <requires type="static">
       <file>biblatex.bst</file>
