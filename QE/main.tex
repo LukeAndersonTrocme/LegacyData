@@ -161,7 +161,7 @@ For example, sequence data estimates that Human expansion out of Africa (OOA) oc
 As humans expanded into new habitats, each new colony was founded by a smaller group departing a larger, more diverse source population.
 The impacts of the OOA bottleneck are still measurable, as distance from Africa is strongly correlated with decreasing genetic diversity \citep{Ramachandran2005}.
 
-Bottlenecks can drastically change the allele frequencies within a population and lead to rapid divergences \citep{Rosenberg2002, Charlesworth2003}.
+Bottlenecks can drastically change the allele frequencies within a population and lead to rapid divergences \citep{Rosenberg2002, Charlesworth2003, Balick2015}.
 Rare alleles in the source population can increase significantly in frequency or even become fixed in the founder population.
 Isolation over time can lead to increased diversity between small populations, while the diversity within may remain relatively low. 
 For this reason, migration between populations can increase the genetic diversity of both populations \citep{Charlesworth2003}.
@@ -303,7 +303,7 @@ The BALSAC database is a genealogical tree of predominantly French-Canadian Queb
 It was compiled from birth, marriage and death certificates from the Catholic Church.
 Because of the major role the Church played in French-Canadian society, these records are remarkably detailed and comprehensive.
 
-\subsection{Founder effect or ancient population structure?}
+\subsection{Test statistics : founder effect or ancient population structure?}
 Using Fst statistics we can infer the relative differences between sub-populations of Quebec (see \citep{Roy-Gagnon2011}).
 Dominic Nelson, a graduate student from the Gravel lab, has written software that can produce single locus forward simulations of the Quebec population using the genealogical data from BALSAC.
 These simulations can be used to produce estimated differences between sub-populations resulting purely from a founder effect.
@@ -311,21 +311,19 @@ Comparing the Fst statistics between the real data and simulations will allow us
 
 \section{Preliminary results}
 
-\subsection{The geography of genetics}
-
-Preliminary analyses of the Genizon dataset are in agreement with previous work.
+\subsection{Visualizing population structure}
 In collaboration with another graduate student from the Gravel lab, Alex Diaz-Papkovich, we performed a UMAP projection of the Genizon genotype data \citep{mcinnes2018umap,diaz2018}.
 This method takes the first $n$ principal components of genetic data as input ($n = 20$ in this case) and reduces this high dimensional data to a lower dimension that preserves the high dimensional topology.
 UMAP has been shown to outperform dimension reduction techniques like tSNE both computationally and at preserving both local and global population structure \citep{diaz2018, mcinnes2018umap}.
-This projection shows significant population structure in Quebec (Figure \ref{UMAP}). 
-
-We colored this plot based on the three dimensional coordinates of the UMAP projection space (X,Y,Z) converted to three dimensional color space (R,G,B) (Figure \ref{UMAP}).
+This visualization of Quebec population structure shows five clusters which is in agreement with previous works (Figure \ref{UMAP}) \citep{Gagnon2001, Bherer2011,Roy-Gagnon2011}. 
+\vfill
+\subsection{The geography of genetics}
+The three dimensional coordinates of the UMAP space (X,Y,Z) were converted to three dimensional color space (R,G,B) (Figure \ref{UMAP}).
 Therefore, Individuals with similar color are closer to each other in the projection and presumably share more recent ancestry.
 To link the genetic data to geographic coordinates, we used the marriage locations of the ancestors of those linked to the BALSAC database.
-The ancestral locations of these individuals in combination with the three dimensional UMAP coloring scheme show geographic clustering of the sub-populations becomes apparent.
-Five genetic clusters are visible in the UMAP projection, these clusters also appear to be geographically linked.
+The ancestral locations of these individuals in combination with the three dimensional UMAP coloring scheme show geographic clustering of the five sub-populations.
 This is in agreement with what Roy-Gagnon observed \citep{Roy-Gagnon2011}.
-These preliminary results are very promising as they appear to capture the geographic and genetic clustering of the Quebec population.
+These preliminary results are very promising as they appear to capture the geographic and genetic clustering of the French-Canadian population of Quebec.
 
 \section{Goals}
 While Fst gives a good estimate of genome wide past coalescent rates, we plan on analyzing IBD segments as they can provide us with more detailed insight of demographic history \citep{Charlesworth2003, Ralph2013, Baharian2016}.
@@ -341,9 +339,18 @@ While studying the French-Canadian populations on their own can provide a detail
 We plan on expanding the current analyses to include data from French individuals which could be used to confirm the results from the Fst analysis as well as provide insight into which regions in France are source populations to regions in Quebec.
 If our hypothesis is correct, we expect French data projected onto the preserved embeddings from Figure \ref{UMAP} to cluster with the distinct sub-groups of Quebec.
 Dr. Christian Dina in the University of Nantes in France has expressed interest in sharing French genomics data for this project.
-\clearpage
 
+\newgeometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=2cm, % Inner margin
+	outer=2cm, % Outer margin
+	bindingoffset=0cm, % Binding offset
+	top=2.6cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+}
 \chapter{Estimating human mutation rates}
+
+\section{Review of current methods and limitations}
 
 Mutation rate estimations are necessary for understanding the timing of evolutionary processes and events.
 Neutral mutations are expected to arise at a constant rate in the genome, and can therefore be used as an evolutionary clock that can estimate divergence times \citep{Moorjani2016}. 
@@ -352,39 +359,35 @@ Estimating mutation rates in humans has proven to be difficult for a number of r
 Mutation rates vary across the genome as some regions are more conserved than others. 
 Mutation rates are also known to vary over time as shorter branches within the Ape family compared to other primates suggest a "hominoid rate slowdown" whereby mutation rates decreased in apes \citep{Moorjani2016, Scally2012}.
 In addition, more recent studies have found that mutation rates can even vary among human populations. \citep{Harris2015a, Harris2017a}.
-%Converting the mutation rate per generation to a yearly rate is also met with difficulties when estimating average human generation time.
-%Generation times are known to vary among current populations, and likely varied over longer time spans \citep{Henn2012, Moorjani2016}
 
-\section{Review of current methods and limitations}
-
-%\subsection{Phylogenetic methods}
+\subsection{Phylogenetic methods}
 The first human mutation rates were estimated by Haldane (1935) using the rates of children born with rare diseases from unaffected parents \citep{Haldane1935}.
 However, once sequence data became available, estimates were based on phylogenetic data and fossil records.
 By using fossil record dating as an estimate for coalescence time $t$ and the sequence divergence $d$ between two species as the number of mutation that have occurred over that time span, mutation rates $\mu$ can be estimated as $\mu = 2d/t$ \citep{Scally2012}. 
 Using this method with the time of divergence of Chimps and Humans of 6 to 10 million years, the mutation rates are estimated to be around $1\times10^{-9}$ up to $2.5\times10^{-8}$ \citep{Takahata1997, Scally2012, Moorjani2016, Narasimhan2016}.
 The limitations of this approach are numerous, ranging from accuracy of fossil record dating, to estimating the average generation time for chimps and humans over millions of years.
 
-%\subsection{Direct methods}
+
+\subsection{Direct methods}
 Instead of using distant ancestry and fossil records, another more direct approach to estimating mutation rates is to sequence the genomes of parents and offspring. 
 This approach tends to give estimates that are less than half of the rate compared to the phylogenetic approach ($1-1.25\times10^{-8}$) \citep{Shendure2015,Narasimhan2016}.
 One issue with trio sequencing for mutation rates is that false-positive rates of sequencing technologies are difficult to account for considering how low the true mutation rate is.
 Another issue is that the samples used for sequencing are not zygotes.
 This leaves room for germline mosaicisms to artificially increase the number of mutations observed in a generation.
 
-%\subsection{Population genetics methods}
+\subsection{Population genetics methods}
 Methods for estimating mutation rates using population genetics are increasingly being used.
 These approaches expand on the theory behind trio sequencing by including more distantly related individuals.
 One approach involves autozygous segments observed in a founder population with a known pedigree \citep{Campbell2012}.
 These segments shared by multiple individuals are compared and mutations in these segments are then used in combination with the number of generations separating two individuals \citep{Campbell2012}.
-Using autozygous regions from 70 trio sequenced Hutterite families, they obtained an estimated mutation rate of $1.2\times10^{-8}$.
-Palamara et al. (2015) describe an even more generalized method by identifying IBD segments from unrelated individuals and inferring the number of generations using coalescent theory \citep{Palamara2015,Baharian2016}.
+An estimated mutation rate of $1.2\times10^{-8}$ was obtained by using autozygous regions from 70 trio sequenced Hutterite families.
+Palamara et al. (2015) describe an even more generalized method by identifying IBD segments from unrelated individuals and inferring the number of generations using coalescent theory \citep{Palamara2012,Palamara2015,Baharian2016}.
 This method then regresses the number of mutations observed per base against the time of most recent common ancestor.
 The slope of the regression is the mutation rate per generation and the intercept is the inferred genotyping false-positive rate.
-Applying this method to 498 individuals from 250 families, they measured a mutation rate of ($2.08\times10^{-8}$).
+Applying this method to 498 individuals from 250 families, they measured a mutation rate of ($2.08\times10^{-8}$)\citep{Palamara2015}.
 %The major limitation to this method comes from the coalescence estimations.
 
 \section{Goals}
-%\subsection{Applying new methods to new data}
 The aim of the third chapter of this thesis will be to explore mutation rate estimations using a combination of sequence data and genealogical data from the French-Canadian population.
 One preliminary objective might be to replicate the population genetics methods described above by Palamara et al. and Campbell et al. \citep{Palamara2015,Campbell2012}.
 There remains much controversy over mutation rate estimations and applying each of these methods to the same dataset would be a useful comparison.
@@ -394,7 +397,7 @@ Indeed, by linking individuals to the phylogenetic tree of the Quebec population
 In addition, we expect French-Canadians to share long IBD segments as a result of the relatively recent bottleneck, which increases the power for this method.
 Furthermore, by grouping IBD segments according to genomic regions (e.g. coding, CpG islands, etc.) and running the analysis separately would provide us with a more detailed view of the genome wide mutation rate in humans.
 
-
+\restoregeometry 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %----------------------------------------------------------------------------------------
@@ -418,10 +421,12 @@ The same analysis was performed independently for each of the populations in the
 \end{figure}
 
 \begin{figure}
-\includegraphics[width=0.85\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
+\begin{center}
+\includegraphics[width=0.75\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
 
 \caption{\textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. Individuals are ranked by the date of the earliest sequencing data is used for individuals sequenced more than once. The x-axis is ranked by the mean sequencing date per population. \textbf{B} The x-axis is sorted by the sequencing date per individual. The colors indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. The bottom plot indicates the sequencing technologies used over time.}
 \label{MapQual}
+\end{center}
 \end{figure}
 
 \begin{figure}
