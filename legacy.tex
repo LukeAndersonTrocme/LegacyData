@@ -189,49 +189,56 @@ The same variants identified as being low quality independently in each populati
 \end{figure}
 
 \subsection{Suspicious variants impact modern genomics analyses}
+\subsubsection{Imputation}
 The state of the art imputation servers use a combination of many databases including many that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
 To investigate the proportion of suspicious variants that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples. 
-This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual
+This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
-Once we identified variants that were clearly associated with low $Q$, we searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
+\subsubsection{Cell line or technical artifact}
+
+To determine whether this artifact is the result of a cell line artifact or a technical artifact, we investigated other cohorts that used the same cell lines.
+The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
+If these variants are a cell line artifact then the same suspicious variants should be present in the two sequencing projects.
+We found that only 70 variants were present in HapMap and 186 in GnomAD (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
+However, with our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations.
+
+% \sgcomment{This could be fleshed out a bit. Currently reader has no idea whether the proportion of variants that are present in other cohorts is more or less than expected.}
+
+%However, considering that there are only 70 suspicious variants that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
+%Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real \sgcomment{previous phrase needs rewriting. I don't love the "real" vs "not real". Or at least you should clarify that we detect problematic mutations. The next question is whether these are real and badly called, or completely spurious I think this paragraph suggest that the majority are spurious}; however we cannot discount the chance that they are real.
+In 2017, Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
+We find that \todo{000} out of the \todo{000} the suspicious variants from the single population test, and \todo{000} out of \todo{000} the variants from the combined test are present in the resequenced data.
+While this is more than 1\% of the sites, we suspect that they are indeed false associations to $Q$.
+To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
+We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
+These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact.
+\luke{More here with the SFS and concordance between 90Han and 1kGP}
+
+\subsubsection{GWAS}
+We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified three recent publications that had reported these variants as close to or above the genome-wide significant threshold.
-Two of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation.
-The third study used the 1kGP sequence data and cell lines directly.
+Two of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013}.
+A third study used the 1kGP sequence data and cell lines directly.
 All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits.  \sgcomment{The previous paragraph should be clarified: two of the studies are likely ok. the third is likely problematic, and why. For "conventional" GWAS, we do not see evidence that these contaminated hits. but they may still affect, e.g., risk scores.}
+Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits. 
+The two studies that imputed using HapMap are likely not impacted by this as these variants are likely falsely associated to $Q$.
 
-
-We searched other databases to see if the suspicious variants had been sequenced in different cohorts.
-70 of these variants were present in HapMap and 186 in GnomAD (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
-These variants include the two variants found in the studies that imputed genotypes using HapMap.
-With our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations. \sgcomment{This could be fleshed out a bit. Currently reader has no idea whether the proportion of variants that are present in other cohorts is more or less than expected. Also, I would probably put this paragraph before the GWAS section.}
-
-\section{Discussion}
-
-One study used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
+The third study used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
 Based on GWAS on the EBV copy number, the study reports only one SNP with significance below $ p < 10^{-8}$, as well as 104 SNPs in the range of $p < 10^{-7}$ to $ p < 10^{-6}$. 
-Four of the SNPs in the top hits for the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) were identified by our regression against $Q$. 
+Four of the SNPs in the top hits for the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) were identified by our regression against $Q$.
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
 It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. \sgcomment{Do you still stand by this?}
 
-Two studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
-The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
-It is possible that that a cell line artifact may have produced the same suspicious variants in the two sequencing projects.
+For "conventional" GWAS, we do not see evidence that these contaminated hits. but they may still affect, e.g., risk scores.
 
-However, considering that there are only 70 suspicious variants that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
-Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real \sgcomment{previous phrase needs rewriting. I don't love the "real" vs "not real". Or at least you should clarify that we detect problematic mutations. THe next question is whether these are real and badly called, or completely spurious I think this paragraph suggest that the majority are spurious}; however we cannot discount the chance that they are real.
-In 2017 Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
-We find that \todo{000} out of the \todo{000} the suspicious variants from the single population test, and \todo{000} out of \todo{000} the variants from the combined test are present in the resequenced data.
-While this is more than 1\% of the sites, we suspect that they are indeed false associations to quality.
-To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
-We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
-These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact. \sgcomment{I would have the discussion of cell line artifacts as a separate paragraph}
+
+\section{Discussion}
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
