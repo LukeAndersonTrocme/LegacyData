@@ -153,7 +153,7 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 We therefore performed the reverse GWAS approach in all populations, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
 % \sgcomment{quantify!}
 Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}). 
-To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figure \ref{NRS_Manhattan}, Figure \ref{NRI_Manhattan}, Figure \ref{RS_Manhattan} and Figure \ref{RI_Manhattan}).
+To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}).
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable})
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 
@@ -178,7 +178,7 @@ To account for the large number of tests, we used a two-stage Benjamini \& Hochb
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
 
-\caption{Overlap of variants identified independently to be associated with average quality of mapped bases $Q$.
+\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
 The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
 The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
 Phase 1 populations are marked by a star ( * ).
@@ -202,13 +202,13 @@ Two of these studies genotyped individuals and imputed the data using the HapMap
 The third study used the 1kGP sequence data and cell lines directly.
 All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits. 
+Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits.  \sgcomment{The previous paragraph should be clarified: two of the studies are likely ok. the third is likely problematic, and why. For "conventional" GWAS, we do not see evidence that these contaminated hits. but they may still affect, e.g., risk scores.}
 
 
 We searched other databases to see if the suspicious variants had been sequenced in different cohorts.
 70 of these variants were present in HapMap and 186 in GnomAD (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
 These variants include the two variants found in the studies that imputed genotypes using HapMap.
-With our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations.
+With our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations. \sgcomment{This could be fleshed out a bit. Currently reader has no idea whether the proportion of variants that are present in other cohorts is more or less than expected. Also, I would probably put this paragraph before the GWAS section.}
 
 \section{Discussion}
 
@@ -218,20 +218,20 @@ Four of the SNPs in the top hits for the Asian populations (rs200655768, rs18420
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
-It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. 
+It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. \sgcomment{Do you still stand by this?}
 
 Two studies used HapMap as a reference panel, rather than 1000 Genomes \citep{Kraja2011, Ebejer2013}. 
 The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
 It is possible that that a cell line artifact may have produced the same suspicious variants in the two sequencing projects.
 
 However, considering that there are only 70 suspicious variants that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
-Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real; however we cannot discount the chance that they are real.
+Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real \sgcomment{previous phrase needs rewriting. I don't love the "real" vs "not real". Or at least you should clarify that we detect problematic mutations. THe next question is whether these are real and badly called, or completely spurious I think this paragraph suggest that the majority are spurious}; however we cannot discount the chance that they are real.
 In 2017 Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
 We find that \todo{000} out of the \todo{000} the suspicious variants from the single population test, and \todo{000} out of \todo{000} the variants from the combined test are present in the resequenced data.
 While this is more than 1\% of the sites, we suspect that they are indeed false associations to quality.
 To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
 We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
-These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact.
+These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact. \sgcomment{I would have the discussion of cell line artifacts as a separate paragraph}
 
 \subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technology.
@@ -240,39 +240,37 @@ A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found tha
 Differences in read quality and error profiles in turn require different calling pipelines.
 
 We were not able to pinpoint the precise technical source of the discrepancy. 
-Sequencer-specific errors would be expected to be absent from Hapmap, which was sequenced using a combination of array based technologies and PCR targeted sequencing \citep{HapMap2005}. 
-We find that $99\%$ of the suspicious variants are indeed absent from HapMap, which is consistent with the expected false positive rate in our test.
+Sequencer-specific errors would be expected to be absent from Hapmap \sgcomment{why? Do you mean that they would be different between 1kgp and hapmap?}, which was sequenced using a combination of array based technologies and PCR targeted sequencing \citep{HapMap2005}. 
+We find that $99\%$ of the suspicious variants are indeed absent from HapMap \sgcomment{what is this $99\%$? concordance? I thought that the result was a bit different}, which is consistent with the expected false positive rate in our test.
   
-The presence of some of these variants in HapMap suggests a cell line effect; although, this result is not very convincing with only 70 variants of sites identified in 1kGP present in HapMap (Figure \ref{HapMap_GnomAD}).
+The presence of some of these variants in HapMap suggests a cell line effect; although, this result is not very convincing with only 70 variants of sites identified in 1kGP present in HapMap (Figure \ref{HapMap_GnomAD}). \sgcomment{I don't think you want to start sentence with "although,". }
 We also note that 186 of the suspicious variants are present in the GnomAD database (Figure \ref{HapMap_GnomAD}).
-Indeed, further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal.
+Indeed, further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal. \sgcomment{This paragraph needs a bit of work}
 
-If these sequencing platforms are no longer being used, then it it likely that these artifacts are no longer being actively introduced in recent sequence data.
+If these \sgcomment{Which?} sequencing platforms are no longer being used, then it it likely that these \sgcomment{which?} artifacts are no longer being actively introduced in recent sequence data. \sgcomment{It's good to start paragraph in more self-contained manner}
 However, because the 1kGP data is widely used as a reference database, these variants are being imputed onto new genotype data.
-We have shown that these variants have been significantly associated using traditional GWAS methods.
-However, this is not the only method that would be affected by these false positives. 
-Polygenic risk scores, meta analyses and other methods that combine the scores of multiple variants might also include some of these variants in their analyses.
-The inclusion of these variants could also affect population genetics analyses that compare and contrast populations based on allele frequencies.
+\sgcomment{Even though we have found only one GWAS study that reported associations with the problematic variants, the imputation of incorrect variants can lead to milder problems such as the addition of noise in polygenic risk scores and biases in fine mapping analyses. }  
+%However, this is not the only method that would be affected by these false positives. Polygenic risk scores, meta analyses and other methods that combine the scores of multiple variants might also include some of these variants in their analyses.
+These variants do have a sizeable effect on population on analyses that compare and contrast populations based on mutational profiles. Even though we expect that present-day technologies will be less sensitive to such artefacts, if is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
 
 
 \subsection{Recommendations}
-While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet the current quality standards.
+While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
 A conservative approach would be to remove all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$.
-In this case, we used a cut-off of $Q$ over 30.
-Another approach is to remove all the sites that reach a significance below $ p < 10^{-6}$ in at least two populations or using the sites reaching a significance below $ p < 10^{-6}$ in the combined test. (See supplementary material for lists of variants)
+We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signal.
+Another approach is to remove all the sites that reach a significance below $ p < 10^{-6}$ in at least two populations or using the sites reaching a significance below $ p < 10^{-6}$ in the combined test. (See supplementary material for lists of variants) \sgcomment{This is not really a recommendation. We should be a bit more specific}
 
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome wide simple logistic regression analysis approach is rather straightforward, and could be a standard in a variety of -omics studies. 
+The genome wide simple logistic regression analysis approach is straightforward, and should probably be a standard in a variety of -omics studies. 
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
 However, cleaning up data is also important to avoid generating spurious results. 
 The present findings suggest that a substantial fraction of the final release of the 1kGP project is overdue for removal or re-sequencing.
 
-We have not identified the precise mechanism through which the technical artifact was introduced: we have ruled out neither cell-line, sequencer, nor algorithmic artifact. 
-Given that modern platforms seem to have resolved this technical issue but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while the sequencing forensics investigation can take place. 
+We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
 
 
 \section{Methods}
