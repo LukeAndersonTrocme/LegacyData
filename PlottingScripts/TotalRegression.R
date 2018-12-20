@@ -7,8 +7,30 @@ library(multtest)
 library(cowplot)
 library(reshape2)
 
+dir='~/Documents/GenomeWideRegression/'
+out='~/Documents/GenomeWideRegression/'
+
+Reg = fread('~/Documents/GenomeWideRegression/ALLPOP_GenomeWide.Regression.csv', header=F, sep=' ', col.names=c('Chr','Pos','Pop','dev'))
+Reg$Chr<-as.numeric(as.character(Reg$Chr))
+Reg$Pos<-as.numeric(as.character(Reg$Pos))
+Reg$dev<-as.numeric(as.character(Reg$dev))
+
+
+for(i in 1:22){
+print(i)	
+Sub<- Reg[which(Reg$Chr == i),]
+#chisquared random variable
+#taking the sum of the deviances (mean is to take into account the DF)
+Sub <- Sub %>% group_by(Chr,Pos) %>% summarize(SumDev = sum(dev), MeanDev = mean(dev), Count = n())
+#write results to file
+if(i == 1){
+	write.table(Sub,file='~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv', quote=F, row.names=F, append=FALSE)}
+if(i > 1){
+    write.table(Sub,file='~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv', quote=F, row.names=F, append=TRUE)}
+}
+
 ##read Regression
-Regression<-fread('~/Documents/QualityPaper/Misc/Reg_ALL_SITES_5col.txt', fill=T)
+Regression<-fread('~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv', fill=T)
 Regression <-Regression[which(Regression $Pos != 'Pos'),]
 Regression $Chr<-as.numeric(as.character(Regression $Chr))
 Regression $Pos<-as.numeric(as.character(Regression $Pos))
@@ -52,7 +74,7 @@ write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegre
 
 Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
 
-Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
+`Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
 								& Regression$Repeat=='yes'),])
 
 NORepeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
@@ -136,7 +158,7 @@ makePlot(Repeat_Indels, 'Repeat Indels')
 makePlot(NORepeat_Indels, 'Non Repeat Indels')
 makePlot(Repeat_SNPs, 'Repeat SNPs')
 makePlot(NORepeat_SNPs, 'Non Repeat SNPs')
-
+`
 ########## find sig in catalogue
 
 catalog <- fread('~/Documents/GWAS_Qual/gwas_catalog_cut.txt',fill=TRUE, sep='\t')
