@@ -190,11 +190,11 @@ The same variants identified as being low quality independently in each populati
 
 \subsection{Suspicious variants impact modern genomics analyses}
 \subsubsection{Imputation}
-The state of the art imputation servers use a combination of many databases including many that are not freely available.
+The state of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-To investigate the proportion of suspicious variants that are being imputed, we submitted genotype data from chromosome 1 and 2 of 1kGP individuals to the Michigan Imputation Server.
-We found that all of the variants associated with $Q$ were imputed back in the samples. 
+To investigate the proportion of suspicious variants that are being imputed, we submitted the first two chromosomes of  the 1kGP genotype data to the Michigan Imputation Server.
+We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
 \subsubsection{Cell line or technical artifact}
@@ -202,7 +202,7 @@ This suggests that the imputation reference panel still includes individuals wit
 To determine whether this artifact is the result of a cell line artifact or a technical artifact, we investigated other cohorts that used the same cell lines.
 The HapMap project and 1000 Genomes project shared some cell lines but used different sequencing platforms to produce the data.
 If these variants are a cell line artifact then the same suspicious variants should be present in the two sequencing projects.
-We found that only 70 variants were present in HapMap and 186 in GnomAD (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
+We found that only 70 variants were present in HapMap and 186 in GnomAD - a compilation of multiple databases (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
 However, with our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations.
 
 % \sgcomment{This could be fleshed out a bit. Currently reader has no idea whether the proportion of variants that are present in other cohorts is more or less than expected.}
