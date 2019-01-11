@@ -10,15 +10,18 @@ library(reshape2)
 dir='~/Documents/GenomeWideRegression/'
 out='~/Documents/GenomeWideRegression/'
 
-Reg = fread('~/Documents/GenomeWideRegression/ALLPOP_GenomeWide.Regression.csv', header=F, sep=' ', col.names=c('Chr','Pos','Pop','dev'))
-Reg$Chr<-as.numeric(as.character(Reg$Chr))
-Reg$Pos<-as.numeric(as.character(Reg$Pos))
-Reg$dev<-as.numeric(as.character(Reg$dev))
+Reg = fread('gzcat /Users/luke/Documents/Regression_BigPop/ALLPOP_GenomeWide_Regression.csv.gz', header=F, sep=' ', col.names=c('Chr','Pos','Pop','dev'))
+
 
 
 for(i in 1:22){
 print(i)	
 Sub<- Reg[which(Reg$Chr == i),]
+
+Sub $Chr<-as.numeric(as.character(Sub $Chr))
+Sub $Pos<-as.numeric(as.character(Sub $Pos))
+Sub $dev<-as.numeric(as.character(Sub $dev))
+
 #chisquared random variable
 #taking the sum of the deviances (mean is to take into account the DF)
 Sub <- Sub %>% group_by(Chr,Pos) %>% summarize(SumDev = sum(dev), MeanDev = mean(dev), Count = n())
@@ -28,7 +31,7 @@ if(i == 1){
 if(i > 1){
     write.table(Sub,file='~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv', quote=F, row.names=F, append=TRUE)}
 }
-
+rm(Reg)
 ##read Regression
 Regression<-fread('~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv', fill=T)
 Regression <-Regression[which(Regression $Pos != 'Pos'),]
@@ -74,7 +77,7 @@ write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegre
 
 Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
 
-`Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
+Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
 								& Regression$Repeat=='yes'),])
 
 NORepeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
@@ -109,10 +112,8 @@ write.table(Repeat_Indels,
 file='/Users/luke/Documents/QualityPaper/Misc/Repeat_Indels.csv',row.names=F)
 write.table(NORepeat_Indels, 
 file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_Indels.csv',row.names=F)	
-write.table(Repeat_SNPs, 
-file='/Users/luke/Documents/QualityPaper/Misc/Repeat_SNPs.csv',row.names=F	
-write.table(NORepeat_SNPs, 
-file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_SNPs.csv',row.names=F)
+write.table(Repeat_SNPs,file='/Users/luke/Documents/QualityPaper/Misc/Repeat_SNPs.csv',row.names=F	
+write.table(NORepeat_SNPs,file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_SNPs.csv',row.names=F)
 
 writeSig <- function(df, Name){
 write.table(df[which(df$log10P_0.01>-log10(0.01)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
@@ -151,13 +152,14 @@ dir='~/Documents/QualityPaper/Figures/ManhattanPlot_'
 ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
 ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
 
-
 }
 
 makePlot(Repeat_Indels, 'Repeat Indels')
 makePlot(NORepeat_Indels, 'Non Repeat Indels')
 makePlot(Repeat_SNPs, 'Repeat SNPs')
 makePlot(NORepeat_SNPs, 'Non Repeat SNPs')
+
+
 `
 ########## find sig in catalogue
 

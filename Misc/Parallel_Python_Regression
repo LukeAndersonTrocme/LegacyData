@@ -1,0 +1,21 @@
+import multiprocessing as mp
+import subprocess
+
+def Bash_cmd(i):
+    #print statement to keep track of where you are
+    print('Working on Chrom : '+str(i))
+    #put your bash command below
+    subprocess.call('python /Users/luke/Documents/QualityPaper/PlottingScripts/DoRegression.py -chr {0} -o /Users/luke/Documents/PythonRegression/'.format(i), shell=True)
+
+if __name__ == '__main__':
+    #you can replace ListOfChrom with whatever you are iterating through
+    ListOfChrom=list(range(16,23))
+    #print(ListOfChrom)
+    #pool_size is number of CPU
+    pool_size=7 #mp.cpu_count()
+    pool=mp.Pool(processes=pool_size)
+    #this is where you are calling the parallelization
+    pool_outputs= pool.map(Bash_cmd, ListOfChrom)
+    #some magic, not sure what this does
+    pool.close()
+    pool.join()
