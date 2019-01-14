@@ -1,0 +1,18 @@
+## VCF file name
+path = os.path.join('/Users','luke','genomes','genomes','hg19','phase3')
+vcf_file_name = 'ALL.chr' + args.chr +\
+        '.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz'
+vcf_file_path = os.path.join(path,vcf_file_name)
+tabix_file_path = vcf_file_path + ".tbi"
+h5_file_name = 'chr' + args.chr + '.h5'
+h5_file_path = os.path.join(path,h5_file_name)
+#read h5 file (much faster than vcf)
+exists = os.path.isfile(h5_file_path)
+if exists:
+    callset = h5py.File(h5_file_path, mode='r')
+    print('Chr ' + args.chr +' H5 exists')
+else:
+    callset = allel.read_vcf(vcf_file_path)
+    # Uncomment to re-create hdf5 file
+    print('Chr ' + args.chr +' H5 being produced')
+    allel.vcf_to_hdf5(vcf_file_path, h5_file_path, fields='*', overwrite=True)
