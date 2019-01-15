@@ -10,6 +10,7 @@ import pandas as pd
 import h5py
 import allel; print('scikit-allel', allel.__version__)
 import statsmodels.api as sm
+import patsy
 import argparse
 import rpy2
 print(rpy2.__version__)
@@ -20,36 +21,37 @@ tuple(ro.globalenv.keys())
 import time
 
 #function to run the regression for each snp
-def doStats(chunk,samples):
+def doStats(i, genotypes_01, X_pop_PCs, X_pop_PCs_Q):
      try:
-         ro.globalenv['chunky'] = chunk
-         ro.globalenv['samply'] = samples
-         #samples['GT'] = np.array(row)
+        GT = genotypes_01[i,:]
+        # Population + PCs
+        logistic_model_pop_PCs =\
+                            sm.GLM(GT, X_pop_PCs,
+                            family=sm.families.Binomial())
+        results_pop_PCs = logistic_model_pop_PCs.fit()
 
-         #formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
-         out = ro.r('apply(chunky, 1, function(x) \
-                     anova(glm(x ~ samply$Pop + \
-                     samply$PC1 + samply$PC1 + \
-                     samply$average_quality_of_mapped_bases,\
-                     family=binomial),test="Chi")[5,2])')
+        # Population + PCs + Q
+        logistic_model_pop_PCs_Q =\
+                            sm.GLM(GT, X_pop_PCs_Q,
+                            family=sm.families.Binomial())
+        results_pop_PCs_Q = logistic_model_pop_PCs_Q.fit()
 
-         #dev=ro.r('sapply(out, function(x) anova(x, test=Chi)[4,2]')
-
-         #model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
-
-         #deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
-
-         #out = str(deviance[1][4])
-
-         return out
+        #return deviance
+        return [results_pop_PCs.deviance,results_pop_PCs_Q.deviance]
      except Exception as e:
-         return str(e)
+         return [str(e),str(e)]
 
 def main(args):
     #this file has Name, Pop, Qual, and the first 5 Global PCs
     samples_fn = os.path.join('/Users','luke','Documents','PCAperPop',
                                         'Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
     samples = pd.DataFrame.from_csv(samples_fn, sep=' ')
+
+    #Make Design Matrix
+    X_pop_PCs = patsy.dmatrix("Pop + PC1 + PC2",samples)
+
+    X_pop_PCs_Q = patsy.dmatrix("Pop + PC1 + PC2 +\
+                                average_quality_of_mapped_bases",samples)
 
     ## VCF file name
     path = os.path.join('/Users','luke','genomes','genomes','hg19','phase3')
@@ -98,31 +100,32 @@ def main(args):
     end = time.time()
     print('time for formatting : '+ str(end-start) + 's')
     #for loop append results
-    n = 10 #len(genotypes_01)
-    s = 100
-    iter = 0
+    n = len(genotypes_01)
+    start1 = time.time()
+    times = []
     for i in range(n):
         start = time.time()
-        chunk = genotypes_01[ iter : iter+s]
-        out = doStats(chunk, samples)
-        iter = iter+s
+        out = doStats(i, genotypes_01, X_pop_PCs, X_pop_PCs_Q)
 
         fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
         if not os.path.isfile(fileName):
             f=open(fileName,'w+')
-            f.write(str(out) + '\n')
-            end = time.time()
-            print('time for loop : '+ str(end-start) + 's')
+            f.write(str(out[0]) + ',' + str(out[1]) + '\n')
         else:
             f=open(fileName,'a')
-            f.write(str(out) + '\n')
-            end = time.time()
-            print('time for loop : '+ str(end-start) + 's')
+            f.write(str(out[0]) + ',' + str(out[1]) + '\n')
 
-    print('Chr ' + args.chr +' loop complete, writing file')
+        end = time.time()
+        times.append(end-start)
+        if i % 1000 == 0:
+            print('average run time per snp : ' + str(sum(times)/len(times)))
+            times = []
+
+    end1=time.time()
+    print('Chr ' + args.chr +' loop complete, writing file\nTime to run : '+str(end1-start1))
 
     fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
-    results = pd.read_table(fileName,header=None)
+    results = pd.read_table(fileName,header=None,sep=',',names=['pop_PCs','pop_PCs_Q'])
 
     chrPos = pd.DataFrame({'CHROM' : callset['variants']['CHROM'][:].compress(variants_selection),
                            'POS' : callset['variants']['POS'][:].compress(variants_selection),
