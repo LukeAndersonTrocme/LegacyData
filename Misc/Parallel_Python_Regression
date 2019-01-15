@@ -9,7 +9,7 @@ def Bash_cmd(i):
 
 if __name__ == '__main__':
     #you can replace ListOfChrom with whatever you are iterating through
-    ListOfChrom=list(range(16,23))
+    ListOfChrom=list(range(1,23))
     #print(ListOfChrom)
     #pool_size is number of CPU
     pool_size=7 #mp.cpu_count()

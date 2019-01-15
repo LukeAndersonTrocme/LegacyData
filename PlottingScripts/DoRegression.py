@@ -9,46 +9,52 @@ import scipy
 import pandas as pd
 import h5py
 import allel; print('scikit-allel', allel.__version__)
-import patsy
 import statsmodels.api as sm
+import argparse
 import rpy2
 print(rpy2.__version__)
-import rpy2.robjects as robjects
-import argparse
+import rpy2.robjects as ro
+from rpy2.robjects import r, pandas2ri
+pandas2ri.activate()
+tuple(ro.globalenv.keys())
 
 #function to run the regression for each snp
-def doStats(i, genotypes_01, samples, X_pop_PCs, X_pop_PCs_Q):
-    try: #subset the genotypes at position i
-        GT = pd.Series(genotypes_01[i,:],index=samples.index)
-        # Population + PCs
-        logistic_model_pop_PCs =\
-                            sm.GLM(GT, X_pop_PCs,
-                            family=sm.families.Binomial())
-        results_pop_PCs = logistic_model_pop_PCs.fit_regularized(alpha= 1.e-7, L1_wt=0)
+def doStats(i, genotypes_01, samples):
+    try:
+        #subset the genotypes at position i
+        samples['GT'] = pd.Series(genotypes_01[i,:],index=samples.index)
 
-        # Population + PCs + Q
-        logistic_model_pop_PCs_Q =\
-                            sm.GLM(GT, X_pop_PCs_Q,
-                            family=sm.families.Binomial())
-        results_pop_PCs_Q = logistic_model_pop_PCs_Q.fit_regularized(alpha= 1.e-7, L1_wt=0)
+        formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
 
-        #return deviance
-        return pd.DataFrame({'Pop_PCs_Dev':results_pop_PCs.deviance,
-                             'Pop_PCs_Q_Dev':results_pop_PCs_Q.deviance})
+        model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
+
+        deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
+
+        out = str(deviance[1][4]) + '\n'
+
+        fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
+
+        if not os.path.isfile(fileName):
+            f=open(fileName,'w+')
+            f.write(out)
+        else:
+            f=open(fileName,'a')
+            f.write(out)
+
     except Exception as e:
-        return pd.DataFrame({'Pop_PCs_Dev': [e],
-                             'Pop_PCs_Q_Dev': [e]})
+        if not os.path.isfile(fileName):
+            f=open(fileName,'w+')
+            f.write(str(e)+ '\n')
+        else:
+            f=open(fileName,'a')
+            f.write(str(e)+ '\n')
 
 def main(args):
     #this file has Name, Pop, Qual, and the first 5 Global PCs
     samples_fn = os.path.join('/Users','luke','Documents','PCAperPop',
                                         'Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
     samples = pd.DataFrame.from_csv(samples_fn, sep=' ')
-    #Make Design Matrix
-    X_pop_PCs = patsy.dmatrix("Pop + PC1 + PC2",samples)
 
-    X_pop_PCs_Q = patsy.dmatrix("Pop + PC1 + PC2 +\
-                                average_quality_of_mapped_bases",samples)
     ## VCF file name
     path = os.path.join('/Users','luke','genomes','genomes','hg19','phase3')
     vcf_file_name = 'ALL.chr' + args.chr +\
@@ -93,20 +99,18 @@ def main(args):
     genotypes_01 = genotypes_012.astype(bool).astype(int)
     print('Chr ' + args.chr +' Formatting complete')
     #for loop append results
-    n=10000
-    results = pd.DataFrame([])
+    n=len(genotypes_01)
     for i in range(n):
-        out = doStats(i, genotypes_01, samples, X_pop_PCs, X_pop_PCs_Q)
-        results = results.append(out, ignore_index=True)
+        out = doStats(i, genotypes_01, samples)
 
-    print(results)
+    print('Chr ' + args.chr +' loop complete, writing file')
 
-    print('Chr ' + args.chr +' loop complete, writing to file')
+    fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
+    results = pd.read_table(fileName,header=None)
 
-    chrPos = pd.DataFrame({'CHROM' : callset['variants']['CHROM'][:n],
-                           'POS' : callset['variants']['POS'][:n],
-                           'AF' : np.around(callset['variants']['numalt'][:n]\
-                               /callset['variants']['NS'][:n]*100,3)})
+    chrPos = pd.DataFrame({'CHROM' : callset['variants']['CHROM'][:].compress(variants_selection),
+                           'POS' : callset['variants']['POS'][:].compress(variants_selection),
+                           'AF' : alt_allele_freqs.compress(variants_selection)})
 
     output = pd.concat([chrPos, results], axis = 1)
 
