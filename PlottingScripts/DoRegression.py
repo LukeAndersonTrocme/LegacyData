@@ -20,18 +20,26 @@ tuple(ro.globalenv.keys())
 import time
 
 #function to run the regression for each snp
-def doStats(row,samples):
+def doStats(chunk,samples):
      try:
+         ro.globalenv['chunky'] = chunk
+         ro.globalenv['samply'] = samples
+         #samples['GT'] = np.array(row)
 
-         samples['GT'] = np.array(row)
+         #formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
+         out = ro.r('apply(chunky, 1, function(x) \
+                     anova(glm(x ~ samply$Pop + \
+                     samply$PC1 + samply$PC1 + \
+                     samply$average_quality_of_mapped_bases,\
+                     family=binomial),test="Chi")[5,2])')
 
-         formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
+         #dev=ro.r('sapply(out, function(x) anova(x, test=Chi)[4,2]')
 
-         model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
+         #model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
 
-         deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
+         #deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
 
-         out = str(deviance[1][4])
+         #out = str(deviance[1][4])
 
          return out
      except Exception as e:
@@ -90,22 +98,26 @@ def main(args):
     end = time.time()
     print('time for formatting : '+ str(end-start) + 's')
     #for loop append results
-    n = 1000 #len(genotypes_01)
+    n = 10 #len(genotypes_01)
+    s = 100
+    iter = 0
     for i in range(n):
-        #start = time.time()
-        out = doStats(genotypes_01[i,:], samples)
+        start = time.time()
+        chunk = genotypes_01[ iter : iter+s]
+        out = doStats(chunk, samples)
+        iter = iter+s
 
         fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
         if not os.path.isfile(fileName):
             f=open(fileName,'w+')
             f.write(str(out) + '\n')
-            #end = time.time()
+            end = time.time()
             print('time for loop : '+ str(end-start) + 's')
         else:
             f=open(fileName,'a')
             f.write(str(out) + '\n')
-            #end = time.time()q
-            #print('time for loop : '+ str(end-start) + 's')
+            end = time.time()
+            print('time for loop : '+ str(end-start) + 's')
 
     print('Chr ' + args.chr +' loop complete, writing file')
 
