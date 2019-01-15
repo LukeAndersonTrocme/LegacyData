@@ -17,37 +17,25 @@ import rpy2.robjects as ro
 from rpy2.robjects import r, pandas2ri
 pandas2ri.activate()
 tuple(ro.globalenv.keys())
+import time
 
 #function to run the regression for each snp
-def doStats(i, genotypes_01, samples):
-    try:
-        #subset the genotypes at position i
-        samples['GT'] = pd.Series(genotypes_01[i,:],index=samples.index)
+def doStats(row,samples):
+     try:
 
-        formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
+         samples['GT'] = np.array(row)
 
-        model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
+         formula='GT ~ Pop + PC1 + PC2 + average_quality_of_mapped_bases'
 
-        deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
+         model_pop_PCs_Q = ro.r.glm(formula, data=samples,family='binomial')
 
-        out = str(deviance[1][4]) + '\n'
+         deviance = ro.r.anova(model_pop_PCs_Q, test='Chi')
 
-        fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
+         out = str(deviance[1][4])
 
-        if not os.path.isfile(fileName):
-            f=open(fileName,'w+')
-            f.write(out)
-        else:
-            f=open(fileName,'a')
-            f.write(out)
-
-    except Exception as e:
-        if not os.path.isfile(fileName):
-            f=open(fileName,'w+')
-            f.write(str(e)+ '\n')
-        else:
-            f=open(fileName,'a')
-            f.write(str(e)+ '\n')
+         return out
+     except Exception as e:
+         return str(e)
 
 def main(args):
     #this file has Name, Pop, Qual, and the first 5 Global PCs
@@ -75,6 +63,7 @@ def main(args):
         allel.vcf_to_hdf5(vcf_file_path, h5_file_path, fields='*', overwrite=True)
 
     print('Chr ' + args.chr +' File is read')
+    start = time.time()
     #Verify that individuals are in same order in both files
     assert (np.array(samples.index) == callset['samples'] ).all()
     genotypes = allel.GenotypeChunkedArray(callset['calldata/GT'])
@@ -98,10 +87,25 @@ def main(args):
     genotypes_012 = variants_pass.to_n_alt(fill=-1)
     genotypes_01 = genotypes_012.astype(bool).astype(int)
     print('Chr ' + args.chr +' Formatting complete')
+    end = time.time()
+    print('time for formatting : '+ str(end-start) + 's')
     #for loop append results
-    n=len(genotypes_01)
+    n = 1000 #len(genotypes_01)
     for i in range(n):
-        out = doStats(i, genotypes_01, samples)
+        #start = time.time()
+        out = doStats(genotypes_01[i,:], samples)
+
+        fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
+        if not os.path.isfile(fileName):
+            f=open(fileName,'w+')
+            f.write(str(out) + '\n')
+            #end = time.time()
+            print('time for loop : '+ str(end-start) + 's')
+        else:
+            f=open(fileName,'a')
+            f.write(str(out) + '\n')
+            #end = time.time()q
+            #print('time for loop : '+ str(end-start) + 's')
 
     print('Chr ' + args.chr +' loop complete, writing file')
 
