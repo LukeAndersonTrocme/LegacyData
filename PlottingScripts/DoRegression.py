@@ -21,9 +21,8 @@ tuple(ro.globalenv.keys())
 import time
 
 #function to run the regression for each snp
-def doStats(i, genotypes_01, X_pop_PCs, X_pop_PCs_Q):
+def doStats(GT, X_pop_PCs, X_pop_PCs_Q):
      try:
-        GT = genotypes_01[i,:]
         # Population + PCs
         logistic_model_pop_PCs =\
                             sm.GLM(GT, X_pop_PCs,
@@ -105,7 +104,7 @@ def main(args):
     times = []
     for i in range(n):
         start = time.time()
-        out = doStats(i, genotypes_01, X_pop_PCs, X_pop_PCs_Q)
+        out = doStats(genotypes_01[i,:], X_pop_PCs, X_pop_PCs_Q)
 
         fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
         if not os.path.isfile(fileName):
@@ -117,7 +116,7 @@ def main(args):
 
         end = time.time()
         times.append(end-start)
-        if i % 1000 == 0:
+        if i % 100 == 0:
             print('average run time per snp : ' + str(sum(times)/len(times)))
             times = []
 
