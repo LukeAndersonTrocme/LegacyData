@@ -1,33 +1,47 @@
 library(data.table)
-
-f1<-'~/Documents/GenomeWideRegression/GenomeWide.MeanDev_ALLPOPS.csv'
-f2<-'~/Documents/QualityPaper/Misc/Reg_ALL_SITES_5col.txt'
+library(ggplot2)
+f1<-'/Users/luke/Documents/PythonRegression/Regression_Chr_19.csv'
+f2<-'/Users/luke/Documents/QualityPaper/Misc/Reg_chr19.txt'
 
 new<-fread(f1)
-new $Chr<-as.numeric(as.character(new $Chr))
-new $Pos<-as.numeric(as.character(new $Pos))
-new $SumDev <-as.numeric(as.character(new $SumDev))
-new $Count<-as.numeric(as.character(new $Count))
-new$MeanDev<-NULL
+new $CHROM <-as.numeric(as.character(new $CHROM))
+new $POS <-as.numeric(as.character(new $POS))
+new $AF<-as.numeric(as.character(new $AF))
+new $pop_PCs <-as.numeric(as.character(new $pop_PCs))
+new $pop_PCs_Q <-as.numeric(as.character(new $pop_PCs_Q))
+new$dev <- new$pop_PCs - new $pop_PCs_Q
 
-old<-fread(f2)
-old $Chr<-as.numeric(as.character(old $Chr))
-old $Pos<-as.numeric(as.character(old $Pos))
+
+old<-fread(f2,col.names=c('CHROM', 'POS', 'SumDev', 'MeanDev', 'Count'))
+old $CHROM <-as.numeric(as.character(old $CHROM))
+old $POS<-as.numeric(as.character(old $POS))
 old $SumDev<-as.numeric(as.character(old $SumDev))
 old $Count<-as.numeric(as.character(old $Count))
 old$MeanDev<-NULL
 
-test<-unique(merge(old[which(old$Chr==1),], new[which(new$Chr==1),], by=c('Chr','Pos')))
+newR <- fread('/Volumes/gravel/luke_projects/1000Genomes/NewR_Regression/CHR19.Regression.csv', col.names='NEWdev')
+newPos <- fread('~/genomes/genomes/hg19/Genotypes/Chr19_Pos.csv')
+newR<- cbind(newR, head(newPos, nrow(newR)))
 
-test$p.new<-pchisq(test$SumDev.y, test$Count.y, lower.tail=F)
+newR $CHROM <-as.numeric(as.character(newR $CHROM))
+newR $POS <-as.numeric(as.character(newR $POS))
+newR $AF <- as.numeric(as.character(newR $AF))
+newR$NEWdev <- as.numeric(as.character(newR $NEWdev))
 
-test$p.old<-pchisq(test$SumDev.x, test$Count.x, lower.tail=F)
+test<-unique(merge(old[which(old$CHROM==19),], new[which(new$CHROM==19),], by=c('CHROM','POS')))
 
-test$diff<-test$Count.y-test$Count.x
+test <-unique(merge(test, newR, by=c('CHROM','POS')))
 
-library(ggplot2)
+test$pythonRegression<--log10(pchisq(test$dev, 1, lower.tail=F))
+test$R.Regression<--log10(pchisq(test$NEWdev, 1, lower.tail=F))
+test$OldMethod<--log10(pchisq(test$SumDev, test$Count, lower.tail=F))
 
-ggplot(test, aes(x= -log10(p.new), y= -log10(p.old)))+geom_point()
+
+plt1=ggplot(test[which(test$AF.x < 0.02)], aes(x= pythonRegression, y= R.Regression, color=AF.x))+geom_point()
+
+plt2=ggplot(test[which(test$AF.x < 0.02)], aes(x= pythonRegression, y= OldMethod, color=AF.x))+geom_point()
+plt3=ggplot(test[which(test$AF.x < 0.02)], aes(x= R.Regression, y= OldMethod, color=AF.x))+geom_point()
+plot_grid(plt1,plt2,plt3, nrow=1)
 
 chr22<-list.files(path="/Volumes/gravel/luke_projects/1000Genomes/FinalRegression/",pattern="CHR22.Regression",full.names=T)
 

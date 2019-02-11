@@ -41,14 +41,24 @@ Regression $SumDev<-as.numeric(as.character(Regression $SumDev))
 Regression $MeanDev<-as.numeric(as.character(Regression $MeanDev))
 Regression $Count<-as.numeric(as.character(Regression $Count))
 
+
+#########5PCS STARTS HERE
+
+
+Regression <-fread('/Users/luke/Documents/PC5/GenomeWide.5PC.Regression.txt', colClasses='numeric')
+Regression <-Regression[which(Regression $POS != 'POS'),]
+Regression $CHROM<-as.numeric(as.character(Regression $CHROM))
+Regression $POS<-as.numeric(as.character(Regression $POS))
+Regression $ID<-as.numeric(as.character(Regression $ID))
+Regression $dev.p<-as.numeric(as.character(Regression $dev.p))
 #read in list of global singletons
 singles<-fread(
 	'/Users/luke/genomes/genomes/1kGP_NotFiltered/GenomeWide_doubles.frq',
-	col.names=c('Chr','Pos'))
+	col.names=c('CHROM','POS'))
 singles$drop<-'Yes' #dummy variable for merging
 
 #join the singles to the Reg to get info of what sites to remove
-Regression <-left_join(Regression, singles, by=c('Chr','Pos'))
+Regression <-left_join(Regression, singles, by=c('CHROM','POS'))
 rm(singles)
 
 #this removes the singletons
@@ -56,7 +66,7 @@ Regression <-Regression[which(is.na(Regression$drop)),]
 Regression$drop<-NULL
 
 ##read Repeats
-Repeats <- fread('~/Documents/QualityPaper/Misc/Reg_strictMask_nestedRepeats.POS',fill=T,col.names=c('Chr','Pos'))
+Repeats <- fread('~/Documents/QualityPaper/Misc/Reg_strictMask_nestedRepeats.POS',fill=T,col.names=c('CHROM','POS'))
 Repeats$Repeat='yes'
 
 ##read Indels
@@ -65,15 +75,15 @@ Indels$Indel = 'yes'
 
 #read in rsIDs (used for GWAS catalogue search)
 rsID<-fread('/Users/luke/genomes/genomes/hg19/phase3/rsID.txt')
-colnames(rsID)<-c('Chr','Pos','rsID')
+colnames(rsID)<-c('CHROM','POS','rsID')
 
-Regression <- left_join(Regression, Repeats, by=c('Chr','Pos'))
+Regression <- left_join(Regression, Repeats, by=c('CHROM','POS'))
 
-Regression <- left_join(Regression, Indels, by=c('Chr','Pos'))
+Regression <- left_join(Regression, Indels, by=c('CHROM','POS'))
 
-Regression <- left_join(Regression, rsID, by=c('Chr','Pos'))
+Regression <- left_join(Regression, rsID, by=c('CHROM','POS'))
 
-write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv',row.names=F)
+write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegressionPC5.csv',row.names=F)
 
 Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
 
@@ -94,8 +104,8 @@ NORepeat_SNPs <- unique(Regression[which(is.na(Regression$Indel)
 TSBH <-function(df){	
 procedures <- c( "TSBH") 
 #0.01
-df$p <- pchisq(df$SumDev, df$Count, lower.tail=F)
-adjusted <- mt.rawp2adjp(df$p, procedures, alpha = 0.01)
+#df$p <- pchisq(df$SumDev, df$Count, lower.tail=F)
+adjusted <- mt.rawp2adjp(df$dev.p, procedures, alpha = 0.01)
 adj <- as.data.frame(adjusted$adj[order(adjusted$index), ])
 df$log10P_0.01 <- -log10(adj$TSBH_0.01)
 df$P_0.01 <- adj$TSBH_0.01
@@ -127,16 +137,16 @@ writeSig(Repeat_SNPs, 'Repeat_SNPs')
 writeSig(NORepeat_SNPs, 'NORepeat_SNPs')
 
 makePlot <- function(df,Name){
-sig.20<-df[which((df $log10P_0.01 >= 20)&(df $Count > 1)),]
+sig.20<-df[which((df $log10P_0.01 >= 20)),] #&(df $Count > 1)
 sig.20$log10P_0.01=20
-sig.19<-df[which((df $log10P_0.01 < 20)&(df $Count > 1)),]
+sig.19<-df[which((df $log10P_0.01 < 20)),] #&(df $Count > 1)
 
-ggplot(sig.19, aes(x=Pos, y = log10P_0.01, color=as.factor(Chr)))+
-facet_grid(~Chr, scales='free_x', space='free_x', switch='x')+
+ggplot(sig.19, aes(x=POS, y = log10P_0.01, color=as.factor(CHROM)))+
+facet_grid(~CHROM, scales='free_x', space='free_x', switch='x')+
 scale_fill_manual (values=getPalette(colourCount))+
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
-geom_point(data=sig.20, aes(x=Pos, y = log10P_0.01),shape=1)+
+geom_point(data=sig.20, aes(x=POS, y = log10P_0.01),shape=1)+
 geom_hline(yintercept=-log10(0.01), color='blue')+
 labs(y='-log10(p)', x='Chromosome', title=Name, subtitle=paste('Number of loci tested =',nrow(df)))+
 theme(plot.title = element_text(hjust = 0.5), 

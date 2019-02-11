@@ -5,11 +5,14 @@ def Bash_cmd(i):
     #print statement to keep track of where you are
     print('Working on Chrom : '+str(i))
     #put your bash command below
-    subprocess.call('python /Users/luke/Documents/QualityPaper/PlottingScripts/DoRegression.py -chr {0} -o /Users/luke/Documents/PythonRegression/'.format(i), shell=True)
+    #subprocess.call('python /Users/luke/Documents/QualityPaper/PlottingScripts/DoRegression.py -chr {0} -o /Users/luke/Documents/PythonRegression/'.format(i), shell=True)
+
+    subprocess.call('python /Users/luke/Documents/QualityPaper/Misc/MakeGT.py -chr {0} -o /Users/luke/genomes/genomes/hg19/Genotypes/'.format(i), shell=True)
+
 
 if __name__ == '__main__':
     #you can replace ListOfChrom with whatever you are iterating through
-    ListOfChrom=list(range(19,23))
+    ListOfChrom=list(range(1,23))
     #print(ListOfChrom)
     #pool_size is number of CPU
     pool_size=2 #mp.cpu_count()

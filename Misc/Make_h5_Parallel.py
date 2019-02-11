@@ -12,7 +12,7 @@ if __name__ == '__main__':
     ListOfChrom=list(range(1,22))
     #print(ListOfChrom)
     #pool_size is number of CPU
-    pool_size=1 #mp.cpu_count()
+    pool_size=1   #mp.cpu_count()
     pool=mp.Pool(processes=pool_size)
     #this is where you are calling the parallelization
     pool_outputs= pool.map(Bash_cmd, ListOfChrom)

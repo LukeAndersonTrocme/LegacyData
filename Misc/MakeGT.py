@@ -10,47 +10,14 @@ import pandas as pd
 import h5py
 import allel; print('scikit-allel', allel.__version__)
 import statsmodels.api as sm
-import patsy
 import argparse
-import rpy2
-print(rpy2.__version__)
-import rpy2.robjects as ro
-from rpy2.robjects import r, pandas2ri
-pandas2ri.activate()
-tuple(ro.globalenv.keys())
 import time
-
-#function to run the regression for each snp
-def doStats(GT, X_pop_PCs, X_pop_PCs_Q):
-     try:
-        # Population + PCs
-        logistic_model_pop_PCs =\
-                            sm.GLM(GT, X_pop_PCs,
-                            family=sm.families.Binomial())
-        results_pop_PCs = logistic_model_pop_PCs.fit()
-
-        # Population + PCs + Q
-        logistic_model_pop_PCs_Q =\
-                            sm.GLM(GT, X_pop_PCs_Q,
-                            family=sm.families.Binomial())
-        results_pop_PCs_Q = logistic_model_pop_PCs_Q.fit()
-
-        #return deviance
-        return str(results_pop_PCs.deviance - results_pop_PCs_Q.deviance)
-     except Exception as e:
-         return str(e)
 
 def main(args):
     #this file has Name, Pop, Qual, and the first 5 Global PCs
     samples_fn = os.path.join('/Users','luke','Documents','PCAperPop',
                                         'Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
     samples = pd.DataFrame.from_csv(samples_fn, sep=' ')
-
-    #Make Design Matrix
-    X_pop_PCs = patsy.dmatrix("Pop + PC1 + PC2",samples)
-
-    X_pop_PCs_Q = patsy.dmatrix("Pop + PC1 + PC2 +\
-                                average_quality_of_mapped_bases",samples)
 
     ## VCF file name
     path = os.path.join('/Users','luke','genomes','genomes','hg19','phase3')
@@ -97,36 +64,27 @@ def main(args):
     genotypes_01 = genotypes_012.astype(bool).astype(int)
     print('Chr ' + args.chr +' Formatting complete')
     end = time.time()
-    print('time for formatting : '+ str(end-start) + 's')
-    positions = callset['variants']['POS'][:].compress(variants_selection)
-    afs = np.round(alt_allele_freqs.compress(variants_selection),3)
-    #for loop append results
-    n = 100 #len(genotypes_01)
-    start1 = time.time()
-    times = []
-    for i in range(n):
-        start = time.time()
-        dev = doStats(genotypes_01[i,:], X_pop_PCs, X_pop_PCs_Q)
-        pos = callset['variants']['POS'][:].compress(variants_selection)[i]#positions[i]
-        chrom = args.chr
-        af = np.round(alt_allele_freqs.compress(variants_selection)[i],3)#afs[i]
+    print('time for ' + args.chr + ' formatting : '+ str(end-start) + 's')
 
-        fileName= args.o + 'Chr' + args.chr + '_deviance.csv'
-        if not os.path.isfile(fileName):
-            f=open(fileName,'w+')
-            f.write(str(chrom)+','+str(pos)+','+ str(af)+','+str(dev) + '\n')
-        else:
-            f=open(fileName,'a')
-            f.write(str(chrom)+','+str(pos)+','+ str(af)+','+str(dev) + '\n')
+    fileName= args.o + 'Chr' + args.chr + '_GT.csv.gz'
+    exists = os.path.isfile(fileName)
+    if exists:
+        print('File Exists')
+    else:
+        start2=time.time()
+        print('writing ' + args.chr)
+        np.savetxt(fileName, genotypes_01[:], fmt='%i', delimiter = ',')
+        end2 = time.time()
+        print('time for writing ' + args.chr +' : '+ str(end2-start2) + 's')
 
-        end = time.time()
-        times.append(end-start)
-        if i % 100 == 0:
-            print('average run time per snp : ' + str(sum(times)/len(times)))
-            times = []
+    pos = callset['variants']['POS'][:].compress(variants_selection)
+    chrom = callset['variants']['CHROM'][:].compress(variants_selection)
+    af = np.round(alt_allele_freqs.compress(variants_selection)[:],3)
 
-    end1=time.time()
-    print('Chr ' + args.chr +' loop complete, writing file\nTime to run : '+str(end1-start1))
+    ChrPos=pd.DataFrame({'POS':pos,'CHROM':chrom,'AF':af})
+
+    fileName = args.o + 'Chr' + args.chr + '_Pos.csv'
+    ChrPos.to_csv(fileName)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Logistic Regression Analysis')
