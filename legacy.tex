@@ -154,7 +154,7 @@ We therefore performed the same reverse GWAS approach in all populations indepen
 Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}).
 
 \luke{Added text here}To build a test statistic with more power to represent the association across all populations simultaneously, we performed a logistic regression predicting genotype with the top five principal components as covariates to account for population structure and $Q$ as the last covariate.
-This method identifies a total of 1,409,401 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}).
+This method identifies a total of 1,409,401 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). The total number of sites tested is 37,597,679 meaning that 3.75\% of the sites tested are statistically significantly associated to $Q$.
 %we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable})
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
@@ -165,7 +165,7 @@ To account for the large number of tests, we used a two-stage Benjamini \& Hochb
 {SNP}  & 284,551 & 1,059,354 \\  
 {INDEL} & 15,680 & 49,816 \\ \hline
 \end{tabular}
-\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately.}
+\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. The total number of sites tested is 37,597,679 meaning that 3.75\% of the sites tested are statistically significantly associated to $Q$.}
 \label{sigTable}
 \end{table}
 
@@ -241,15 +241,29 @@ For "conventional" GWAS, we do not see evidence that these contaminated hits. bu
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
   {Pubmed ID}  & {Journal} & {rsID} & {GWAS -$\log_{10} p$} & {Adjusted $Q$ -$\log_{10} p$} & {odds ratio}     \\ \hline
- 28654678	& PLoS One	& rs201761909	& 5.70	& 100.67 & 0.63\\ 	& 		& rs201130852	& 5.05	& 94.28 & 0.65\\ 	& 		& rs200655768	& 6.53	& 85.84 & 0.66\\
- 	& 		& rs201255786	& 5.70	& 80.65 & 0.65\\	 	& 		& rs184202621	& 5.52	& 71.13 & 0.68\\	& 		& rs80274284	& 6	& 69.02 &  0.70\\ 	& 		& rs200699422	& 5.30	& 7.82 & 0.87\\ 
+ 28654678	& PLoS One	& rs201761909	& 5.70	& 100.67 & 0.63\\
+ 	& 		& rs201130852	& 5.05	& 94.28 & 0.65\\
+ 	& 		& rs200655768	& 6.53	& 85.84 & 0.66\\
+ 	& 		& rs201255786	& 5.70	& 80.65 & 0.65\\	
+ 	& 		& rs184202621	& 5.52	& 71.13 & 0.68\\
+	& 		& rs80274284	& 6.00	& 69.02 &  0.70\\
+ 	& 		& rs200699422	& 5.30	& 7.82 & 0.87\\ 
 23527680 &	Twin Res Hum Genet	& rs6057648	& 5.40	& 25.50 & 0.82\\  
-21386085 &	Diabetes &	rs301 &*10.52	 & 8.22 & 0.90\\28928442	& Nature Commun	& rs201471471	& 6.52	& 7.14 & 0.67\\
-29255261	& Nature Genetics	& rs11039216	& *14.30	& 2.59 & 1.08\\25918132	& Toxicol Sci	& rs76780579	& 6	& 2.58	7 & 1.17 \\27863252	& Cell	& rs3794738	& *13.16	& 2.39 & 0.91\\28698626	& Science Reports	& rs11015915	& 5.05	& 2.05 & 1.08\\ \hline
+21386085 &	Diabetes &	rs301 &*10.52	 & 8.22 & 0.90\\
+28928442	& Nature Commun	& rs201471471	& 6.52	& 7.14 & 0.67\\
+29255261	& Nature Genetics	& rs11039216	& *14.30	& 2.59 & 1.08\\
+25918132	& Toxicol Sci	& rs76780579	& 6.00	& 2.58	& 1.17 \\
+27863252	& Cell	& rs3794738	& *13.16	& 2.39 & 0.91\\
+28698626	& Science Reports	& rs11015915	& 5.05	& 2.05 & 1.08\\
+
+ \hline
 \end{tabular}
-\caption{A list of eight recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star.}
+\caption{A list of eight recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star. Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
 \label{gwasTable}
 \end{table}
+
+\subsubsection{Microarrays}
+We found that 6456 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
 
 
 \section{Discussion}
@@ -447,11 +461,11 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 \label{MostSig}
 \end{figure}
 
-\begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot_diabetes.jpg}
-\caption{Logistic regression of rs301 to the average quality per mapped bases $Q$.}
-\label{DiabetesSNP}
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot_diabetes.jpg}
+%\caption{Logistic regression of rs301 to the average quality per mapped bases $Q$.}
+%\label{DiabetesSNP}
+%\end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot.jpg}
