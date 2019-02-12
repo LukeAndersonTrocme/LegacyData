@@ -65,8 +65,7 @@ The second phase of the 1kGP implemented multiple technological and analytical i
 
 Even though such batch effects clearly have the potential to confound analyses, the usefulness and ubiquity of the 1kGP data make such issues particularly insidious.   
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
-Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and indirect use through prominent imputation servers.
-
+Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses \luke{and spurious GWAS associations as a result of imputation using the 1kGP as a reference.}
 
 \subsection{Mutational Signatures}
 
@@ -90,7 +89,7 @@ In addition to creating biases in mutational signatures, this artefact leads to 
 
 
 The results section is organized as follows.
-We first attempt to reproduce the original signal and identify problematic variants in the JPT cohort from the 1000 genomes project. 
+We first attempt to reproduce the original signal and identify problematic variants in the JPT cohort from the 1kGP. 
 Next, we expand our analysis to the other populations in the 1kGP and identify lists of variants that show evidence for technical bias.
 Finally, we investigate how these variants have impacted modern genomics analyses.  
   
@@ -121,7 +120,8 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests \sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. 
+These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests. 
+%\sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. 
 %Even though some of the mismatched variants are at low frequency in the 1kGP, and thus can evade Hardy-Weinberg detection, but many are at high enough frequency that HW detection   
 %Whereas Hardy-Weinberg testing is efficient at detecting high frequency spurious variants, it has little power to filter out rare variants which, in aggregate, can contribute to mutational signatures.
 
@@ -142,7 +142,7 @@ Thus, this mutational signal is heavily enriched in suspicious SNPs, but residua
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses, removing suspicious SNPs may be adequate. 
-Lists of suspicious SNPs and low-quality individuals is provided as supplementary material.
+Lists of suspicious SNPs and low-quality individuals is provided as supplementary material \luke{link to file here}.
 
 	%\subsection{Identifying Suspicious SNPs in the 1kGP}
 The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
@@ -150,19 +150,20 @@ This variability could result from evolving sequence platform and protocols or v
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 %Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
-We therefore performed the reverse GWAS approach in all populations, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
-% \sgcomment{quantify!}
-Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}). 
-To build a test statistic to represent the association across all populations, we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}).
+We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
+Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}).
+
+\luke{Added text here}To build a test statistic with more power to represent the association across all populations simultaneously, we performed a logistic regression predicting genotype with the top five principal components as covariates to account for population structure and $Q$ as the last covariate.
+This method identifies a total of 1,409,401 statistically significant variants using a FDR cutoff of $\alpha = 0.01$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}).
+%we summed the deviances from each population (adjusting the degrees of freedom for the chi-squared test according to the number of populations with a segregating variant) and identified a total of 10756 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable})
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 
-\luke{Need a final update on these values.}
 \begin{table}[h]
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 2207 & 6919 \\  
-{INDEL} & 750  & 2017 \\ \hline
+{SNP}  & 284,551 & 1,059,354 \\  
+{INDEL} & 15,680 & 49,816 \\ \hline
 \end{tabular}
 \caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately.}
 \label{sigTable}
@@ -210,32 +211,45 @@ However, with our FDR type-I error rate of $\alpha = 0.01$, these variants could
 %However, considering that there are only 70 suspicious variants that are concordant between hapmap and 1000 Genomes data, this is consistent with it being a false positive association.
 %Given the false discovery rate adjustment with a type-I error rate $\alpha = 0.01$, we expect most the variants we identified not to be real \sgcomment{previous phrase needs rewriting. I don't love the "real" vs "not real". Or at least you should clarify that we detect problematic mutations. The next question is whether these are real and badly called, or completely spurious I think this paragraph suggest that the majority are spurious}; however we cannot discount the chance that they are real.
 In 2017, Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
-We find that \todo{000} out of the \todo{000} the suspicious variants from the single population test, and \todo{000} out of \todo{000} the variants from the combined test are present in the resequenced data.
+We find that 9 out of the 297 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
 While this is more than 1\% of the sites, we suspect that they are indeed false associations to $Q$.
 To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
 We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
 These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact.
-\luke{More here with the SFS and concordance between 90Han and 1kGP}
 
 \subsubsection{GWAS}
 We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
-The NHGRI-EBI Catalog of published genome-wide association studies identified three recent publications that had reported these variants as close to or above the genome-wide significant threshold.
-Two of these studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013}.
-A third study used the 1kGP sequence data and cell lines directly.
-All three papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+The NHGRI-EBI Catalog of published genome-wide association studies identified eight recent publications that had reported these variants as close to or above the genome-wide significant threshold.
+Four of these studies used the 1kGP in their reference panel for imputation.
+One study used genotype data directly using the Omni2-5 and Omni5 chips.
+Two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013}.
+And one study used the 1kGP sequence data and cell lines directly.
+All eight papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also nearly reached genome wide significance for biological traits. 
+Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for some biological traits.
 The two studies that imputed using HapMap are likely not impacted by this as these variants are likely falsely associated to $Q$.
 
-The third study used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
+The study that used the raw BAM files from the 1kGP to identify EBV copy number by comparing the number of reads that mapped to EBV \citep{Mandage2017}.
 Based on GWAS on the EBV copy number, the study reports only one SNP with significance below $ p < 10^{-8}$, as well as 104 SNPs in the range of $p < 10^{-7}$ to $ p < 10^{-6}$. 
 Four of the SNPs in the top hits for the Asian populations (rs200655768, rs184202621, rs201255786, rs201761909) were identified by our regression against $Q$.
 
 The EBV strain was used to transform B-cells from blood samples from the 1kGP into lymphoblastoid cell lines.
 This is a commonly used transformation that helps preserve cell lines for long periods of time.
-It is unclear what exactly might be causing the association to EBV copy number and the data quality, however, one could speculate that different protocols were used in the cell culturing of certain samples from the 1kGP which might affect the replication of the virus in the cells, or somehow affect the overall quality of the sequencing data produced. \sgcomment{Do you still stand by this?}
 
 For "conventional" GWAS, we do not see evidence that these contaminated hits. but they may still affect, e.g., risk scores.
+
+\begin{table}[h]
+\begin{tabular}{l l l r r r}
+  {Pubmed ID}  & {Journal} & {rsID} & {GWAS -$\log_{10} p$} & {Adjusted $Q$ -$\log_{10} p$} & {odds ratio}     \\ \hline
+ 28654678	& PLoS One	& rs201761909	& 5.70	& 100.67 & 0.63\\ 	& 		& rs201130852	& 5.05	& 94.28 & 0.65\\ 	& 		& rs200655768	& 6.53	& 85.84 & 0.66\\
+ 	& 		& rs201255786	& 5.70	& 80.65 & 0.65\\	 	& 		& rs184202621	& 5.52	& 71.13 & 0.68\\	& 		& rs80274284	& 6	& 69.02 &  0.70\\ 	& 		& rs200699422	& 5.30	& 7.82 & 0.87\\ 
+23527680 &	Twin Res Hum Genet	& rs6057648	& 5.40	& 25.50 & 0.82\\  
+21386085 &	Diabetes &	rs301 &*10.52	 & 8.22 & 0.90\\28928442	& Nature Commun	& rs201471471	& 6.52	& 7.14 & 0.67\\
+29255261	& Nature Genetics	& rs11039216	& *14.30	& 2.59 & 1.08\\25918132	& Toxicol Sci	& rs76780579	& 6	& 2.58	7 & 1.17 \\27863252	& Cell	& rs3794738	& *13.16	& 2.39 & 0.91\\28698626	& Science Reports	& rs11015915	& 5.05	& 2.05 & 1.08\\ \hline
+\end{tabular}
+\caption{A list of eight recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star.}
+\label{gwasTable}
+\end{table}
 
 
 \section{Discussion}
@@ -370,37 +384,37 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 \setcounter{figure}{0}   	
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_NonRepeatSNPs.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Non_Repeat_SNPs.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 3839 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 1,059,354 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
  \label{NRS_Manhattan}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_NonRepeatIndels.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Non_Repeat_Indels.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 1175 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 49,816 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
  \label{NRI_Manhattan}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_RepeatSNPs.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Repeat_SNPs.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 2207 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 284,551 variants that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
 \label{RS_Manhattan}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_RepeatIndels.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/ManhattanPlot_Repeat_Indels.jpg}
 
 \caption{Manhattan plot of the -log10 p values for the combined test using the deviances from each population of the 1kGP. 
-There are 750 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
+There are 15,680 insertions and deletions that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment. 
 The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20.}
  \label{RI_Manhattan}
 \end{figure}
@@ -449,6 +463,14 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/SNP6_Singles.jpg}
 \caption{SNPs associated with $Q$ in a single population. The x-axis is sorted by genomic position.}
 \label{Singles}
+\end{figure}
+
+
+\begin{figure}[h]
+\includegraphics[width=8cm,keepaspectratio]{./Figures/Han83.jpg}
+\caption{Site frequency spectrum plot of the significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 297 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
+Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
+\label{90HanSFS}
 \end{figure}
 
 \begin{figure}[h]

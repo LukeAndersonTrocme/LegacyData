@@ -27,7 +27,7 @@ gt[is.na(gt)] <- 0
 Concordance<-as.data.frame.matrix(table(gt$kGT, gt$HanGT))
 
 AF<-aggregate(. ~ POS+ID, data = gt[,c('POS','ID','HanGT','kGT')], sum)
-AF<-AF[-which((AF$HanGT==0)&(AF$kGT==0)),]
+AF<-AF[-which((AF$kGT==0)),]
 ggplot(AF, aes(x=HanGT, y=kGT))+geom_bin2d(bins=83)+scale_fill_distiller(palette = "Spectral")+labs(x='high depth',y='1kGP')+theme_classic()
 
 ggsave('~/Documents/QualityPaper/Figures/Han83.jpg',height=5,width=6)
