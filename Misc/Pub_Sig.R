@@ -14,6 +14,8 @@ GT = fread('~/Desktop/PublishedHits.txt')
 ColNames = read.table(paste(path,"ColNames.txt", sep=''), header=F)
 names(GT)= as.character(unlist(ColNames))
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
+samples$Pop = factor(samples$Pop, levels=c('FIN','GBR','CEU','IBS','TSI','CHS','CDX','CHB','JPT','KHV','GIH','STU','PJL','ITU','BEB','PEL','MXL','CLM','PUR','ASW','ACB','GWD','YRI','LWK','ESN','MSL'))
+
 SigPub = fread('~/Documents/QualityPaper/sig/SignificantPublications.txt')
 
 
@@ -51,8 +53,10 @@ exp.coef = apply(GT[,-(1:3)], 1, function(x)
 
 plt = cbind(samples, model)
 plt = melt(plt, id=c('Name','Pop','average_quality_of_mapped_bases','PC1','PC2','PC3','PC4','PC5'))
+plt = plt[order(plt$Pop),]
 q = list()
 for(p in seq(1,14)){
+
 	sub = plt[which(plt$variable == paste('V',p,sep='')),]
 	snp = GT[[p,2]]
 	journal = SigPub[which(SigPub$POS == snp),]$JOURNAL
@@ -60,20 +64,15 @@ for(p in seq(1,14)){
 	rsID = SigPub[which(SigPub$POS == snp),]$SNPS
 	logOdds = round(exp.coef[[p]],2)
 	
-	title = paste(journal, rsID, '\n -log10(p) : ', pval, ' odds ratio', logOdds)
-	
+	title = paste(journal, rsID, '\n -log10(p) : ', pval, ' odds ratio : ', logOdds)
 	
 	q[[p]] = ggplot(sub,aes(x=value, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+guides(color=F)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')
 }
+l = ggplot(sub,aes(x=value, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')+guides(colour = guide_legend(override.aes = list(shape = 15, size=5), ncol=6, title='Population'))
 
-plot_grid(q[[1]],q[[2]],q[[3]],q[[5]],q[[6]],q[[7]],q[[8]],q[[9]],q[[10]],q[[11]],q[[12]],q[[13]],q[[14]],ncol=2)						
-						
+legend <- get_legend(l)
 
-dat = cbind(GT[,c(1,2)], exp.coef)
-rsid = fread('~/Desktop/SigPos.txt')
-rsID <- merge(dat, rsid, by.x=c("CHROM",'POS'), by.y=c('rsID','CHROM'))
+plot_grid(q[[5]],q[[7]],q[[9]],q[[2]],q[[13]],q[[6]],q[[10]],q[[8]],q[[12]],q[[11]],q[[3]],q[[14]],q[[4]],q[[1]],legend,ncol=3)
 
-mGT = melt(GT,id=c('CHROM','POS','ID'))
-mGT <- merge(samples, mGT, by.y='variable',by.x='Name')
-cGT <- mGT %>% group_by(Pop) %>% summarize(var = sum(value))
-keep <- cGT[which(cGT$var > 0),]$Pop
+ggsave('~/Documents/QualityPaper/Figures/PublishedSNPs.jpg',height=20, width=18)					
+		
