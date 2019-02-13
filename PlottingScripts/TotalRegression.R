@@ -85,7 +85,7 @@ Regression <- left_join(Regression, rsID, by=c('CHROM','POS'))
 
 write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegressionPC5.csv',row.names=F)
 
-Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegression.csv')
+Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegressionPC5.csv')
 
 Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
 								& Regression$Repeat=='yes'),])
@@ -117,6 +117,13 @@ Repeat_Indels <-TSBH(Repeat_Indels)
 NORepeat_Indels <-TSBH(NORepeat_Indels)
 Repeat_SNPs <-TSBH(Repeat_SNPs)
 NORepeat_SNPs <-TSBH(NORepeat_SNPs)
+
+
+SNPs <- rbind(Repeat_SNPs,NORepeat_SNPs)
+###OMNI CHIP
+omni <- fread('~/Documents/QualityPaper/sig/Omni2-5.txt',header=F)
+omni <- merge(omni, SNPs, by.x='V2', by.y='rsID')
+omni <- omni[which(omni$V2 != '.'),]
 
 write.table(Repeat_Indels, 
 file='/Users/luke/Documents/QualityPaper/Misc/Repeat_Indels.csv',row.names=F)
