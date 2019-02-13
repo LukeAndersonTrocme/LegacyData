@@ -40,6 +40,16 @@ model = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases,
 						family=binomial)))
+						
+model2 = apply(GT[,-(1:3)], 1, function(x)
+					predict(glm2(x ~
+							samples$PC1 + 
+							samples$PC2 +
+							samples$PC3 +
+							samples$PC4 +
+							samples$PC5 + 
+							samples$average_quality_of_mapped_bases,
+						family=binomial), type='response'))						
 
 exp.coef = apply(GT[,-(1:3)], 1, function(x)
 					exp(coefficients(glm2(x ~
@@ -51,9 +61,15 @@ exp.coef = apply(GT[,-(1:3)], 1, function(x)
 							samples$average_quality_of_mapped_bases,
 						family=binomial)))[[7]])
 
-plt = cbind(samples, model)
+plt = cbind(samples, model2)
 plt = melt(plt, id=c('Name','Pop','average_quality_of_mapped_bases','PC1','PC2','PC3','PC4','PC5'))
+
+GT1 = as.data.frame(t(GT[,-c(1:3)]))
+GT1$Name = rownames(GT1)
+GT1 = melt(GT1)
+plt = merge(plt, GT1, by=c('Name','variable'))
 plt = plt[order(plt$Pop),]
+
 q = list()
 for(p in seq(1,14)){
 
@@ -66,13 +82,15 @@ for(p in seq(1,14)){
 	
 	title = paste(journal, rsID, '\n -log10(p) : ', pval, ' odds ratio : ', logOdds)
 	
-	q[[p]] = ggplot(sub,aes(x=value, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+guides(color=F)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')
+	q[[p]] = ggplot(sub,aes(y=value.x, x= average_quality_of_mapped_bases, color=Pop,shape=as.factor(value.y)))+scale_shape_manual(values=c(1, 16))+scale_color_manual(breaks= plt$Pop,values = MyColour)+guides(color=F, shape=F)+geom_point()+ggtitle(title)+labs(y='Predicted',x='Quality')
 }
-l = ggplot(sub,aes(x=value, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')+guides(colour = guide_legend(override.aes = list(shape = 15, size=5), ncol=6, title='Population'))
+l = ggplot(sub,aes(x=value.x, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')+guides(colour = guide_legend(override.aes = list(shape = 15, size=5), ncol=6, title='Population'))
 
 legend <- get_legend(l)
 
 plot_grid(q[[5]],q[[7]],q[[9]],q[[2]],q[[13]],q[[6]],q[[10]],q[[8]],q[[12]],q[[11]],q[[3]],q[[14]],q[[4]],q[[1]],legend,ncol=3)
 
-ggsave('~/Documents/QualityPaper/Figures/PublishedSNPs.jpg',height=20, width=18)					
-		
+ggsave('~/Documents/QualityPaper/Figures/PublishedSNPs.jpg',height=20, width=18)
+ggsave('~/Documents/QualityPaper/Figures/PublishedSNPs.pdf',height=20, width=18)					
+
+mGT = melt(GT, id=c('CHROM','POS','ID'))
