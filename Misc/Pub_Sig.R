@@ -82,7 +82,7 @@ for(p in seq(1,14)){
 	
 	title = paste(journal, rsID, '\n -log10(p) : ', pval, ' odds ratio : ', logOdds)
 	
-	q[[p]] = ggplot(sub,aes(y=value.x, x= average_quality_of_mapped_bases, color=Pop,shape=as.factor(value.y)))+scale_shape_manual(values=c(1, 16))+scale_color_manual(breaks= plt$Pop,values = MyColour)+guides(color=F, shape=F)+geom_point()+ggtitle(title)+labs(y='Predicted',x='Quality')
+	q[[p]] = ggplot(sub,aes(y=value.x, x= average_quality_of_mapped_bases, color=Pop,shape=as.factor(value.y)),alpha=0.6)+scale_shape_manual(values=c(1, 16))+scale_color_manual(breaks= plt$Pop,values = MyColour)+guides(color=F, shape=F)+geom_point()+ggtitle(title)+labs(y='Predicted',x='Quality')
 }
 l = ggplot(sub,aes(x=value.x, y= average_quality_of_mapped_bases, color=Pop))+scale_color_manual(breaks= plt$Pop,values = MyColour)+geom_point()+ggtitle(title)+labs(x='Predicted',y='Quality')+guides(colour = guide_legend(override.aes = list(shape = 15, size=5), ncol=6, title='Population'))
 
