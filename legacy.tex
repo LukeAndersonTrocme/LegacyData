@@ -53,9 +53,8 @@ Recent reports have identified differences in the mutational spectra across huma
 \end{abstract}
 
 \section{Introduction}
-
-\sgcomment{Check time concordance throughout}		
-%\subsection{Batch Effects in Aging Reference Cohort Data}			
+	
+\subsection{Batch Effects in Aging Reference Cohort Data}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
 Reference cohorts such as the International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project \citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
@@ -123,10 +122,6 @@ While trying to follow up on this observation in a larger and more recent Japane
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups.
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
 These mismatches were maintained after filtering for low-quality regions of the human genome and sites failing Hardy-Weinberg equilibrium tests. 
-%\sgcomment{did we have a specific result for this? As in "$94\%$ of sites passed HW"...}. 
-%Even though some of the mismatched variants are at low frequency in the 1kGP, and thus can evade Hardy-Weinberg detection, but many are at high enough frequency that HW detection   
-%Whereas Hardy-Weinberg testing is efficient at detecting high frequency spurious variants, it has little power to filter out rare variants which, in aggregate, can contribute to mutational signatures.
-
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. %(\sgcomment {p value?})
 Thus, sequences with low mapping quality harbour mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
@@ -156,7 +151,6 @@ Lists of suspicious SNPs and low-quality individuals is provided as supplementar
 The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
 This variability could result from evolving sequence platform and protocols or variation between sequencing centres. 
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
-%Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
@@ -467,13 +461,6 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions.}
   \label{RI_Manhattan}
   \end{figure}
-  
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/AllDeviances.jpg}
-
-%\caption{Empirical distribution plots of the sum of deviances for Non-Repeat variants grouped by N, the number of populations included. The blue curve is the theoretical null reference chi squared distribution with $N$ degrees of freedom. Note $\sum_i^N  \chi^2_1= \chi^2_N$. The grey dotted line indicates the significance level of $10^{-5}$ for the respective distribution which happens to be very close to the adjusted \textit{p}-value threshold at 0.01 FDR. }
-%\label{Deviances}
-%\end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/PC1_Correlation.jpg}
@@ -489,31 +476,6 @@ The  *AC${\rightarrow}$*CC mutational signature in JPT remains despite removing 
 Removing individuals with average quality per mapped bases $Q$ below a threshold of 30 removes the mutational signature completely. }
 \label{MutSpect}
 \end{figure}
-
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot_mostSig2.jpg}
-%\caption{Logistic regression of the most significantly associated SNP rs75254682 for the populations with significant association to the average quality per mapped bases $Q$.}
-%\label{MostSig}
-%\end{figure}
-
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot_diabetes.jpg}
-%\caption{Logistic regression of rs301 to the average quality per mapped bases $Q$.}
-%\label{DiabetesSNP}
-%\end{figure}
-
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot.jpg}
-%\caption{Logistic regression of rs6057648 for the populations with significant association to the average quality per mapped bases $Q$.}
-%\label{TwinsSNP}
-%\end{figure}
-
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNP6_Singles.jpg}
-%\caption{SNPs associated with $Q$ in a single population. The x-axis is sorted by genomic position.}
-%\label{Singles}
-%\end{figure}
-
 
 \begin{figure}[h]
 \centering
@@ -536,7 +498,6 @@ Because the resequencing did not include all the individuals from the original 1
 Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals. There is no correlation in the p-values between the two datasets indicating that the suspicious variants found in the more recent dataset are false discoveries.}  
 \label{90Han}
 \end{figure}
-
 
 
 %\begin{figure}[h]
