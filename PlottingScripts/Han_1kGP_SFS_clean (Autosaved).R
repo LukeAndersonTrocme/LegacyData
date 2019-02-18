@@ -29,7 +29,7 @@ agg <- combo %>% group_by(CHROM,POS) %>% summarize(hanAF = sum(Han.gt), kgpAF = 
 
 
 ggplot(agg, aes(x=hanAF, y=kgpAF))+geom_bin2d()+scale_fill_distiller(palette = "Spectral")+labs(x='Resequenced Han', y='1000 Genomes Project')+ggtitle('Joint Frequency Plot of Suspicious variants')
-ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS.jpg',height=4, width=12)
+ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS.jpg',height=10, width=10)
 
 #concordance per sample
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')

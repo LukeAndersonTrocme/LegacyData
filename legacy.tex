@@ -158,9 +158,9 @@ This variability could result from evolving sequence platform and protocols or v
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 %Among the many covariates that could be used to identify spurious sites, such as sequencing date, sequencing technology, or sequencing centre, we used average quality of mapped bases ($Q$) per individual because it best correlated with mismatched sites across Japanese cohorts.
 
-\luke{removed paragraph about meta-analysis}
-%We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
-%Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}).
+
+We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
+Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ (Figure \ref{OverLap}).
 
 \luke{Added text here}To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$. 
 To account for population structure, we also included the top five global principal components.
@@ -179,28 +179,29 @@ To account for the large number of tests, we used a two-stage Benjamini \& Hochb
 \label{sigTable}
 \end{table}
 
-\luke{removed figure 3}
-%\begin{figure}
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
 
-%\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
-%The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
-%The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
-%Phase 1 populations are marked by a star ( * ).
-%The line plot underneath shows the number of populations for which a variant has reached significance.
-%The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$. 
-%The same variants identified as being low quality independently in each population are found in other populations. }
-%  \label{OverLap}
-%\end{figure}
+\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
+The size of the crosses ( + ) are proportional to the -log10(p) value of that SNP.
+The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
+Phase 1 populations are marked by a star ( * ).
+The line plot underneath shows the number of populations for which a variant has reached significance.
+The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$. 
+The same variants identified as being low quality independently in each population are found in other populations. }
+  \label{OverLap}
+\end{figure}
 
 \subsection{Cell line or technical artifact}
 
+
 To determine whether this signal is the result of a cell line or technical artifact, we investigated other cohorts that used the same cell lines.
 Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
-The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{}.
+The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.
 If the variants we've identified are the result of a cell line artifact, then we would expect the same variants to be present in the data from two separate platforms.
 From the list of 22,186 variants identified as being associated to $Q$, only 22 variants were present in HapMap and 143 in GnomAD - a compilation of multiple databases (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
-However, with our FDR type-I error rate of $\alpha = 0.01$, these variants could be explained by false positive associations.
+Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
+This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
 
 In 2017, Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
 We find that 9 out of the 297 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
@@ -261,11 +262,11 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 \label{gwasTable}
 \end{table}
 
-\begin{figure}
-\includegraphics[width=15cm,keepaspectratio]{./Figures/PublishedSNPs.jpg}
-\caption{For each of the suspicious variants identified in the GWAS catalogue a plot of the average quality of mapped bases $Q$ compared to the predicted value from logistic regression. The strong correlation of $Q$ and the predicted value indicates that $Q$ is strongly associated to genotype for these variants. A negative correlation indicates that individuals with low $Q$ have higher likelihood of having a variant, whereas a positive correlation indicates that these individuals have a lower likelihood of having a variant at this position.}  
-\label{PubSig}
-\end{figure}
+%\begin{figure}
+%\includegraphics[width=15cm,keepaspectratio]{./Figures/PublishedSNPs.jpg}
+%\caption{For each of the suspicious variants identified in the GWAS catalogue a plot of the average quality of mapped bases $Q$ compared to the predicted value from logistic regression. The strong correlation of $Q$ and the predicted value indicates that $Q$ is strongly associated to genotype for these variants. A negative correlation indicates that individuals with low $Q$ have higher likelihood of having a variant, whereas a positive correlation indicates that these individuals have a lower likelihood of having a variant at this position.}  
+%\label{PubSig}
+%\end{figure}
 \section{Discussion}
 
 \subsection{Technical Artifact}
@@ -273,10 +274,6 @@ The variants identified in this study are likely to be technical artifacts from 
 Different sequencing technologies will have different error profiles. 
 A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011}, with, for instance, different patterns of quality decrease along reads (known as B-tails). 
 Differences in read quality and error profiles in turn require different calling pipelines.
-
-Sequencer-specific errors from the 1kGP would likely be absent from HapMap, which was sequenced using a combination of array based technologies and PCR targeted sequencing \citep{HapMap2005}.  
-Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
-This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
  
  We were not able to pinpoint the precise technical source of the discrepancy. 
 Further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal. 
@@ -284,9 +281,12 @@ For instance, our test was limited by the genome wide resolution of the quality 
 Data quality at a SNP-wise resolution would be a better metric to use, but unfortunately was not available.
 
 If the Illumina Genome Analyzer sequencing platforms are no longer being used, then it it likely that these sequencer specific artifacts are no longer being actively introduced in recent sequence data.
-However, because the 1kGP data is widely used as a reference database, these variants are being imputed onto new genotype data.
-Even though we have found only one GWAS study that reported associations with the problematic variants, the imputation of incorrect variants can lead to milder problems such as the addition of noise in polygenic risk scores and biases in fine mapping analyses.
-These variants do have a sizeable effect on population analyses that compare populations based on mutational profiles. Even though we expect that present-day technologies will be less sensitive to such artefacts, if is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
+However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes.
+Our model only reveals association to quality; some variants may be false positives in cases where only individuals with low $Q$ scores have the variant and other variants may be false negatives, in cases where individuals with low $Q$ appear to have lower calling rates for particular.
+
+The imputation of incorrect variants can lead to milder problems such as the addition of noise in polygenic risk scores, biases in fine mapping analyses as well as impact population specific allele frequency estimates.
+These variants do have a sizeable effect on population analyses that compare populations based on mutational profiles. 
+Even though we expect that present-day technologies will be less sensitive to such artefacts, if is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
 
 For \textit{conventional} GWAS, we do not see evidence that these contaminated hits impact the conclusions made in each of these publications.
 However, considering many polygenic risk score estimates use the association scores from multiple sources, the inclusion of these variants could possibly impact downstream analyses.  
@@ -351,15 +351,15 @@ For the reverse GWAS we used less stringent quality controls to broaden the scop
 \subsection{Genome wide association study}
 We ran a simple logistic regression independently for each genomic locus $s$ using the R glm2 package\citep{RDevelopmentCoreTeam2016}. The model we fitted to each subset of data can be expressed as such.
 \begin{align*}
-{logit}{E(Y_{s'i})} &= \beta_{0}{PC1}_{i} + \beta_{1}{PC2}_{i} + \beta_{2}{PC3}_{i} + \beta_{3}{PC4}_{i} + \beta_{4}{PC5}_{i} + \beta_{5}Q_{i}
+{logit}{E(Y_{s'i})} &= \beta_{0}  + \beta_{1}{PC1}_{i} + \beta_{2}{PC2}_{i} + \beta_{3}{PC3}_{i} + \beta_{4}{PC4}_{i} + \beta_{5}{PC5}_{i} + \beta_{6}Q_{i}
 \\
 \textit{for}\quad i &= 1,\hdots, n
 \end{align*}
 Here $Y_{si}$ is a Bernoulli random variable denoting the genotype of individual $i$ at genomic locus $s$. 
-In the model, the regression coefficient $\beta_{0}{PC1}$ represents the coefficient of the first principal component, the slope coefficient $\beta_{1}$ denotes the association to average quality of mapped bases $Q$ to genotype $Y_{s}$. 
+In the model, the regression coefficient $\beta_{1}{PC1}$ represents the coefficient of the first principal component, the slope coefficient $\beta_{6}$ denotes the association to average quality of mapped bases $Q$ to genotype $Y_{s}$. 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. 
 
-For each of the $K$ regressions, we formulated a null hypothesis $H_{0}: \beta_{1}^{(s)}=0$. That is, the average quality of mapped bases $Q_{p}$ variable is not associated with genotype $Y_{s}$.
+For each of the $K$ regressions, we formulated a null hypothesis $H_{0}: \beta_{6}^{(s)}=0$. That is, the average quality of mapped bases $Q$ variable is not associated with genotype $Y_{s}$.
 In other words, the slope coefficient of the simple logistic regression is zero.
 To test the null hypothesis, we used the chi-square likelihood ratio test statistic (the deviance) as a measure of the marginal importance of adding $Q$ in the model. 
 The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
@@ -376,10 +376,10 @@ Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for
 We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} genotype data.
 The VCF file returned from the server was then downloaded and used to search for the number of significant variants successfully imputed. 
 
-\subsection{Frequencies of variants in other datasets}
-Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 70 variants in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
+%\subsection{Frequencies of variants in other datasets}
+%Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 70 variants in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
 
-Similarly, using the allele frequencies from GnomAD, we were able to extract 186 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
+%Similarly, using the allele frequencies from GnomAD, we were able to extract 186 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
 
 \section{Code Availability}
 https://github.com/LukeAndersonTrocme/QualityPaper
@@ -459,8 +459,6 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
   \label{RI_Manhattan}
   \end{figure}
   
-
-
 %\begin{figure}[h]
 %\includegraphics[width=\hsize,keepaspectratio]{./Figures/AllDeviances.jpg}
 
@@ -495,11 +493,11 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 %\label{DiabetesSNP}
 %\end{figure}
 
-\begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot.jpg}
-\caption{Logistic regression of rs6057648 for the populations with significant association to the average quality per mapped bases $Q$.}
-\label{TwinsSNP}
-\end{figure}
+%\begin{figure}[h]
+%\includegraphics[width=\hsize,keepaspectratio]{./Figures/RegressionPlot.jpg}
+%\caption{Logistic regression of rs6057648 for the populations with significant association to the average quality per mapped bases $Q$.}
+%\label{TwinsSNP}
+%\end{figure}
 
 %\begin{figure}[h]
 %\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNP6_Singles.jpg}
@@ -509,9 +507,17 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 
 
 \begin{figure}[h]
-\includegraphics[width=8cm,keepaspectratio]{./Figures/Han83.jpg}
-\caption{Site frequency spectrum plot of the significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 297 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
+\centering
+\includegraphics[width=10cm,keepaspectratio]{./Figures/Han83.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 297 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
 Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
+\label{90HanSFS}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows significant SNPs identified in the full model including all populations. Only 1899 of the variants are present in the 83 individuals included in both the original 1kGP and the high depth resequenced individuals.}  
 \label{90HanSFS}
 \end{figure}
 
@@ -523,11 +529,12 @@ Because the resequencing did not include all the individuals from the original 1
 \end{figure}
 
 
-\begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
-\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such variants in HapMap and 186 in the GnomAD.}
-\label{HapMap_GnomAD}
-\end{figure}
+
+%\begin{figure}[h]
+%\includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
+%\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such variants in HapMap and 186 in the GnomAD.}
+%\label{HapMap_GnomAD}
+%\end{figure}
 
 \end{document}
 

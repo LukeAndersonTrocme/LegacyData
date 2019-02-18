@@ -11,9 +11,8 @@ def Bash_cmd(i):
 
     os.system('java -jar ~/bin/snpEff_latest_core/snpEff/SnpSift.jar \
     extractFields {0}/ALL.chr{1}.{2} CHROM POS AF "GEN[*].GT" \
-    | sed "s/0|[1-9]/1/g ; s/[1-9]|0/1/g ; s/[1-9]|[1-9]/1/g ; /|/d"\
-    | tail -n +2 | awk "\$3 > 0.000599" | gzip > /Users/luke/genomes/genomes/hg19/Genotypes/CHR{1}.Genotypes.txt.gz'.format(path,i,name))
-    #NOTE : the [1-9] portion of the SED allows for multiallelic Snp
+    | sed "s/0|0/0/g ; s/0|[1-9]/1/g ; s/[1-9]|0/1/g ; s/[1-9]|[1-9]/1/g ; /|/d"\
+    | tail -n +2 | awk "\$3 > 0.000599" | gzip > /Users/luke/genomes/genomes/hg19/Genotypes/DoubleCheck/CHR{1}.Genotypes.txt.gz'.format(path,i,name))
 
 if __name__ == '__main__':
     #you can replace ListOfChrom with whatever you are iterating through
@@ -26,5 +25,3 @@ if __name__ == '__main__':
     #some magic, not sure what this does
     pool.close()
     pool.join()
-
-#s/\//|/g ; s/0|0/0/g ; s/0|1/1/g ; s/1|0/1/g ; s/1|1/1/g ; /|/d
