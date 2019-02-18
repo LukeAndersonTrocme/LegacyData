@@ -194,12 +194,12 @@ The same variants identified as being low quality independently in each populati
 
 \subsection{Cell line or technical artifact}
 
-
 To determine whether this signal is the result of a cell line or technical artifact, we investigated other cohorts that used the same cell lines.
 Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
 The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.
 If the variants we've identified are the result of a cell line artifact, then we would expect the same variants to be present in the data from two separate platforms.
-From the list of 22,186 variants identified as being associated to $Q$, only 22 variants were present in HapMap and 143 in GnomAD - a compilation of multiple databases (Figure \ref{HapMap_GnomAD}) \citep{HapMap2005,Lek2016}.
+From the list of 22,186 variants identified as being associated to $Q$, only 108 variants were present in HapMap \citep{HapMap2005}.
+%and 143 in GnomAD - a compilation of multiple databases %Lek2016
 Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
 This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
 
@@ -208,11 +208,18 @@ We find that 9 out of the 297 the suspicious variants from the single population
 While this is more than 1\% of the sites, we suspect that they are indeed false associations to $Q$.
 To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
 We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
-These result suggest that the variants we have identified using this reverse-GWAS approach are the result of a technical artifact and not a cell line artifact.
+
+We find that of the 1899 variants from the full model that are present in both Resequenced and original 1kGP data, 933 of the variants are present in both samples at matching allele frequencies.
+These variants are likely unaffected by $Q$ in these particular individuals.
+We find that 772 variants are at higher frequency in the resequenced data.
+These variants may be associated to $Q$ due to false negatives, whereby individuals with lower $Q$ tend to have lower calling rates for these variants.
+Only 194 variants are at higher frequencies in the original 1kGP data.
+These variants may be associated to $Q$ due to false positives, whereby individuals with lower $Q$ have higher calling rates for these variants (See Figure \ref{90HanSFS_full}).
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
 \subsubsection{Imputation}
+
 The state of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
@@ -221,9 +228,11 @@ We found that all of the variants associated with $Q$ were imputed back in the s
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
 \subsubsection{Microarrays}
+
 We found that 476 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
 
 \subsubsection{GWAS}
+
 We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified eight recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
@@ -518,7 +527,7 @@ Because the resequencing did not include all the individuals from the original 1
 \centering
 \includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows significant SNPs identified in the full model including all populations. Only 1899 of the variants are present in the 83 individuals included in both the original 1kGP and the high depth resequenced individuals.}  
-\label{90HanSFS}
+\label{90HanSFS_full}
 \end{figure}
 
 \begin{figure}[h]
