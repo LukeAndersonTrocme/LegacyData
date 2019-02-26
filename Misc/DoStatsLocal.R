@@ -24,15 +24,10 @@ for(chunk in chunks){
 	out = apply(gt, 1, function(x) 
 				anova(
 					glm2(x ~
-							samples$Pop + 
-							samples$PC1 + 
-							samples$PC2 +
-							samples$PC3 +
-							samples$PC4 +
-							samples$PC5 + 
+							samples$Pop +
 							samples$average_quality_of_mapped_bases,
 						family=binomial),
-					test="Chi")[8,2])
+					test="Chi")[3,2])
 					
 	positions$dev.p = -log10(pchisq(out, 1, lower.tail=F))
 

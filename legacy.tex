@@ -161,18 +161,18 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
 Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
-\luke{Added text here}To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$. 
+To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$. 
 To account for population structure, we also included the top five global principal components.
-This method identifies a total of 22,186 statistically significant variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
+This method identifies a total of 14,322 statistically significant variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
+To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.001$ \citep{Benjamini2006}. 
 
 \begin{table}[h]
 \centering
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 4,405 & 15,018 \\  
-{INDEL} & 642 & 2,121 \\ \hline
+{SNP}  & 2,819 & 9,846 \\  
+{INDEL} & 378 & 1,279 \\ \hline
 \end{tabular}
 \caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. The total number of 22,186 are statistically significantly associated to $Q$.}
 \label{sigTable}
@@ -193,27 +193,24 @@ The same variants identified as being low quality independently in each populati
 
 \subsection{Cell line or technical artifact}
 
-To determine whether this signal is the result of a cell line or technical artifact, we investigated other cohorts that used the same cell lines.
+To determine whether this signal is the result of a cell line or technical artifact, we investigated other sequencing projects that used the same cell lines.
 Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
 The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.
 If the variants we've identified are the result of a cell line artifact, then we would expect the same variants to be present in the data from two separate platforms.
-From the list of 22,186 variants identified as being associated to $Q$, only 108 variants were present in HapMap \citep{HapMap2005}.
-%and 143 in GnomAD - a compilation of multiple databases %Lek2016
+From the list of 14,322 variants identified as being associated to $Q$, only 17 variants were present in HapMap \citep{HapMap2005}.
 Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
 This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
 
-In 2017, Lan et al. resequenced 90 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
-We find that 9 out of the 297 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
-While this is more than 1\% of the sites, we suspect that they are indeed false associations to $Q$.
+In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
+After downsampling the 1kGP data to match the resequenced individuals, we find that 9 out of the 296 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
+While this is more than 0.1\% of the sites, we suspect that they are indeed false associations to $Q$.
 To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
 We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
 
-Of the 1899 variants from the full model that are present in both Resequenced and original 1kGP data, 933 of the variants are present in both samples at matching allele frequencies.
-These variants are likely unaffected by $Q$ in these particular individuals.
-We find that 772 variants are at higher frequency in the resequenced data.
-These variants may be associated to $Q$ due to false negatives, whereby individuals with lower $Q$ tend to have lower calling rates for these variants.
-Only 194 variants are at higher frequencies in the original 1kGP data.
-These variants may be associated to $Q$ due to false positives, whereby individuals with lower $Q$ have higher calling rates for these variants (See Figure \ref{90HanSFS_full}).
+We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
+Of the 14,322 suspicious variants identified globally, only 8,697 of them are found in the 83 individuals in the original 1kGP data.
+From this subset, 8,085 of these variants are missing entirely from the resequenced data.
+We noticed a unusually large number of INDELs that are fixed in the resequenced data that are at lower frequencies in the 1kGP. (See Figure \ref{90HanSFS_full})
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
@@ -484,8 +481,8 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=10cm,keepaspectratio]{./Figures/Han83.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 297 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
+\includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 296 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
 Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
 \label{90HanSFS}
 \end{figure}
@@ -493,7 +490,7 @@ Because the resequencing did not include all the individuals from the original 1
 \begin{figure}[h]
 \centering
 \includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows significant SNPs identified in the full model including all populations. Only 1899 of the variants are present in the 83 individuals included in both the original 1kGP and the high depth resequenced individuals.}  
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  8697 significant SNPs and INDELs identified in the \textit{5PC} model including all populations. Only 612 of the variants are present in the high depth resequenced individuals.}  
 \label{90HanSFS_full}
 \end{figure}
 
@@ -505,11 +502,11 @@ Because the resequencing did not include all the individuals from the original 1
 \end{figure}
 
 
-%\begin{figure}[h]
-%\includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap_GnomAD.jpg}
-%\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 70 such variants in HapMap and 186 in the GnomAD.}
-%\label{HapMap_GnomAD}
-%\end{figure}
+\begin{figure}[h]
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap.jpg}
+\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 17 such variants in HapMap and 186 in the GnomAD.}
+\label{HapMap_GnomAD}
+\end{figure}
 
 \end{document}
 
