@@ -1,0 +1,296 @@
+---
+title: "HGP analysis"
+author: 
+- name: Rick Farouni
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+# Preparations
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(Matrix)
+library(irlba)
+library(threejs)
+library(tidyverse)
+library(lfa)
+```
+
+# Download data
+
+
+Download a fast parser program (after compilation you'll have a program called a.out)
+
+```{bash}
+wget https://raw.githubusercontent.com/bwlewis/1000_genomes_examples/master/parse.c
+cc -O2 parse.c
+```
+
+Download 1000 genomes phenotype data file
+ 
+```{bash}
+wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_g1k.ped
+```
+
+Download 1000 genomes genotype data file for chr 20
+
+
+```{bash}
+wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+
+```
+
+Read just the header of the chromosome file to obtain the sample identifiers
+
+
+```{r}
+ids <- readLines(pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
+                      sed -n /^#CHROM/p | 
+                      tr '\t' '\n' | 
+                      tail -n +10"))
+head(ids)
+```
+
+
+Write ids to file
+
+```{r}
+writeLines(ids, "ids.txt")
+```
+
+
+Download bas files for all the samples 
+
+```{bash message=FALSE}
+for id in `cat ids.txt`
+  do
+  wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/${id}/alignment/${id}.chrom20.*.bam.bas
+done
+wait
+```
+
+# Read bas files
+
+```{r}
+read_basfiles <- function(bas_filepath) {
+  
+  bas_file <- read_tsv(bas_filepath,
+                  col_types = cols_only('sample' = 'c', 
+                                        'platform' = 'c',        
+                                       'average_quality_of_mapped_bases' = col_guess())) 
+  return( bas_file)
+}
+```
+
+```{r}
+bas_files <- list.files(path = ".",
+                        pattern="*bam.bas")
+
+bas_dt <- 
+  map_dfr(bas_files,read_basfiles ) %>%
+  rename(avg_qual="average_quality_of_mapped_bases")
+bas_dt
+```
+
+
+```{r}
+bas_dt <-
+  bas_dt %>%
+  group_by(sample) %>%
+  mutate(id=1:n()) %>%
+  select(-platform)%>%
+  spread(id,avg_qual)
+bas_dt
+```
+```{r}
+n_not_na <- function(x) {
+ sum(!is.na(x))
+}
+```
+
+
+```{r}
+ bas_dt <- 
+  bas_dt %>%
+  ungroup()%>% 
+    mutate( avg_qual_sd =pmap_dbl(select(., -sample), lift_vd(sd,na.rm =TRUE )),
+           avg_qual_mean = rowMeans(select(., -sample),na.rm =TRUE),
+           avg_qual_n= pmap_dbl(select(., -sample), lift_vd(n_not_na)),
+           avg_qual_min= pmap_dbl(select(., -sample), lift_vd(min, na.rm =TRUE)),
+           avg_qual_max= pmap_dbl(select(., -sample), lift_vd(max, na.rm =TRUE))) %>%
+  select (sample, avg_qual_n, avg_qual_min,avg_qual_max,avg_qual_mean,avg_qual_sd, everything() ) 
+```
+
+
+
+```{r}
+ped <- 
+  read_tsv(url("ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_g1k.ped"))%>% 
+  rename(sample="Individual ID")
+ped 
+```
+
+
+
+```{r}
+bas_dt <- inner_join( ped  %>% 
+                       select(sample, Population),
+                       bas_dt,
+                     by="sample")
+bas_dt
+```
+
+
+```{r}
+write_tsv(bas_dt, "average_quality_chrom21.txt")
+```
+
+
+
+## Plot 
+
+```{r fig.width=20}
+ggplot(bas_dt,
+       aes(x=avg_qual_min,
+           y=avg_qual_max, 
+           colour=avg_qual_n )) +
+  geom_point(size=2)
+ 
+```
+
+
+
+```{r fig.width=20}
+ggplot(bas_dt,
+       aes(x=avg_qual_mean,
+           y=avg_qual_sd, 
+           colour=avg_qual_n )) +
+  geom_point(size=2)
+ 
+```
+
+
+# Load Gentype data
+
+
+
+Load VCF file into a sparse matrix 
+
+```{r}
+p <- pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
+          sed /^#/d  |
+          cut  -f '10-' |
+          ./a.out | 
+          cut -f '1-2'")
+x <- read.table(p,
+                colClasses=c("integer","integer"), 
+                fill=TRUE,
+                row.names=NULL)
+```
+
+
+```{r}
+# Convert to a sparse matrix of people (rows) x variant (columns)
+chr20 <- sparseMatrix(i=x[,2], j=x[,1], x=1.0)
+
+# Inspect the dimensions of this matrix
+print(dim(chr20))
+```
+
+
+The matrix has 2,504 rows (people) and 1,812,841 columns (variants)
+
+
+
+# PCA
+
+compute the first three principal component vectors
+
+```{r}
+cm <- colMeans(chr20)
+p <- irlba(chr20,
+           nv=3,
+           nu=3,
+           tol=0.1,
+           center=cm)
+```
+
+
+ add to dataset
+```{r}
+colnames(p$u) <- paste0("pc",1:3)
+bas_dt <- bind_cols(bas_dt, 
+                    as_tibble(p$u))
+```
+
+
+
+```{r}
+ggplot(bas_dt,
+       aes(pc1, pc3, color=Population)) +
+  geom_point() +
+  theme_bw() 
+```
+
+# Logistic factor analysis
+
+```{r}
+chr20_mtx <- t(as.matrix(chr20[,1:50000]))
+```
+
+
+compute the first three factors including the intercept
+
+```{r}
+LF <- lfa(chr20_mtx, 4)
+dim(LF)
+```
+
+
+
+```{r}
+
+bas_dt <- bind_cols(bas_dt,
+                    tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
+```
+
+
+```{r}
+ggplot(bas_dt,
+       aes(lf1, lf2, color=Population)) +
+  geom_point() +
+  theme_bw()
+```
+
+
+computes the individual-specific allele frequencies
+
+```{r}
+subset <- af(chr20_mtx, LF)
+
+subset[1:5,1]
+```
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
+
