@@ -130,3 +130,11 @@ QE/thesis_1/main.bbl
 *.out
 *.xml
 .Rproj.user
+
+*.c
+
+rick/.Rhistory
+
+rick/.RData
+
+PlottingScripts/HapMap+GnomAD (Autosaved).R
