@@ -193,7 +193,19 @@ LF = mapply(function(x, y){
 ```
 
 ```{r}
-Pop = apply(head(chr22_mtx,1000), 1, function(x)
+t= list()
+for(f in seq(1,10000)){
+  t1 = chr22_mtx[f,]
+  t2 = subset[f,]
+  t[[f]] = glm(t1 ~ bas_dt$avg_qual + offset(t2))
+}
+
+
+```
+
+
+```{r}
+Pop = apply(head(chr22_mtx,10000), 1, function(x)
                     glm2(x 
                           ~ bas_dt$Population
                           + bas_dt$avg_qual))
