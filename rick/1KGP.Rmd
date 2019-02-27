@@ -28,6 +28,9 @@ library(irlba)
 library(threejs)
 library(tidyverse)
 library(lfa)
+library(furrr)
+options(future.globals.maxSize= 10000000000)
+plan(multicore)
 ```
 
 # Download data
@@ -211,18 +214,26 @@ chr20 <- sparseMatrix(i=x[,2], j=x[,1], x=1.0)
 print(dim(chr20))
 ```
 
+```{r}
+rm(x)
+gc()
+```
 
 The matrix has 2,504 rows (people) and 1,812,841 columns (variants)
 
+### work with a subset
 
+```{r}
+chr20_sub <- chr20[,1:100000]
+```
 
 # PCA
 
 compute the first three principal component vectors
 
 ```{r}
-cm <- colMeans(chr20)
-p <- irlba(chr20,
+cm <- colMeans(chr20_sub)
+p <- irlba(chr20_sub,
            nv=3,
            nu=3,
            tol=0.1,
@@ -241,7 +252,7 @@ bas_dt <- bind_cols(bas_dt,
 
 ```{r}
 ggplot(bas_dt,
-       aes(pc1, pc3, color=Population)) +
+       aes(pc1, pc2, color=Population)) +
   geom_point() +
   theme_bw() 
 ```
@@ -249,7 +260,7 @@ ggplot(bas_dt,
 # Logistic factor analysis
 
 ```{r}
-chr20_mtx <- t(as.matrix(chr20[,1:50000]))
+chr20_mtx <- t(as.matrix(chr20_sub))
 ```
 
 
@@ -261,6 +272,14 @@ dim(LF)
 ```
 
 
+Determine genome-wide goodness-of-fit for a particular value of d by computing SNP-by-SNP goodness-of-fit when compared to population structure. 
+
+```{r}
+#gof_4 <- model.gof(chr20_mtx, LF, 3)
+#LF <- lfa(chr20_mtx, 10)
+#gof_10 <- model.gof(chr20_mtx, LF, 3)
+#hist(gof_4)
+```
 
 ```{r}
 
@@ -280,11 +299,67 @@ ggplot(bas_dt,
 computes the individual-specific allele frequencies
 
 ```{r}
-subset <- af(chr20_mtx, LF)
+chr20sub_ial <- af(chr20_mtx, LF)
 
-subset[1:5,1]
 ```
 
+
+```{r}
+
+to_datalist <- function(i, data_genotype, data_iaf, qual){
+  
+    data <- tibble(genotype=data_genotype[i,],
+               iaf=data_iaf[i,],
+               qual=qual)
+               
+     return(data)       
+}
+
+
+fit_model_1 <- function(data){
+  
+  
+  fit <- glm(genotype ~ qual + offset(iaf), family ="binomial", data=data)
+  return(fit)
+  
+}
+
+plot_data <- function(data){
+  
+      p <- ggplot(data,
+       aes(qual, genotype, color=iaf)) +
+      geom_point() +
+      theme_bw()
+  return(p)
+  
+}
+```
+
+```{r}
+
+loci <- c(1,4,5)
+names(loci) <- loci
+
+data_list <- map(loci, 
+                 to_datalist,
+                 data_genotype=chr20_mtx,
+                 data_iaf=chr20sub_ial,
+                 qual=bas_dt$avg_qual_mean)
+
+   
+
+```
+
+
+
+```{r}
+fits <- future_map(data_list, fit_model_1)
+
+```
+
+```{r}
+plots <-  future_map(data_list, plot_data) 
+```
 
 
 ```{r}
