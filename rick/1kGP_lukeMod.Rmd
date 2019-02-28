@@ -7,10 +7,10 @@ output: html_document
 
 # Preparations
 
-```{r}
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
-options(scipen=999)
-```
+#```{r}
+#knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+#options(scipen=999)
+#```
 ```{bash}
 wget https://raw.githubusercontent.com/bwlewis/1000_genomes_examples/master/parse.c
 cc -O2 parse.c
@@ -23,7 +23,7 @@ library(irlba)
 library(threejs)
 library(tidyverse)
 library(lfa)
-
+library(furrr)plots
 library(glm2)
 ```
 
@@ -181,16 +181,81 @@ ggplot(bas_dt,
   theme_bw()
 ```
 
-Logistic Regression
+
+
+
+
+
+computes the individual-specific allele frequencies
+
 ```{r}
-LF = mapply(function(x, y){
-                           glm(x 
-                                ~ bas_dt$avg_qual 
-                                + offset(y))}, 
-                           as.data.frame(t(chr22_mtx)),
-                           as.data.frame(t(subset)))
-						
+chr22sub_ial <- af(chr22_mtx, LF)
+
 ```
+
+
+```{r}
+
+to_datalist <- function(i, data_genotype, data_iaf, qual){
+  
+    data <- tibble(genotype=data_genotype[i,],
+               iaf=data_iaf[i,],
+               qual=qual)
+               
+     return(data)       
+}
+
+
+fit_model_1 <- function(data){
+  
+  
+  fit <- glm2(genotype ~ qual + offset(iaf), family ="binomial", data=data)
+  return(fit)
+  
+}
+
+plot_data <- function(data){
+  
+      p <- ggplot(data,
+       aes(qual, genotype, color=iaf)) +
+      geom_point() +
+      theme_bw()
+  return(p)
+  
+}
+```
+
+```{r}
+
+loci <- seq(1,50000)
+names(loci) <- loci
+
+data_list <- map(loci, 
+                 to_datalist,
+                 data_genotype=chr22_mtx,
+                 data_iaf=chr22sub_ial,
+                 qual=bas_dt$avg_qual)
+
+```
+
+
+
+```{r}
+options(future.globals.maxSize= 6000000000)
+
+fits <- future_map(data_list, fit_model_1)
+
+```
+
+```{r}
+coefLF = lapply(fits, function(x) coef(x)[[2]])
+
+```
+
+```{r}
+plots <-  future_map(data_list, plot_data) 
+```
+
 
 ```{r}
 t= list()
@@ -210,13 +275,6 @@ Pop = apply(head(chr22_mtx,10000), 1, function(x)
                           ~ bas_dt$Population
                           + bas_dt$avg_qual))
 ```
-
-
-
-
-
-
-
 
 
 
