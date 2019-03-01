@@ -341,10 +341,10 @@ plot_data <- function(data,qual){
 
 ```{r}
 
-loci <- c(1,4,5)
+loci <- c(1:1000)
 names(loci) <- loci
 
-data_list <- map(loci, 
+data_list <- future_map(loci, 
                  to_datalist,
                  data_genotype=chr20_mtx,
                  data_iaf=chr20sub_ial)
@@ -354,24 +354,30 @@ data_list <- map(loci,
 
 
 ```{r}
-data_list <- enframe(data_list,
-                     name = "locus", 
-                     value = "dataset")
+data_list <- 
+  enframe(data_list,
+          name = "locus", 
+          value = "dataset")
 ```
 
 
 ```{r}
 avg_qual_mean <- bas_dt$avg_qual_mean
+
 data_list <- 
   data_list %>%
   mutate(
-    fit = future_map(dataset,~ glm(genotype ~ avg_qual_mean + offset(iaf), family ="binomial", data=.x)),
+    fit = future_map(dataset,
+                     ~ glm(genotype ~ avg_qual_mean + offset(iaf),
+                           family ="binomial",
+                           data=.x)),
     tidied = future_map(fit, tidy),
     glanced = future_map(fit, glance)
 )
 ```
 
 get all p-values
+
 ```{r}
 p_values_dt <-
   data_list  %>% 
@@ -385,6 +391,27 @@ p_values_dt <-
 
 p_values_dt
 ```
+
+
+```{r}
+estimates_dt <-
+  data_list  %>% 
+  select(tidied) %>% 
+  map_depth( 2, "estimate")%>% 
+  map_depth( 2, c(2)) %>% # c(1) for the intercept
+  unlist(use.names = FALSE) %>% 
+  enframe(name = "locus" ,
+          value= "beta_hat")%>%
+  mutate(locus= data_list$locus)
+
+estimates_dt
+```
+```{r}
+ggplot(p_values_dt)+
+  geom_histogram((aes(x=p.value)), bins=100) +
+  theme_bw()
+```
+
 get a p-value for target specific loci
 
 
