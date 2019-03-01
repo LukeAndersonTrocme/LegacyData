@@ -1,23 +1,6 @@
----
-title: "Individual Specific Allele Frequency"
-author: "Rick + Luke"
-date: "2/27/2019"
-output: html_document
----
+#Taking Rick's Code and putting it in an Rscript
 
-# Preparations
-
-#```{r}
-#knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
-#options(scipen=999)
-#```
-```{bash}
-wget https://raw.githubusercontent.com/bwlewis/1000_genomes_examples/master/parse.c
-cc -O2 parse.c
-```
-
-
-```{r}
+#load libaries
 library(Matrix)
 library(irlba)
 library(threejs)
@@ -25,33 +8,33 @@ library(tidyverse)
 library(lfa)
 library(furrr)
 library(glm2)
-```
+library(cowplot)
+library(drake)
 
-Read just the header of the chromosome file to obtain the sample identifiers
-
-
-```{r}
+#For running in terminal
+args = commandArgs(trailingOnly=T)
+Chr <- args[1]
+#Chr <- '22'
+#set directories and paths
 GenoPath='/Users/luke/genomes/genomes/hg19/phase3/'
+Dir = '/Users/luke/Documents/QualityPaper/rick/'
+setwd(Dir)
 
-
-ids <- readLines(pipe(paste("gzcat ",GenoPath,"ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
+#Get ID names
+if(!file.exists("ids.txt")){
+ids <- readLines(pipe(paste("gzcat ",GenoPath,"ALL.chr",Chr,".phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
                       sed -n /^#CHROM/p | 
                       tr '\t' '\n' | 
                       tail -n +10",sep='')))
-head(ids)
-```
 
-Write ids to file
+writeLines(ids, "ids.txt")}
 
-```{r}
-Dir = '/Users/luke/Documents/QualityPaper/rick/'
-setwd(Dir)
-writeLines(ids, "ids.txt")
-```
+if(file.exists("ids.txt")){
+  ids <- unlist(read.table("ids.txt"))
+  head(ids)
+}
 
-# Read bas files
-
-```{r}
+#Get Quality Scores
 read_basfiles <- function(bas_filepath) {
   
   bas_file <- read_tsv(bas_filepath,
@@ -59,9 +42,7 @@ read_basfiles <- function(bas_filepath) {
                                        'average_quality_of_mapped_bases' = col_guess())) 
   return( bas_file)
 }
-```
 
-```{r}
 bas_files <- list.files(path = "/Users/luke/genomes/bas_file/1000GenomesBAS/",
                         pattern="*bam.bas", full.names = TRUE)
 
@@ -73,10 +54,7 @@ bas_dt <-
 #keep samples in 1kGP VCF files
 bas_dt <- bas_dt[which((bas_dt$sample %in% ids)==T),]
 
-bas_dt
-```
-Get Sample Info, 
-```{r}
+#get populations of each ID
 ped <- 
   read_tsv(url("ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_g1k.ped"))%>% 
   rename(sample="Individual ID")
@@ -85,16 +63,10 @@ bas_dt <- inner_join( ped  %>%
                        select(sample, Population),
                        bas_dt,
                      by="sample")
-bas_dt
-```
-
-# Load Gentype data
-
-
-Load VCF file into a sparse matrix 
-
-```{r}
-p <- pipe(paste("gzcat ",GenoPath,"ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
+                     
+#Load Genotype Data
+#Load VCF file into a sparse matrix                     
+p <- pipe(paste("gzcat ",GenoPath,"ALL.chr",Chr,".phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
           sed /^#/d  |
           cut  -f '10-' |
           ./a.out | 
@@ -103,103 +75,64 @@ x <- read.table(p,
                 colClasses=c("integer","integer"), 
                 fill=TRUE,
                 row.names=NULL)
-```
 
-
-```{r}
 # Convert to a sparse matrix of people (rows) x variant (columns)
-chr22 <- sparseMatrix(i=x[,2], j=x[,1], x=1.0)
+GT <- sparseMatrix(i=x[,2], j=x[,1], x=1.0)
 
 # Inspect the dimensions of this matrix
-print(dim(chr22))
-```
+print(dim(GT))                     
 
-# PCA
-
-compute the first three principal component vectors
-
-```{r}
-cm <- colMeans(chr22)
-p <- irlba(chr22,
+# PCA compute the first three principal component vectors
+cm <- colMeans(GT)
+p <- irlba(GT,
            nv=3,
            nu=3,
            tol=0.1,
            center=cm)
-```
-
-
- add to dataset
-```{r}
+           
+#Add to dataset
 colnames(p$u) <- paste0("pc",1:3)
 bas_dt <- bind_cols(bas_dt, 
                     as_tibble(p$u))
-```
-
-
-
-```{r}
-ggplot(bas_dt,
-       aes(pc1, pc3, color=Population)) +
-  geom_point() +
-  theme_bw() 
-```
-
+                     
 # Logistic factor analysis
-
-```{r}
-chr22_mtx <- t(as.matrix(chr22[,1:50000]))
-```
-
-
-compute the first three factors including the intercept
-
-```{r}
-LF <- lfa(chr22_mtx, 4)
-dim(LF)
-```
-
-
-
-```{r}
-
+GT_mtx <- t(as.matrix(GT[,1:50000]))
+LF <- lfa(GT_mtx, 4)
+print(dim(LF))
+#Add to dataset
 bas_dt <- bind_cols(bas_dt,
                     tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
-```
 
-```{r}
-ggplot(bas_dt,
+#compute Individual Specific Allele Frequency
+sub_ial <- af(GT_mtx, LF)
+                    
+lfa <- ggplot(bas_dt,
        aes(lf1, lf2, color=Population)) +
   geom_point() +
   theme_bw()
-```
 
-
-computes the individual-specific allele frequencies
-
-```{r}
-chr22sub_ial <- af(chr22_mtx, LF)
-
-```
-
-
-```{r}
-
+pca <- ggplot(bas_dt,
+       aes(pc1, pc3, color=Population)) +
+  geom_point() +
+  theme_bw()
+     
+plot_grid(pca, lfa)
+ 
 to_datalist <- function(i, data_genotype, data_iaf, qual){
   
     data <- tibble(genotype=data_genotype[i,],
                iaf=data_iaf[i,],
                qual=qual)
                
-     return(data)       
+    return(data)       
 }
 
-
 fit_model_1 <- function(data){
-  
-  
-  fit <- glm2(genotype ~ qual + offset(iaf), family ="binomial", data=data)
-  return(fit)
-  
+	
+	fit <- glm2(genotype ~ bas_dt$avg_qual + offset(iaf), 
+				family ="binomial", data=data)
+	
+	return(fit)
 }
 
 plot_data <- function(data){
@@ -211,59 +144,23 @@ plot_data <- function(data){
   return(p)
   
 }
-```
-
-```{r}
 
 loci <- seq(1,50000)
 names(loci) <- loci
 
 data_list <- map(loci, 
                  to_datalist,
-                 data_genotype=chr22_mtx,
-                 data_iaf=chr22sub_ial,
-                 qual=bas_dt$avg_qual)
+                 data_genotype=GT_mtx,
+                 data_iaf=sub_ial)
 
-```
+#save(data_list, file = '~/Documents/QualityPaper/rick/data_list.temp')
+#load('~/Documents/QualityPaper/rick/data_list.temp')  
+               
+future::plan(sequential)
 
+dt <- head(data_list,100)
 
+fits <- future_map(dt, fit_model_1)
 
-```{r}
-plan(multiprocess)
-
-fits <- future_map(data_list, fit_model_1)
-
-```
-
-```{r}
-coefLF = lapply(fits, function(x) coef(x)[[2]])
-
-```
-
-```{r}
-plots <-  future_map(data_list, plot_data) 
-```
-
-
-```{r}
-t= list()
-for(f in seq(1,10000)){
-  t1 = chr22_mtx[f,]
-  t2 = subset[f,]
-  t[[f]] = glm(t1 ~ bas_dt$avg_qual + offset(t2))
-}
-
-
-```
-
-
-```{r}
-Pop = apply(head(chr22_mtx,10000), 1, function(x)
-                    glm2(x 
-                          ~ bas_dt$Population
-                          + bas_dt$avg_qual))
-```
-
-
-
-
+coefLF = lapply(fits, function(x) coef(x)[[2]])  
+                                                              

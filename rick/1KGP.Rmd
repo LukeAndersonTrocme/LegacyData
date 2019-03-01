@@ -29,6 +29,7 @@ library(threejs)
 library(tidyverse)
 library(lfa)
 library(furrr)
+library(broom)
 options(future.globals.maxSize= 10000000000)
 plan(multicore)
 ```
@@ -163,6 +164,10 @@ write_tsv(bas_dt, "average_quality_chrom21.txt")
 ```
 
 
+```{r}
+bas_dt<- read_tsv( "average_quality_chrom21.txt")
+```
+
 
 ## Plot 
 
@@ -208,7 +213,7 @@ x <- read.table(p,
 
 ```{r}
 # Convert to a sparse matrix of people (rows) x variant (columns)
-chr20 <- sparseMatrix(i=x[,2], j=x[,1], x=1.0)
+chr20 <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
 
 # Inspect the dimensions of this matrix
 print(dim(chr20))
@@ -260,7 +265,7 @@ ggplot(bas_dt,
 # Logistic factor analysis
 
 ```{r}
-chr20_mtx <- t(as.matrix(chr20_sub))
+chr20_mtx <- t(as.matrix(chr20[,1:100000]))
 ```
 
 
@@ -290,7 +295,7 @@ bas_dt <- bind_cols(bas_dt,
 
 ```{r}
 ggplot(bas_dt,
-       aes(lf1, lf2, color=Population)) +
+       aes(lf2, lf3, color=Population)) +
   geom_point() +
   theme_bw()
 ```
@@ -306,17 +311,16 @@ chr20sub_ial <- af(chr20_mtx, LF)
 
 ```{r}
 
-to_datalist <- function(i, data_genotype, data_iaf, qual){
+to_datalist <- function(i, data_genotype, data_iaf){
   
     data <- tibble(genotype=data_genotype[i,],
-               iaf=data_iaf[i,],
-               qual=qual)
+               iaf=data_iaf[i,])
                
      return(data)       
 }
 
 
-fit_model_1 <- function(data){
+fit_model_1 <- function(data, qual){
   
   
   fit <- glm(genotype ~ qual + offset(iaf), family ="binomial", data=data)
@@ -324,7 +328,7 @@ fit_model_1 <- function(data){
   
 }
 
-plot_data <- function(data){
+plot_data <- function(data,qual){
   
       p <- ggplot(data,
        aes(qual, genotype, color=iaf)) +
@@ -337,29 +341,99 @@ plot_data <- function(data){
 
 ```{r}
 
-loci <- c(1,4,5)
+loci <- c(1:1000)
 names(loci) <- loci
 
-data_list <- map(loci, 
+data_list <- future_map(loci, 
                  to_datalist,
                  data_genotype=chr20_mtx,
-                 data_iaf=chr20sub_ial,
-                 qual=bas_dt$avg_qual_mean)
-
-   
+                 data_iaf=chr20sub_ial)
 
 ```
 
 
 
 ```{r}
-fits <- future_map(data_list, fit_model_1)
+data_list <- 
+  enframe(data_list,
+          name = "locus", 
+          value = "dataset")
+```
 
+
+```{r}
+avg_qual_mean <- bas_dt$avg_qual_mean
+
+data_list <- 
+  data_list %>%
+  mutate(
+    fit = future_map(dataset,
+                     ~ glm(genotype ~ avg_qual_mean + offset(iaf),
+                           family ="binomial",
+                           data=.x)),
+    tidied = future_map(fit, tidy),
+    glanced = future_map(fit, glance)
+)
+```
+
+get all p-values
+
+```{r}
+p_values_dt <-
+  data_list  %>% 
+  select(tidied) %>% 
+  map_depth( 2, "p.value") %>% 
+  map_depth( 2, c(2)) %>% # c(1) for the intercept
+  unlist(use.names = FALSE) %>% 
+  enframe(name = "locus" ,
+          value= "p.value")%>%
+  mutate(locus= data_list$locus)
+
+p_values_dt
+```
+
+
+```{r}
+estimates_dt <-
+  data_list  %>% 
+  select(tidied) %>% 
+  map_depth( 2, "estimate")%>% 
+  map_depth( 2, c(2)) %>% # c(1) for the intercept
+  unlist(use.names = FALSE) %>% 
+  enframe(name = "locus" ,
+          value= "beta_hat")%>%
+  mutate(locus= data_list$locus)
+
+estimates_dt
+```
+```{r}
+ggplot(p_values_dt)+
+  geom_histogram((aes(x=p.value)), bins=100) +
+  theme_bw()
+```
+
+get a p-value for target specific loci
+
+
+```{r}
+target_loci <- c("4", "5")
 ```
 
 ```{r}
-plots <-  future_map(data_list, plot_data) 
+p_values_subset <-
+  data_list  %>% 
+  filter(locus %in% target_loci) %>% 
+  select(tidied) %>% 
+  map_depth( 2, "p.value") %>% 
+   map_depth( 2, c(2)) %>%
+  unlist(use.names = FALSE) %>% 
+  enframe(name = "locus" ,
+          value= "p.value")%>%
+  mutate(locus= target_loci)
+p_values_subset 
 ```
+
+
 
 
 ```{r}

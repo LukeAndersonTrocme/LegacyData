@@ -4,38 +4,62 @@ library(ggplot2)
 library(glm2)
 library(cowplot)
 library(lfa)
+library(tidyverse)
 
 #read Genotypes
-GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=10000)
+#GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
 GT = fread('/Users/luke/Documents/QualityPaper/sig/SigVar_0.001.genotypes.txt')
+
+
 SigPos = fread('~/Documents/QualityPaper/sig/Total_Sig_POSfreq.txt', col.names=c('CHROM','POS','rsID','ID'))
 
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
+GT = merge(GT, SigPos, by=c('CHROM','POS','ID'))
+GT$rsID = NULL
+
+
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt') 
 
 # Logistic factor analysis
-chr22_mtx <- as.matrix(GT[,-(1:3)])
+GT_mtx <- as.matrix(GT[,-(1:3)])
 #compute the first three factors including the intercept
-LF <- lfa(chr22_mtx, 4)
-subset <- af(chr22_mtx, LF)
+LF <- lfa(GT_mtx, 4)
+subset <- af(GT_mtx, LF)
+subset <- cbind(GT[,c(1:3)], subset)
 
-samples <- bind_cols(samples,
-                    tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
+to_datalist <- function(i, data_genotype, data_iaf){
+  
+    data <- tibble(genotype=data_genotype[i,],
+               iaf= subset[i,])
+               
+    return(data)       
+}
 
-LF = mapply(function(x, y){
-                           glm(x 
-                                ~ samples$average_quality_of_mapped_bases 
-                                + offset(y))}, 
-                           as.data.frame(t(chr22_mtx)),
-                           as.data.frame(t(subset)))
+loci <- seq(1,nrow(GT_mtx))
+names(loci) <- loci
 
-Pop = apply(GT[,-(1:3)], 1, function(x)
+data_list <- map(loci, 
+                 to_datalist,
+                 data_genotype = GT_mtx,
+                 data_iaf = subset)
+
+fit_model_1 <- function(data){
+	
+	fit <- glm2(genotype ~ samples$average_quality_of_mapped_bases + offset(iaf), 
+				family ="binomial", data=data)
+	
+	return(fit)
+}
+
+fits <- lapply(head(data_list,10000), fit_model_1)
+
+Pop = apply(GT[c(1:10000),-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$Pop +
 							samples$average_quality_of_mapped_bases))
 
-PC = apply(GT[,-(1:3)], 1, function(x)
+PC = apply(GT[c(1:10000),-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$PC1 + 
 							samples$PC2 +
@@ -45,33 +69,60 @@ PC = apply(GT[,-(1:3)], 1, function(x)
 							samples$average_quality_of_mapped_bases))
 																					
 #get coef of Qual per site
-coefLF = lapply(LF, function(x) coef(x)[[5]])
+coefLF = lapply(fits, function(x) coef(x)[[2]])
 coefPop = lapply(Pop, function(x) coef(x)[[27]])
 coefPC = lapply(PC, function(x) coef(x)[[7]])
 
 coef = data.frame('LF' = unlist(coefLF),
 				  'Pop'=unlist(coefPop),
 				  'PC' = unlist(coefPC))
+				  
+q0<-ggplot(coef, aes(x=Pop, y=PC))+geom_point()
+q1<-ggplot(coef, aes(x=LF, y=Pop))+geom_point()+xlim(c(-0.5,0.5))
+q2<-ggplot(coef, aes(x=LF, y=PC))+geom_point()+xlim(c(-0.5,0.5))
+plot_grid(q0,q1,q2, nrow=1)
 
-coef = cbind(coef, GT[,c(1:3)])
+
+makePlot<-function(pos){
+	testing = data.frame(
+			GT = unlist(GT[which(GT$POS == pos),-c(1:3)]),
+			IAF = unlist(subset[which(subset$POS == pos),-c(1:3)]), 
+			Qual = samples$average_quality_of_mapped_bases,
+			Pop = samples$Pop)
+			
+	ggplot(testing, aes(x=Qual, y=GT, color=IAF))+
+				geom_point()+facet_wrap(.~Pop, ncol=3)+
+				guides(color=F)+geom_smooth(method = "glm", 
+     			method.args = list(family = "binomial"), 
+     			se = FALSE)
+}
+
+coef = cbind(coef, GT[c(1:10000),c(1:3)])
 coef1 = merge(coef, SigPos, by=c('CHROM','POS','ID'))
 
-devLF = lapply(PC, function(x) anova(x, test='Chi')[[7,2]])
+devLF = lapply(fits, function(x) anova(x, test='Chi')[[2,2]])
 devPop = lapply(Pop, function(x) anova(x, test='Chi')[[3,2]])
 devPC = lapply(PC, function(x) anova(x, test='Chi')[[7,2]])
 
-dev = data.frame('Pop'=unlist(devPop),
-				  'PC' = unlist(devPC))
+dev = data.frame('LFd' = unlist(devLF),
+				  'Popd'=unlist(devPop),
+				  'PCd' = unlist(devPC))
 				  
+n1<-ggplot(dev, aes(x=Pop, y=PC))+geom_point()			  
+n2<-ggplot(dev, aes(x=LF, y=PC))+geom_point()
+n3<-ggplot(dev, aes(x=LF, y=Pop))+geom_point()
+plot_grid(n1,n2,n3, nrow=1)					  
 
-dev1 = cbind(dev, GT[,c(1:3)])
-dev1 = merge(dev1, SigPos, by=c('CHROM','POS','ID'))
+dev = cbind(coef, dev)
 
 
 all = merge(dev1, coef1, by=c('CHROM','POS','ID', 'rsID'))
 
-pa=ggplot(coef1, aes(x=as.numeric(ID), y=Pop))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Beta')
-pb=ggplot(coef1, aes(x=as.numeric(ID), y=PC))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Beta')
+pLF=ggplot(dev, aes(x=as.numeric(ID), y=LFd))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Deviance')
+pPop=ggplot(dev, aes(x=as.numeric(ID), y=Popd))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Deviance')
+pb=ggplot(coef, aes(x=as.numeric(ID), y=PC))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Beta')
+pp=ggplot(coef, aes(x=as.numeric(ID), y=LF))+geom_point(shape=1)+theme_bw()+labs(x='Allele Frequency',y='Beta')
+plot_grid(pb,pp,pPop,pLF)
 			  
 p1=ggplot(coef1, aes(x=Pop, y=PC))+geom_point(shape=1, alpha=0.3)+theme_classic()+ggtitle('Coef of Q')+theme(plot.title = element_text(hjust = 0.5))
 			  
