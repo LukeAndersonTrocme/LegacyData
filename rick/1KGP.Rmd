@@ -315,7 +315,7 @@ run_workflow <- function(loci){
   
   data_list <- 
     data_list %>%
-  slice(1:10) %>%
+  #slice(1:10) %>%
   transmute(
     locus=locus,
     fit1 = future_map(dataset, fit_model))  %>%
@@ -353,6 +353,7 @@ data_list_subset <-
   data_list %>%
    filter(locus %in% target_loci ) %>%
     mutate(plotted= future_map(predicted, get_plot)) 
+data_list_subset
 ```
 
 
