@@ -163,13 +163,7 @@ bas_dt
 write_tsv(bas_dt, "average_quality_chrom21.txt")
 ```
 
-
-```{r}
-bas_dt<- read_tsv( "average_quality_chrom21.txt")
-```
-
-
-## Plot 
+ Plot 
 
 ```{r fig.width=20}
 ggplot(bas_dt,
@@ -192,122 +186,12 @@ ggplot(bas_dt,
 ```
 
 
-# Load Gentype data
-
-
-
-Load VCF file into a sparse matrix 
-
-```{r}
-p <- pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
-          sed /^#/d  |
-          cut  -f '10-' |
-          ./a.out | 
-          cut -f '1-2'")
-x <- read.table(p,
-                colClasses=c("integer","integer"), 
-                fill=TRUE,
-                row.names=NULL)
-```
-
-
-```{r}
-# Convert to a sparse matrix of people (rows) x variant (columns)
-chr20 <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
-
-# Inspect the dimensions of this matrix
-print(dim(chr20))
-```
-
-```{r}
-rm(x)
-gc()
-```
-
-The matrix has 2,504 rows (people) and 1,812,841 columns (variants)
-
-### work with a subset
-
-```{r}
-chr20_sub <- chr20[,1:100000]
-```
-
-# PCA
-
-compute the first three principal component vectors
-
-```{r}
-cm <- colMeans(chr20_sub)
-p <- irlba(chr20_sub,
-           nv=3,
-           nu=3,
-           tol=0.1,
-           center=cm)
-```
-
-
- add to dataset
-```{r}
-colnames(p$u) <- paste0("pc",1:3)
-bas_dt <- bind_cols(bas_dt, 
-                    as_tibble(p$u))
-```
-
-
-
-```{r}
-ggplot(bas_dt,
-       aes(pc1, pc2, color=Population)) +
-  geom_point() +
-  theme_bw() 
-```
-
 # Logistic factor analysis
 
 ```{r}
-chr20_mtx <- t(as.matrix(chr20[,1:100000]))
+bas_dt <- read_tsv( "average_quality_chrom21.txt")
+avg_qual_mean <- bas_dt$avg_qual_mean
 ```
-
-
-compute the first three factors including the intercept
-
-```{r}
-LF <- lfa(chr20_mtx, 4)
-dim(LF)
-```
-
-
-Determine genome-wide goodness-of-fit for a particular value of d by computing SNP-by-SNP goodness-of-fit when compared to population structure. 
-
-```{r}
-#gof_4 <- model.gof(chr20_mtx, LF, 3)
-#LF <- lfa(chr20_mtx, 10)
-#gof_10 <- model.gof(chr20_mtx, LF, 3)
-#hist(gof_4)
-```
-
-```{r}
-
-bas_dt <- bind_cols(bas_dt,
-                    tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
-```
-
-
-```{r}
-ggplot(bas_dt,
-       aes(lf2, lf3, color=Population)) +
-  geom_point() +
-  theme_bw()
-```
-
-
-computes the individual-specific allele frequencies
-
-```{r}
-chr20sub_ial <- af(chr20_mtx, LF)
-
-```
-
 
 ```{r}
 
@@ -319,64 +203,213 @@ to_datalist <- function(i, data_genotype, data_iaf){
      return(data)       
 }
 
+get_data <- function(loci){
+  
+  p <- pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
+          sed /^#/d  |
+          cut  -f '10-' |
+          ./a.out | 
+          cut -f '1-2'")
+  x <- read.table(p,
+                colClasses=c("integer","integer"), 
+                fill=TRUE,
+                row.names=NULL)
 
-fit_model_1 <- function(data, qual){
   
+  data <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
   
-  fit <- glm(genotype ~ qual + offset(iaf), family ="binomial", data=data)
-  return(fit)
+  data <- t(as.matrix(data[,loci]))
+  
+  return(data)
   
 }
-
-plot_data <- function(data,qual){
   
-      p <- ggplot(data,
-       aes(qual, genotype, color=iaf)) +
-      geom_point() +
-      theme_bw()
-  return(p)
   
-}
-```
+get_af_data <- function(data, d=4){
+  
 
-```{r}
-
-loci <- c(1:1000)
-names(loci) <- loci
-
-data_list <- future_map(loci, 
+  # compute the first d factors including the intercept
+  LF <- lfa(data, d)
+  # compute the individual-specific allele frequencies
+  data_iaf <- af(data, LF)
+  loci <- c(1:dim(data)[1])
+  names(loci) <- loci
+  
+  data_list <- future_map(loci, 
                  to_datalist,
-                 data_genotype=chr20_mtx,
-                 data_iaf=chr20sub_ial)
-
-```
-
-
-
-```{r}
-data_list <- 
+                 data_genotype=data,
+                 data_iaf=data_iaf) 
+  
+  data_list <- 
   enframe(data_list,
           name = "locus", 
           value = "dataset")
+  
+  return(data_list)
+  
+}
+
+get_predicted_mean <- function(model_fit) {
+ predicted <- 
+   augment(model_fit, type.predict = "response") %>%
+   select("genotype","offset.iaf.",".fitted") %>%
+   rename(iaf="offset.iaf.", mu=".fitted" )
+  return(predicted)
+}
+
+get_stats <- function(model_fit){
+  stats_dt <- 
+    tidy(model_fit)  %>%
+    filter(term=="avg_qual_mean") %>%
+    select(estimate, p.value) %>%
+    mutate(deviance= anova(model_fit)["Deviance"][[1]][2])
+  return(stats_dt)
+}
+
+
+
+fit_model <- function(dataset){
+  
+   fit <- glm(genotype ~ avg_qual_mean + offset(iaf),
+                           family ="binomial",
+                           data=dataset)
+   
+   stats <- get_stats(fit)
+   predicted <- get_predicted_mean(fit)
+   
+   return(list(stats, predicted))
+}
+
+get_plot <- function(data){
+  
+ p <- ggplot(bind_cols(data, 
+                   bas_dt %>% 
+                     select(Population,
+                            avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean, 
+                   genotype),
+               size=.5,
+               alpha= 0.4) +
+    geom_line(aes(avg_qual_mean,
+                  iaf, 
+                  colour="af"),
+              linetype="dashed") +
+    geom_line(aes(avg_qual_mean,
+                  mu,
+                  colour="mu")) +
+      theme_bw() +
+    facet_wrap(~Population)
+  
+  return(p)
+}
+```
+
+```{r}
+run_workflow <- function(loci){
+
+  data <- get_data(loci)
+  data_list <- get_af_data(data) 
+  
+  rm(data)
+  gc()
+  
+  data_list <- 
+    data_list %>%
+  #slice(1:10) %>%
+  transmute(
+    locus=locus,
+    fit1 = future_map(dataset, fit_model))  %>%
+  transmute(
+    locus=locus,
+    stats = future_map(fit1, c(1)),
+    predicted =future_map(fit1, c(2))) %>%
+    unnest(stats) %>%
+    mutate(plotted= future_map(predicted, get_plot)) %>%
+    arrange(-deviance)
+  
+  return(data_list)
+  
+}
+
+
 ```
 
 
 ```{r}
-avg_qual_mean <- bas_dt$avg_qual_mean
-
-data_list <- 
-  data_list %>%
-  mutate(
-    fit = future_map(dataset,
-                     ~ glm(genotype ~ avg_qual_mean + offset(iaf),
-                           family ="binomial",
-                           data=.x)),
-    tidied = future_map(fit, tidy),
-    glanced = future_map(fit, glance)
-)
+data_list <- run_workflow (loci=c(1:100))
+data_list
 ```
 
-get all p-values
+
+
+
+
+```{r}
+n <-5
+target_loci <- 
+  data_list %>% 
+  slice(1:n) %>% 
+  pull(locus)
+target_loci 
+```
+
+
+```{r}
+data_list_subset %>%
+  filter(locus %in% target_loci )%>%
+  pull(plotted)
+```
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+
+
+## Draft
+
+
+
+The matrix has 2,504 rows (people) and 1,812,841 columns (variants)
+
+
+
+
+Determine genome-wide goodness-of-fit for a particular value of d by computing SNP-by-SNP goodness-of-fit when compared to population structure. 
+
+```{r}
+#gof_4 <- model.gof(chr20_mtx, LF, 3)
+#LF <- lfa(chr20_mtx, 10)
+#gof_10 <- model.gof(chr20_mtx, LF, 3)
+#hist(gof_4)
+```
+
+
+
+```{r}
+
+
+data_list
+```
+
+
 
 ```{r}
 p_values_dt <-
@@ -416,7 +449,7 @@ get a p-value for target specific loci
 
 
 ```{r}
-target_loci <- c("4", "5")
+
 ```
 
 ```{r}
@@ -434,11 +467,58 @@ p_values_subset
 ```
 
 
+```{r}
+
+bas_dt <- bind_cols(bas_dt,
+                    tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
+```
 
 
 ```{r}
-sessionInfo()
+ggplot(bas_dt,
+       aes(lf2, lf3, color=Population)) +
+  geom_point() +
+  theme_bw()
 ```
+
+### work with a subset
+
+```{r}
+chr20_sub <- chr20[,1:50000]
+```
+
+# PCA
+
+compute the first three principal component vectors
+
+```{r}
+cm <- colMeans(chr20_sub)
+p <- irlba(chr20_sub,
+           nv=3,
+           nu=3,
+           tol=0.1,
+           center=cm)
+```
+
+
+ add to dataset
+```{r}
+colnames(p$u) <- paste0("pc",1:3)
+bas_dt <- bind_cols(bas_dt, 
+                    as_tibble(p$u))
+```
+
+
+
+```{r}
+ggplot(bas_dt,
+       aes(pc1, pc2, color=Population)) +
+  geom_point() +
+  theme_bw() 
+```
+
+
+
 
 
 
