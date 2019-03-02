@@ -203,7 +203,7 @@ to_datalist <- function(i, data_genotype, data_iaf){
      return(data)       
 }
 
-get_data <- function(loci){
+get_data <- function(){
   
   p <- pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
           sed /^#/d  |
@@ -218,7 +218,6 @@ get_data <- function(loci){
   
   data <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
   
-  data <- t(as.matrix(data[,loci]))
   
   return(data)
   
@@ -307,7 +306,8 @@ get_plot <- function(data){
 ```{r}
 run_workflow <- function(loci){
 
-  data <- get_data(loci)
+  data <- get_data()
+  data <- t(as.matrix(data[,loci]))
   data_list <- get_af_data(data) 
   
   rm(data)
@@ -315,7 +315,7 @@ run_workflow <- function(loci){
   
   data_list <- 
     data_list %>%
-  #slice(1:10) %>%
+  slice(1:10) %>%
   transmute(
     locus=locus,
     fit1 = future_map(dataset, fit_model))  %>%
@@ -324,8 +324,7 @@ run_workflow <- function(loci){
     stats = future_map(fit1, c(1)),
     predicted =future_map(fit1, c(2))) %>%
     unnest(stats) %>%
-    mutate(plotted= future_map(predicted, get_plot)) %>%
-    arrange(-deviance)
+    arrange(-deviance) 
   
   return(data_list)
   
@@ -336,13 +335,9 @@ run_workflow <- function(loci){
 
 
 ```{r}
-data_list <- run_workflow (loci=c(1:100))
+data_list <- run_workflow (loci=c(1:50000))
 data_list
 ```
-
-
-
-
 
 ```{r}
 n <-5
@@ -353,10 +348,17 @@ target_loci <-
 target_loci 
 ```
 
+```{r}
+data_list_subset <- 
+  data_list %>%
+   filter(locus %in% target_loci ) %>%
+    mutate(plotted= future_map(predicted, get_plot)) 
+```
+
+
 
 ```{r}
 data_list_subset %>%
-  filter(locus %in% target_loci )%>%
   pull(plotted)
 ```
 
