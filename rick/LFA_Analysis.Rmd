@@ -15,14 +15,6 @@ output:
       smooth_scroll: false
 ---
 
-# Preparations
-
-```{r setup}
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
-options(scipen=999)
-```
-
-
 ```{r}
 library(Matrix)
 library(irlba)
@@ -97,10 +89,13 @@ get_af_data <- function(data, d=4){
 
 data <- get_data()
 data <- t(as.matrix(data))
+
+```
+
+```{r}
 data_list <- get_af_data(data) 
 
 rm(data)
 
 save(data_list, '/Users/luke/Documents/QualityPaper/rick/LFA_GenotypeData.RData')
-
 ```
