@@ -55,8 +55,14 @@ get_data <- function(){
   
   data <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
   
+  data.csc <- new("matrix.csc", ra = data@x,
+                           ja = data@i + 1L,
+                           ia = data@p + 1L,
+                           dimension = data@Dim)
   
-  return(data)
+  data.csr <- as.matrix.csr(data.csc)
+  
+  return(data.csr)
   
 }
   
