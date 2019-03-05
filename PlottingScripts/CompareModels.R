@@ -16,6 +16,8 @@ Pop = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$Pop +
 							samples$average_quality_of_mapped_bases))
+save(Pop, file='~/Documents/QualityPaper/Misc/Temp.Pop.RData')
+rm(Pop)
 
 PC = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
@@ -25,7 +27,9 @@ PC = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))
-							
+save(PC, file='~/Documents/QualityPaper/Misc/Temp.PC.RData')
+rm(PC)	
+					
 PopPC = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$Pop +
@@ -35,7 +39,10 @@ PopPC = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))						
-																										
+save(PopPC, file='~/Documents/QualityPaper/Misc/Temp.PopPC.RData')
+	
+load('~/Documents/QualityPaper/Misc/Temp.Pop.RData')
+load('~/Documents/QualityPaper/Misc/Temp.PC.RData')																								
 #get coef of Qual per site
 coefPop = lapply(Pop, function(x) coef(x)[[27]])
 coefPC = lapply(PC, function(x) coef(x)[[7]])
