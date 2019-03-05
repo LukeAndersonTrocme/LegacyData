@@ -1,7 +1,7 @@
 ---
 title: "HGP analysis"
 author: 
-- name: Rick Farouni
+- name: Rick Farouni, 
   affiliation:
   - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
@@ -24,8 +24,8 @@ options(scipen=999)
 
 ```{r}
 library(Matrix)
-library(irlba)
-library(threejs)
+#library(irlba)
+#library(threejs)
 library(tidyverse)
 library(lfa)
 library(furrr)
@@ -34,62 +34,21 @@ options(future.globals.maxSize= 10000000000)
 plan(multicore)
 ```
 
-# Download data
-
-
-Download a fast parser program (after compilation you'll have a program called a.out)
-
-```{bash}
-wget https://raw.githubusercontent.com/bwlewis/1000_genomes_examples/master/parse.c
-cc -O2 parse.c
-```
-
-Download 1000 genomes phenotype data file
- 
-```{bash}
-wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_g1k.ped
-```
-
-Download 1000 genomes genotype data file for chr 20
-
-
-```{bash}
-wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
-
-```
-
-Read just the header of the chromosome file to obtain the sample identifiers
-
-
-```{r}
-ids <- readLines(pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
-                      sed -n /^#CHROM/p | 
-                      tr '\t' '\n' | 
-                      tail -n +10"))
-head(ids)
-```
-
-
-Write ids to file
-
-```{r}
-writeLines(ids, "ids.txt")
-```
-
+# Download metadata
 
 Download bas files for all the samples 
 
 ```{bash message=FALSE}
 for id in `cat ids.txt`
   do
-  wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/${id}/alignment/${id}.chrom20.*.bam.bas
+  wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/${id}/alignment/${id}.mapped.*.bam.bas -P ./data/bas
 done
 wait
 ```
 
-# Read bas files
+## Read bas files
 
-```{r}
+```{r read_bas}
 read_basfiles <- function(bas_filepath) {
   
   bas_file <- read_tsv(bas_filepath,
@@ -99,6 +58,8 @@ read_basfiles <- function(bas_filepath) {
   return( bas_file)
 }
 ```
+
+### Preprocess table
 
 ```{r}
 bas_files <- list.files(path = ".",
@@ -149,7 +110,6 @@ ped
 ```
 
 
-
 ```{r}
 bas_dt <- inner_join( ped  %>% 
                        select(sample, Population),
@@ -160,10 +120,12 @@ bas_dt
 
 
 ```{r}
-write_tsv(bas_dt, "average_quality_chrom21.txt")
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+write_tsv(bas_dt, bas_filepath)
 ```
 
- Plot 
+Plot 
+ 
 
 ```{r fig.width=20}
 ggplot(bas_dt,
@@ -173,7 +135,6 @@ ggplot(bas_dt,
   geom_point(size=2)
  
 ```
-
 
 
 ```{r fig.width=20}
@@ -189,7 +150,7 @@ ggplot(bas_dt,
 # Logistic factor analysis
 
 ```{r}
-bas_dt <- read_tsv( "average_quality_chrom21.txt")
+bas_dt <- read_tsv(bas_filepath)
 avg_qual_mean <- bas_dt$avg_qual_mean
 ```
 
@@ -203,37 +164,25 @@ to_datalist <- function(i, data_genotype, data_iaf){
      return(data)       
 }
 
-get_data <- function(){
-  
-  p <- pipe("zcat ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz  |
-          sed /^#/d  |
-          cut  -f '10-' |
-          ./a.out | 
-          cut -f '1-2'")
-  x <- read.table(p,
-                colClasses=c("integer","integer"), 
-                fill=TRUE,
-                row.names=NULL)
-
-  
-  data <- sparseMatrix(i=x[,2], j=x[,1], x=1L)
-  
-  
-  return(data)
-  
-}
-  
   
 get_af_data <- function(data, d=4){
   
 
   # compute the first d factors including the intercept
+  
+  message("running lfa")
+
   LF <- lfa(data, d)
   # compute the individual-specific allele frequencies
+  
+  message("running  af")
+
   data_iaf <- af(data, LF)
   loci <- c(1:dim(data)[1])
   names(loci) <- loci
   
+  message("to datalist")
+
   data_list <- future_map(loci, 
                  to_datalist,
                  data_genotype=data,
@@ -303,15 +252,20 @@ get_plot <- function(data){
 }
 ```
 
+
 ```{r}
 run_workflow <- function(loci){
 
-  data <- get_data()
-  data <- t(as.matrix(data[,loci]))
+  data <- read.bed("./data/plink/ALL_Pops")
+  
+  message("plink data loaded")
+  
   data_list <- get_af_data(data) 
   
   rm(data)
   gc()
+  
+  message("fitting model")
   
   data_list <- 
     data_list %>%
@@ -335,12 +289,17 @@ run_workflow <- function(loci){
 
 
 ```{r}
-data_list <- run_workflow (loci=c(1:50000))
+data_list <- run_workflow ()
 data_list
 ```
 
+```{r save_data}
+saveRDS(data_list, "./data/preprocessed/data_fit.rds")
+```
+
+
 ```{r}
-n <-5
+n <-20
 target_loci <- 
   data_list %>% 
   slice(1:n) %>% 
@@ -366,159 +325,10 @@ data_list_subset %>%
 
 
 
-
-
-
-
-
-
-
 ```{r}
 sessionInfo()
 ```
 
-
-
-
-
-
-
-
-
-
-## Draft
-
-
-
-The matrix has 2,504 rows (people) and 1,812,841 columns (variants)
-
-
-
-
-Determine genome-wide goodness-of-fit for a particular value of d by computing SNP-by-SNP goodness-of-fit when compared to population structure. 
-
-```{r}
-#gof_4 <- model.gof(chr20_mtx, LF, 3)
-#LF <- lfa(chr20_mtx, 10)
-#gof_10 <- model.gof(chr20_mtx, LF, 3)
-#hist(gof_4)
-```
-
-
-
-```{r}
-
-
-data_list
-```
-
-
-
-```{r}
-p_values_dt <-
-  data_list  %>% 
-  select(tidied) %>% 
-  map_depth( 2, "p.value") %>% 
-  map_depth( 2, c(2)) %>% # c(1) for the intercept
-  unlist(use.names = FALSE) %>% 
-  enframe(name = "locus" ,
-          value= "p.value")%>%
-  mutate(locus= data_list$locus)
-
-p_values_dt
-```
-
-
-```{r}
-estimates_dt <-
-  data_list  %>% 
-  select(tidied) %>% 
-  map_depth( 2, "estimate")%>% 
-  map_depth( 2, c(2)) %>% # c(1) for the intercept
-  unlist(use.names = FALSE) %>% 
-  enframe(name = "locus" ,
-          value= "beta_hat")%>%
-  mutate(locus= data_list$locus)
-
-estimates_dt
-```
-```{r}
-ggplot(p_values_dt)+
-  geom_histogram((aes(x=p.value)), bins=100) +
-  theme_bw()
-```
-
-get a p-value for target specific loci
-
-
-```{r}
-
-```
-
-```{r}
-p_values_subset <-
-  data_list  %>% 
-  filter(locus %in% target_loci) %>% 
-  select(tidied) %>% 
-  map_depth( 2, "p.value") %>% 
-   map_depth( 2, c(2)) %>%
-  unlist(use.names = FALSE) %>% 
-  enframe(name = "locus" ,
-          value= "p.value")%>%
-  mutate(locus= target_loci)
-p_values_subset 
-```
-
-
-```{r}
-
-bas_dt <- bind_cols(bas_dt,
-                    tibble(lf1=LF[,1], lf2=LF[,2],lf3=LF[,3]))
-```
-
-
-```{r}
-ggplot(bas_dt,
-       aes(lf2, lf3, color=Population)) +
-  geom_point() +
-  theme_bw()
-```
-
-### work with a subset
-
-```{r}
-chr20_sub <- chr20[,1:50000]
-```
-
-# PCA
-
-compute the first three principal component vectors
-
-```{r}
-cm <- colMeans(chr20_sub)
-p <- irlba(chr20_sub,
-           nv=3,
-           nu=3,
-           tol=0.1,
-           center=cm)
-```
-
-
- add to dataset
-```{r}
-colnames(p$u) <- paste0("pc",1:3)
-bas_dt <- bind_cols(bas_dt, 
-                    as_tibble(p$u))
-```
-
-
-
-```{r}
-ggplot(bas_dt,
-       aes(pc1, pc2, color=Population)) +
-  geom_point() +
-  theme_bw() 
-```
 
 
 
