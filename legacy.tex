@@ -66,16 +66,14 @@ The second phase of the 1kGP implemented multiple technological and analytical i
 
 Even though such batch effects clearly have the potential to confound analyses, the unrestricted availability of the 1kGP data lead to ubiquitous use making batch effects particularly insidious.   
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
-Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses \luke{and spurious GWAS associations as a result of imputation using the 1kGP as a reference.}
+Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
 
 \subsection{Mutational Signatures}
 
 Different mutagenic processes may preferentially affect different DNA motifs. 
 Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \citep{Pfeifer2002,Pleasance2010}. 
-Thus, the impact of mutational processes can be inferred by considering the DNA context of a polymorphism \citep{Alexandrov2013,Shiraishi2015a}. 
-%Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
+Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
 Such genome-wide mutational signatures have been used as diagnostic tools for cancers \citep{Alexandrov2013,Shiraishi2015a}.
-
 %This means that the genomic context of a mutation can be used to gain insight into the cause of this mutation \cite{Pleasance2010}.
 %While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity \cite{Pleasance2010}.
 %Large cohorts have recently become available to increase statistical power to resolve some of these fine scale mutational signatures.
@@ -491,8 +489,15 @@ Because the resequencing did not include all the individuals from the original 1
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  8697 significant SNPs and INDELs identified in the \textit{5PC} model including all populations. Only 612 of the variants are present in the high depth resequenced individuals.}  
+\includegraphics[width=15cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  7,607 significant SNPs and INDELs identified in the reverse GWAS model including all populations. Only 613 of the variants are present in the high depth resequenced individuals.}  
+\label{90HanSFS_full}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/OverUnder30.jpg}
+\caption{Site frequency spectrum plot comparing the frequency of suspicious variants for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30.}  
 \label{90HanSFS_full}
 \end{figure}
 

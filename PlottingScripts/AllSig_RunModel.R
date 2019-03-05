@@ -12,9 +12,11 @@ names(MyColour) <- colors $Pop
 path = '/Users/luke/genomes/genomes/hg19/Genotypes/'
 
 #read Genotypes
-GT = fread('~/Documents/QualityPaper/sig/SigVar_Pop_0.01_genotype.txt')
-ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
+GT = fread('~/Documents/QualityPaper/sig/SigVar_Pop_0.01_rsID.genotype.txt')
+ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames_rsID.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
+names(GT)[4] = 'rsID'
+GT$ID <- as.numeric(as.character(GT$ID))
 
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
 samples$Pop = factor(samples$Pop, levels=c('FIN','GBR','CEU','IBS','TSI','CHS','CDX','CHB','JPT','KHV','GIH','STU','PJL','ITU','BEB','PEL','MXL','CLM','PUR','ASW','ACB','GWD','YRI','LWK','ESN','MSL'))
@@ -35,6 +37,7 @@ plt$pval = -log10(pchisq(plt$V2, 1, lower.tail=F))
 
 #to deal with duplicate entries, merge based on Chr Pos and AF
 SigPos = fread('/Users/luke/Documents/QualityPaper/sig/SignificantVariants.txt')
+
 plt = merge(plt, SigPos, by = c('CHROM','POS','ID'))
 
 names(plt) = c('Beta','CHROM','POS','AF','deviance','-log10(p)')
@@ -45,30 +48,34 @@ ggplot(plt, aes(x=ID, y=V1, color=log10P_0.01))+geom_point()+theme_bw()+labs(x='
 
 ##Compare over and under 30
 
-mGT = melt(unique(GT), id = c('CHROM','POS','ID'))
+mGT = melt(unique(GT), id = c('CHROM','POS','ID','rsID'))
 mGT = merge(samples[,c('Name','Pop','average_quality_of_mapped_bases')], mGT, by.x='Name',by.y='variable')
-mGT = merge(mGT, SigPos, by=c('CHROM','POS','ID'))
+mGT = merge(mGT, SigPos, by=c('CHROM','POS','ID','rsID'))
 
 over30 = mGT[which(mGT$average_quality_of_mapped_bases > 30),]
 
 under30 = mGT[which(mGT$average_quality_of_mapped_bases < 30),]
 
-o30AF <- over30 %>% group_by(CHROM,POS,ID) %>% summarize(oAF = sum(value))
-u30AF <- under30 %>% group_by(CHROM,POS,ID) %>% summarize(uAF = sum(value))
+o30AF <- over30 %>% group_by(CHROM,POS,ID,rsID) %>% summarize(oAF = sum(value))
+u30AF <- under30 %>% group_by(CHROM,POS,ID,rsID) %>% summarize(uAF = sum(value))
 
-AF30 <- merge(u30AF, o30AF, by=c('CHROM','POS','ID'))
+AF30 <- merge(u30AF, o30AF, by=c('CHROM','POS','ID','rsID'))
 
-af1 = ggplot(AF30, aes(x=uAF, y=oAF))+geom_abline(intercept=0, slope = 2279/225, linetype=2, color='grey60')+geom_bin2d(bins=100)+scale_fill_distiller(palette = "Spectral")+labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=200)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
 
-af2 = ggplot(AF30[which(AF30$oAF <50),], aes(x=uAF, y=oAF))+geom_abline(intercept=0, slope = 2279/225, linetype=2, color='grey60')+geom_bin2d(bins=50)+scale_fill_distiller(palette = "Spectral")+labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=100)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
 
 plot_grid(af1, af2)
 
-all = merge(all, AF30, by=c('CHROM','POS','rsID'))
-
-af3=ggplot(all, aes(x=uAF, y=oAF, color=PC.y))+geom_abline(intercept=0, slope = 2279/225, linetype=2, color='grey60')+geom_point()+scale_color_gradient(low='green',high='blue')+labs(x='Samples with Q < 30',y='Samples with Q > 30',color='Beta')
-
-af4=ggplot(all, aes(x=uAF, y=oAF, color=PC.x))+geom_abline(intercept=0, slope = 2279/225, linetype=2, color='grey60')+geom_point()+scale_color_gradient(low='green',high='blue')+labs(x='Samples with Q < 30',y='Samples with Q > 30',color='Deviance')
-
-plot_grid(af3, af4)
-
+ggsave('/Users/luke/Documents/QualityPaper/Figures/OverUnder30.jpg',height=5,width=10)
+ggsave('/Users/luke/Documents/QualityPaper/Figures/OverUnder30.pdf',height=5,width=10)
