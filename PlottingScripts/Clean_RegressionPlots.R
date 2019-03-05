@@ -4,13 +4,19 @@ library(dplyr)
 library(magrittr)
 library(data.table)
 library(ggplot2)
+library(RColorBrewer)
 library(multtest)
 library(cowplot)
 library(reshape2)
 
-Regression <-fread('/Users/luke/Documents/PC5/GenomeWide.5PC.Regression.clean.txt', colClasses='numeric',col.names=c('CHROM','POS','ID','dev.p'))
+Regression <-fread('~/Documents/QualityPaper/Misc/GenomeWide.Regression.txt', colClasses='numeric',col.names=c('CHROM','POS','ID','dev.p'))
 
 Regression $ID<-as.numeric(as.character(Regression $ID))
+Regression $CHROM<-as.numeric(as.character(Regression $CHROM))
+Regression $POS<-as.numeric(as.character(Regression $POS))
+Regression $dev.p<-as.numeric(as.character(Regression $dev.p))
+Regression <- Regression[complete.cases(Regression),]
+
 
 #read in list of global singletons
 singles<-fread(
@@ -49,9 +55,9 @@ rm(Repeats)
 rm(Indels)
 rm(rsID)
 
-write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegressionPC5.csv',row.names=F)
+write.table(Regression, file='/Users/luke/Documents/QualityPaper/Misc/TotalRegressionJustPop.csv',row.names=F)
 
-Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegressionPC5.csv')
+Regression<-fread('/Users/luke/Documents/QualityPaper/Misc/TotalRegressionJustPop.csv')
 
 Repeat_Indels <- unique(Regression[which(Regression$Indel=='yes' 
 								& Regression$Repeat=='yes'),])
@@ -71,10 +77,10 @@ TSBH <-function(df){
 procedures <- c( "TSBH") 
 #0.01
 df$p <- 10^-(df$dev.p)
-adjusted <- mt.rawp2adjp(df$p, procedures, alpha = 0.001)
+adjusted <- mt.rawp2adjp(df$p, procedures, alpha = 0.01)
 adj <- as.data.frame(adjusted$adj[order(adjusted$index), ])
-df$log10P_0.001 <- -log10(adj$TSBH_0.001)
-df$P_0.001 <- adj$TSBH_0.001
+df$log10P_0.01 <- -log10(adj$TSBH_0.01)
+df$P_0.01 <- adj$TSBH_0.01
 
 return(df)
 }
@@ -84,19 +90,11 @@ NORepeat_Indels <-TSBH(NORepeat_Indels)
 Repeat_SNPs <-TSBH(Repeat_SNPs)
 NORepeat_SNPs <-TSBH(NORepeat_SNPs)
 
-#write file
-write.table(Repeat_Indels, 
-file='/Users/luke/Documents/QualityPaper/Misc/Repeat_Indels.csv',row.names=F)
-write.table(NORepeat_Indels, 
-file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_Indels.csv',row.names=F)	
-write.table(Repeat_SNPs,file='/Users/luke/Documents/QualityPaper/Misc/Repeat_SNPs.csv',row.names=F)
-write.table(NORepeat_SNPs,file='/Users/luke/Documents/QualityPaper/Misc/NORepeat_SNPs.csv',row.names=F)
-
 #write significant positions
 writeSig <- function(df, Name){
-write.table(df[which(df$log10P_0.001>-log10(0.001)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
+write.table(df[which(df$log10P_0.01>-log10(0.01)),]$rsID, file=paste('~/Documents/QualityPaper/sig/',Name,'_rsID.txt',sep=''), quote=F, col.names=F, row.names=F)
 
-write.table(df[which(df$log10P_0.001>-log10(0.001)),c('CHROM','POS')], file=paste('~/Documents/QualityPaper/sig/',Name,'_POS.txt',sep=''), quote=F, col.names=F, row.names=F)
+write.table(df[which(df$log10P_0.01>-log10(0.01)),c('CHROM','POS')], file=paste('~/Documents/QualityPaper/sig/',Name,'_POS.txt',sep=''), quote=F, col.names=F, row.names=F)
 }
 
 writeSig(Repeat_Indels, 'Repeat_Indels')
@@ -106,24 +104,24 @@ writeSig(NORepeat_SNPs, 'NORepeat_SNPs')
 
 #combine them back together and write output file
 Regression <- bind_rows(list(Repeat_Indels, NORepeat_Indels, Repeat_SNPs, NORepeat_SNPs))
-write.table(Regression[which(Regression$log10P_0.00>-log10(0.001)),c('CHROM','POS','rsID','ID','dev.p','log10P_0.001')], file = '~/Documents/QualityPaper/sig/SignificantVariants.txt',row.names=F, quote=F, sep=',')
-write.table(Regression[which(Regression$log10P_0.00>-log10(0.001)),c('CHROM','POS')], file = '~/Documents/QualityPaper/sig/SignificantVariantsCHROM_POS.txt',row.names=F, quote=F,col.names=F,sep='\t')
+write.table(Regression[which(Regression$log10P_0.01>-log10(0.01)),c('CHROM','POS','rsID','ID','dev.p','log10P_0.01')], file = '~/Documents/QualityPaper/sig/SignificantVariants.txt',row.names=F, quote=F, sep=',')
+write.table(Regression[which(Regression$log10P_0.01>-log10(0.01)),c('CHROM','POS')], file = '~/Documents/QualityPaper/sig/SignificantVariantsCHROM_POS.txt',row.names=F, quote=F,col.names=F,sep='\t')
 
 #Make the manhattan plots
 makePlot <- function(df,Name, fileName){
 #subset the data to deal with sites -log10(p) > 20
-sig.20<-df[which((df$log10P_0.001 >= 20)),]
-sig.20$log10P_0.001=20
-sig.19<-df[which((df$log10P_0.001 < 20)),]
-nSig <- nrow(df[which(df$log10P_0.001 > -log10(0.001)),])
+sig.20<-df[which((df$log10P_0.01 >= 20)),]
+sig.20$log10P_0.01=20
+sig.19<-df[which((df$log10P_0.01 < 20)),]
+nSig <- nrow(df[which(df$log10P_0.01 > -log10(0.01)),])
 
 #make the plot
-ggplot(sig.19, aes(x=POS, y = log10P_0.001, color=as.factor(CHROM)))+
+ggplot(sig.19, aes(x=POS, y = log10P_0.01, color=as.factor(CHROM)))+
 facet_grid(~CHROM, scales='free_x', space='free_x', switch='x')+
-scale_fill_manual (values=getPalette(colourCount))+
+scale_color_manual(values = rep(c("grey", "black"), 22 )) +
 scale_y_continuous(expand=c(0,0))+
 geom_point(alpha=0.3, size=1)+theme_classic()+
-geom_point(data=sig.20, aes(x=POS, y = log10P_0.001),shape=1)+
+geom_point(data=sig.20, aes(x=POS, y = log10P_0.01),shape=1)+
 geom_hline(yintercept=-log10(0.01), color='blue')+
 labs(y='-log10(p)', x='Chromosome', title=Name, subtitle=paste('Number of loci tested =',nrow(df),'\n','Number of significant loci =',nSig))+
 theme(plot.title = element_text(hjust = 0.5), 
@@ -153,15 +151,15 @@ catalog$rsID <- catalog$SNPS
 
 
 
-catalog <- merge(catalog, Regression[,c('CHROM','POS', 'rsID','log10P_0.001')], by='rsID')
+catalog <- merge(catalog, Regression[,c('CHROM','POS', 'rsID','log10P_0.01')], by='rsID')
 
-write.table(catalog[which(catalog$log10P_0.001 > -log10(0.01)),], file = '~/Documents/QualityPaper/sig/SignificantPublications.txt',row.names=F, quote=F, sep=',')
+write.table(catalog[which(catalog$log10P_0.01 > -log10(0.01)),], file = '~/Documents/QualityPaper/sig/SignificantPublications.txt',row.names=F, quote=F, sep=',')
 
 ###OMNI CHIP
 omni <- fread('~/Downloads/HumanOmni2-5-8-v1-2-A-b138-rsIDs.txt',header=T)
 omni <- merge(omni, Regression, by.x='RsID', by.y='rsID')
 omni <- omni[which(omni$RsID != '.'),]
 
-ggplot(omni[which(omni$log10P_0.001 > 2),], aes(x=ID, y= log10P_0.001))+geom_point()+labs(x='Allele Frequency',y='-log10(p)')+ggtitle('SNPs present in the Omni 2.5 Microarray')
+ggplot(omni[which(omni$log10P_0.01 > 2),], aes(x=ID, y= log10P_0.01))+geom_point()+labs(x='Allele Frequency',y='-log10(p)')+ggtitle('SNPs present in the Omni 2.5 Microarray')
 
 ####
