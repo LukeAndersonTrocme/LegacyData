@@ -155,11 +155,15 @@ catalog <- merge(catalog, Regression[,c('CHROM','POS', 'rsID','log10P_0.01')], b
 
 write.table(catalog[which(catalog$log10P_0.01 > -log10(0.01)),], file = '~/Documents/QualityPaper/sig/SignificantPublications.txt',row.names=F, quote=F, sep=',')
 
+table <- catalog[which(catalog$log10P_0.01 > -log10(0.01)),c('PUBMEDID','JOURNAL','SNPS','PVALUE_MLOG','log10P_0.01')]
+print(table[order(-log10P_0.01),])
+
 ###OMNI CHIP
 omni <- fread('~/Downloads/HumanOmni2-5-8-v1-2-A-b138-rsIDs.txt',header=T)
 omni <- merge(omni, Regression, by.x='RsID', by.y='rsID')
 omni <- omni[which(omni$RsID != '.'),]
 
-ggplot(omni[which(omni$log10P_0.01 > 2),], aes(x=ID, y= log10P_0.01))+geom_point()+labs(x='Allele Frequency',y='-log10(p)')+ggtitle('SNPs present in the Omni 2.5 Microarray')
-
+ggplot(omni[which(omni$log10P_0.01 > 2),], aes(x=ID, y= log10P_0.01))+geom_point(shape=1)+labs(x='Allele Frequency',y='Adjusted -log10(p)')+ggtitle('219 SNPs present in the Omni 2.5 Microarray')
+ggsave('~/Documents/QualityPaper/Figures/Omni_AF.jpg', height=5, width=10)
 ####
+

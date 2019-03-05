@@ -14,7 +14,7 @@ $GenoPath/ALL.chip.POS
 for f in `seq 1 22`
   do echo $f
   #download VCF if needed
-  if [ ! -f $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz]; then
+  if [ ! -f $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz ]; then
     echo "Downloading VCF CHR ${f}"
     wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
   fi

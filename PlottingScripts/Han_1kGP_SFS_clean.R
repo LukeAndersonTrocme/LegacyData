@@ -3,7 +3,12 @@ library(data.table)
 library(ggplot2)
 library(reshape2)
 
-#bcftools view -R /Users/luke/Documents/QualityPaper/sig/SignificantVariants_chr_CHROM_POS.txt /Users/luke/genomes/genomes/Han90/90_Han_Chinese_GenomeWide_sorted.vcf.gz  -Oz -o /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001.vcf.gz
+#grep '^#' $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz     > ~/Documents/QualityPaper/sig/SigVar_Pop_0.01.vcf
+
+#for f in `seq 1 22`; do echo $f; bcftools view -R /Users/luke/Documents/QualityPaper/sig/SignificantVariantsCHROM_POS.txt $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz | grep -v '#' >> ~/Documents/QualityPaper/sig/SigVar_Pop_0.01.vcf; done
+
+
+#bcftools view -R /Users/luke/Documents/QualityPaper/sig/SignificantVariants_chr_CHROM_POS.txt /Users/luke/genomes/genomes/Han90/90_Han_Chinese_GenomeWide_sorted.vcf.gz  -Oz -o /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.01.vcf.gz
 
 #java -jar ~/bin/snpEff_latest_core/snpEff/SnpSift.jar extractFields /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001.vcf.gz CHROM POS AF "GEN[*].GT" | sed "s/0\/0/0/g ; s/0\/[1-9]/1/g ; s/[1-9]\/0/1/g ; s/[1-9]\/[1-9]/1/g ; /\//d" | tail -n +2 > /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001_genotype.txt
 

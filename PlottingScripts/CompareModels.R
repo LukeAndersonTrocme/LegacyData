@@ -7,17 +7,14 @@ library(lfa)
 library(tidyverse)
 
 #read Genotypes
-#GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
-GT = fread('/Users/luke/Documents/QualityPaper/sig/SigVar_0.001.genotypes.txt')
-
-
-SigPos = fread('~/Documents/QualityPaper/sig/Total_Sig_POSfreq.txt', col.names=c('CHROM','POS','rsID','ID'))
+GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
+#GT = fread('/Users/luke/Documents/QualityPaper/sig/SigVar_0.001.genotypes.txt')
+#SigPos = fread('~/Documents/QualityPaper/sig/Total_Sig_POSfreq.txt', col.names=c('CHROM','POS','rsID','ID'))
 
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
-GT = merge(GT, SigPos, by=c('CHROM','POS','ID'))
-GT$rsID = NULL
-
+#GT = merge(GT, SigPos, by=c('CHROM','POS','ID'))
+#GT$rsID = NULL
 
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt') 
 
@@ -54,12 +51,12 @@ fit_model_1 <- function(data){
 
 fits <- lapply(head(data_list,10000), fit_model_1)
 
-Pop = apply(GT[c(1:10000),-(1:3)], 1, function(x)
+Pop = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$Pop +
 							samples$average_quality_of_mapped_bases))
 
-PC = apply(GT[c(1:10000),-(1:3)], 1, function(x)
+PC = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$PC1 + 
 							samples$PC2 +
@@ -67,7 +64,17 @@ PC = apply(GT[c(1:10000),-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))
-																					
+							
+PopPC = apply(GT[,-(1:3)], 1, function(x)
+						glm2(x ~
+							samples$Pop +
+							samples$PC1 + 
+							samples$PC2 +
+							samples$PC3 +
+							samples$PC4 +
+							samples$PC5 + 
+							samples$average_quality_of_mapped_bases))						
+																												
 #get coef of Qual per site
 coefLF = lapply(fits, function(x) coef(x)[[2]])
 coefPop = lapply(Pop, function(x) coef(x)[[27]])
