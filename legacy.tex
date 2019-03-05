@@ -193,8 +193,9 @@ The same variants identified as being low quality independently in each populati
 \subsection{Model selection}
 We considered multiple approaches to account for population structure in order to best capture the variants associated to $Q$.
 Each of these methods is somewhat similar to the genotype-conditional association test described by Song et al. \citep{song2015testing}.
-One approach included the top five global principal components (PCs)as covariates to account for population structure without using a categorical variable.
-Another combined both the population categorical variable as well as all five global PCs.  
+These methods model each genotype as a logistic function using principal components (PCs), Population membership or both as a covariate. 
+We found that these three models to be consistent except a small number of variants with higher associations with the PC model.
+We chose the more conservative approach using Population membership as the sole covariate.
 
 \subsection{Cell line or technical artifact}
 
@@ -207,15 +208,15 @@ Indeed, we find that while there are some variants that are present in HapMap, t
 This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
-After downsampling the 1kGP data to match the resequenced individuals, we find that 9 out of the 296 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
+After restricting the analysis to individuals in both datasets, we find that 9 out of the 296 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
 While this is more than 0.1\% of the sites, we suspect that they are indeed false associations to $Q$.
-To confirm this, we also ran the reverse-GWAS approach on these resequenced individuals, using the $Q$ scores from the 1kGP sequencing \ref{90Han}.
-We found no correlation in p-values indicating that the SNPs in the resequenced dataset had no association to $Q$.
 
 We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
-Of the 11,416 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data.
+Of the 11,416 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
 From this subset, only 613 of these variants are present in the resequenced data, the rest are missing entirely.
-We noticed a unusually large number of INDELs that are fixed in the resequenced data that are at lower frequencies in the 1kGP. (See Figure \ref{90HanSFS_full})
+Figure \ref{90HanSFS_full} shows a weak correlation to allele frequency for the variants present in the resequenced data.
+Whereas the vast majority of the SNPs are absent in resequenced data, a high proportion of INDELs are fixed in the resequenced data.
+A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are real but genotyped incorrectly.
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
@@ -493,13 +494,6 @@ Because the resequencing did not include all the individuals from the original 1
 \includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  8697 significant SNPs and INDELs identified in the \textit{5PC} model including all populations. Only 612 of the variants are present in the high depth resequenced individuals.}  
 \label{90HanSFS_full}
-\end{figure}
-
-\begin{figure}[h]
-\includegraphics[width=8cm,keepaspectratio]{./Figures/ResequencePvals.jpg}
-\caption{Comparison of p-values from the CHS and CHB populations using the original 1kGP data and the 90 Han Chinese resequenced data from \citep{Lan2017}.
-Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals. There is no correlation in the p-values between the two datasets indicating that the suspicious variants found in the more recent dataset are false discoveries.}  
-\label{90Han}
 \end{figure}
 
 

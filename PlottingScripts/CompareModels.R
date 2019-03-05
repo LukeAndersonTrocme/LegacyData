@@ -3,53 +3,14 @@ library(data.table)
 library(ggplot2)
 library(glm2)
 library(cowplot)
-library(lfa)
-library(tidyverse)
 
 #read Genotypes
 GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
-#GT = fread('/Users/luke/Documents/QualityPaper/sig/SigVar_0.001.genotypes.txt')
-#SigPos = fread('~/Documents/QualityPaper/sig/Total_Sig_POSfreq.txt', col.names=c('CHROM','POS','rsID','ID'))
 
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
-#GT = merge(GT, SigPos, by=c('CHROM','POS','ID'))
-#GT$rsID = NULL
 
 samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt') 
-
-# Logistic factor analysis
-GT_mtx <- as.matrix(GT[,-(1:3)])
-#compute the first three factors including the intercept
-LF <- lfa(GT_mtx, 4)
-subset <- af(GT_mtx, LF)
-subset <- cbind(GT[,c(1:3)], subset)
-
-to_datalist <- function(i, data_genotype, data_iaf){
-  
-    data <- tibble(genotype=data_genotype[i,],
-               iaf= subset[i,])
-               
-    return(data)       
-}
-
-loci <- seq(1,nrow(GT_mtx))
-names(loci) <- loci
-
-data_list <- map(loci, 
-                 to_datalist,
-                 data_genotype = GT_mtx,
-                 data_iaf = subset)
-
-fit_model_1 <- function(data){
-	
-	fit <- glm2(genotype ~ samples$average_quality_of_mapped_bases + offset(iaf), 
-				family ="binomial", data=data)
-	
-	return(fit)
-}
-
-fits <- lapply(head(data_list,10000), fit_model_1)
 
 Pop = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
@@ -74,46 +35,26 @@ PopPC = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))						
-																												
+																										
 #get coef of Qual per site
-coefLF = lapply(fits, function(x) coef(x)[[2]])
 coefPop = lapply(Pop, function(x) coef(x)[[27]])
 coefPC = lapply(PC, function(x) coef(x)[[7]])
+coefPopPC = lapply(PopPC, function(x) coef(x)[[32]])
 
-coef = data.frame('LF' = unlist(coefLF),
-				  'Pop'=unlist(coefPop),
-				  'PC' = unlist(coefPC))
-				  
-q0<-ggplot(coef, aes(x=Pop, y=PC))+geom_point()
-q1<-ggplot(coef, aes(x=LF, y=Pop))+geom_point()+xlim(c(-0.5,0.5))
-q2<-ggplot(coef, aes(x=LF, y=PC))+geom_point()+xlim(c(-0.5,0.5))
-plot_grid(q0,q1,q2, nrow=1)
-
-
-makePlot<-function(pos){
-	testing = data.frame(
-			GT = unlist(GT[which(GT$POS == pos),-c(1:3)]),
-			IAF = unlist(subset[which(subset$POS == pos),-c(1:3)]), 
-			Qual = samples$average_quality_of_mapped_bases,
-			Pop = samples$Pop)
-			
-	ggplot(testing, aes(x=Qual, y=GT, color=IAF))+
-				geom_point()+facet_wrap(.~Pop, ncol=3)+
-				guides(color=F)+geom_smooth(method = "glm", 
-     			method.args = list(family = "binomial"), 
-     			se = FALSE)
-}
-
-coef = cbind(coef, GT[c(1:10000),c(1:3)])
-coef1 = merge(coef, SigPos, by=c('CHROM','POS','ID'))
-
-devLF = lapply(fits, function(x) anova(x, test='Chi')[[2,2]])
+#get the deviance of Qual
 devPop = lapply(Pop, function(x) anova(x, test='Chi')[[3,2]])
 devPC = lapply(PC, function(x) anova(x, test='Chi')[[7,2]])
+devPopPC = lapply(PopPC, function(x) anova(x, test='Chi')[[2,2]])
 
-dev = data.frame('LFd' = unlist(devLF),
-				  'Popd'=unlist(devPop),
-				  'PCd' = unlist(devPC))
+plt = data.frame('coefPopPC' = unlist(coefPopPC),
+				  'coefPop'=unlist(coefPop),
+				  'coefPC' = unlist(coefPC),
+				  'devLF' = unlist(devLF),
+				  'devPop'=unlist(devPop),
+				  'devPC' = unlist(devPC))
+				  
+
+plt = cbind(plt, GT[,c(1:3)])
 				  
 n1<-ggplot(dev, aes(x=Pop, y=PC))+geom_point()			  
 n2<-ggplot(dev, aes(x=LF, y=PC))+geom_point()
