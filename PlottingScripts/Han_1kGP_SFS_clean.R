@@ -2,19 +2,21 @@
 library(data.table)
 library(ggplot2)
 library(reshape2)
+library(cowplot)
+library(dplyr)
 
-#grep '^#' $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz     > ~/Documents/QualityPaper/sig/SigVar_Pop_0.01.vcf
+#zgrep '^#' $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz     > ~/Documents/QualityPaper/sig/SigVar_Pop_0.01.vcf
 
 #for f in `seq 1 22`; do echo $f; bcftools view -R /Users/luke/Documents/QualityPaper/sig/SignificantVariantsCHROM_POS.txt $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz | grep -v '#' >> ~/Documents/QualityPaper/sig/SigVar_Pop_0.01.vcf; done
-
+#java -jar ~/bin/snpEff_latest_core/snpEff/SnpSift.jar extractFields ~/Documents/QualityPaper/sig/SigVar_0.01_Pop.vcf CHROM POS AF "GEN[*].GT" | sed "s/0|0/0/g ; s/0|[1-9]/1/g ; s/[1-9]|0/1/g ; s/[1-9]|[1-9]/1/g ; /|/d" | tail -n +2 > ~/Documents/QualityPaper/sig/SigVar_Pop_0.01_genotype.txt
 
 #bcftools view -R /Users/luke/Documents/QualityPaper/sig/SignificantVariants_chr_CHROM_POS.txt /Users/luke/genomes/genomes/Han90/90_Han_Chinese_GenomeWide_sorted.vcf.gz  -Oz -o /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.01.vcf.gz
 
-#java -jar ~/bin/snpEff_latest_core/snpEff/SnpSift.jar extractFields /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001.vcf.gz CHROM POS AF "GEN[*].GT" | sed "s/0\/0/0/g ; s/0\/[1-9]/1/g ; s/[1-9]\/0/1/g ; s/[1-9]\/[1-9]/1/g ; /\//d" | tail -n +2 > /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001_genotype.txt
+#java -jar ~/bin/snpEff_latest_core/snpEff/SnpSift.jar extractFields /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.01.vcf.gz CHROM POS AF "GEN[*].GT" | sed "s/0\/0/0/g ; s/0\/[1-9]/1/g ; s/[1-9]\/0/1/g ; s/[1-9]\/[1-9]/1/g ; /\//d" | tail -n +2 > /Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.01_genotype.txt
 
 
 #read Genotypes
-han1=fread('/Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.001_genotype.txt')
+han1=fread('/Users/luke/genomes/genomes/Han90/SignificantSNPs_Han90_0.01_genotype.txt')
 HanNames=fread('~/genomes/genomes/Han90/SignificantSNPs_Han90_COLNAMES.txt',header=F)
 names(han1) = as.character(unlist(HanNames))
 #melt to long format
@@ -30,7 +32,7 @@ hanAF <- han %>% group_by(CHROM,POS) %>% summarize(hanAF = sum(han.gt))
 
 
 #read Genotypes
-kgp1 = fread('~/Documents/QualityPaper/sig/SigVar_0.001.genotypes.txt')
+kgp1 = fread('~/Documents/QualityPaper/sig/SigVar_Pop_0.01_genotype.txt')
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(kgp1) = as.character(unlist(ColNames))
 #melt to long format
