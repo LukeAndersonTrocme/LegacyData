@@ -1,0 +1,79 @@
+---
+title: "HGP analysis: LFA"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+# Preparations
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(lfa)
+library(tictoc)
+```
+```{r}
+gc() #- do it now
+gcinfo(TRUE) #-- in the future, show when R does it
+```
+
+```{bash}
+free -t -g
+```
+
+
+
+```{r load}
+tic()
+ data <- read.bed("./data/plink/ALL_Pops")
+toc()
+ message("plink data loaded")
+```
+
+
+```{bash}
+free -t -g
+```
+
+```{r lfa}
+tic()
+LF <- lfa(data, 4)
+toc()
+message("lfa run complete")
+```
+
+```{r save}
+tic()
+saveRDS(LF, "./data/preprocessed/lf.rds")
+toc()
+```
+```{r}
+gcinfo(verbose = FALSE) #-- don't show it anymore
+gc()
+```
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
