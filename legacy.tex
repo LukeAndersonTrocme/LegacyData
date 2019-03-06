@@ -157,12 +157,12 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 
 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
-Over 3826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
+Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
 To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with population as a covariate to account for population structure.
 This method identifies a total of 11,416 statistically significant variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.001$ \citep{Benjamini2006}. 
+To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 
 \begin{table}[h]
 \centering
@@ -196,7 +196,7 @@ We found that these three models to be consistent except a small number of varia
 We chose the more conservative approach using Population membership as the sole covariate.
 
 \subsection{Cell line or technical artifact}
-
+\luke{Do we keep HapMap? It may be worth keeping some of it to explain why 2/4 papers impute using HapMap and find the same variants.}
 To determine whether this signal is the result of a cell line or technical artifact, we investigated other sequencing projects that used the same cell lines.
 Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
 The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.
@@ -207,7 +207,7 @@ This result suggests that there is no cell line artifact and that the variants i
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
 After restricting the analysis to individuals in both datasets, we find that 9 out of the 296 the suspicious variants from the single population test are present in the resequenced data \ref{90HanSFS}.
-While this is more than 0.1\% of the sites, we suspect that they are indeed false associations to $Q$.
+While this is more than 0.1\% of the sites, we suspect that some of these variants may be associated to $Q$ as a result of incorrect genotyping.
 
 We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
 Of the 11,416 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
@@ -236,9 +236,8 @@ We found that 219 of the variants we identified as being associated to $Q$ were 
 We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified eight recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
-One of these studies used the 1kGP in their reference panel for imputation \citep{tian2017genome}.
+One of these studies used the 1kGP in their reference panel for imputation \citep{tian2017genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
 Two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013}.
-And one study used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
 
 All four papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
