@@ -1,0 +1,228 @@
+---
+title: "HGP analysis: fit model"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+# Preparations
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(tidyverse)
+library(lfa)
+library(furrr)
+library(broom)
+library(tictoc)
+options(future.globals.maxSize= 1000000000000)
+plan(multicore)
+```
+
+```{r}
+gc()
+```
+
+```{r}
+gcinfo(TRUE) 
+```
+
+
+
+#  Fit model
+
+
+
+```{r}
+
+to_datalist <- function(i){
+  
+    data <- tibble(genotype=data_genotype[i,],
+               iaf=data_iaf[i,])
+               
+     return(data)       
+}
+
+
+
+get_predicted_mean <- function(model_fit) {
+ predicted <- 
+   augment(model_fit, type.predict = "response") %>%
+   select("genotype","offset.iaf.",".fitted") %>%
+   rename(iaf="offset.iaf.", mu=".fitted" )
+  return(predicted)
+}
+
+get_stats <- function(model_fit){
+  stats_dt <- 
+    tidy(model_fit)  %>%
+    filter(term=="avg_qual_mean") %>%
+    select(estimate, p.value) %>%
+    mutate(deviance= anova(model_fit)["Deviance"][[1]][2])
+  return(stats_dt)
+}
+
+
+
+fit_model <- function(dataset){
+  
+   fit <- glm(genotype ~ avg_qual_mean + offset(iaf),
+                           family ="binomial",
+                           data=dataset)
+   
+   stats <- get_stats(fit)
+   predicted <- get_predicted_mean(fit)
+   
+   return(list(stats, predicted))
+}
+
+get_plot <- function(data){
+  
+ p <- ggplot(bind_cols(data, 
+                   bas_dt %>% 
+                     select(Population,
+                            avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean, 
+                   genotype),
+               size=.5,
+               alpha= 0.4) +
+    geom_line(aes(avg_qual_mean,
+                  iaf, 
+                  colour="af"),
+              linetype="dashed") +
+    geom_line(aes(avg_qual_mean,
+                  mu,
+                  colour="mu")) +
+      theme_bw() +
+    facet_wrap(~Population)
+  
+  return(p)
+}
+```
+
+
+```{r}
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+bas_dt <- read_tsv(bas_filepath)
+avg_qual_mean <- bas_dt$avg_qual_mean
+```
+
+
+
+```{r}
+fit_data <- function(data_list){
+
+  message("fitting model")
+  tic()
+  data_list <- 
+    data_list %>%
+  #slice(1:10) %>%
+  transmute(
+    locus=locus,
+    fit1 = future_map(dataset, fit_model))  %>%
+  transmute(
+    locus=locus,
+    stats = future_map(fit1, c(1)),
+    predicted =future_map(fit1, c(2))) %>%
+    unnest(stats) %>%
+    arrange(-deviance) 
+
+  toc()
+  
+  return(data_list)
+  
+}
+
+
+```
+
+```{r}
+  data_genotype <- read.bed("./data/plink/ALL_Pops")
+  message("plink data loaded")
+
+  # compute the first d factors including the intercept
+  
+  
+
+  data_iaf <- readRDS("./data/preprocessed/iaf.rds")
+
+  loci <- c(1:dim(data_genotype)[1])
+  names(loci) <- loci
+  
+  message("to datalist")
+
+  tic()
+  data_list <- future_map(loci, 
+                 to_datalist) 
+
+  toc()
+  
+  data_list <- 
+  enframe(data_list,
+          name = "locus", 
+          value = "dataset")
+  
+saveRDS(data_list, "./data/preprocessed/data_list.rds")
+```
+
+```{r}
+data_list <- fit_data (data_list)
+data_list
+```
+
+```{r save_data}
+saveRDS(data_list, "./data/preprocessed/data_fits.rds")
+```
+
+
+```{r}
+n <-20
+target_loci <- 
+  data_list %>% 
+  slice(1:n) %>% 
+  pull(locus)
+target_loci 
+```
+
+```{r}
+data_list_subset <- 
+  data_list %>%
+   filter(locus %in% target_loci ) %>%
+    mutate(plotted= future_map(predicted, get_plot)) 
+data_list_subset
+```
+
+
+
+```{r}
+data_list_subset %>%
+  pull(plotted)
+```
+
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
