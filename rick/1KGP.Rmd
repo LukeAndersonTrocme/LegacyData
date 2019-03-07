@@ -28,7 +28,7 @@ library(lfa)
 library(furrr)
 library(broom)
 library(tictoc)
-options(future.globals.maxSize= 10000000000)
+options(future.globals.maxSize= 1000000000000)
 plan(multicore)
 ```
 
@@ -72,6 +72,9 @@ get_af_data <- function(){
   tic()
   data_iaf <- af(data, LF)
   toc()
+
+
+  saveRDS(data_iaf, "./data/preprocessed/iaf.rds")
 
   loci <- c(1:dim(data)[1])
   names(loci) <- loci
@@ -164,7 +167,7 @@ run_workflow <- function(loci){
 
   data_list <- get_af_data() 
   
-
+  saveRDS(data_list, "./data/preprocessed/data_list.rds")
   
   message("fitting model")
   tic()
@@ -197,7 +200,7 @@ data_list
 ```
 
 ```{r save_data}
-saveRDS(data_list, "./data/preprocessed/data_fit.rds")
+saveRDS(data_list, "./data/preprocessed/data_fits.rds")
 ```
 
 
