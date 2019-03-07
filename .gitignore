@@ -146,3 +146,5 @@ rick/data_list.temp
 *.R
 
 rick/data_list.temp
+
+*.RData

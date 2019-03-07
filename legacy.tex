@@ -126,7 +126,8 @@ When comparing the allele frequencies between the Japanese individuals from the 
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
 These mismatches were present despite filtering for low-quality regions of the human genome and Hardy-Weinberg disequilibrium. 
 
-When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. %(\sgcomment {p value?})
+When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). 
+The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. 
 Thus, sequences called from low-$Q$ data contain mutations that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 \begin{figure}
@@ -147,8 +148,8 @@ These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* 
 Thus, this mutational signal is heavily enriched in suspicious SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques (Figure \ref{MutSpect}).
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
-For other analyses where quality of imputation matters, identifying suspicious SNPs may be preferable. 
-Lists of suspicious SNPs and individuals with low $Q$ are provided as supplementary material \luke{link to file here}.
+For other analyses where quality of imputation matters, identifying suspicious variants may be preferable. 
+Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \luke{link to file here}.
 
 \subsection{Identifying suspicious variants in the 1kGP}
 The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).

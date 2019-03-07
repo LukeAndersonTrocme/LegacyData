@@ -56,8 +56,15 @@ over30 = mGT[which(mGT$average_quality_of_mapped_bases > 30),]
 
 under30 = mGT[which(mGT$average_quality_of_mapped_bases < 30),]
 
-o30AF <- over30 %>% group_by(CHROM,POS,ID,rsID) %>% summarize(oAF = sum(value))
-u30AF <- under30 %>% group_by(CHROM,POS,ID,rsID) %>% summarize(uAF = sum(value))
+o30AF <- 
+		over30 %>% 
+		group_by(CHROM,POS,ID,rsID) %>% 
+		summarize(oAF = sum(value))
+		
+u30AF <- 
+		under30 %>% 
+		group_by(CHROM,POS,ID,rsID) %>% 
+		summarize(uAF = sum(value))
 
 AF30 <- merge(u30AF, o30AF, by=c('CHROM','POS','ID','rsID'))
 
@@ -65,7 +72,7 @@ af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
   geom_bin2d(bins=200)+
   scale_fill_distiller(palette = "Spectral")+
   geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
-  geom_abline(intercept=0, slope = 2, linetype=3, color='red')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
   labs(x='Samples with Q < 30',y='Samples with Q > 30')
 
 af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
@@ -74,6 +81,26 @@ af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
   geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
   geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
   labs(x='Samples with Q < 30',y='Samples with Q > 30')
+
+
+
+af3 = ggplot(AF30, aes(x=uAF/2504, y=oAF/2504))+
+  geom_bin2d(bins=200)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+
+af4 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF/2504, y=oAF/2504))+
+  geom_bin2d(bins=100)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+
+plot_grid(af3, af4)
+
+plot_grid(af1,af2,af3, af4, nrow=2)
 
 plot_grid(af1, af2)
 

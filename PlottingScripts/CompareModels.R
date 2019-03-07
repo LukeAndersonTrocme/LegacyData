@@ -5,7 +5,7 @@ library(glm2)
 library(cowplot)
 
 #read Genotypes
-GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
+GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=1000)
 
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
@@ -16,8 +16,8 @@ Pop = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
 							samples$Pop +
 							samples$average_quality_of_mapped_bases))
-save(Pop, file='~/Documents/QualityPaper/Misc/Temp.Pop.RData')
-rm(Pop)
+#save(Pop, file='~/Documents/QualityPaper/Misc/Temp.Pop.RData')
+#rm(Pop)
 
 PC = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
@@ -27,8 +27,8 @@ PC = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))
-save(PC, file='~/Documents/QualityPaper/Misc/Temp.PC.RData')
-rm(PC)	
+#save(PC, file='~/Documents/QualityPaper/Misc/Temp.PC.RData')
+#rm(PC)	
 					
 PopPC = apply(GT[,-(1:3)], 1, function(x)
 						glm2(x ~
@@ -39,10 +39,9 @@ PopPC = apply(GT[,-(1:3)], 1, function(x)
 							samples$PC4 +
 							samples$PC5 + 
 							samples$average_quality_of_mapped_bases))						
-save(PopPC, file='~/Documents/QualityPaper/Misc/Temp.PopPC.RData')
-	
-load('~/Documents/QualityPaper/Misc/Temp.Pop.RData')
-load('~/Documents/QualityPaper/Misc/Temp.PC.RData')																								
+#save(PopPC, file='~/Documents/QualityPaper/Misc/Temp.PopPC.RData')
+#load('~/Documents/QualityPaper/Misc/Temp.Pop.RData')
+#load('~/Documents/QualityPaper/Misc/Temp.PC.RData')																							
 #get coef of Qual per site
 coefPop = lapply(Pop, function(x) coef(x)[[27]])
 coefPC = lapply(PC, function(x) coef(x)[[7]])
@@ -53,13 +52,54 @@ devPop = lapply(Pop, function(x) anova(x, test='Chi')[[3,2]])
 devPC = lapply(PC, function(x) anova(x, test='Chi')[[7,2]])
 devPopPC = lapply(PopPC, function(x) anova(x, test='Chi')[[2,2]])
 
+
+load('~/Documents/QualityPaper/Misc/PC.coef.RData')
+load('~/Documents/QualityPaper/Misc/Pop.coef.RData')
+load('~/Documents/QualityPaper/Misc/PopPC.coef.RData')
+
+load('~/Documents/QualityPaper/Misc/PC.dev.RData')
+load('~/Documents/QualityPaper/Misc/Pop.dev.RData')
+load('~/Documents/QualityPaper/Misc/PopPC.dev.RData')
+
 plt = data.frame('coefPopPC' = unlist(coefPopPC),
 				  'coefPop'=unlist(coefPop),
 				  'coefPC' = unlist(coefPC),
-				  'devLF' = unlist(devLF),
+				  'devPopPC' = unlist(devPopPC),
 				  'devPop'=unlist(devPop),
 				  'devPC' = unlist(devPC))
 				  
+c1<-ggplot(plt, aes(coefPop, coefPC))+
+				geom_point(shape=1)+
+				geom_abline()+
+				labs(x='Pop',y='PC')
+c2<-ggplot(plt, aes(coefPopPC, coefPC))+
+				geom_point(shape=1)+
+				geom_abline()+
+				labs(x='PopPC',y='PC')
+c3<-ggplot(plt, aes(coefPopPC, coefPop))+
+				geom_point(shape=1)+
+				geom_abline()+
+				labs(x='PopPC',y='Pop')				  
+
+d1<-ggplot(plt, aes(devPop, devPC))+
+			geom_point(shape=1)+
+			geom_abline()+
+			labs(x='Pop',y='PC')
+d2<-ggplot(plt, aes(devPopPC, devPC))+
+			geom_point(shape=1)+
+			geom_abline()+
+			labs(x='PopPC',y='PC')
+d3<-ggplot(plt, aes(devPopPC, devPop))+
+			geom_point(shape=1)+
+			geom_abline()+
+			labs(x='PopPC',y='Pop')
+
+plot_grid(c1,c2,c3,d1,d2,d3, nrow=2)
+ggsave('~/Documents/QualityPaper/Figures/CoefDEV_Pop_PC_PopPC.jpg',height=9,width=12)
+
+
+plot_grid(c1,c2,c3,d1,nrow=2)
+ggsave('~/Documents/QualityPaper/Figures/Coef_Pop_PC_PopPC.jpg',height=10,width=10)
 
 plt = cbind(plt, GT[,c(1:3)])
 				  
@@ -69,7 +109,6 @@ n3<-ggplot(dev, aes(x=LF, y=Pop))+geom_point()
 plot_grid(n1,n2,n3, nrow=1)					  
 
 dev = cbind(coef, dev)
-
 
 all = merge(dev1, coef1, by=c('CHROM','POS','ID', 'rsID'))
 
