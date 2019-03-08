@@ -194,10 +194,19 @@ We considered multiple approaches to account for population structure in order t
 Each of these methods is somewhat similar to the genotype-conditional association test described by Song et al. \citep{song2015testing}.
 These methods model each genotype as a logistic function using principal components (PCs), Population membership or both as a covariate. 
 We found that these three models to be consistent except a small number of variants with higher associations with the PC model.
-We chose the more conservative approach using Population membership as the sole covariate.
+We chose the more conservative approach using Population membership as the sole covariate (See Figure \ref{CompareModel}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/dev_Pop_PC_PopPC.jpg}
+\caption{Comparison of three logistic regression models for testing association to $Q$.
+These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or both (PopPC) as a covariate.
+In these plots we are comparing the deviance from the null model in 50,000 variants from chromosome 22.}  
+\label{CompareModel}
+\end{figure}
 
 \subsection{Cell line or technical artifact}
-\luke{Do we keep HapMap? It may be worth keeping some of it to explain why 2/4 papers impute using HapMap and find the same variants.}
+%\luke{Do we keep HapMap? It may be worth keeping some of it to explain why 2/4 papers impute using HapMap and find the same variants.}
 To determine whether this signal is the result of a cell line or technical artifact, we investigated other sequencing projects that used the same cell lines.
 Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
 The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.

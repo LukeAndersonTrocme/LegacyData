@@ -1,5 +1,5 @@
-##Download 1kGP data and Down Sample to Omni Chip Positions
-
+##Download 1kGP data and Down Sample to Omni Chip Positions for PCA and LFA
+GenoName='phase3_shapeit2_mvncall_integrated_v5a.20130502'
 GenoPath='/Users/luke/genomes/genomes/hg19/phase3'
 cd $GenoPath
 
@@ -14,19 +14,28 @@ $GenoPath/ALL.chip.POS
 for f in `seq 1 22`
   do echo $f
   #download VCF if needed
-  if [ ! -f $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz ]; then
+  if [ ! -f $GenoPath/ALL.chr${f}.${GenoName}.genotypes.vcf.gz ]; then
     echo "Downloading VCF CHR ${f}"
-    wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+    wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.${GenoName}.genotypes.vcf.gz
   fi
   #Get header of VCF to keep sample names
   if [ $f = 1 ]; then
-    grep '^#' $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz \
+    grep '^#' $GenoPath/ALL.chr${f}.$GenoName.genotypes.vcf.gz \
     > $GenoPath/ALL.chip.vcf
   fi
   #select positions on Omni Chip
   echo "extracting positions for CHR ${f}"
   bcftools view -R $GenoPath/ALL.chip.POS \
-    $GenoPath/ALL.chr${f}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz | \
+    $GenoPath/ALL.chr${f}.$GenoName.genotypes.vcf.gz | \
     grep -v '#' >> $GenoPath/ALL.chip.vcf
 
   done
+
+## Get Chrom Position rsID for all 22 chromosomes
+if [ ! -f /Users/luke/Documents/QualityPaper/Misc/GenomeWide.${GenoName}.positions.txt ]; then
+for f in `seq 1 22`;
+  do echo $f;
+    gzcat $GenoPath/ALL.chr${f}.${GenoName}.genotypes.vcf.gz | \
+    grep -v '^#' | cut -f1,2,3 >> /Users/luke/Documents/QualityPaper/Misc/GenomeWide.${GenoName}.positions.txt;
+  done
+fi

@@ -69,37 +69,40 @@ plt = data.frame('coefPopPC' = unlist(coefPopPC),
 				  'devPC' = unlist(devPC))
 				  
 c1<-ggplot(plt, aes(coefPop, coefPC))+
-				geom_point(shape=1)+
+				geom_point(shape=1, alpha=0.6)+
 				geom_abline()+
 				labs(x='Pop',y='PC')
 c2<-ggplot(plt, aes(coefPopPC, coefPC))+
-				geom_point(shape=1)+
+				geom_point(shape=1, alpha=0.6)+
 				geom_abline()+
 				labs(x='PopPC',y='PC')
 c3<-ggplot(plt, aes(coefPopPC, coefPop))+
-				geom_point(shape=1)+
+				geom_point(shape=1, alpha=0.6)+
 				geom_abline()+
 				labs(x='PopPC',y='Pop')				  
 
 d1<-ggplot(plt, aes(devPop, devPC))+
-			geom_point(shape=1)+
-			geom_abline()+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)+
 			labs(x='Pop',y='PC')
 d2<-ggplot(plt, aes(devPopPC, devPC))+
-			geom_point(shape=1)+
-			geom_abline()+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)+
 			labs(x='PopPC',y='PC')
-d3<-ggplot(plt, aes(devPopPC, devPop))+
-			geom_point(shape=1)+
-			geom_abline()+
+d3<-ggplot(plt, aes(devPop, devPopPC))+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)+
 			labs(x='PopPC',y='Pop')
 
 plot_grid(c1,c2,c3,d1,d2,d3, nrow=2)
-ggsave('~/Documents/QualityPaper/Figures/CoefDEV_Pop_PC_PopPC.jpg',height=9,width=12)
+ggsave('~/Documents/QualityPaper/Figures/CoefDEV_Pop_PC_PopPC.jpg',height=6,width=12)
 
 
-plot_grid(c1,c2,c3,d1,nrow=2)
-ggsave('~/Documents/QualityPaper/Figures/Coef_Pop_PC_PopPC.jpg',height=10,width=10)
+plot_grid(c1,c2,c3,nrow=1)
+ggsave('~/Documents/QualityPaper/Figures/Coef_Pop_PC_PopPC.jpg',height=5,width=10)
+
+plot_grid(d3,d1,d2,nrow=1)
+ggsave('~/Documents/QualityPaper/Figures/dev_Pop_PC_PopPC.jpg',height=3,width=9)
 
 plt = cbind(plt, GT[,c(1:3)])
 				  
