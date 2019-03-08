@@ -4,7 +4,6 @@ import time
 
 
 def Bash_cmd(i):
-    GenoName='phase3_shapeit2_mvncall_integrated_v5a.20130502'
     #print statement to keep track of where you are
     print('Working on Chrom : '+str(i))
     #put your bash command below
