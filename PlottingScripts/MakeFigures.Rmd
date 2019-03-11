@@ -5,9 +5,12 @@ output: html_notebook
 load libraries
 ```{r}
 library(ggplot2)
+library(RColorBrewer)
+library(plotly)
 library(colorspace)
 library(cowplot)
 library(data.table)
+
 ```
 
 
@@ -138,7 +141,7 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                            space = 'free_x', 
                            switch = 'x')+
               scale_y_continuous(expand = c(0,0))+
-              scale_fill_manual(values = getPalette(colourCount))+
+              scale_fill_brewer(palette = 'Spectral')+
               labs(y='-log10(p)', x='Chromosome')+
               guides(color=F) + 
               theme_classic()+
@@ -157,6 +160,11 @@ GWAS
 ```{r}
 #To get mutation context, use paste0(miscPath,'AncestralContext.py')
 #Then select positions reaching significance in JPT regression
+set.seed(123)
+sig.pos <- sig.6[,c('Chr','Pos')]
+
+random.pos <- rand
+
 SNP<-read.table(paste0(miscPath,'JPT_sig6.Context'), sep='\t', header=F,
                 col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
 rSNP<-read.table(paste0(miscPath,'1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt'), sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
