@@ -448,7 +448,139 @@ ggsave("~/Documents/QualityPaper/Figures/MapQualOverTime.jpg",d,height=14,width=
 ggsave("~/Documents/QualityPaper/Figures/MapQualOverTime.pdf",d,height=14,width=9)
 ```
 
+#Figure 3
+
+```{r}
+phase1=c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
+#read single population regressions
+Reg <- fread(paste0(miscPath,'AllRegressionsOver10.txt'), 
+             col.names = c('Chr','Pos','Population','deviance'), 
+             colClasses = c('numeric', 'numeric', 'character', 'numeric'))
+#Get P-Values and significant sites
+Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, lower.tail=F))
+Reg<-Reg[which(Reg$plog10 >= 6),]
+#Count number of populations where a variant is significant
+NumPop<-as.data.frame(table(Reg$Chr,Reg$Pos))
+NumPop<-NumPop[which(NumPop$Freq>1),]
+names(NumPop) <- c('Chr','Pos', 'SigHits')
+NumPop$Chr<-as.numeric(as.character(NumPop$Chr))
+NumPop$Pos<-as.numeric(as.character(NumPop$Pos))
+
+m <- merge(Reg,
+           NumPop, 
+           by=c('Chr','Pos'))
+#count number of significant sites per population
+n <- as.data.frame(table(m$Pop))
+#put it all together for plotting
+overLap <- unique(merge(m,n,
+                        by.x='Population',
+                        by.y='Var1'))
+#include number of significant sites in titles
+overLap$title = paste0(overLap$Pop, ' : ',overLap$Freq)
+#add asterix for Phase 1 pops
+overLap[which(
+  overLap$Pop 
+  %in% phase1),]$title <- paste('*',
+                                overLap[which(
+                                  overLap$Pop
+                                  %in% phase1),]$title)
+#set order by SigHits, Chromosome and Position
+overLap <- overLap[with(overLap, order(-SigHits,
+                                       Chr,
+                                       Pos)),]
+overLap$Pos <- factor(overLap$Pos, 
+                      levels = unique(overLap$Pos))
+#this is for keeping track of the number of variants
+overLap$nrow<-seq(length=nrow(overLap))
+#this is for discrete point size
+overLap$Pcat<-4
+overLap[which(overLap$plog10 <8),]$Pcat<-2
+overLap[which((overLap$plog10 >8) & (overLap$plog10 <10)),]$Pcat<-3
+#this is for the labels of the xaxis
+xaxis<-overLap[!duplicated(overLap[,c('SigHits')]), ]
+xaxis<-xaxis[which(xaxis$SigHits<11),]
+xaxis<-rbind(xaxis,tail(overLap,1))
+
+overLap
+```
 
 
+```{r}
+p1 <- ggplot(overLap, 
+          aes(x = Pos,
+              y = reorder(title, -Freq), 
+              color = Population, 
+              size = Pcat)) +
+          geom_point(shape = 108) +
+          scale_size(breaks = c(2,3,4), 
+                     range = c(1,3),
+                     labels = c('6-8', '8-10', '10+'), 
+                     guide = guide_legend(direction = "horizontal"),
+                                          name = '-log10(p)') +
+          scale_color_manual(breaks = overLap$Population,
+                             values = MyColour) +
+          guides(color = FALSE) +
+          ylab('Population') +
+          ggtitle('Overlap of Significant SNPs') +
+          theme_classic() +
+          theme(legend.position = c(0.85,0.95),
+                legend.box.background = element_rect(colour = "black"), 
+                plot.title = element_text(hjust = 0.5), 
+                axis.title.x=element_blank(),
+                axis.text.x=element_blank(), 
+                axis.ticks.x=element_blank(), 
+                plot.margin = unit(c(1,1,0,1), "cm"))
+p1
+
+```
+
+
+```{r}
+p2 <- ggplot(overLap,
+             aes(x = Pos,
+                 y = SigHits, 
+                 group=1))+
+             geom_hline(yintercept = 1, 
+                        color = 'grey', 
+                        linetype = 2) +
+             geom_hline(yintercept = 5,
+                        color = 'grey',
+                        linetype = 2) +
+             geom_hline(yintercept = 10,
+                        color = 'grey',
+                        linetype = 2) +
+             geom_line() +
+             scale_y_continuous(limits = c(0,16),
+                                breaks = c(1,5,10,15)) +
+             scale_x_discrete(expand = c(0.01,0),
+                              breaks  =xaxis$Pos, 
+                              labels = xaxis$nrow) + 
+             theme_classic() +
+             theme(plot.title = element_text(hjust = 0.5),
+                   plot.margin = unit(c(0,1,1,1), "cm"),
+                   axis.text.x = element_text(angle = 60, 
+                                              hjust = 1)) +
+             labs(x = 'SNPs ranked by frequency of occurence and genomic position', 
+                  y = 'Frequency\nof occurence')
+p2
+
+```
+
+
+```{r}
+p3 <- plot_grid(p1, p2, 
+                ncol=1, 
+                align="v", 
+                rel_heights = c(3, 1))
+
+ggsave('~/Documents/QualityPaper/Figures/SNPOverlap6.jpg',p3, height=10, width=10)
+ggsave('~/Documents/QualityPaper/Figures/SNPOverlap6.PDF',p3, height=10, width=10)
+
+```
+
+
+```{r}
+h=ggplot(n, aes(x=reorder(Var1,-Freq), y=Freq, fill=Var1))+geom_bar(stat='identity')+coord_flip()+scale_y_reverse()+theme(axis.text.y=element_blank(), axis.title.y=element_blank(), axis.ticks=element_blank())+guides(fill=F)
+```
 
 
