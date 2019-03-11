@@ -1,0 +1,164 @@
+---
+title: "Legacy Data Confounds Modern Genomics Studies"
+output: html_notebook
+---
+load libraries
+```{r}
+library(ggplot2)
+library(colorspace)
+library(cowplot)
+library(data.table)
+```
+
+
+load data
+```{r}
+#Directories
+filterPath <- '/Users/luke/genomes/genomes/1kGP_4bedFiltered/'
+miscPath <- '~/Documents/QualityPaper/Misc/'
+  
+if(!file.exists(paste0(miscPath,'jointAF.txt'))){
+  #file names for Allele Frequency and HWE files
+
+  f1kGP <- paste0(filterPath,'1kGP_GenomeWide_JPT_1.frq')
+  fnag <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered.freq.frq')
+  hwe_1kGP <- paste0(filterPath,'1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
+  hwe_NAG <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
+  
+  #Load Allele Frequency files
+  JPT <- fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'))
+  NAG <- fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'))
+  
+  #merge them together to get joint frequency spectrum
+  join <- merge(JPT[which(JPT$JPT_AF <= 1),],
+ 			          NAG[which(NAG$NAG_AF <= 1),], 
+ 			          by = c('CHROM','POS'), all=T)
+  join[is.na(join)] <- 0 #missing positions are frequency of 0
+  rm(NAG) #free up memory
+  rm(JPT)
+  
+  #REMOVE  HWE SITES
+  NAG_hwe <- fread(hwe_NAG)
+  JPT_hwe <- fread(hwe_1kGP)
+  hwe <- merge(NAG_hwe[,c('V1','V2')], 
+              JPT_hwe[,c('V1','V2')], 
+              by = c('V1','V2'), all=T)
+  #remove sites from AF that don't meet HWE
+  join <- join[! paste(join$CHROM, join$POS) 
+               %in% c(paste(hwe$V1,hwe$V2)), ]
+  join <- join[,c('CHROM','POS','JPT_MAF','JPT_AF','NAG_MAF','NAG_AF')]
+  #make numeric
+  join <- sapply(join, as.numeric )
+  join <- join[complete.cases(join),]
+  #save to file
+  write.table(join, paste0(miscPath,'jointAF.txt'))
+}
+
+#to save time, load file if it already exists
+if(file.exists(paste0(miscPath,'jointAF.txt'))){
+join <- fread(paste0(miscPath,'jointAF.txt'))}
+
+#load poisitons that reach -log10(p) > 6
+sig.6 <- fread(paste0(miscPath,'JPT_sig6.Pos'), col.names=c('CHROM','POS'))
+sig.6$sig <- 'Significant' #add dummy variable for joining
+join <- merge(join, 
+              sig.6, 
+              by=c('CHROM', 'POS'), 
+              all.x=T)
+join <- join[which(join$JPT_MAF + join$NAG_MAF != 0),] #remove fixed
+jj <- join[complete.cases(join),]
+
+SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAF)) +
+          geom_bin2d(binwidth = c(1/884, 1/104)) +
+          geom_point(data = jj, size = 0.8, alpha = 0.7, shape = 3) +
+          scale_fill_distiller(palette = "Spectral",
+                               trans = "log",
+                               breaks = c(1,10,100,1000,10000,100000,1000000), 
+                               labels = c('1','10', '100', '1,000', 
+                                          '10,000', '100,000', '1,000,000')) +
+          scale_x_continuous(expand = c(0.01,0.01)) +
+          scale_y_continuous(expand = c(0.01,0.01)) + 
+          xlab(label = "Nagahama") +
+          theme_classic() +
+          theme(axis.line = element_blank(), 
+                axis.title.y = element_blank(), 
+                axis.text.y = element_blank(), 
+                axis.ticks.y = element_blank())
+
+HIST <- ggplot(jj, aes(x = JPT_MAF)) +
+            geom_histogram(binwidth=0.01, 
+                         fill='grey') +
+            scale_x_continuous(limits = c(0,1),
+                             expand = c(0.01,0.01)) +
+            scale_y_reverse(expand = c(0.01,0.01), 
+                          breaks = c(10,50,100)) +
+            xlab(label = "1000 Genomes Project") +
+            coord_flip()+xlab('')+ylab('') +
+            theme_classic() +
+            theme(axis.line = element_blank(),
+                  axis.text.x = element_text(angle=90))
+
+B <- plot_grid(HIST, SFS,
+               nrow=1, rel_widths=c(1,5), 
+               align = 'h', labels=c('','B'))
+B
+```
+#Reverse GWAS in JPT
+```{r}
+#Load single population regression results
+Reg <- fread(paste0(miscPath,'GenomeWide.Regression_JPT.csv'))
+#Clean up input data
+Reg <- Reg[which(Reg$Pos != 'Pos'),]
+Reg$Chr <- as.numeric(as.character(Reg$Chr))
+Reg$Pos <- as.numeric(as.character(Reg$Pos))
+Reg$dev <- as.numeric(as.character(Reg$dev))
+Reg$Pop <- NULL
+
+#Compute P values from deviance from null model
+Reg$plog10 <- -pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
+Reg$p<- pchisq(Reg$dev, 1, lower.tail=F)
+
+#split data into sig / not sig for plotting
+sig.6<-Reg[which(Reg$plog10 > 6),]
+NotSig<-Reg[which(Reg$plog10 < 6),]
+rm(Reg) #save memory
+
+#make manhattan plot
+GWAS <- ggplot(NotSig, aes(x = Pos, 
+                           y = plog10, 
+                           color = as.factor(Chr)))+
+              geom_point(alpha=0.3, 
+                         size=1)+
+              geom_point(data=sig.6, aes(x=Pos, 
+                             y = plog10,),
+                         color='black',
+                         shape=3)+
+              facet_grid(~Chr, 
+                           scales = 'free_x', 
+                           space = 'free_x', 
+                           switch = 'x')+
+              scale_y_continuous(expand = c(0,0))+
+              scale_fill_manual(values = getPalette(colourCount))+
+              labs(y='-log10(p)', x='Chromosome')+
+              guides(color=F) + 
+              theme_classic()+
+              theme(plot.title = element_text(hjust = 0.5), 
+                    plot.subtitle = element_text(hjust = 0.5), 
+                    axis.text.x=element_blank(), 
+                    axis.ticks.x=element_blank(),
+                    axis.line.x=element_blank(), 
+                    strip.background = element_blank(),
+                    strip.text.x = element_text(size = 6))
+
+GWAS
+```
+
+#Mutation Spectrum enrichment
+```{r}
+#To get mutation context, use paste0(miscPath,'AncestralContext.py')
+#Then select positions reaching significance in JPT regression
+SNP<-read.table(paste0(miscPath,'JPT_sig6.Context'), sep='\t', header=F,
+                col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+rSNP<-read.table(paste0(miscPath,'1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt'), sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+
+```
