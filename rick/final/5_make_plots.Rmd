@@ -1,0 +1,125 @@
+---
+title: "HGP analysis: plot"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# Preparations
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(tidyverse)
+library(lfa)
+library(glm2)
+library(furrr)
+library(broom)
+library(tictoc)
+options(future.globals.maxSize= 1000000000000)
+plan(multicore)
+```
+
+
+
+```{r}
+gc()
+```
+
+
+```{r}
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+bas_dt <- read_tsv(bas_filepath)
+avg_qual_mean <- bas_dt$avg_qual_mean
+```
+```{r}
+head(avg_qual_mean)
+```
+
+
+
+
+```{r}
+S <-30
+m <- 76871
+subset <- vector("list", length = S)
+for(i in 1:S){
+  subset[[i]] <-readRDS(file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
+}
+```
+
+
+```{r}
+gc()
+```
+
+
+
+
+
+```{r}
+
+get_plot <- function(data) {
+  p <- ggplot(bind_cols(data,
+                        bas_dt %>%
+                          select(Population,
+                                 avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean,
+                   genotype),
+               size = .5,
+               alpha = 0.4) +
+    geom_point(aes(avg_qual_mean,
+                  iaf,
+                  colour = "af")) +
+    geom_line(aes(avg_qual_mean,
+              p_0,
+              colour = "p_0"),
+          linetype = "dashed") +
+    geom_line(aes(avg_qual_mean,
+                  p_1,
+                  colour = "p_1")) +
+    theme_bw() +
+    facet_wrap( ~ Population)
+  
+  return(p)
+}
+
+
+data_list_subset <- 
+  data_list_sub %>%
+    mutate(plotted= future_map(data, get_plot)) 
+data_list_subset
+```
+
+
+```{r, fig.width=20}
+data_list_subset %>%
+  arrange(dev_logp )%>%
+  slice(1:5)%>%
+  pull(plotted)
+```
+
+
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
