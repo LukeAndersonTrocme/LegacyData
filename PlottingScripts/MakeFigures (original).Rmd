@@ -1,11 +1,22 @@
 ---
-title: "Legacy Data Confounds Modern Genomics Studies"
+title: "HGP analysis: fit model"
+author: 
+- name: Luke Anderson-Trocmé, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
-  html_document:
+  html_notebook:
     df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
 ---
+
 load libraries
-```{r}
+```{r, message=FALSE}
 library(ggplot2)
 library(RColorBrewer)
 library(plotly)
@@ -14,6 +25,10 @@ library(cowplot)
 library(data.table)
 library(tidyverse)
 library(purrr)
+
+#Directories
+filterPath <- '/Users/luke/genomes/genomes/1kGP_4bedFiltered/'
+miscPath <- '~/Documents/QualityPaper/Misc/'
 ```
 
 # Figure 1
@@ -29,7 +44,7 @@ Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, lower.tail=F))
 Reg$p<- pchisq(Reg$dev, 1, lower.tail=F)
 
 #split data into sig / not sig for plotting
-sig.6<-Reg[which(Reg$plog10 > 6),]
+SigPos<-Reg[which(Reg$plog10 > 6),]
 NotSig<-Reg[which(Reg$plog10 < 6),]
 rm(Reg) #save memory
 
@@ -39,7 +54,7 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                            color = as.factor(Chr)))+
               geom_point(alpha=0.3, 
                          size=1)+
-              geom_point(data=sig.6, aes(x=Pos, 
+              geom_point(data=SigPos, aes(x=Pos, 
                              y = plog10,),
                          color='black',
                          shape=3)+
@@ -65,20 +80,20 @@ GWAS
 
 ## Joint Frequency Spectrum
 ```{r}
-#Directories
-filterPath <- '/Users/luke/genomes/genomes/1kGP_4bedFiltered/'
-miscPath <- '~/Documents/QualityPaper/Misc/'
   
 if(!file.exists(paste0(miscPath,'jointAF.txt'))){
-  #file names for Allele Frequency and HWE files
-  f1kGP <- paste0(filterPath,'1kGP_GenomeWide_JPT_1.frq')
-  fnag <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered.freq.frq')
-  hwe_1kGP <- paste0(filterPath,'1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  hwe_NAG <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  
+
   #Load Allele Frequency files
-  JPT <- fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'))
-  NAG <- fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'))
+  f1kGP <- paste0(filterPath,
+                  '1kGP_GenomeWide_JPT_1.frq')
+  JPT <- fread(f1kGP, fill=T, 
+               col.names=c('CHROM','POS','N_ALLELES',
+                           'N_CHR','JPT_AF','JPT_MAF'))
+  fnag <- paste0(filterPath,
+                 'NAG_GenomeWide.4bed_filtered.freq.frq')
+  NAG <- fread(fnag, fill=T,
+               col.names=c('CHROM','POS','N_ALLELES',
+                           'N_CHR','NAG_AF','NAG_MAF'))
   
   #merge them together to get joint frequency spectrum
   join <- merge(JPT[which(JPT$JPT_AF <= 1),],
@@ -87,8 +102,13 @@ if(!file.exists(paste0(miscPath,'jointAF.txt'))){
   join[is.na(join)] <- 0 #missing positions are frequency of 0
   
   #REMOVE  HWE SITES
-  NAG_hwe <- fread(hwe_NAG)
+  hwe_1kGP <- paste0(filterPath,
+                     '1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
   JPT_hwe <- fread(hwe_1kGP)
+  hwe_NAG <- paste0(filterPath,
+                    'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
+  NAG_hwe <- fread(hwe_NAG)
+  
   hwe <- merge(NAG_hwe[,c('V1','V2')], 
               JPT_hwe[,c('V1','V2')], 
               by = c('V1','V2'), all=T)
@@ -96,7 +116,8 @@ if(!file.exists(paste0(miscPath,'jointAF.txt'))){
   join <- join[! paste(join$CHROM, join$POS) 
                %in% c(paste(hwe$V1,hwe$V2)), ]
 
-  join <- join[,c('CHROM','POS','JPT_MAF','JPT_AF','NAG_MAF','NAG_AF')]
+  join <- join[,c('CHROM','POS','JPT_MAF',
+                  'JPT_AF','NAG_MAF','NAG_AF')]
   #make numeric
   join <- sapply(join, as.numeric )
   join <- join[complete.cases(join),]
@@ -164,7 +185,7 @@ B
 ```{r}
 set.seed(123)
 #get positions of significant SNPs
-sig.pos <- sig.6[,c('Chr','Pos')]
+sig.pos <- SigPos[,c('Chr','Pos')]
 write.table(sig.pos, file=paste0(miscPath,'sig.pos.txt'), 
             col.names = FALSE, row.names = FALSE, quote = FALSE, sep = '\t')
 #get positions of random SNPs as control
@@ -174,7 +195,7 @@ write.table(random.pos, file=paste0(miscPath,'random.pos.txt'),
 
 rm(NotSig)
 ```
-### extract context for snps of interest
+extract context for snps of interest
 ```{bash}
 #Using GenomeWide.AncestralContext.txt
 #To get mutation context, use $path/AncestralContext.py
@@ -196,7 +217,7 @@ if [ ! -f $path/sig.pos.context.txt ]; then
   > $path/sig.pos.context.txt
 fi 
 ```
-## Load mutation context and plot enrichment
+Load mutation context and plot enrichment
 ```{r}
 contextHeader=c('Chr','Pos','Ref','Alt','Flip','Context')
 
@@ -306,7 +327,8 @@ rm(AB)
 
 #Figure 2
 
-
+This plot illustrates the quality of the date from the 1000 Genomes Project over time.
+Before we can plot this, we must download and parse the data.
 
 ```{r}
 BasPath = "/Users/luke/genomes/bas_file/1000GenomesBAS/"
@@ -367,7 +389,9 @@ names(MyColour) <- colors$Population
 metaData
 ```
 
-# Make plots
+Make plots
+
+### Quality per population
 ```{r}
 
 a <- ggplot(metaData, 
@@ -397,7 +421,7 @@ a <- ggplot(metaData,
 
 a
 ```
-
+### Quality by sequencing center
 ```{r}
 b <- ggplot(metaData, 
             aes(x=SUBMISSION_DATE, 
@@ -421,6 +445,7 @@ b <- ggplot(metaData,
 b
 ```
 
+### Sequencing technology use over time
 ```{r}
 c <- ggplot(metaData, 
             aes(x = SUBMISSION_DATE, 
@@ -441,7 +466,7 @@ c <- ggplot(metaData,
 c
 ```
 
-#Put it all together and save it
+Put it all together and save it
 ```{r}
 d=plot_grid(a,b,c, nrow=3, labels=c('A','B',''),rel_heights=c(4,4,1),align='v')
 ggsave("~/Documents/QualityPaper/Figures/MapQualOverTime.jpg",d,height=14,width=9)
@@ -450,6 +475,7 @@ ggsave("~/Documents/QualityPaper/Figures/MapQualOverTime.pdf",d,height=14,width=
 
 #Figure 3
 
+This figure shows the overlap of sites associated to qualiy independantly in each single population regression.
 ```{r}
 phase1=c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
 #read single population regressions
@@ -504,7 +530,7 @@ xaxis<-rbind(xaxis,tail(overLap,1))
 overLap
 ```
 
-
+### Overlap of significant SNPs
 ```{r}
 p1 <- ggplot(overLap, 
           aes(x = Pos,
@@ -534,7 +560,7 @@ p1
 
 ```
 
-
+### Frequency of occurence
 ```{r}
 p2 <- ggplot(overLap,
              aes(x = Pos,
@@ -566,7 +592,7 @@ p2
 
 ```
 
-
+put it all together and save it
 ```{r}
 p3 <- plot_grid(p1, p2, 
                 ncol=1, 
@@ -578,9 +604,7 @@ ggsave('~/Documents/QualityPaper/Figures/SNPOverlap6.PDF',p3, height=10, width=1
 
 ```
 
-
 ```{r}
-h=ggplot(n, aes(x=reorder(Var1,-Freq), y=Freq, fill=Var1))+geom_bar(stat='identity')+coord_flip()+scale_y_reverse()+theme(axis.text.y=element_blank(), axis.title.y=element_blank(), axis.ticks=element_blank())+guides(fill=F)
+sessionInfo()
 ```
-
 
