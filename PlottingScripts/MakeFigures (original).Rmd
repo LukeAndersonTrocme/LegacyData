@@ -17,6 +17,52 @@ library(purrr)
 ```
 
 # Figure 1
+## Reverse GWAS in JPT
+```{r}
+#Load single population regression results
+Reg <- fread(paste0(miscPath,'1KGP.GenomeWide.Regression_JPT.csv'), 
+             col.names = c('Chr','Pos','Population','deviance'), 
+             colClasses = c('numeric', 'numeric', 'character', 'numeric'))
+
+#Compute P values from deviance from null model
+Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, lower.tail=F))
+Reg$p<- pchisq(Reg$dev, 1, lower.tail=F)
+
+#split data into sig / not sig for plotting
+sig.6<-Reg[which(Reg$plog10 > 6),]
+NotSig<-Reg[which(Reg$plog10 < 6),]
+rm(Reg) #save memory
+
+#make manhattan plot
+GWAS <- ggplot(NotSig, aes(x = Pos, 
+                           y = plog10, 
+                           color = as.factor(Chr)))+
+              geom_point(alpha=0.3, 
+                         size=1)+
+              geom_point(data=sig.6, aes(x=Pos, 
+                             y = plog10,),
+                         color='black',
+                         shape=3)+
+              facet_grid(~Chr, 
+                           scales = 'free_x', 
+                           space = 'free_x', 
+                           switch = 'x')+
+              scale_y_continuous(expand = c(0,0))+
+              scale_fill_brewer(palette = 'Spectral')+
+              labs(y='-log10(p)', x='Chromosome')+
+              guides(color=F) + 
+              theme_classic()+
+              theme(plot.title = element_text(hjust = 0.5), 
+                    plot.subtitle = element_text(hjust = 0.5), 
+                    axis.text.x=element_blank(), 
+                    axis.ticks.x=element_blank(),
+                    axis.line.x=element_blank(), 
+                    strip.background = element_blank(),
+                    strip.text.x = element_text(size = 6))
+GWAS
+```
+
+
 ## Joint Frequency Spectrum
 ```{r}
 #Directories
@@ -39,8 +85,6 @@ if(!file.exists(paste0(miscPath,'jointAF.txt'))){
  			          NAG[which(NAG$NAG_AF <= 1),], 
  			          by = c('CHROM','POS'), all=T)
   join[is.na(join)] <- 0 #missing positions are frequency of 0
-  rm(NAG) #free up memory
-  rm(JPT)
   
   #REMOVE  HWE SITES
   NAG_hwe <- fread(hwe_NAG)
@@ -51,12 +95,16 @@ if(!file.exists(paste0(miscPath,'jointAF.txt'))){
   #remove sites from AF that don't meet HWE
   join <- join[! paste(join$CHROM, join$POS) 
                %in% c(paste(hwe$V1,hwe$V2)), ]
-  rm(hwe)
+
   join <- join[,c('CHROM','POS','JPT_MAF','JPT_AF','NAG_MAF','NAG_AF')]
   #make numeric
   join <- sapply(join, as.numeric )
   join <- join[complete.cases(join),]
-  #save to file
+
+  rm(NAG) #free up memory
+  rm(JPT)
+  rm(hwe)
+  #save to file  
   write.table(join, paste0(miscPath,'jointAF.txt'))
 }
 #to save time, load file if it already exists
@@ -110,55 +158,7 @@ rm(join)#save memory
 rm(SFS)
 B
 ```
-## Reverse GWAS in JPT
-```{r}
-#Load single population regression results
-Reg <- fread(paste0(miscPath,'GenomeWide.Regression_JPT.csv'))
-#Clean up input data
-Reg <- Reg[which(Reg$Pos != 'Pos'),]
-Reg$Chr <- as.numeric(as.character(Reg$Chr))
-Reg$Pos <- as.numeric(as.character(Reg$Pos))
-Reg$dev <- as.numeric(as.character(Reg$dev))
-Reg$Pop <- NULL
 
-#Compute P values from deviance from null model
-Reg$plog10 <- -pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
-Reg$p<- pchisq(Reg$dev, 1, lower.tail=F)
-
-#split data into sig / not sig for plotting
-sig.6<-Reg[which(Reg$plog10 > 6),]
-NotSig<-Reg[which(Reg$plog10 < 6),]
-rm(Reg) #save memory
-
-#make manhattan plot
-GWAS <- ggplot(NotSig, aes(x = Pos, 
-                           y = plog10, 
-                           color = as.factor(Chr)))+
-              geom_point(alpha=0.3, 
-                         size=1)+
-              geom_point(data=sig.6, aes(x=Pos, 
-                             y = plog10,),
-                         color='black',
-                         shape=3)+
-              facet_grid(~Chr, 
-                           scales = 'free_x', 
-                           space = 'free_x', 
-                           switch = 'x')+
-              scale_y_continuous(expand = c(0,0))+
-              scale_fill_brewer(palette = 'Spectral')+
-              labs(y='-log10(p)', x='Chromosome')+
-              guides(color=F) + 
-              theme_classic()+
-              theme(plot.title = element_text(hjust = 0.5), 
-                    plot.subtitle = element_text(hjust = 0.5), 
-                    axis.text.x=element_blank(), 
-                    axis.ticks.x=element_blank(),
-                    axis.line.x=element_blank(), 
-                    strip.background = element_blank(),
-                    strip.text.x = element_text(size = 6))
-
-GWAS
-```
 
 ## Mutation Spectrum enrichment
 ```{r}
