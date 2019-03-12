@@ -51,14 +51,14 @@ free -t -g
 
 ```{r lfa}
 tic()
-LF <- lfa(data, 4)
+LF <- lfa(data, 5)
 toc()
 message("lfa run complete")
 ```
 
 ```{r save}
 tic()
-saveRDS(LF, "./data/preprocessed/lf.rds")
+saveRDS(LF, "./data/preprocessed/lf5.rds")
 toc()
 ```
 ```{r}
