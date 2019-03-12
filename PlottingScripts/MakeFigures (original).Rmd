@@ -1,5 +1,5 @@
 ---
-title: "HGP analysis: fit model"
+title: "Legacy Data Confounds Modern Genomics Studies"
 author: 
 - name: Luke Anderson-Trocmé, 
   affiliation:
@@ -14,6 +14,7 @@ output:
       collapsed: false
       smooth_scroll: false
 ---
+  
 
 load libraries
 ```{r, message = FALSE}
@@ -157,7 +158,7 @@ join <- merge(join,
 join <- join[which(join$JPT_MAF + join$NAG_MAF != 0),] #remove fixed
 jj <- join[complete.cases(join),]
 
-SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAFALSE)) +
+SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAF)) +
           geom_bin2d(binwidth = c(1/884, 1/104)) +
           geom_point(data = jj, size = 0.8, alpha = 0.7, shape = 3) +
           scale_fill_distiller(palette = "Spectral",
@@ -175,7 +176,7 @@ SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAFALSE)) +
                 axis.text.y = element_blank(), 
                 axis.ticks.y = element_blank())
 
-HIST <- ggplot(jj, aes(x = JPT_MAFALSE)) +
+HIST <- ggplot(jj, aes(x = JPT_MAF)) +
             geom_histogram(binwidth = 0.01, 
                          fill = 'grey') +
             scale_x_continuous(limits = c(0,1),
@@ -278,9 +279,9 @@ ReverseComp <- function(x)
 processContext <- function(data){
   
 #get reverse complement of context, ref and alt
-data$Rev <- ReverseComp(data$Context)
-data$RevRef <- ReverseComp(data$ReFALSE)
-data$RevAlt <- ReverseComp(data$Alt)
+data$Rev<-ReverseComp(as.character(data$Context))
+data$RevRef<-ReverseComp(as.character(data$Ref))
+data$RevAlt<-ReverseComp(as.character(data$Alt))
 
 #only get one half (to fold over)
 AC<-data[which(data$Ref 
