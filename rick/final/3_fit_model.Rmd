@@ -1,0 +1,175 @@
+---
+title: "HGP analysis: fit model"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+  
+  
+  # Preparations
+  
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(tidyverse)
+library(lfa)
+library(furrr)
+library(glm2)
+library(tictoc)
+options(future.globals.maxSize= 1000000000000)
+plan(multicore)
+```
+
+
+
+
+```{r}
+data_genotype <- read.bed("./data/plink/ALL_Pops")
+message("plink data loaded")
+```
+
+
+```{r}
+loci <- c(1:dim(data_genotype)[1])
+```
+
+
+```{r read lf}
+LF <- readRDS( "./data/preprocessed/lf5.rds")
+```
+
+```{r}
+lreg <- function(y, X){
+  X <- rbind(X, X)
+  y1 <- as.numeric((y==1) | (y==2))
+  y2 <- as.numeric(y==2)
+  y <- c(y1,y2)
+  b <- glm2(cbind(y, 2-y) ~ -1 + X, family="binomial")$coef
+  
+  return(b)
+  
+}
+
+fit_glm <- function(..., LF, trait){
+  snp <- c(...)
+  
+  ind <- !is.na(snp) #logical index vector
+  snp_no_na <- snp[ind]
+  LF_no_na <- LF[ind,]
+  p0 <- rep(NA, length(snp))
+  p1 <- rep(NA, length(snp))
+  trait_no_na <- trait[ind]
+  b0 <- lreg(snp_no_na, LF_no_na) #coefficients from logreg 
+  b1 <- lreg(snp_no_na, cbind(LF_no_na, trait_no_na))
+  est0 <- .Call("mv", LF_no_na, b0)
+  est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
+  p0[ind] <- exp(est0)/(1+exp(est0))
+  p1[ind] <- exp(est1)/(1+exp(est1))
+  
+  
+  dataset <-
+    tibble(snp=snp,
+           p0 = p0,
+           p1 = p1)
+  
+  stat <-
+    dataset %>%
+    summarize(
+      dev0 = -2 * sum(snp * log(p0) +
+                        (2 - snp) * log(1 - p0),
+                      na.rm = TRUE),
+      dev1 = -2 * sum(snp * log(p1) +
+                        (2 - snp) * log(1 - p1),
+                      na.rm = TRUE),
+      devdiff = dev0 - dev1,
+      dev_logp = -log10(pchisq(devdiff,
+                               1,
+                               lower.tail = FALSE))
+    ) %>% 
+    mutate(nobs = sum(ind),
+           b=b1[length(b1)])
+  
+  return(list(dataset=dataset, stat=stat))
+         
+}
+```
+
+
+```{r}
+gc()
+```
+
+```{r}
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+bas_dt <- read_tsv(bas_filepath)
+avg_qual_mean <- bas_dt$avg_qual_mean
+```
+
+```{r}
+head(avg_qual_mean)
+```
+
+
+```{r}
+fit_subset <- function(sub_index) {
+
+  data_sub <- 
+    data_genotype[sub_index,] %>%
+    as_tibble() %>%
+    transmute(
+      locus=loci[sub_index],
+      fit = future_pmap(., fit_glm,
+                        LF=LF, 
+                        trait=avg_qual_mean))  %>%
+    unnest(fit) %>%
+    mutate(l= rep(c("data","stat"), n()/2))%>%
+    spread(l, fit)%>%
+    unnest(stat)
+  return(data_sub)
+  
+}
+```
+
+
+```{r}
+S <-30
+m <- 76871
+subset <- vector("list", length = S)
+for(i in 1:S){
+  strt <- m*(i-1) +1
+  stp <- m*i
+  sub_range <- c(strt:stp)
+  tic()
+  subset <- fit_subset(sub_range) 
+  toc()
+  message("fitting model subset:", i)
+  saveRDS(subset, file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
+}
+```
+
+
+```{r}
+gc()
+```
+
+
+
+```{r}
+sessionInfo()
+```
+
+
+
