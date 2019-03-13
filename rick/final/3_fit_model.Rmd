@@ -54,10 +54,13 @@ message("plink data loaded")
 data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
                   col.names = c('Chr','rsID','X',
                                 'Pos','Ref','Alt'))
-loci <- data_bim$rsID
+
+
+rownames(data_genotype) <- data_bim$rsID
+#loci <- data_bim$rsID
 #loci <- c(1:dim(data_genotype)[1])
 ```
-rownames(data_genotype) <- data_bim$rsID
+
 
 ```{r lfa}
 tic()
@@ -146,6 +149,33 @@ avg_qual_mean <- bas_dt$avg_qual_mean
 
 ```{r}
 head(avg_qual_mean)
+```
+
+
+
+```{r}
+tic("fitting model")
+data_fit <- 
+	data_genotype %>%
+	as_tibble(rownames="rsID") %>%
+	transmute(
+	rsID=rsID,
+	fit = future_pmap(., fit_glm,
+		LF=LF, 
+		trait=avg_qual_mean))  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()
+
+```
+
+```{r}
+chromosome <- ""
+saveRDS(data_fit, 
+	file.path("./data/preprocessed/subsets",
+	paste0("fits_chrom_", chromosome, ".rds"))) 
 ```
 
 
