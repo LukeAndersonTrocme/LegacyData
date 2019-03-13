@@ -57,6 +57,7 @@ data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'),
 loci <- data_bim$rsID
 #loci <- c(1:dim(data_genotype)[1])
 ```
+rownames(data_genotype) <- data_bim$rsID
 
 ```{r lfa}
 tic()
@@ -153,9 +154,9 @@ fit_subset <- function(sub_index) {
 
   data_sub <- 
     data_genotype[sub_index,] %>%
-    as_tibble() %>%
+    as_tibble(rownames="rsID") %>%
     transmute(
-      locus=loci[sub_index],
+      rsID=rsID,
       fit = future_pmap(., fit_glm,
                         LF=LF, 
                         trait=avg_qual_mean))  %>%
@@ -167,6 +168,23 @@ fit_subset <- function(sub_index) {
   
 }
 ```
+
+```{r}
+S <-30
+m <- 76871
+subset <- vector("list", length = S)
+for(i in 1:S){
+  strt <- m*(i-1) +1
+  stp <- m*i
+  sub_range <- c(strt:stp)
+  tic()
+  subset <- fit_subset(sub_range) 
+  toc()
+  message("fitting model subset:", i)
+  saveRDS(subset, file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
+}
+```
+
 
 
 ```{r, warning=FALSE}
