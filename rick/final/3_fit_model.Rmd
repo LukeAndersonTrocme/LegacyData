@@ -31,19 +31,31 @@ library(glm2)
 library(tictoc)
 options(future.globals.maxSize= 1000000000000)
 plan(multicore)
+
+path='/Users/luke/Documents/QualityPaper/rick/final/'
+setwd(path)
+
+plinkPath='/Users/luke/genomes/genomes/hg19/plink/'
+chr='22'
 ```
 
 
 
 
 ```{r}
-data_genotype <- read.bed("./data/plink/ALL_Pops")
+data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
+#data_genotype <- read.bed("./data/plink/ALL_Pops")
+
 message("plink data loaded")
 ```
 
 
 ```{r}
-loci <- c(1:dim(data_genotype)[1])
+data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt'))
+loci <- data_bim$rsID
+#loci <- c(1:dim(data_genotype)[1])
 ```
 
 ```{r lfa}
@@ -157,19 +169,32 @@ fit_subset <- function(sub_index) {
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 S <-30
-m <- 76871
+##Still working on this, to be completed
+m <- nrow(data_genotype)/30
 subset <- vector("list", length = S)
 for(i in 1:S){
   strt <- m*(i-1) +1
   stp <- m*i
   sub_range <- c(strt:stp)
+  bim_range <- data_bim[sub_range,]
   tic()
   subset <- fit_subset(sub_range) 
+  subset <- add_column(subset, 
+                       Chr = bim_range$Chr,
+                       Pos = bim_range$Pos,
+                       rsID = bim_range$rsID)
   toc()
   message("fitting model subset:", i)
-  saveRDS(subset, file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
+  saveRDS(subset, 
+          file.path("./data/preprocessed/subsets",
+                    paste0("fits_subset_", i, ".rds")))
+  write.table(subset[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("fits_subset_", i, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
 }
 ```
 
