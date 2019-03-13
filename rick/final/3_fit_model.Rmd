@@ -46,6 +46,18 @@ message("plink data loaded")
 loci <- c(1:dim(data_genotype)[1])
 ```
 
+```{r lfa}
+tic()
+#LF <- lfa(data_genotype, 5)
+toc()
+message("lfa run complete")
+```
+
+```{r save}
+tic()
+#saveRDS(LF, "./data/preprocessed/lf5.rds")
+toc()
+```
 
 ```{r read lf}
 LF <- readRDS( "./data/preprocessed/lf5.rds")
@@ -99,7 +111,8 @@ fit_glm <- function(..., LF, trait){
                                1,
                                lower.tail = FALSE))
     ) %>% 
-    mutate(nobs = sum(ind),
+    mutate(num_nas = sum(!ind),
+	   num_zeros= sum(snp_no_na ==0),
            b=b1[length(b1)])
   
   return(list(dataset=dataset, stat=stat))
