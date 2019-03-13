@@ -29,6 +29,7 @@ library(lfa)
 library(furrr)
 library(glm2)
 library(tictoc)
+library(data.table)
 options(future.globals.maxSize= 1000000000000)
 plan(multicore)
 
@@ -220,27 +221,22 @@ for(i in 1:S){
 ```{r, warning=FALSE}
 S <-30
 ##Still working on this, to be completed
-m <- nrow(data_genotype)/30
+m <- 10000 #nrow(data_genotype)/30
 subset <- vector("list", length = S)
 for(i in 1:S){
   strt <- m*(i-1) +1
   stp <- m*i
   sub_range <- c(strt:stp)
-  bim_range <- data_bim[sub_range,]
   tic()
   subset <- fit_subset(sub_range) 
-  subset <- add_column(subset, 
-                       Chr = bim_range$Chr,
-                       Pos = bim_range$Pos,
-                       rsID = bim_range$rsID)
   toc()
   message("fitting model subset:", i)
   saveRDS(subset, 
           file.path("./data/preprocessed/subsets",
-                    paste0("fits_subset_", i, ".rds")))
+                    paste0("fits_subset_", i, "_10000.rds")))
   write.table(subset[-2], 
               file.path("./data/preprocessed/subsets", 
-                        paste0("fits_subset_", i, ".txt")),
+                        paste0("fits_subset_", i, "_10000.txt")),
               quote = FALSE,
               row.names = FALSE)
 }
