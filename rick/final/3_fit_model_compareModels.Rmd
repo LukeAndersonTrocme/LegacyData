@@ -1,0 +1,501 @@
+---
+title: "HGP analysis: fit model"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+  
+  
+  # Preparations
+  
+```{r setup}
+args <- commandArgs(trailingOnly=T)
+
+#path <- args[1]
+path <- '/Users/luke/Documents/QualityPaper/rick/final/'
+setwd(path)
+
+#plinkPath <- args[2] 
+plinkPath <- '/Users/luke/genomes/genomes/hg19/plink/'
+
+#chr <- args[3]
+chr <- '22_10000'
+
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(tidyverse)
+library(lfa)
+library(furrr)
+library(glm2)
+library(tictoc)
+library(data.table)
+library(cowplot)
+options(future.globals.maxSize= 1000000000000)
+plan(multicore)
+```
+load plink format genotype data
+```{r}
+data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
+
+message("plink data loaded")
+```
+get rsIDs and add them as rownames for genotype data
+```{r}
+data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt'))
+
+rownames(data_genotype) <- data_bim$rsID
+```
+run lfa if needed
+```{r lfa}
+tic()
+#LF <- lfa(data_genotype, 5)
+toc()
+message("lfa run complete")
+```
+save lfa if needed
+```{r save}
+tic()
+#saveRDS(LF, "./data/preprocessed/lf5.rds")
+toc()
+```
+load logistic factor analysis results
+```{r read lf}
+LF <- readRDS( "./data/preprocessed/lf5.rds")
+```
+
+
+```{r}
+#this runs the logistic regression
+lreg_dich <- function(y, X){
+  
+  b <- glm2(cbind(y, 2-y) ~ -1 + X, family="binomial")$coef
+  
+  return(b)
+  
+}
+
+
+#modified from gcat
+fit_glm_dich <- function(..., LF, trait){
+  snp <- c(...)
+  snp <- as.numeric((snp==1) | (snp==2))
+  ind <- !is.na(snp) #logical index vector
+  snp_no_na <- snp[ind]
+  LF_no_na <- LF[ind,]
+  p0 <- rep(NA, length(snp))
+  p1 <- rep(NA, length(snp))
+  trait_no_na <- trait[ind]
+  b0 <- lreg_dich(snp_no_na, LF_no_na) #coefficients from logreg 
+  b1 <- lreg_dich(snp_no_na, cbind(LF_no_na, trait_no_na))
+  est0 <- .Call("mv", LF_no_na, b0)
+  est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
+  p0[ind] <- exp(est0)/(1+exp(est0))
+  p1[ind] <- exp(est1)/(1+exp(est1))
+  
+  dataset <-
+    tibble(snp=snp,
+           p0 = p0,
+           p1 = p1)
+  
+  stat <-
+    dataset %>%
+    summarize( #cross entropy (log likelihood)
+      dev0 = -2 * sum(snp * log(p0) +
+                        (1 - snp) * log(1 - p0),
+                      na.rm = TRUE),
+      dev1 = -2 * sum(snp * log(p1) +
+                        (1 - snp) * log(1 - p1),
+                      na.rm = TRUE),
+      devdiff = dev0 - dev1,
+      dev_logp = -log10(pchisq(devdiff,
+                               1,
+                               lower.tail = FALSE))
+    ) %>% 
+    mutate(num_nas = sum(!ind),
+	   num_zeros= sum(snp_no_na ==0),
+           b=b1[length(b1)])
+  
+  return(list(dataset=dataset, stat=stat))
+         
+}
+```
+
+
+
+
+define functions
+```{r}
+
+
+#this runs the logistic regression
+lreg <- function(y, X){
+  X <- rbind(X, X)
+  y1 <- as.numeric((y==1) | (y==2))
+  y2 <- as.numeric(y==2)
+  y <- c(y1,y2)
+  b <- glm2(cbind(y, 2-y) ~ -1 + X, family="binomial")$coef
+  
+  return(b)
+  
+}
+#modified from gcat
+fit_glm <- function(..., LF, trait){
+  snp <- c(...)
+  ind <- !is.na(snp) #logical index vector
+  snp_no_na <- snp[ind]
+  LF_no_na <- LF[ind,]
+  p0 <- rep(NA, length(snp))
+  p1 <- rep(NA, length(snp))
+  trait_no_na <- trait[ind]
+  b0 <- lreg(snp_no_na, LF_no_na) #coefficients from logreg 
+  b1 <- lreg(snp_no_na, cbind(LF_no_na, trait_no_na))
+  est0 <- .Call("mv", LF_no_na, b0)
+  est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
+  p0[ind] <- exp(est0)/(1+exp(est0))
+  p1[ind] <- exp(est1)/(1+exp(est1))
+  
+  dataset <-
+    tibble(snp=snp,
+           p0 = p0,
+           p1 = p1)
+  
+  stat <-
+    dataset %>%
+    summarize(
+      dev0 = -2 * sum(snp * log(p0) +
+                        (2 - snp) * log(1 - p0),
+                      na.rm = TRUE),
+      dev1 = -2 * sum(snp * log(p1) +
+                        (2 - snp) * log(1 - p1),
+                      na.rm = TRUE),
+      devdiff = dev0 - dev1,
+      dev_logp = -log10(pchisq(devdiff,
+                               1,
+                               lower.tail = FALSE))
+    ) %>% 
+    mutate(num_nas = sum(!ind),
+	   num_zeros= sum(snp_no_na ==0),
+           b=b1[length(b1)])
+  
+  return(list(dataset=dataset, stat=stat))
+         
+}
+```
+
+```{r}
+gc()
+```
+
+```{r}
+fam_file <-fread(paste0(plinkPath,'chr',chr,'.fam'), 
+                  col.names=c('sample','a','b','c','d','e'))
+                 
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+bas_dt <- read_tsv(bas_filepath)
+bas_dt <- merge(fam_file, 
+                bas_dt,
+                by = 'sample') 
+avg_qual_mean <- bas_dt$avg_qual_mean
+```
+
+```{r}
+head(avg_qual_mean)
+```
+#LFA
+```{r, warning=FALSE}
+tic("fitting model")
+labels <- rownames(data_genotype)
+data_fit <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm,
+	LF=LF, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+
+data_fit_dich <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm_dich,
+	LF= LF, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()    
+```
+
+```{r}
+
+saveRDS(data_fit, 
+	file.path("./data/preprocessed/subsets",
+	paste0("fits_chrom_", chr, ".rds")))
+
+write.table(data_fit[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("fits_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+
+saveRDS(data_fit_dich, 
+	file.path("./data/preprocessed/subsets",
+	paste0("dich_fits_chrom_", chr, ".rds")))
+
+write.table(data_fit_dich[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("dich_fits_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+```
+#PCA
+```{r, warning=FALSE}
+#load PCA
+library(data.table)
+samples = fread('/Users/luke/Documents/PCAperPop/Name_Pop_Qual_PC1_PC2_PC3_PC4_PC5.txt')
+PC <- as.matrix(samples[,c('PC1','PC2','PC3','PC4','PC5')])
+PC <- cbind(PC, 1)
+
+tic("fitting model")
+labels <- rownames(data_genotype)
+data_fit_PCA <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm,
+	LF= PC, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+
+data_fit_PCA_dich <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm_dich,
+	LF= PC, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()    
+```
+
+```{r}
+
+saveRDS(data_fit_PCA, 
+	file.path("./data/preprocessed/subsets",
+	paste0("fits_chrom_", chr, ".rds")))
+
+write.table(data_fit_PCA[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("fitsPCA_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+
+saveRDS(data_fit_PCA_dich, 
+	file.path("./data/preprocessed/subsets",
+	paste0("dich_fits_chrom_", chr, ".rds")))
+
+write.table(data_fit_PCA_dich[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("dich_fitsPCA_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+```
+#Population
+```{r, warning=FALSE}
+
+testModel <- model.matrix(data = bas_dt, object = ~Population)  
+
+tic("fitting model")
+labels <- rownames(data_genotype)
+data_fit_Pop <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm,
+	LF= testModel, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()
+
+   
+data_fit_Pop_dich <- 
+	data_genotype %>%
+	as_tibble() %>%
+	transmute(
+	fit = future_pmap(., fit_glm_dich,
+	LF= testModel, 
+	trait=avg_qual_mean),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()   
+```
+```{r}
+
+saveRDS(data_fit_Pop, 
+	file.path("./data/preprocessed/subsets",
+	paste0("fits_chrom_", chr, ".rds")))
+
+write.table(data_fit[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("fitsPOP_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+
+saveRDS(data_fit_Pop_dich, 
+	file.path("./data/preprocessed/subsets",
+	paste0("dich_fits_chrom_", chr, ".rds")))
+
+write.table(data_fit_dich[-2], 
+              file.path("./data/preprocessed/subsets", 
+                        paste0("dich_fitsPOP_chrom_", chr, ".txt")),
+              quote = FALSE,
+              row.names = FALSE)
+```
+
+```{r}
+gc()
+```
+
+```{r}
+sessionInfo()
+```
+
+```{r,fig.height = 10, fig.width = 10}
+
+plt <- merge(data_fit[-2], data_fit_PCA[-2], by=c('rsID'), suffixes = c('LFA','PCA'))
+plt <- merge(plt, data_fit_Pop[-2], by=c('rsID'), suffixes = c('','Pop'))
+
+
+p1<-ggplot(plt, aes(dev0LFA, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(plt, aes(bLFA, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
+pp1 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(plt, aes(dev0LFA, dev0))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(plt, aes(bLFA, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
+pp2 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(plt, aes(dev0, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiff, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiff, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Deviance Zoom')+xlim(c(0,50))+ylim(c(0,50))
+p3<-ggplot(plt, aes(b, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Beta')
+pp3 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+plot_grid(pp1,pp2,pp3,ncol=3)
+ggsave('./CompareModels.jpg', height=10, width = 10)
+
+```
+
+
+```{r,fig.height = 10, fig.width = 10}
+
+plt <- merge(data_fit_dich[-2], data_fit_PCA_dich[-2], by=c('rsID'), suffixes = c('LFA','PCA'))
+plt <- merge(plt, data_fit_Pop_dich[-2], by=c('rsID'), suffixes = c('','Pop'))
+
+
+p1<-ggplot(plt, aes(dev0LFA, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(plt, aes(bLFA, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
+pp1 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(plt, aes(dev0LFA, dev0))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(plt, aes(bLFA, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
+pp2 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(plt, aes(dev0, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Null Model')
+p2<-ggplot(plt, aes(devdiff, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Deviance')
+p2.2<-ggplot(plt, aes(devdiff, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Deviance Zoom')+xlim(c(0,50))+ylim(c(0,50))
+p3<-ggplot(plt, aes(b, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Beta')
+pp3 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+plot_grid(pp1,pp2,pp3,ncol=3)
+ggsave('./CompareModels_dich.jpg', height=10, width = 10)
+
+```
+
+```{r,fig.height = 10, fig.width = 10}
+
+LFAp <- merge(data_fit[-2], data_fit_dich[-2], by=c('rsID'), suffixes = c('Poly','Dich'))
+PCAp <- merge(data_fit_PCA[-2], data_fit_PCA_dich[-2], by=c('rsID'), suffixes = c('Poly','Dich'))
+Popp <- merge(data_fit_Pop[-2], data_fit_Pop_dich[-2], by=c('rsID'), suffixes = c('Poly','Dich'))
+
+
+p1<-ggplot(LFAp, aes(dev0Poly, dev0Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Null Model LFA')
+p2<-ggplot(LFAp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance')
+p2.2<-ggplot(LFAp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(LFAp, aes(bPoly, bDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Beta')
+pp1 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(PCAp, aes(dev0Poly, dev0Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Null Model PCA')
+p2<-ggplot(PCAp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance')
+p2.2<-ggplot(PCAp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(PCAp, aes(bPoly, bDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Beta')
+pp2 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+p1<-ggplot(Popp, aes(dev0Poly, dev0Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Null Model Pop')
+p2<-ggplot(Popp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance')
+p2.2<-ggplot(Popp, aes(devdiffPoly, devdiffDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
+p3<-ggplot(Popp, aes(bPoly, bDich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Poly', y='Dich')+ggtitle('Beta')
+pp3 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+plot_grid(pp1,pp2,pp3,ncol=3)
+ggsave('./CompareModels_VSdich.jpg', height=10, width = 10)
+
+```
+
+```{r,fig.height = 10, fig.width = 6}
+#plot diff
+plt <- merge(data_fit, data_fit_Pop_dich, by=c('rsID'), suffixes = c('LFA_Full','Pop_Dich'))
+
+p1<-ggplot(plt, aes(dev0LFA_Full, dev0Pop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA Full', y='Pop Dich')+ggtitle('Null Model')+coord_flip()
+p2<-ggplot(plt, aes(devdiffLFA_Full, devdiffPop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA_Full', y='Pop_Dich')+ggtitle('Deviance')+coord_flip()
+p2.2<-ggplot(plt, aes(devdiffLFA_Full, devdiffPop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA_Full', y='Pop_Dich')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))+coord_flip()
+p3<-ggplot(plt, aes(bLFA_Full, bPop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA_Full', y='Pop_Dich')+ggtitle('Beta')+coord_flip()
+pp1 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
+
+pp1
+ggsave('./CompareModels_FullLFA_Popdich.jpg', height=10, width = 6)
+```
