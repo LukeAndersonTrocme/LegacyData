@@ -5,8 +5,9 @@ library(glm2)
 library(cowplot)
 
 #read Genotypes
-GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=1000)
-
+GT = fread('gzcat ~/genomes/genomes/hg19/Genotypes/CHR22.Genotypes.txt.gz',nrows=50000)
+Pos = GT[,c(1:3)]
+names(Pos) <- c('Chr','Pos','AF')
 ColNames = read.table('/Users/luke/genomes/genomes/hg19/Genotypes/ColNames.txt', header=F)
 names(GT) = as.character(unlist(ColNames))
 
@@ -68,6 +69,20 @@ plt = data.frame('coefPopPC' = unlist(coefPopPC),
 				  'devPop'=unlist(devPop),
 				  'devPC' = unlist(devPC))
 				  
+plt <- cbind(plt, Pos)
+plt$Pop_p <- -log10(pchisq(plt$devPop, df = 1, lower.tail=F))				  
+rick <- fread('~/Documents/QualityPaper/rick/final/data/preprocessed/subsets/fits_subset_1_10000.txt')
+plinkPath='/Users/luke/genomes/genomes/hg19/plink/'
+chr='22'
+data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt'))
+rick <- merge(rick, data_bim, by.x = 'locus',by.y='rsID')   
+
+
+plt <- merge(plt, rick, by = c('Chr','Pos'))
+                             
+                                			  
 c1<-ggplot(plt, aes(coefPop, coefPC))+
 				geom_point(shape=1, alpha=0.6)+
 				geom_abline()+
@@ -93,10 +108,23 @@ d3<-ggplot(plt, aes(devPop, devPopPC))+
 			geom_abline(alpha=0.3, linetype=3)+
 			geom_point(shape=1, alpha=0.6)+
 			labs(x='PopPC',y='Pop')
+d1r<-ggplot(plt, aes(devPop, devdiff))+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)
+d2r<-ggplot(plt, aes(devPopPC, devdiff))+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)
+d3r<-ggplot(plt, aes(devPC, devdiff))+
+			geom_abline(alpha=0.3, linetype=3)+
+			geom_point(shape=1, alpha=0.6)
 
-plot_grid(c1,c2,c3,d1,d2,d3, nrow=2)
-ggsave('~/Documents/QualityPaper/Figures/CoefDEV_Pop_PC_PopPC.jpg',height=6,width=12)
+plot_grid(d1,d2,d3,d1r,d2r,d3r, nrow=2)
+ggsave('~/Documents/QualityPaper/Figures/CoefDEV_Pop_PC_PopPC_rick.jpg',height=8,width=12)
 
+af1<-ggplot(plt,aes(x=AF, y=b))+geom_hline(yintercept=0, linetype=3, color='grey')+geom_point()
+af2<- ggplot(plt,aes(x=AF, y= coefPop))+geom_hline(yintercept=0, linetype=3, color='grey')+geom_point()
+plot_grid(af1,af2)
+ggsave('~/Documents/QualityPaper/Figures/AF_CoefDEV_Pop_rick.jpg',height=5,width=10)
 
 plot_grid(c1,c2,c3,nrow=1)
 ggsave('~/Documents/QualityPaper/Figures/Coef_Pop_PC_PopPC.jpg',height=5,width=10)
