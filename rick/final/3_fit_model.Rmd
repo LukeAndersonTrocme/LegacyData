@@ -37,11 +37,8 @@ path='/Users/luke/Documents/QualityPaper/rick/final/'
 setwd(path)
 
 plinkPath='/Users/luke/genomes/genomes/hg19/plink/'
-chr='22'
+chr='22_10000'
 ```
-
-
-
 
 ```{r}
 data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
@@ -49,7 +46,6 @@ data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
 
 message("plink data loaded")
 ```
-
 
 ```{r}
 data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
@@ -94,7 +90,7 @@ lreg <- function(y, X){
 
 fit_glm <- function(..., LF, trait){
   snp <- c(...)
-  
+  snp <- as.numeric(snp[-1]) #drop rsID from GT
   ind <- !is.na(snp) #logical index vector
   snp_no_na <- snp[ind]
   LF_no_na <- LF[ind,]
@@ -107,7 +103,6 @@ fit_glm <- function(..., LF, trait){
   est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
   p0[ind] <- exp(est0)/(1+exp(est0))
   p1[ind] <- exp(est1)/(1+exp(est1))
-  
   
   dataset <-
     tibble(snp=snp,
@@ -137,22 +132,25 @@ fit_glm <- function(..., LF, trait){
 }
 ```
 
-
 ```{r}
 gc()
 ```
 
 ```{r}
+fam_file <-fread(paste0(plinkPath,'chr',chr,'.fam'), 
+                  col.names=c('sample','a','b','c','d','e'))
+                 
 bas_filepath <- "./data/metadata/average_quality_dt.txt"
 bas_dt <- read_tsv(bas_filepath)
+bas_dt <- merge(fam_file, 
+                bas_dt,
+                by = 'sample') 
 avg_qual_mean <- bas_dt$avg_qual_mean
 ```
 
 ```{r}
 head(avg_qual_mean)
 ```
-
-
 
 ```{r}
 tic("fitting model")
@@ -173,81 +171,21 @@ data_fit <-
 ```
 
 ```{r}
-chromosome <- ""
+
 saveRDS(data_fit, 
 	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chromosome, ".rds"))) 
-```
+	paste0("fits_chrom_", chr, ".rds")))
 
-
-```{r}
-fit_subset <- function(sub_index) {
-
-  data_sub <- 
-    data_genotype[sub_index,] %>%
-    as_tibble(rownames="rsID") %>%
-    transmute(
-      rsID=rsID,
-      fit = future_pmap(., fit_glm,
-                        LF=LF, 
-                        trait=avg_qual_mean))  %>%
-    unnest(fit) %>%
-    mutate(l= rep(c("data","stat"), n()/2))%>%
-    spread(l, fit)%>%
-    unnest(stat)
-  return(data_sub)
-  
-}
-```
-
-```{r}
-S <-30
-m <- 76871
-subset <- vector("list", length = S)
-for(i in 1:S){
-  strt <- m*(i-1) +1
-  stp <- m*i
-  sub_range <- c(strt:stp)
-  tic()
-  subset <- fit_subset(sub_range) 
-  toc()
-  message("fitting model subset:", i)
-  saveRDS(subset, file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
-}
-```
-
-
-
-```{r, warning=FALSE}
-S <-30
-##Still working on this, to be completed
-m <- 10000 #nrow(data_genotype)/30
-subset <- vector("list", length = S)
-for(i in 1:S){
-  strt <- m*(i-1) +1
-  stp <- m*i
-  sub_range <- c(strt:stp)
-  tic()
-  subset <- fit_subset(sub_range) 
-  toc()
-  message("fitting model subset:", i)
-  saveRDS(subset, 
-          file.path("./data/preprocessed/subsets",
-                    paste0("fits_subset_", i, "_10000.rds")))
-  write.table(subset[-2], 
+write.table(data_fit[-2], 
               file.path("./data/preprocessed/subsets", 
-                        paste0("fits_subset_", i, "_10000.txt")),
+                        paste0("fits_chrom_", chr, ".txt")),
               quote = FALSE,
               row.names = FALSE)
-}
 ```
-
 
 ```{r}
 gc()
 ```
-
-
 
 ```{r}
 sessionInfo()
