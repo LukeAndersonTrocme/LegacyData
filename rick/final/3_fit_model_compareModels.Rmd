@@ -162,6 +162,7 @@ fit_glm <- function(..., LF, trait){
   p0 <- rep(NA, length(snp))
   p1 <- rep(NA, length(snp))
   trait_no_na <- trait[ind]
+  
   b0 <- lreg(snp_no_na, LF_no_na) #coefficients from logreg 
   b1 <- lreg(snp_no_na, cbind(LF_no_na, trait_no_na))
   est0 <- .Call("mv", LF_no_na, b0)
@@ -399,20 +400,74 @@ sessionInfo()
 
 ```{r,fig.height = 10, fig.width = 10}
 
-plt <- merge(data_fit[-2], data_fit_PCA[-2], by=c('rsID'), suffixes = c('LFA','PCA'))
-plt <- merge(plt, data_fit_Pop[-2], by=c('rsID'), suffixes = c('','Pop'))
+plt <- merge(data_fit[-2], 
+             data_fit_PCA[-2], 
+             by=c('rsID'), 
+             suffixes = c('LFA','PCA'))
+plt <- merge(plt, 
+             data_fit_Pop[-2], 
+             by=c('rsID'), 
+             suffixes = c('','Pop'))
+
+beta1<-ggplot(plt, aes(b, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Beta')
+beta2<-ggplot(plt, aes(bLFA, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
+beta3<-ggplot(plt, aes(bLFA, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
+betas <- plot_grid(beta1,beta2,beta3,nrow=1)
+
+af1<-ggplot(plt, aes(1-num_zeros/2504, bLFA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='AF', y='LFA')+ggtitle('Beta')+xlim(c(0,0.3))
+af2<-ggplot(plt, aes(1-num_zeros/2504, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='AF', y='PCA')+ggtitle('Beta')+xlim(c(0,0.3))
+af3<-ggplot(plt, aes(1-num_zeros/2504, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='AF', y='Pop')+ggtitle('Beta')+xlim(c(0,0.3))
+af <- plot_grid(af1,af2,af3,nrow=1)
+af
+ggsave('./Beta_AF.jpg', height=4, width=8)
+
+plt <- plt[which(plt$num_zeros < 2501),]
+
+beta1<-ggplot(plt, aes(b, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Beta')
+beta2<-ggplot(plt, aes(bLFA, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
+beta3<-ggplot(plt, aes(bLFA, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
+betas2 <- plot_grid(beta1,beta2,beta3,nrow=1)
+
+af1<-ggplot(plt, aes(1-num_zeros/2504, bLFA))+geom_point(shape=1)+labs(x='AF', y='LFA')+ggtitle('Beta')+xlim(c(0,0.3))
+af2<-ggplot(plt, aes(1-num_zeros/2504, bPCA))+geom_point(shape=1)+labs(x='AF', y='PCA')+ggtitle('Beta')+xlim(c(0,0.3))
+af3<-ggplot(plt, aes(1-num_zeros/2504, b))+geom_point(shape=1)+labs(x='AF', y='Pop')+ggtitle('Beta')+xlim(c(0,0.3))
+af2 <- plot_grid(af1,af2,af3,nrow=1)
+af2
+ggsave('./Beta_AF2.jpg', height=4, width=8)
 
 
-p1<-ggplot(plt, aes(dev0LFA, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Null Model')
-p2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance')
+
+
+makePlot <- function(x,y,xlab,ylab,title) {
+p <- ggplot(plt, aes(x, y)) + 
+  geom_abline(color='grey') +
+  geom_point(shape=1) +
+  labs(x=xlab, y=ylab) +
+  ggtitle(title)
+
+return(p)
+}
+
+p1 <- makePlot(plt$dev0LFA, 
+               plt$dev0PCA, 
+               'Null Deviance LFA', 
+               'Null Deviance PCA', 
+               'Null Model')
+p2 <- makePlot(plt$devdiffLFA, 
+               plt$devdiffPCA, 
+               'Deviance LFA', 
+               'Deviance PCA', 
+               'Deviance')
+
 p2.2<-ggplot(plt, aes(devdiffLFA, devdiffPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
-p3<-ggplot(plt, aes(bLFA, bPCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
+
+p3<-ggplot(plt, aes(bLFA, bPCA, color=1-num_zeros/2504))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='PCA')+ggtitle('Beta')
 pp1 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
 
 p1<-ggplot(plt, aes(dev0LFA, dev0))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Null Model')
 p2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance')
 p2.2<-ggplot(plt, aes(devdiffLFA, devdiff))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Deviance Zoom')+xlim(c(0,30))+ylim(c(0,30))
-p3<-ggplot(plt, aes(bLFA, b))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
+p3<-ggplot(plt, aes(bLFA, b, color=1-num_zeros/2504))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA', y='Pop')+ggtitle('Beta')
 pp2 <- plot_grid(p1,p2,p2.2,p3,ncol=1)
 
 p1<-ggplot(plt, aes(dev0, dev0PCA))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='Pop', y='PCA')+ggtitle('Null Model')
@@ -488,7 +543,7 @@ ggsave('./CompareModels_VSdich.jpg', height=10, width = 10)
 
 ```{r,fig.height = 10, fig.width = 6}
 #plot diff
-plt <- merge(data_fit, data_fit_Pop_dich, by=c('rsID'), suffixes = c('LFA_Full','Pop_Dich'))
+plt <- merge(data_fit[-2], data_fit_Pop_dich[-2], by=c('rsID'), suffixes = c('LFA_Full','Pop_Dich'))
 
 p1<-ggplot(plt, aes(dev0LFA_Full, dev0Pop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA Full', y='Pop Dich')+ggtitle('Null Model')+coord_flip()
 p2<-ggplot(plt, aes(devdiffLFA_Full, devdiffPop_Dich))+geom_abline(color='grey')+geom_point(shape=1)+labs(x='LFA_Full', y='Pop_Dich')+ggtitle('Deviance')+coord_flip()

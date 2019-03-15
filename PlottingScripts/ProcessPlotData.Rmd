@@ -1,0 +1,496 @@
+---
+title: "Legacy Data Confounds Modern Genomics Studies"
+author: 
+- name: Luke Anderson-Trocmé, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+  
+
+load libraries
+```{r, message = FALSE}
+library(ggplot2)
+library(RColorBrewer)
+library(plotly)
+library(colorspace)
+library(cowplot)
+library(data.table)
+library(tidyverse)
+library(purrr)
+
+#Directories
+DataPath <- '~/Documents/QualityPaper/ProcessedData/'
+figurePath <- '~/Documents/QualityPaper/Figures/'
+```
+
+#Joint Frequency Spectrum
+```{r}
+if(!file.exists(paste0(DataPath,
+                       'jointAF.txt'))) {
+  #Load Allele Frequency files
+  AF.1kGP <- paste0(DataPath,
+                    '1kGP_GenomeWide_JPT_1.frq')
+  JPT <- fread(
+    AF.1kGP,
+    fill = TRUE,
+    col.names = c('Chr', 'Pos', 'N_ALLELES',
+                  'N_CHR', 'JPT_AF', 'JPT_MAF')
+  )
+  AF.NAG <- paste0(DataPath,
+                   'NAG_GenomeWide.4bed_filtered.freq.frq')
+  NAG <- fread(
+    AF.NAG,
+    fill = TRUE,
+    col.names = c('Chr', 'Pos', 'N_ALLELES',
+                  'N_CHR', 'NAG_AF', 'NAG_MAF')
+  )
+  
+  #merge them together to get joint frequency spectrum
+  join <- merge(JPT[which(JPT$JPT_AF <= 1), ],
+                NAG[which(NAG$NAG_AF <= 1), ],
+                by = c('Chr', 'Pos'), all = TRUE)
+  join[is.na(join)] <- 0 #missing positions are frequency of 0
+  
+  #REMOVE  HWE SITES
+  hwe_1kGP <- paste0(DataPath,
+                     '1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
+  JPT_hwe <- fread(hwe_1kGP)
+  hwe_NAG <- paste0(DataPath,
+                    'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
+  NAG_hwe <- fread(hwe_NAG)
+  
+  hwe <- merge(NAG_hwe[, c('V1', 'V2')],
+               JPT_hwe[, c('V1', 'V2')],
+               by = c('V1', 'V2'),
+               all = TRUE)
+  #remove sites from AF that don't meet HWE
+  join <- join[!paste(join$CHROM, join$POS)
+               %in% c(paste(hwe$V1, hwe$V2)),]
+  
+  join <- join[, c('Chr', 'Pos', 'JPT_MAF',
+                   'JPT_AF', 'NAG_MAF', 'NAG_AF')]
+  #make numeric
+  join <- sapply(join, as.numeric)
+  join <- join[complete.cases(join), ]
+  
+  rm(NAG) #free up memory
+  rm(JPT)
+  rm(hwe)
+  
+  join
+  
+  #save to file
+  write.table(join,
+              paste0(DataPath,
+                     'jointAF.txt'))
+}
+```
+
+## Mutation Spectrum enrichment
+```{r}
+#get positions of significant SNPs
+sig.pos <- SigPos[,c('Chr','Pos')]
+write.table(sig.pos, 
+            file=paste0(DataPath,
+                        'sig.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+
+#get positions of random SNPs as control
+set.seed(123)
+random.pos <- NotSig[sample(nrow(NotSig), 
+                            nrow(sig.6)),
+                     c('Chr','Pos')]
+write.table(random.pos, 
+            file = paste0(DataPath,
+                        'random.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+rm(NotSig) #save memory
+```
+extract context for snps of interest
+```{bash}
+#Using GenomeWide.AncestralContext.txt
+#To get mutation context, use $path/AncestralContext.py
+#compare first two columns in both files, extract matches
+path='/Users/luke/Documents/QualityPaper/Misc/'
+if [ ! -f $path/random.pos.context.txt ]; then
+  echo "random pos context"
+  awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
+  $path/random.pos.txt \
+  $path/GenomeWide.AncestralContext.txt \
+  > $path/random.pos.context.txt
+fi  
+  
+if [ ! -f $path/sig.pos.context.txt ]; then
+  echo "sig pos context"
+  awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
+  $path/sig.pos.txt \
+  $path/GenomeWide.AncestralContext.txt \
+  > $path/sig.pos.context.txt
+fi 
+```
+Load mutation context and plot enrichment
+```{r}
+contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
+
+#load SNP context
+SNP <- read.table(paste0(DataPath,
+                         'sig.pos.context.txt'), 
+                sep = '\t', 
+                header  = FALSE,
+                col.names = contextHeader)
+rSNP <- read.table(paste0(DataPath,
+                          'random.pos.context.txt'), 
+                sep = '\t',
+                header = FALSE,
+                col.names = contextHeader)
+
+ReverseComp <- function(x)
+        chartr("ATGC","TACG",
+        sapply(
+          lapply(
+          strsplit(x, NULL), 
+          rev), 
+          paste, 
+          collapse = ""))
+
+processContext <- function(data){
+  
+#get reverse complement of context, ref and alt
+data$Rev<-ReverseComp(as.character(data$Context))
+data$RevRef<-ReverseComp(as.character(data$Ref))
+data$RevAlt<-ReverseComp(as.character(data$Alt))
+
+#only get one half (to fold over)
+AC<-data[which(data$Ref 
+               %in% 
+                 c('A','C')),]
+TG<-data[which(data$Ref 
+               %in% 
+                 c('T','G')),]
+#fold over
+TG$Context <- TG$Rev
+TG$Ref <- TG$RevRef
+TG$Alt <- TG$RevAlt
+#bind them together
+data <- rbind(AC,TG)
+#combine it all together to get a context
+data$Mut <- paste0(data$Ref,'->', 
+                substr(data$Context,1,1),
+                data$Alt,
+                substr(data$Context,3,3))
+#get the counts of each bin
+binCount <- as.data.frame(table(data$Mut))
+#process for plotting
+binCount$Start <- substr(binCount$Var1,4,4)
+binCount$End <- substr(binCount$Var1,6,6)
+binCount$Mut <- paste(substr(binCount$Var1,1,3),
+                      substr(binCount$Var1,5,5))
+return(binCount)
+}
+
+SNP <- processContext(SNP)
+rSNP <- processContext(rSNP)
+
+SNP
+#save to file
+saveRDS(SNP,
+            paste0(DataPath,
+                   'SNP_Context.rds'))
+
+#save to file
+saveRDS(rSNP,
+            paste0(DataPath,
+                   'rSNP_Context.rds'))
+```
+
+
+
+```{r}
+BasPath = '/Users/luke/genomes/bas_file/1000GenomesBAS/'
+
+#load bas_dt
+#see 1_make_quality_dt.Rmd for making this file
+load('/Users/luke/Documents/QualityPaper/rick/bas_dt')
+
+#get the index files for extra meta data
+#wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index
+index <- read.table(paste0(BasPath, 
+                           '20130502.phase3.analysis.sequence.index'),
+               comment.char = "?", 
+               fill = TRUE,
+               sep = "\t", 
+               header = TRUE,
+               stringsAsFactors = FALSE)
+#keep columns of interest
+index <- unique(index[,c('SAMPLE_NAME',
+                         'CENTER_NAME',
+                         'SUBMISSION_DATE',
+                         'INSTRUMENT_MODEL')])
+
+#Phase 1 samples, list downloaded from http://www.internationalgenome.org/data-portal/sample
+phase <- read.table(paste0(DataPath,
+                           'Phase1_IDs.txt'))
+phase$Phase = 1
+
+#merge tables
+bas_dt <- merge(bas_dt, 
+                index, 
+                by.x = "sample", 
+                by.y = "SAMPLE_NAME",
+                all.x = TRUE)
+bas_dt <- merge(bas_dt, 
+                phase, 
+                by.x = "sample", 
+                by.y = "V1", 
+                all.x = TRUE)
+bas_dt[which(is.na(bas_dt$Phase)),]$Phase <- 3
+#clean up the text
+bas_dt$SUBMISSION_DATE <- gsub(" 00:00:00",
+                               "",
+                               bas_dt$SUBMISSION_DATE)
+bas_dt$SUBMISSION_DATE <- as.Date(bas_dt$SUBMISSION_DATE, 
+                                  "%Y-%m-%d")
+bas_dt$CENTER_NAME<-gsub('Illumina',
+                         'ILLUMINA',
+                         bas_dt$CENTER_NAME)
+bas_dt$INSTRUMENT_MODEL <-gsub('Illumina',
+                               '',
+                               bas_dt$INSTRUMENT_MODEL)
+bas_dt$INSTRUMENT_MODEL <-gsub('Genome Analyzer',
+                               'GA',
+                               bas_dt$INSTRUMENT_MODEL)
+bas_dt$INSTRUMENT_MODEL <-gsub('HiSeq 2000',
+                               'HS 2k',
+                               bas_dt$INSTRUMENT_MODEL)
+#remove missing data
+bas_dt<-bas_dt[complete.cases(bas_dt),]
+
+#Get the average sequencing date per population
+#Used for ranking the populations
+Day<-aggregate(bas_dt$SUBMISSION_DATE, 
+               list(bas_dt$Population), 
+               mean)
+#add it to data
+metaData<-merge(bas_dt, 
+                Day, 
+                by.x = 'Population', 
+                by.y = 'Group.1')
+#reorder data by average date then quality
+metaData <- metaData[with(metaData, 
+                          order(x,
+                                Population, 
+                                avg_qual)),]
+#set factor with order in mind (for plotting)
+metaData$sample <- factor(metaData$sample, 
+                          levels = unique(metaData$sample))
+
+metaData
+#save to file
+saveRDS(metaData,
+            paste0(DataPath,
+                   'metaData.rds'))
+```
+
+```{r}
+phase1 <- c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
+#read single population regressions
+Reg <- fread(paste0(DataPath,
+                    'AllRegressionsOver10.txt'), 
+             col.names = c('Chr','Pos',
+                           'Population','deviance'), 
+             colClasses = c('numeric', 'numeric', 
+                            'character', 'numeric'))
+#Get P-Values and significant sites
+Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, 
+                            lower.tail = FALSE))
+Reg<-Reg[which(Reg$plog10 >= 6),]
+#Count number of populations where a variant is significant
+NumPop <- as.data.frame(table(Reg$Chr,Reg$Pos))
+NumPop <- NumPop[which(NumPop$Freq>1),]
+names(NumPop) <- c('Chr','Pos', 'SigHits')
+NumPop$Chr<-as.numeric(as.character(NumPop$Chr)) 
+NumPop$Pos<-as.numeric(as.character(NumPop$Pos))
+
+m <- merge(Reg,
+           NumPop, 
+           by = c('Chr','Pos'))
+#count number of significant sites per population
+n <- as.data.frame(table(m$Pop))
+#put it all together for plotting
+overLap <- unique(merge(m,n,
+                        by.x = 'Population',
+                        by.y = 'Var1'))
+#include number of significant sites in titles
+overLap$title = paste0(overLap$Pop,
+                       ' : ', 
+                       overLap$Freq)
+#add asterix for Phase 1 pops
+Phase1Title <- paste('*',
+                     overLap[which(overLap$Pop 
+                                   %in% phase1),]$title)
+overLap[which(overLap$Pop
+              %in% phase1),]$title <- Phase1Title
+#set order by SigHits, Chromosome and Position
+overLap <- overLap[with(overLap, 
+                        order(-SigHits,
+                              Chr,
+                              Pos)),]
+overLap$Pos <- factor(overLap$Pos, 
+                      levels = unique(overLap$Pos))
+#this is for keeping track of the number of variants
+overLap$nrow <- seq(length = nrow(overLap))
+#this is for discrete point size
+overLap$Pcat <- 4
+overLap[which(overLap$plog10 < 8),]$Pcat <- 2
+overLap[which((overLap$plog10 > 8) & 
+              (overLap$plog10 < 10)),]$Pcat <- 3
+#this is for the labels of the xaxis
+xaxis <- overLap[!duplicated(overLap[,c('SigHits')]),]
+xaxis <- xaxis[which(xaxis$SigHits < 11),]
+xaxis <- rbind(xaxis,tail(overLap, 1))
+
+overLap
+
+#save to file
+saveRDS(overLap,
+            paste0(DataPath,
+                   'overLap.rds'))
+```
+```{r}
+#load 1kgp 
+kgp1= paste0(DataPath,
+             '1kGP_genomeWide_SINGLEPOP_83.genotypes.txt')
+kgp1.n=fread(paste0(DataPath,
+                    '1kGP_genomeWide_SINGLEPOP_83.header'))
+gt1<-unique(fread(kgp1,
+                  col.names = colnames(kgp1.n)))
+gt1.m<-melt(gt1, 
+            id.vars = c('#CHROM','POS','ID'))
+colnames(gt1.m) = c('CHROM','POS',
+                    'ID','sample','kGT')
+
+
+han1=paste0(DataPath,
+            '90_Han_Chinese_SigPos.genotypes.txt')
+han1.n=fread(paste0(DataPath,
+                    '90_Han_Chinese_SigPos.header'))
+gtHan <-unique(fread(han1,
+                     col.names = colnames(han1.n)))
+gtHan$'#CHROM' <- as.integer(as.character(gsub('chr','',gtHan$'#CHROM')))
+gtHan.m<-melt(gtHan, 
+              id.vars = c('#CHROM','POS','ID'))
+colnames(gtHan.m)=c('CHROM','POS',
+                    'ID','sample','HanGT')
+
+#merge
+HanKgpAF<-merge(gtHan.m, 
+          gt1.m, 
+          by = c('CHROM','POS',
+                 'ID','sample'), 
+          all.y=T)
+
+HanKgpAF[is.na(HanKgpAF)] <- 0
+
+#to get allele frequencies we group by POS and summarize GT
+HanKgpAF <- HanKgpAF %>% 
+  group_by(CHROM,POS) %>% 
+  summarize(hanAF = sum(HanGT), 
+            kgpAF = sum(kGT)) 
+
+#remove sites missing in this subset of individuals
+HanKgpAF <- HanKgpAF[which(HanKgpAF$kgpAF > 0),]
+
+HanKgpAF
+
+#save to file
+saveRDS(HanKgpAF,
+            paste0(DataPath,
+                   'HanKgpAF.rds'))
+```
+
+
+```{r}
+#read Genotypes
+han1=fread(paste0(DataPath,
+                  'SignificantSNPs_Han90_0.01_genotype.txt'))
+HanNames=fread(paste0(DataPath,
+                      'SignificantSNPs_Han90_COLNAMES.txt'),
+               header=F)
+names(han1) = as.character(unlist(HanNames))
+#melt to long format
+han = melt(han1, id=c('#CHROM','POS','ID'))
+#fix chromosome names
+han$CHROM = as.numeric(as.character(substring(han$'#CHROM',4)))
+han$'#CHROM' <- NULL
+
+#to deal with INDELs we only count one instance of duplicate positions (i.e. pick max GT)
+han <- han %>% 
+  group_by(CHROM,POS,variable) %>% 
+  summarize(han.gt = max(value))
+#to get allele frequencies we group by POS and summarize GT
+hanAF <- han %>% 
+  group_by(CHROM,POS) %>% 
+  summarize(hanAF = sum(han.gt))
+
+
+#read Genotypes
+kgp1 = fread(paste0(DataPath,
+                    'SigVar_Pop_0.01_genotype.txt'))
+ColNames = read.table(paste0(DataPath,
+                             'ColNames.txt'),
+                      header=F)
+names(kgp1) = as.character(unlist(ColNames))
+#melt to long format
+kgp = melt(kgp1, id=c('CHROM','POS','ID'))
+#keep only the 83 resequenced individuals
+kgp = kgp[which(kgp$variable %in% han$variable),]
+
+#to deal with INDELs we only count one instance of duplicate positions (i.e. pick max GT)
+kgp <- kgp %>% 
+  group_by(CHROM,POS,variable) %>% 
+  summarize(Kgp.gt = max(value))
+#to get allele frequencies we group by POS and summarize GT
+kgpAF <- kgp %>% 
+  group_by(CHROM,POS) %>% 
+  summarize(kgpAF = sum(Kgp.gt))
+#keep only positions that are present in the 83 individuals
+kgpAF <- kgpAF[which(kgpAF$kgpAF > 0),]
+
+#merge 1kGP and han resequenced data.
+combo <- merge(hanAF, kgpAF, by=c('CHROM','POS'), all.y=T)
+#missing sites replaced with 0
+combo[is.na(combo)] <- 0 
+
+##read Indels
+Indels <- fread(paste0(DataPath,
+                    'Reg_indels.POS'), 
+                skip=1 ,col.names=c('CHROM','POS'))
+Indels$Indel = 'yes'
+
+INDEL = merge(Indels, combo, by=c('CHROM','POS'))
+SNP = combo[which((combo$POS %in% INDEL$POS)==F),]
+
+#save to file
+saveRDS(INDEL,
+            paste0(DataPath,
+                   'INDEL_HanKgp.rds'))
+#save to file
+saveRDS(SNP,
+            paste0(DataPath,
+                   'SNP_HanKgp.rds'))
+```
