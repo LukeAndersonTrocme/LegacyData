@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --job-name=1kgp_array
+#SBATCH --account=rrg-hsn
+#SBATCH --time=23:00:00
+#SBATCH --array=1-22
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=127000M
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+module load nixpkgs/16.09  gcc/7.3.0 r/3.5.2
+
+
+echo "My SLURM_ARRAY_TASK_ID: " $SLURM_ARRAY_TASK_ID
+
+Rscript -e 'library(rmarkdown); rmarkdown::render("3_fit_model.Rmd", "all")' ${SLURM_ARRAY_TASK_ID}

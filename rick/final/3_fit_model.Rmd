@@ -1,5 +1,6 @@
 ---
-title: "HGP analysis: fit model"
+title: "HGP analysis"
+subtitle: "fitting model for Chromosome `r commandArgs(trailingOnly=T)[1]`"
 author: 
 - name: Rick Farouni, 
   affiliation:
@@ -19,23 +20,15 @@ output:
   # Preparations
   
 ```{r setup}
-args <- commandArgs(trailingOnly=T)
-
-path <- args[1]
-#path <- '/Users/luke/Documents/QualityPaper/rick/final/'
-setwd(path)
-
-plinkPath <- args[2] 
-#plinkPath <- '/Users/luke/genomes/genomes/hg19/plink/'
-
-chr <- args[3]
-#chr <- '22_10000'
-
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
 options(scipen=999)
+
+# Rscript -e 'library(rmarkdown); rmarkdown::render("test.Rmd", "all")'  "22_10000" 
+chr <- commandArgs(trailingOnly=T)[1]
+chr <- '22_10000'
 ```
 
-```{r}
+```{r warning=FALSE}
 library(tidyverse)
 library(lfa)
 library(furrr)
@@ -45,38 +38,9 @@ library(data.table)
 options(future.globals.maxSize= 1000000000000)
 plan(multicore)
 ```
-load plink format genotype data
-```{r}
-data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
 
-message("plink data loaded")
-```
-get rsIDs and add them as rownames for genotype data
-```{r}
-data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
-                  col.names = c('Chr','rsID','X',
-                                'Pos','Ref','Alt'))
+## define functions
 
-rownames(data_genotype) <- data_bim$rsID
-```
-run lfa if needed
-```{r lfa}
-tic()
-#LF <- lfa(data_genotype, 5)
-toc()
-message("lfa run complete")
-```
-save lfa if needed
-```{r save}
-tic()
-#saveRDS(LF, "./data/preprocessed/lf5.rds")
-toc()
-```
-load logistic factor analysis results
-```{r read lf}
-LF <- readRDS( "./data/preprocessed/lf5.rds")
-```
-define functions
 ```{r}
 #this runs the logistic regression
 lreg <- function(y, X){
@@ -134,26 +98,86 @@ fit_glm <- function(..., LF, trait){
 ```
 
 ```{r}
-gc()
+plink_data_dir <- "./data/plink/by_chrom"
+metadata_dir <- "./data/metadata"
+preprocessed_dir <- "./data/preprocessed"
+bim_filepath <- file.path(plink_data_dir, paste0('chr', chr,'.bim'))
+fam_filepath <- file.path(plink_data_dir, paste0('chr', chr, '.fam'))
+bas_filepath <- file.path(metadata_dir, "average_quality_dt.txt")
+bed_filepath <- file.path(plink_data_dir, paste0('chr', chr))
+lf_filepath <-   file.path(preprocessed_dir, "lf5.rds")  
+fits_filepath <- 	file.path(preprocessed_dir, 
+                            "subsets",
+                            paste0("fits_chrom_", chr, ".rds"))
+```
+
+
+
+## load data
+
+get rsIDs and add them as rownames for genotype data
+```{r}
+tic("reading rsIDS.")
+data_bim <- fread(bim_filepath, 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt'))
+
+toc()
+data_bim
+```
+
+
+```{r}
+tic("load metadata.")
+fam_file <-read_delim(fam_filepath, 
+                      delim=" ", 
+                      col_names=c('sample','a','b','c','d','e')) %>%
+  select("sample")
+                 
+bas_dt <- read_tsv(bas_filepath)
+bas_dt <- left_join(fam_file, 
+                bas_dt,
+                by = 'sample') 
+toc()
+bas_dt
 ```
 
 ```{r}
-fam_file <-fread(paste0(plinkPath,'chr',chr,'.fam'), 
-                  col.names=c('sample','a','b','c','d','e'))
-                 
-bas_filepath <- "./data/metadata/average_quality_dt.txt"
-bas_dt <- read_tsv(bas_filepath)
-bas_dt <- merge(fam_file, 
-                bas_dt,
-                by = 'sample') 
 avg_qual_mean <- bas_dt$avg_qual_mean
 ```
 
+
+
+load plink format genotype data
 ```{r}
-head(avg_qual_mean)
+tic("loading plink data.")
+data_genotype <- read.bed(bed_filepath)
+rownames(data_genotype) <- data_bim$rsID
+colnames(data_genotype) <- bas_dt$sample
+toc()
+data_genotype[1:5,1:5]
 ```
 
+
+
+load logistic factor analysis results
+```{r read lf}
+#LF <- lfa(data_genotype, 5)
+#saveRDS(LF, "./data/preprocessed/lf5.rds")
+tic("load logistic factors.")
+LF <- readRDS(lf_filepath)
+toc()
+LF[1:5,]
+```
+
+
+
+
 ```{r}
+gc()
+```
+
+```{r warning=FALSE}
 tic("fitting model")
 labels <- rownames(data_genotype)
 data_fit <- 
@@ -168,25 +192,94 @@ data_fit <-
 	mutate(l= rep(c("data","stat"), n()/2))%>%
 	spread(l, fit)%>%
 	unnest(stat)
-   toc()
-
+toc()
 ```
 
 ```{r}
-
-saveRDS(data_fit, 
-	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, ".rds")))
-
-write.table(data_fit[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("fits_chrom_", chr, ".txt")),
-              quote = FALSE,
-              row.names = FALSE)
+data_fit %>% arrange(-dev_logp) %>% slice(1:10)
 ```
 
+
 ```{r}
+rm(data_genotype)
 gc()
+```
+
+```{r}
+tic("saving fit")
+saveRDS(data_fit, fits_filepath)
+toc()
+```
+
+```{r}
+data_fit
+```
+
+
+
+```{r}
+
+get_plot <- function(data, data_stats) {
+  p <- ggplot(bind_cols(data,
+                        bas_dt %>%
+                          select(Population,
+                                 avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean,
+                   snp),
+               size = 1.5,
+               alpha = 0.7) +
+    geom_point(aes(avg_qual_mean,
+              p0,
+              colour = "p0"),
+                             size = .5,
+                alpha = 0.6) +
+    geom_point(aes(avg_qual_mean,
+                  p1-p0,
+                  colour = "p1-p0"),
+                size = .7) + 
+    annotate(
+      "text",
+      x = 45,
+      y = .75,
+      label = sprintf("-10log(deviance) = %4f 
+                      number of NAs= %4d
+                      number of zeros= %4d
+                      beta=%4f",
+                      data_stats$dev_logp,
+                      data_stats$num_nas,
+                      data_stats$num_zeros,
+                      data_stats$b),
+      size = 3
+    ) +
+    theme_bw() #+
+ # facet_wrap( ~ Population, ncol=4)
+  
+  return(p)
+}
+```
+
+```{r}
+subsets_top <-  
+  data_fit  %>%
+  top_n(5,dev_logp) 
+subsets_top
+```
+
+
+```{r, fig.width=20}
+subsets_plots <-
+ subsets_top %>%
+  select(-data) %>%
+  nest(-rsID, .key="data_stats") %>%
+    mutate(data=subsets_top$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r, fig.height=10}
+subsets_plots
 ```
 
 ```{r}
