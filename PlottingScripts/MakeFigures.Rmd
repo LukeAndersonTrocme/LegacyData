@@ -46,23 +46,12 @@ names(MyColour) <- colors$Population
 # Figure 1
 ## Reverse GWAS in JPT
 ```{r}
-#Load single population regression results
-Reg <- fread(paste0(DataPath,
-                    '1KGP.GenomeWide.Regression_JPT.csv'), 
-             col.names = c('Chr','Pos',
-                           'Population','deviance'), 
-             colClasses = c('numeric', 'numeric', 
-                            'character', 'numeric'))
 
-#Compute P values from deviance from null model
-Reg$plog10 <- -log10(pchisq(Reg$deviance, 
-                            df = 1, 
-                            lower.tail = FALSE))
+SigPos <- readRDS(paste0(DataPath,
+                   'SigPos.rds'))
 
-#split data into sig / not sig for plotting
-SigPos <- Reg[which(Reg$plog10 > 6),]
-NotSig <- Reg[which(Reg$plog10 < 6),]
-rm(Reg) #save memory
+NotSig <- readRDS(paste0(DataPath,
+                   'NotSig.rds'))
 
 #make manhattan plot
 GWAS <- ggplot(NotSig, aes(x = Pos, 
@@ -99,8 +88,8 @@ GWAS
 ```{r}
 #load file if it already exists
 #see MakeFiles.Rmd for info on jointAF.txt
-join <- fread(paste0(DataPath,
-                     'jointAF.txt'))
+join <- readRDS(paste0(DataPath,
+               'jointAF.rds'))
 
 #load poisitons that reach -log10(p) > 6
 sig.6 <- SigPos[,c('Chr','Pos')]
@@ -457,16 +446,16 @@ p3
 ###Single Population Test
 ```{r}
 #using the sites associated to Quality in the single population test
-readRDS(paste0(DataPath,
+HanKgpAF <- readRDS(paste0(DataPath,
                    'HanKgpAF.rds'))
 #Load joint frequency for Indels
-readRDS(paste0(DataPath,
+INDEL <- readRDS(paste0(DataPath,
                    'INDEL_HanKgp.rds'))
 #Load joint frequency for SNPs
-readRDS(paste0(DataPath,
+SNP <- readRDS(paste0(DataPath,
                    'SNP_HanKgp.rds'))
 
-ggplot(aggAF, 
+ggplot(HanKgpAF, 
        aes(x = hanAF/2, 
            y = kgpAF/2))+
   geom_bin2d(bins = 83)+
@@ -499,10 +488,36 @@ ggplot(INDEL,
 
 ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_INDEL.jpg',height=10, width=10)
 ```
+```{bash}
+
+
+```
+
+
 ```{r}
+readRDS(paste0(DataPath,
+                   'AF30.rds'))
 
+af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=200)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af1
 
+af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=100)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af2
 
+plot_grid(af1, af2)
+
+ggsave(paste0(figurePath,'OverUnder30.jpg'),height=5,width=10)
+ggsave(paste0(figurePath,'OverUnder30.pdf'),height=5,width=10)
 ```
 ```{r}
 sessionInfo()

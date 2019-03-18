@@ -32,66 +32,94 @@ DataPath <- '~/Documents/QualityPaper/ProcessedData/'
 figurePath <- '~/Documents/QualityPaper/Figures/'
 ```
 
-#Joint Frequency Spectrum
+##GWAS
+```{r}
+#Load single population regression results
+Reg <- fread(
+  paste0(DataPath,
+         '1KGP.GenomeWide.Regression_JPT.csv'),
+  col.names = c('Chr', 'Pos',
+                'Population', 'deviance'),
+  colClasses = c('numeric', 'numeric',
+                 'character', 'numeric'))
+
+#Compute P values from deviance from null model
+Reg$plog10 <- -log10(pchisq(Reg$deviance,
+                            df = 1,
+                            lower.tail = FALSE))
+
+#split data into sig / not sig for plotting
+SigPos <- Reg[which(Reg$plog10 > 6), ]
+NotSig <- Reg[which(Reg$plog10 < 6), ]
+rm(Reg) #save memory
+
+#save to file
+saveRDS(SigPos,
+        paste0(DataPath,
+               'SigPos.rds'))
+#save to file
+saveRDS(NotSig,
+        paste0(DataPath,
+               'NotSig.rds'))
+```
+##Joint Frequency Spectrum
 ```{r}
 if(!file.exists(paste0(DataPath,
-                       'jointAF.txt'))) {
-  #Load Allele Frequency files
-  AF.1kGP <- paste0(DataPath,
-                    '1kGP_GenomeWide_JPT_1.frq')
-  JPT <- fread(
-    AF.1kGP,
-    fill = TRUE,
-    col.names = c('Chr', 'Pos', 'N_ALLELES',
-                  'N_CHR', 'JPT_AF', 'JPT_MAF')
-  )
-  AF.NAG <- paste0(DataPath,
-                   'NAG_GenomeWide.4bed_filtered.freq.frq')
-  NAG <- fread(
-    AF.NAG,
-    fill = TRUE,
-    col.names = c('Chr', 'Pos', 'N_ALLELES',
-                  'N_CHR', 'NAG_AF', 'NAG_MAF')
-  )
+               'jointAF.rds'))){
   
-  #merge them together to get joint frequency spectrum
-  join <- merge(JPT[which(JPT$JPT_AF <= 1), ],
-                NAG[which(NAG$NAG_AF <= 1), ],
-                by = c('Chr', 'Pos'), all = TRUE)
-  join[is.na(join)] <- 0 #missing positions are frequency of 0
-  
-  #REMOVE  HWE SITES
-  hwe_1kGP <- paste0(DataPath,
-                     '1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  JPT_hwe <- fread(hwe_1kGP)
-  hwe_NAG <- paste0(DataPath,
-                    'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  NAG_hwe <- fread(hwe_NAG)
-  
-  hwe <- merge(NAG_hwe[, c('V1', 'V2')],
-               JPT_hwe[, c('V1', 'V2')],
-               by = c('V1', 'V2'),
-               all = TRUE)
-  #remove sites from AF that don't meet HWE
-  join <- join[!paste(join$CHROM, join$POS)
-               %in% c(paste(hwe$V1, hwe$V2)),]
-  
-  join <- join[, c('Chr', 'Pos', 'JPT_MAF',
-                   'JPT_AF', 'NAG_MAF', 'NAG_AF')]
-  #make numeric
-  join <- sapply(join, as.numeric)
-  join <- join[complete.cases(join), ]
-  
-  rm(NAG) #free up memory
-  rm(JPT)
-  rm(hwe)
-  
-  join
-  
-  #save to file
-  write.table(join,
-              paste0(DataPath,
-                     'jointAF.txt'))
+#Load Allele Frequency files
+AF.1kGP <- paste0(DataPath,
+                  '1kGP_GenomeWide_JPT_1.frq')
+JPT <- fread(
+  AF.1kGP,
+  fill = TRUE,
+  col.names = c('Chr', 'Pos', 'N_ALLELES',
+                'N_CHR', 'JPT_AF', 'JPT_MAF'))
+AF.NAG <- paste0(DataPath,
+                 'NAG_GenomeWide.4bed_filtered.freq.frq')
+NAG <- fread(
+  AF.NAG,
+  fill = TRUE,
+  col.names = c('Chr', 'Pos', 'N_ALLELES',
+                'N_CHR', 'NAG_AF', 'NAG_MAF'))
+
+#merge them together to get joint frequency spectrum
+join <- merge(JPT[which(JPT$JPT_AF <= 1),],
+              NAG[which(NAG$NAG_AF <= 1),],
+              by = c('Chr', 'Pos'), all = TRUE)
+join[is.na(join)] <- 0 #missing positions are frequency of 0
+
+#REMOVE  HWE SITES
+hwe_1kGP <- paste0(DataPath,
+                   '1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
+JPT_hwe <- fread(hwe_1kGP)
+hwe_NAG <- paste0(DataPath,
+                  'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
+NAG_hwe <- fread(hwe_NAG)
+
+hwe <- merge(NAG_hwe[, c('V1', 'V2')],
+             JPT_hwe[, c('V1', 'V2')],
+             by = c('V1', 'V2'),
+             all = TRUE)
+#remove sites from AF that don't meet HWE
+join <- join[!paste(join$Chr, join$Pos)
+             %in% c(paste(hwe$V1, hwe$V2)), ]
+
+join <- join[, c('Chr', 'Pos', 'JPT_MAF', 'NAG_MAF')]
+#make numeric
+join <- sapply(join, as.numeric)
+join <- join[complete.cases(join),]
+
+rm(NAG) #free up memory
+rm(JPT)
+rm(hwe)
+
+join
+
+#save to file
+saveRDS(join,
+        paste0(DataPath,
+               'jointAF.rds'))
 }
 ```
 
@@ -110,7 +138,7 @@ write.table(sig.pos,
 #get positions of random SNPs as control
 set.seed(123)
 random.pos <- NotSig[sample(nrow(NotSig), 
-                            nrow(sig.6)),
+                            nrow(sig.pos)),
                      c('Chr','Pos')]
 write.table(random.pos, 
             file = paste0(DataPath,
@@ -219,7 +247,7 @@ saveRDS(rSNP,
 ```
 
 
-
+##Data Quality Over Time
 ```{r}
 BasPath = '/Users/luke/genomes/bas_file/1000GenomesBAS/'
 
@@ -305,7 +333,7 @@ saveRDS(metaData,
             paste0(DataPath,
                    'metaData.rds'))
 ```
-
+##Overlap of Significant SNPs from Single Population test
 ```{r}
 phase1 <- c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
 #read single population regressions
@@ -371,6 +399,8 @@ saveRDS(overLap,
             paste0(DataPath,
                    'overLap.rds'))
 ```
+## Compare Han Resequenced to 1kGP
+##Single Population Test
 ```{r}
 #load 1kgp 
 kgp1= paste0(DataPath,
@@ -423,7 +453,7 @@ saveRDS(HanKgpAF,
                    'HanKgpAF.rds'))
 ```
 
-
+##Full Model
 ```{r}
 #read Genotypes
 han1=fread(paste0(DataPath,
@@ -493,4 +523,68 @@ saveRDS(INDEL,
 saveRDS(SNP,
             paste0(DataPath,
                    'SNP_HanKgp.rds'))
+
+SNP
+INDEL
+```
+##Compare Over and Under Qual 30
+```{r}
+#read Genotypes
+GT = fread(paste0(DataPath,
+                   'SigVar_Pop_0.01_rsID.genotype.txt'))
+ColNames = read.table(paste0(DataPath,
+                   'ColNames_rsID.txt'), 
+                   header=F)
+
+names(GT) = as.character(unlist(ColNames))
+names(GT)[4] = 'rsID'
+GT$ID <- as.numeric(as.character(GT$ID))
+
+Sig.rsID <- fread(paste0(DataPath,
+                         'SignificantVariants.txt'), 
+                  col.names = c('Chr','Pos','rsID', 
+                                'ID', 'dev', 'log10_p'))
+##Compare over and under 30
+
+mGT = melt(unique(GT), 
+           id = c('Chr','Pos',
+                  'ID','rsID'))
+mGT = merge(unique(bas_dt[,
+                          c('sample',
+                            'Population',
+                            'avg_qual')]), 
+            mGT, 
+            by.x='sample',
+            by.y='variable')
+
+mGT = merge(mGT, 
+            Sig.rsID, 
+            by=c('Chr','Pos',
+                 'ID','rsID'))
+
+over30 = mGT[which(mGT$avg_qual > 30),]
+
+under30 = mGT[which(mGT$avg_qual < 30),]
+
+o30AF <- 
+		over30 %>% 
+		group_by(Chr,Pos,
+		         ID,rsID) %>% 
+		summarize(oAF = sum(value))
+		
+u30AF <- 
+		under30 %>% 
+		group_by(Chr,Pos,
+		         ID,rsID) %>% 
+		summarize(uAF = sum(value))
+
+AF30 <- merge(u30AF, 
+              o30AF, 
+              by=c('Chr','Pos',
+                   'ID','rsID'))
+
+#save to file
+saveRDS(AF30,
+            paste0(DataPath,
+                   'AF30.rds'))
 ```
