@@ -154,3 +154,5 @@ rick/data_list.temp
 *.rds
 
 rick/final/.Rhistory
+
+PlottingScripts/.Rhistory
