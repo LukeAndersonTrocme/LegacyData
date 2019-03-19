@@ -14,9 +14,10 @@ def Bash_cmd(i):
         print('AF Filter Chrom : '+str(i))
         os.system('/usr/local/bin/bcftools-1.6/bcftools filter \
         {0}/phase3/ALL.chr{1}{2}vcf.gz \
-        -e "MAF > 0.9988 || MAF < 0.001198" \
+        -e "MAF > 0.9988019169 || MAF < 0.00119808" \
         -Oz -o {0}/AF_VCF/chr{1}_AF.vcf.gz'.format(path, i,vcfName))
 
+    #Split VCF into 100,000 SNP chunks
     fname = '{0}/AF_VCF/Split_chr{1}_aa.vcf'.format(path, i)
     if os.path.isfile(fname) :
         print('VCF already Split : '+str(i))
@@ -37,8 +38,8 @@ def Bash_cmd(i):
         > $i.vcf && rm -f $i ; done ; \
         rm -f {0}/AF_VCF/chr{1}_header {0}/AF_VCF/chr{1}_variants'.format(path, i))
 
+    #Convert VCF to Plink
     print('Plink Chrom : '+str(i))
-
     os.system('for j in {0}/AF_VCF/Split_chr{1}_*.vcf; \
     do /Users/luke/bin/plink_mac/plink \
     --vcf $j --make-bed --out ${{j%.vcf}} ; \
