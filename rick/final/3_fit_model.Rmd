@@ -25,7 +25,7 @@ options(scipen=999)
 
 # Rscript -e 'library(rmarkdown); rmarkdown::render("test.Rmd", "all")'  "22_10000" 
 chr <- commandArgs(trailingOnly=T)[1]
-chr <- '22_10000'
+#chr <- '22_10000'
 ```
 
 ```{r warning=FALSE}
