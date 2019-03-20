@@ -18,7 +18,7 @@ def Bash_cmd(i):
         -Oz -o {0}/AF_VCF/chr{1}_AF.vcf.gz'.format(path, i,vcfName))
 
     #Split VCF into 100,000 SNP chunks
-    fname = '{0}/AF_VCF/Split_chr{1}_aa.vcf'.format(path, i)
+    fname = '{0}/AF_VCF/Split_chr{1}_aa'.format(path, i)
     if os.path.isfile(fname) :
         print('VCF already Split : '+str(i))
     else :
@@ -32,9 +32,13 @@ def Bash_cmd(i):
         {0}/AF_VCF/chr{1}_variants \
         {0}/AF_VCF/Split_chr{1}_'.format(path, i))
 
+    fname = '{0}/AF_VCF/Split_chr{1}_aa.vcf'.format(path, i)
+    if os.path.isfile(fname) :
+        print('VCF already Combined : '+str(i))
+    else :
         print('Combine Chrom : '+str(i))
         os.system('for i in {0}/AF_VCF/Split_chr{1}_*; \
-        cat {0}/AF_VCF/chr{1}_header $i \
+        do cat {0}/AF_VCF/chr{1}_header $i \
         > $i.vcf && rm -f $i ; done ; \
         rm -f {0}/AF_VCF/chr{1}_header {0}/AF_VCF/chr{1}_variants'.format(path, i))
 
