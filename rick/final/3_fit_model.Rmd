@@ -1,5 +1,5 @@
 ---
-title: "Quality Genotype Association"
+title: "TGP Quality-Variants Association"
 subtitle: "Fitting model for Chromosome `r commandArgs(trailingOnly=T)[1]`"
 author: 
 - name: Rick Farouni, Luke Anderson-Trocmé 
@@ -19,14 +19,15 @@ output:
 # Preparations
   
 ```{r setup}
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(),
+                     fig.width=10)
 options(scipen=999)
 
-# Rscript -e 'library(rmarkdown); rmarkdown::render("test.Rmd", "all")'  "22_10000" 
+# Rscript -e 'library(rmarkdown); rmarkdown::render("test.Rmd", "all")'  "chr22_10000" 
 chr <- commandArgs(trailingOnly=T)[1]
 ```
 
-```{r warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(lfa)
 library(furrr)
@@ -41,7 +42,6 @@ plan(multicore)
 
 ```{r functions}
 # modified from https://github.com/StoreyLab/gcatest/blob/master/R/gcat.R
-
 
 lreg <- function(y, X) {
   X <- rbind(X, X)
@@ -154,6 +154,9 @@ lf_filepath <-   file.path(preprocessed_dir,
 fits_filepath <- 	file.path(preprocessed_dir, 
                             "subsets",
                             paste0("fit_", chr, ".rds"))
+fits_table_filepath <- file.path(preprocessed_dir, 
+                            "tables",
+                            paste0("fit_", chr, ".txt"))
 ```
 
 # Run analysis
@@ -184,13 +187,14 @@ data_bim <-
                              rowid,
                              sep="_" ))) %>% 
   select(-rowid)
-data_bim %>% head()
 ```
 ### Load quality data
 
 ```{r load_bas, message=FALSE, warning=FALSE}
 bas_dt <- read_tsv(bas_filepath)
-avg_qual_mean <- bas_dt$avg_qual_mean
+trait <- bas_dt$avg_qual_mean
+#trait <- bas_dt$avg_qual_min
+#trait <- bas_dt$avg_qual_max
 bas_dt
 ```
 
@@ -231,7 +235,7 @@ data_genotype <-
 	transmute(
 	fit = future_pmap(., fit_glm,
 	LF=LF, 
-	trait=avg_qual_mean),
+	trait=trait),
 		rsID=labels)  %>%
 	unnest(fit) %>%
 	mutate(l= rep(c("data","stat"), n()/2))%>%
@@ -240,31 +244,13 @@ data_genotype <-
 toc()
 ```
 
-### Save results
-```{r}
-tic("saving fit")
-saveRDS(data_genotype,
-        fits_filepath)
-toc()
-```
-
-```{r}
-gc()
-```
-
-
 
 
 ## Plot top hits
 
 
-### Show top hits
+### Show top hits by dev_logp
 
-```{r}
-data_genotype %>%
-  arrange(-dev_logp) %>% 
-  slice(1:10)
-```
 
 ```{r subsets}
 subsets_top <-  
@@ -273,9 +259,8 @@ subsets_top <-
 subsets_top
 ```
 
-### Get plots
 
-```{r, fig.width=16}
+```{r, fig.width=14}
 subsets_plots <-
  subsets_top %>%
   select(-data) %>%
@@ -287,9 +272,60 @@ subsets_plots <-
   pull(plotted)
 ```
 
-```{r plots,fig.width=16}
+```{r plots, fig.width=10, message=FALSE, warning=FALSE}
 subsets_plots
 ```
+
+### Show top hits by b
+
+
+
+
+```{r subsets_b}
+subsets_top <-  
+  data_genotype  %>%
+  top_n(3,abs(b) )
+subsets_top
+```
+
+```{r, fig.width=10}
+subsets_plots <-
+ subsets_top %>%
+  select(-data) %>%
+  nest(-rsID, .key="data_stats") %>%
+    mutate(data=subsets_top$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r plots_b, fig.width=10, message=FALSE, warning=FALSE}
+subsets_plots
+```
+
+
+### Save results
+```{r}
+tic("saving fit")
+saveRDS(data_genotype %>% 
+          filter(dev_logp > 8 | abs(b) > 10),
+        fits_filepath)
+toc()
+```
+
+```{r}
+write_tsv(data_genotype %>%
+            select(-data),
+          fits_table_filepath )
+```
+
+
+
+```{r}
+gc()
+```
+
 
 ```{r session_info}
 sessionInfo()
