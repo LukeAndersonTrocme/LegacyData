@@ -158,7 +158,22 @@ data_bim <- fread(bim_filepath,
   select(rsID)
 
 toc()
-data_bim
+```
+
+
+
+```{r}
+# add suffix to rsIDs that are associated with multiple genomic loci
+data_bim <- 
+  data_bim %>%  
+  rowid_to_column() %>% 
+  mutate(rsID= if_else(!duplicated(rsID),
+                       rsID,
+                       paste(rsID,
+                             rowid,
+                             sep="_" ))) %>% 
+  select(-rowid)
+data_bim %>% head()
 ```
 
 
@@ -193,7 +208,6 @@ colnames(data_genotype) <- bas_dt$sample
 toc()
 data_genotype[1:5,1:5]
 ```
-
 
 
 load logistic factor analysis results
@@ -231,7 +245,9 @@ toc()
 
 
 ```{r}
-data_genotype %>% arrange(-dev_logp) %>% slice(1:10)
+data_genotype %>%
+  arrange(-dev_logp) %>% 
+  slice(1:10)
 ```
 
 ```{r}
@@ -240,7 +256,8 @@ gc()
 
 ```{r}
 tic("saving fit")
-saveRDS(data_genotype, fits_filepath)
+saveRDS(data_genotype,
+        fits_filepath)
 toc()
 ```
 
