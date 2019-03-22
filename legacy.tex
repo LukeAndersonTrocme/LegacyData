@@ -255,24 +255,41 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 \todo{UPDATE LOG ODDDS}
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
-  {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)} & \multicolumn{1}{p{1cm}}{\centering Odds \\ ratio}     \\ \hline
- 28654678	& PLoS One	& rs201130852	& 5.05	& 73.18 & 0.65\\
- 	& 		& rs201761909	& 5.70	& 72.90 & 0.63\\
- 	& 		& rs200655768	& 6.53	& 69.28 & 0.66\\
- 	& 		& rs201255786	& 5.70	& 61.20 & 0.65\\
- 	& 		& rs80274284	& 6.00	& 57.76 & 0.70\\		
- 	& 		& rs184202621	& 5.52	& 53.72 & 0.68\\
-	& 		& rs200699422	& 5.30	& 6.33 & 0.87\\	
-	&		&			&		&		&\\
-23527680 &	\multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics}	& rs6057648	& 5.40	& 14.17 & 0.82\\  
-21386085 &	\multicolumn{1}{p{3cm}}{\raggedright Diabetes\\} &	rs301 &*10.52	 & 9.21 & 0.90\\
-28928442	& \multicolumn{1}{p{3cm}}{\raggedright Nature Communications}	& rs201471471	& 6.52	& 2.5 & 0.67\\
+  {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)}      \\ \hline
+28654678 & PLoS One & rs201761909 & 5.7 & 78.11\\
+	& 	&  	rs201130852 & 5.05 & 72.28\\
+	& 	&  	rs201255786 & 5.7 & 68.97\\
+	& 	&  	rs200655768 & 6.52 & 66.67\\
+	& 	&  	rs184202621 & 5.52 & 60.45\\
+	& 	& 	rs80274284 & 6 & 56.15\\
+	& 	& 	rs200699422 & 5.3 & 7.43\\
+23527680 & \multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics} & rs6057648 & 5.4 & 20.5\\
+28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs201471471 & 6.52 & 7.87\\
+28270201 & \multicolumn{1}{p{3cm}}{\raggedright Genome Medicine} & rs453755 & 7.52 & 5.29\\
+23023329 & \multicolumn{1}{p{3cm}}{\raggedright Nature Genetics} & rs103294 & *15.3 & 4.32\\
+28334899 & \multicolumn{1}{p{3cm}}{\raggedright Human Molecular Genetics} & rs103294 & *29.3 & 4.32\\
+28240269 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs103294 & *72.7 & 4.32\\
+27863252 & \multicolumn{1}{p{3cm}}{\raggedright Cell\\} & rs3794738 & *13.15 & 3.73\\
+29534301 & \multicolumn{1}{p{3cm}}{\raggedright Hepatology\\} & rs9273062 & *9.7 & 3.36\\
+21386085 & \multicolumn{1}{p{3cm}}{\raggedright Diabetes\\}  & rs301 & *10.52 & 3.02\\
+26830138 & \multicolumn{1}{p{3cm}}{\raggedright Molecular Psychiatry} & rs77894924 & 6.7 & 2.77\\
+29617998 & \multicolumn{1}{p{3cm}}{\raggedright Human Molecular Genetics} & rs4963156 & *22.4 & 2.52\\
+28698626 & \multicolumn{1}{p{3cm}}{\raggedright Scientific Reports} & rs11015915 & 5.05 & 2.45\\
+26974007 & \multicolumn{1}{p{3cm}}{\raggedright Nature Genetics} & rs3124998 & *8.05 & 2.33\\
+26634245 & \multicolumn{1}{p{3cm}}{\raggedright BMC Genetics} & rs451000 & 6 & 2.28\\
+ 	& 	& 	rs443874 & 5.3 & 2.26\\
+	& 	&	rs400942 & 6 & 2.2\\
+26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & rs60136336 & 5.7 & 2.25\\
+
+25918132 & \multicolumn{1}{p{3cm}}{\raggedright Toxicological Sciences} & rs76780579 & 6 & 2.09\\
 
  \hline
 \end{tabular}
-\caption{A list of four recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
+\caption{A list of recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
 \label{gwasTable}
 \end{table}
+
+%& \multicolumn{1}{p{1cm}}{\centering Odds \\ ratio}
 
 %\begin{figure}
 %\includegraphics[width=15cm,keepaspectratio]{./Figures/PublishedSNPs.jpg}
@@ -365,7 +382,6 @@ We ran a simple logistic regression independently for each genomic locus $s$ usi
 \begin{align*}
 %{logit}{E(Y_{s'i})} &= \beta_{0}  + \beta_{1}{PC1}_{i} + \beta_{2}{PC2}_{i} + \beta_{3}{PC3}_{i} + \beta_{4}{PC4}_{i} + \beta_{5}{PC5}_{i} + \beta_{6}Q_{i}
 {logit}{E(Y_{s'i})} &= \beta_{0}  + \beta_{1}{Pop}_{i}  + \beta_{2}Q_{i}
-
 \\
 \textit{for}\quad i &= 1,\hdots, n
 \end{align*}
@@ -412,13 +428,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NORepeat_SNPs.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatSNPs.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/NORepeat_SNPs_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatSNPs.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -428,13 +444,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NORepeat_Indels.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatIndels.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/NORepeat_Indels_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatIndels.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -444,13 +460,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_Repeat_SNPs.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatSNPs.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/Repeat_SNPs_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatSNPs.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -460,13 +476,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
   
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_Repeat_Indels.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatIndels.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/Repeat_Indels_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatIndels.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
