@@ -158,3 +158,13 @@ rick/final/.Rhistory
 PlottingScripts/.Rhistory
 
 PlottingScripts/.Rhistory
+
+*.bim
+
+*.ped
+
+*.fam
+
+*.nosex
+
+*.map
