@@ -539,8 +539,8 @@ zgrep '^#' $RawDataPath/ALL.chr22$VCF > $DataPath/Significant_Positions.vcf
 
 #AddGenotypes
 for f in `seq 1 22`;
-do echo $f;
-bcftools view -R $DataPath/Significant_Positions.txt \
+do bcftools view \
+-R $DataPath/Significant_Positions.txt \
 $RawDataPath/ALL.chr${f}$VCF \
 | grep -v "^#" \
 >> $DataPath/Significant_Positions.vcf ; \
@@ -556,10 +556,11 @@ vcftools \
 
 /Users/luke/bin/plink_mac/plink \
 --vcf $DataPath/Significant_Positions.recode.vcf \
---recode \
+--make-bed \
 --out $DataPath/Significant_Positions
 
 ```
+##Compare Over and Under Qual 30
 ```{r}
 data_bim <- fread(paste0(DataPath,
                          'Significant_Positions.bim'), 
@@ -579,63 +580,37 @@ rownames(data_genotype) <- data_bim$rsID
 colnames(data_genotype) <- data_fam$sample
 data_genotype[1:5,1:5]
 
-```
-
-##Compare Over and Under Qual 30
-```{r}
-#read Genotypes
-GT = fread(paste0(DataPath,
-                   'SigVar_Pop_0.01_rsID.genotype.txt'))
-ColNames = read.table(paste0(DataPath,
-                   'ColNames_rsID.txt'), 
-                   header=F)
-
-names(GT) = as.character(unlist(ColNames))
-names(GT)[4] = 'rsID'
-GT$ID <- as.numeric(as.character(GT$ID))
-
-Sig.rsID <- fread(paste0(DataPath,
-                         'SignificantVariants.txt'), 
-                  col.names = c('Chr','Pos','rsID', 
-                                'ID', 'dev', 'log10_p'))
 ##Compare over and under 30
 
-mGT = melt(unique(GT), 
-           id = c('Chr','Pos',
-                  'ID','rsID'))
+mGT = melt(unique(data_genotype), 
+           varnames = c('rsID','sample'), 
+           value.name = 'Genotype')
+
 mGT = merge(unique(bas_dt[,
                           c('sample',
                             'Population',
                             'avg_qual')]), 
             mGT, 
-            by.x='sample',
-            by.y='variable')
+            by = 'sample')
 
-mGT = merge(mGT, 
-            Sig.rsID, 
-            by=c('Chr','Pos',
-                 'ID','rsID'))
 
-over30 = mGT[which(mGT$avg_qual > 30),]
+over30 = unique(mGT[which(mGT$avg_qual > 30),])
 
-under30 = mGT[which(mGT$avg_qual < 30),]
+under30 = unique(mGT[which(mGT$avg_qual < 30),])
 
 o30AF <- 
 		over30 %>% 
-		group_by(Chr,Pos,
-		         ID,rsID) %>% 
-		summarize(oAF = sum(value))
+		group_by(rsID) %>% 
+		summarize(oAF = sum(Genotype))
 		
 u30AF <- 
 		under30 %>% 
-		group_by(Chr,Pos,
-		         ID,rsID) %>% 
-		summarize(uAF = sum(value))
+		group_by(rsID) %>% 
+		summarize(uAF = sum(Genotype))
 
 AF30 <- merge(u30AF, 
               o30AF, 
-              by=c('Chr','Pos',
-                   'ID','rsID'))
+              by=c('rsID'))
 
 #save to file
 saveRDS(AF30,
