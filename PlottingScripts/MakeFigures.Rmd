@@ -449,11 +449,15 @@ p3
 HanKgpAF <- readRDS(paste0(DataPath,
                    'HanKgpAF.rds'))
 #Load joint frequency for Indels
-INDEL <- readRDS(paste0(DataPath,
-                   'INDEL_HanKgp.rds'))
+#INDEL <- readRDS(paste0(DataPath,
+#                   'INDEL_HanKgp.rds'))
 #Load joint frequency for SNPs
-SNP <- readRDS(paste0(DataPath,
-                   'SNP_HanKgp.rds'))
+#SNP <- readRDS(paste0(DataPath,
+#                   'SNP_HanKgp.rds'))
+
+#Load joint frequency for SNPs
+combo <- readRDS(paste0(DataPath,
+                   'HanKgp_AF.rds'))
 
 ggplot(HanKgpAF, 
        aes(x = hanAF/2, 
@@ -466,6 +470,15 @@ ggplot(HanKgpAF,
 
 ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_singlePop.jpg',height=10, width=10)
 
+ggplot(combo, 
+        aes(x=han.AF, 
+            y=kgp.AF)) +
+     geom_bin2d(bins = 83) +
+     scale_fill_distiller(palette = "Spectral")
+
+ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_FullModel.jpg',height=10, width=10)
+
+if(FALSE){
 ggplot(SNP, 
            aes(x=hanAF, 
                y=kgpAF)) + 
@@ -487,6 +500,7 @@ ggplot(INDEL,
   ggtitle('Joint Frequency Plot of Suspicious INDELS')
 
 ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_INDEL.jpg',height=10, width=10)
+}
 ```
 ```{bash}
 

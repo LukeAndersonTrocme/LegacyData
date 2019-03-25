@@ -453,81 +453,6 @@ saveRDS(HanKgpAF,
             paste0(DataPath,
                    'HanKgpAF.rds'))
 ```
-
-##Full Model
-```{r}
-#read Genotypes
-han1=fread(paste0(DataPath,
-                  'SignificantSNPs_Han90_0.01_genotype.txt'))
-HanNames=fread(paste0(DataPath,
-                      'SignificantSNPs_Han90_COLNAMES.txt'),
-               header=F)
-names(han1) = as.character(unlist(HanNames))
-#melt to long format
-han = melt(han1, id=c('#CHROM','POS','ID'))
-#fix chromosome names
-han$CHROM = as.numeric(as.character(substring(han$'#CHROM',4)))
-han$'#CHROM' <- NULL
-
-#to deal with INDELs we only count one instance of duplicate positions (i.e. pick max GT)
-han <- han %>% 
-  group_by(CHROM,POS,variable) %>% 
-  summarize(han.gt = max(value))
-#to get allele frequencies we group by POS and summarize GT
-hanAF <- han %>% 
-  group_by(CHROM,POS) %>% 
-  summarize(hanAF = sum(han.gt))
-
-
-#read Genotypes
-kgp1 = fread(paste0(DataPath,
-                    'SigVar_Pop_0.01_genotype.txt'))
-ColNames = read.table(paste0(DataPath,
-                             'ColNames.txt'),
-                      header=F)
-names(kgp1) = as.character(unlist(ColNames))
-#melt to long format
-kgp = melt(kgp1, id=c('CHROM','POS','ID'))
-#keep only the 83 resequenced individuals
-kgp = kgp[which(kgp$variable %in% han$variable),]
-
-#to deal with INDELs we only count one instance of duplicate positions (i.e. pick max GT)
-kgp <- kgp %>% 
-  group_by(CHROM,POS,variable) %>% 
-  summarize(Kgp.gt = max(value))
-#to get allele frequencies we group by POS and summarize GT
-kgpAF <- kgp %>% 
-  group_by(CHROM,POS) %>% 
-  summarize(kgpAF = sum(Kgp.gt))
-#keep only positions that are present in the 83 individuals
-kgpAF <- kgpAF[which(kgpAF$kgpAF > 0),]
-
-#merge 1kGP and han resequenced data.
-combo <- merge(hanAF, kgpAF, by=c('CHROM','POS'), all.y=T)
-#missing sites replaced with 0
-combo[is.na(combo)] <- 0 
-
-##read Indels
-Indels <- fread(paste0(DataPath,
-                    'Reg_indels.POS'), 
-                skip=1 ,col.names=c('CHROM','POS'))
-Indels$Indel = 'yes'
-
-INDEL = merge(Indels, combo, by=c('CHROM','POS'))
-SNP = combo[which((combo$POS %in% INDEL$POS)==F),]
-
-#save to file
-saveRDS(INDEL,
-            paste0(DataPath,
-                   'INDEL_HanKgp.rds'))
-#save to file
-saveRDS(SNP,
-            paste0(DataPath,
-                   'SNP_HanKgp.rds'))
-
-SNP
-INDEL
-```
 ##Extract Significant Positions from 1kGP Data
 ```{bash}
 DataPath='/Users/luke/Documents/QualityPaper/ProcessedData'
@@ -560,6 +485,130 @@ vcftools \
 --out $DataPath/Significant_Positions
 
 ```
+
+```{bash}
+DataPath='/Users/luke/Documents/QualityPaper/ProcessedData'
+RawDataPath='/Users/luke/genomes/genomes/Han90/90_Han_Chinese_SNP_gatkvqsr_20170424_chr'
+VCF='_validator.vcf.gz'
+
+#Han vcf has `chr` before chromosome number
+sed -e 's/^/chr/' \
+$DataPath/Significant_Positions.txt \
+> $DataPath/Significant_Positions_chr.txt
+
+#GetHeader
+zgrep '^#' $RawDataPath\22$VCF > $DataPath/Significant_Positions_Han.vcf
+
+#AddGenotypes
+for f in `seq 1 22`;
+do echo $f;
+bcftools view \
+-R $DataPath/Significant_Positions_chr.txt \
+$RawDataPath${f}$VCF \
+| grep -v "^#" \
+>> $DataPath/Significant_Positions_Han.vcf ; \
+done
+
+#bcftools doesn't take rsID
+#this deals with indels and other mulitallelic variants
+vcftools \
+--vcf $DataPath/Significant_Positions_Han.vcf \
+--snps $DataPath/Significant_rsID.txt \
+--recode --recode-INFO-all \
+--out $DataPath/Significant_Positions_Han
+
+/Users/luke/bin/plink_mac/plink \
+--vcf $DataPath/Significant_Positions_Han.recode.vcf \
+--make-bed \
+--out $DataPath/Significant_Positions_Han
+```
+
+##Full Model
+```{r}
+sharedID <- fread(paste0(DataPath,
+                          '83samples.txt'), 
+                  header = FALSE,
+                  col.names = 'sample')
+
+kgp_bim <- fread(paste0(DataPath,
+                         'Significant_Positions.bim'), 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt')) %>%
+  select(rsID)
+
+kgp_fam <- fread(paste0(DataPath,
+                         'Significant_Positions.fam'), 
+                  col.names = c('familyID','sample',
+                                'father','mother',
+                                'sex','pheno')) %>%
+  select(sample)
+
+kgp_genotype <- read.bed(paste0(DataPath,'Significant_Positions'))
+rownames(kgp_genotype) <- kgp_bim$rsID
+colnames(kgp_genotype) <- kgp_fam$sample
+#Only keep the 83 shared samples
+keep <- colnames(kgp_genotype)[(colnames(kgp_genotype) 
+                                 %in% sharedID$sample)]
+kgp_genotype <- kgp_genotype[,keep]
+kgp_genotype <- kgp_genotype[!duplicated(rownames(kgp_genotype)),]
+kgp_genotype[1:5,1:5]
+
+kgp <- melt(kgp_genotype, 
+           varnames = c('rsID','sample'), 
+           value.name = 'Genotype')
+kgp <- 
+		kgp %>% 
+		group_by(rsID) %>% 
+		summarize(kgp.AF = sum(Genotype))
+
+kgp <- kgp[which(kgp$kgp.AF > 0),]
+#read Han Genotypes
+han_bim <- fread(paste0(DataPath,
+                         'Significant_Positions_Han.bim'), 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt')) %>%
+  select(rsID)
+
+han_fam <- fread(paste0(DataPath,
+                         'Significant_Positions_Han.fam'), 
+                  col.names = c('familyID','sample',
+                                'father','mother',
+                                'sex','pheno')) %>%
+  select(sample)
+
+han_genotype <- read.bed(paste0(DataPath,'Significant_Positions_Han'))
+rownames(han_genotype) <- han_bim$rsID
+colnames(han_genotype) <- han_fam$sample
+#Only keep the 83 shared samples
+keep <- colnames(han_genotype)[(colnames(han_genotype) 
+                                 %in% sharedID$sample)]
+han_genotype <- han_genotype[,keep]
+han_genotype <- han_genotype[!duplicated(rownames(han_genotype)),]
+han_genotype[1:5,1:5]
+
+han = melt(han_genotype, 
+           varnames = c('rsID','sample'), 
+           value.name = 'Genotype')
+
+han <- 
+		han %>% 
+		group_by(rsID) %>% 
+		summarize(han.AF = sum(Genotype))
+
+#merge 1kGP and han resequenced data.
+combo <- merge(han, kgp, by='rsID', all.y=T)
+#missing sites replaced with 0
+combo[is.na(combo)] <- 0 
+
+
+#save to file
+saveRDS(combo,
+            paste0(DataPath,
+                   'HanKgp_AF.rds'))
+
+combo
+```
+
 ##Compare Over and Under Qual 30
 ```{r}
 data_bim <- fread(paste0(DataPath,
