@@ -1,7 +1,7 @@
 ---
 title: "Legacy Data Confounds Modern Genomics Studies"
 author: 
-- name: Luke Anderson-Trocmé, 
+- name: Luke Anderson-Trocmé, Rick Farouni
   affiliation:
   - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
@@ -400,6 +400,13 @@ saveRDS(overLap,
             paste0(DataPath,
                    'overLap.rds'))
 ```
+## Compare Models
+```{r}
+
+
+```
+
+
 ## Compare Han Resequenced to 1kGP
 ##Single Population Test
 ```{r}
@@ -501,8 +508,7 @@ zgrep '^#' $RawDataPath\22$VCF > $DataPath/Significant_Positions_Han.vcf
 
 #AddGenotypes
 for f in `seq 1 22`;
-do echo $f;
-bcftools view \
+do bcftools view \
 -R $DataPath/Significant_Positions_chr.txt \
 $RawDataPath${f}$VCF \
 | grep -v "^#" \
@@ -553,11 +559,11 @@ kgp_genotype <- kgp_genotype[,keep]
 kgp_genotype <- kgp_genotype[!duplicated(rownames(kgp_genotype)),]
 kgp_genotype[1:5,1:5]
 
-kgp <- melt(kgp_genotype, 
+kgp1 <- melt(kgp_genotype, 
            varnames = c('rsID','sample'), 
            value.name = 'Genotype')
 kgp <- 
-		kgp %>% 
+		kgp1 %>% 
 		group_by(rsID) %>% 
 		summarize(kgp.AF = sum(Genotype))
 
@@ -586,12 +592,12 @@ han_genotype <- han_genotype[,keep]
 han_genotype <- han_genotype[!duplicated(rownames(han_genotype)),]
 han_genotype[1:5,1:5]
 
-han = melt(han_genotype, 
+han1 = melt(han_genotype, 
            varnames = c('rsID','sample'), 
            value.name = 'Genotype')
 
 han <- 
-		han %>% 
+		han1 %>% 
 		group_by(rsID) %>% 
 		summarize(han.AF = sum(Genotype))
 
@@ -608,6 +614,8 @@ saveRDS(combo,
 
 combo
 ```
+
+
 
 ##Compare Over and Under Qual 30
 ```{r}

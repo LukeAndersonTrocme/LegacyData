@@ -1,7 +1,7 @@
 ---
 title: "Legacy Data Confounds Modern Genomics Studies"
 author: 
-- name: Luke Anderson-Trocmé, 
+- name: Luke Anderson-Trocmé, Rick Farouni
   affiliation:
   - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
@@ -448,12 +448,6 @@ p3
 #using the sites associated to Quality in the single population test
 HanKgpAF <- readRDS(paste0(DataPath,
                    'HanKgpAF.rds'))
-#Load joint frequency for Indels
-#INDEL <- readRDS(paste0(DataPath,
-#                   'INDEL_HanKgp.rds'))
-#Load joint frequency for SNPs
-#SNP <- readRDS(paste0(DataPath,
-#                   'SNP_HanKgp.rds'))
 
 #Load joint frequency for SNPs
 combo <- readRDS(paste0(DataPath,
@@ -471,39 +465,15 @@ ggplot(HanKgpAF,
 ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_singlePop.jpg',height=10, width=10)
 
 ggplot(combo, 
-        aes(x=han.AF, 
-            y=kgp.AF)) +
+        aes(x = han.AF/166, 
+            y = kgp.AF/166)) +
      geom_bin2d(bins = 83) +
-     scale_fill_distiller(palette = "Spectral")
+     scale_fill_distiller(palette = "Spectral") +
+    labs(x = 'Resequenced Han', 
+         y = '1000 Genomes Project')+
+    ggtitle('Joint frequency plot of 11,946 suspicious SNPs\nfrom combined test')
 
 ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_FullModel.jpg',height=10, width=10)
-
-if(FALSE){
-ggplot(SNP, 
-           aes(x=hanAF, 
-               y=kgpAF)) + 
-  geom_bin2d(bins = 83) + 
-  scale_fill_distiller(palette = "Spectral") +
-  labs(x = 'Resequenced Han', 
-       y = '1000 Genomes Project') +
-  ggtitle('Joint Frequency Plot of Suspicious SNPs')
-
-ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_SNP.jpg',height=10, width=10)
-
-ggplot(INDEL, 
-           aes(x=hanAF, 
-               y=kgpAF)) +
-  geom_bin2d(bins = 83) +
-  scale_fill_distiller(palette = "Spectral") +
-  labs(x='Resequenced Han', 
-       y='1000 Genomes Project') +
-  ggtitle('Joint Frequency Plot of Suspicious INDELS')
-
-ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_INDEL.jpg',height=10, width=10)
-}
-```
-```{bash}
-
 
 ```
 
@@ -528,10 +498,10 @@ af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
   labs(x='Samples with Q < 30',y='Samples with Q > 30')
 af2
 
-plot_grid(af1, af2)
+plot_grid(af1, af2,ncol=1)
 
-ggsave(paste0(figurePath,'OverUnder30.jpg'),height=5,width=10)
-ggsave(paste0(figurePath,'OverUnder30.pdf'),height=5,width=10)
+ggsave(paste0(figurePath,'OverUnder30.jpg'),height=11,width=8)
+ggsave(paste0(figurePath,'OverUnder30.pdf'),height=11,width=8)
 ```
 ```{r}
 sessionInfo()

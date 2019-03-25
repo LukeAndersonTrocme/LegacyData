@@ -29,7 +29,7 @@ setwd(path)
 plinkPath <- '/Users/luke/genomes/genomes/hg19/plink/'
 
 #chr <- args[3]
-chr <- '22_10000'
+chr <- '22'
 
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
 options(scipen=999)
@@ -78,70 +78,8 @@ load logistic factor analysis results
 LF <- readRDS( "./data/preprocessed/lf5.rds")
 ```
 
-
-```{r}
-#this runs the logistic regression
-lreg_dich <- function(y, X){
-  
-  b <- glm2(cbind(y, 2-y) ~ -1 + X, family="binomial")$coef
-  
-  return(b)
-  
-}
-
-
-#modified from gcat
-fit_glm_dich <- function(..., LF, trait){
-  snp <- c(...)
-  snp <- as.numeric((snp==1) | (snp==2))
-  ind <- !is.na(snp) #logical index vector
-  snp_no_na <- snp[ind]
-  LF_no_na <- LF[ind,]
-  p0 <- rep(NA, length(snp))
-  p1 <- rep(NA, length(snp))
-  trait_no_na <- trait[ind]
-  b0 <- lreg_dich(snp_no_na, LF_no_na) #coefficients from logreg 
-  b1 <- lreg_dich(snp_no_na, cbind(LF_no_na, trait_no_na))
-  est0 <- .Call("mv", LF_no_na, b0)
-  est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
-  p0[ind] <- exp(est0)/(1+exp(est0))
-  p1[ind] <- exp(est1)/(1+exp(est1))
-  
-  dataset <-
-    tibble(snp=snp,
-           p0 = p0,
-           p1 = p1)
-  
-  stat <-
-    dataset %>%
-    summarize( #cross entropy (log likelihood)
-      dev0 = -2 * sum(snp * log(p0) +
-                        (1 - snp) * log(1 - p0),
-                      na.rm = TRUE),
-      dev1 = -2 * sum(snp * log(p1) +
-                        (1 - snp) * log(1 - p1),
-                      na.rm = TRUE),
-      devdiff = dev0 - dev1,
-      dev_logp = -log10(pchisq(devdiff,
-                               1,
-                               lower.tail = FALSE))
-    ) %>% 
-    mutate(num_nas = sum(!ind),
-	   num_zeros= sum(snp_no_na ==0),
-           b=b1[length(b1)])
-  
-  return(list(dataset=dataset, stat=stat))
-         
-}
-```
-
-
-
-
 define functions
 ```{r}
-
-
 #this runs the logistic regression
 lreg <- function(y, X){
   X <- rbind(X, X)
@@ -233,43 +171,21 @@ data_fit <-
 	mutate(l= rep(c("data","stat"), n()/2))%>%
 	spread(l, fit)%>%
 	unnest(stat)
-
-data_fit_dich <- 
-	data_genotype %>%
-	as_tibble() %>%
-	transmute(
-	fit = future_pmap(., fit_glm_dich,
-	LF= LF, 
-	trait=avg_qual_mean),
-		rsID=labels)  %>%
-	unnest(fit) %>%
-	mutate(l= rep(c("data","stat"), n()/2))%>%
-	spread(l, fit)%>%
-	unnest(stat)
-   toc()    
+ 
 ```
 
 ```{r}
 
 saveRDS(data_fit, 
 	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, ".rds")))
+	paste0("fits_chrom_", chr, "_LFA.rds")))
 
 write.table(data_fit[-2], 
               file.path("./data/preprocessed/subsets", 
-                        paste0("fits_chrom_", chr, ".txt")),
+                        paste0("fits_chrom_", chr, "_LFA.txt")),
               quote = FALSE,
               row.names = FALSE)
-
-saveRDS(data_fit_dich, 
-	file.path("./data/preprocessed/subsets",
-	paste0("dich_fits_chrom_", chr, ".rds")))
-
-write.table(data_fit_dich[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("dich_fits_chrom_", chr, ".txt")),
-              quote = FALSE,
-              row.names = FALSE)
+data_fit[,2]<-NULL
 ```
 #PCA
 ```{r, warning=FALSE}
@@ -313,23 +229,14 @@ data_fit_PCA_dich <-
 
 saveRDS(data_fit_PCA, 
 	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, ".rds")))
+	paste0("fits_chrom_", chr, "_PCA.rds")))
 
 write.table(data_fit_PCA[-2], 
               file.path("./data/preprocessed/subsets", 
-                        paste0("fitsPCA_chrom_", chr, ".txt")),
+                        paste0("fits_chrom_", chr, "_PCA.txt")),
               quote = FALSE,
               row.names = FALSE)
-
-saveRDS(data_fit_PCA_dich, 
-	file.path("./data/preprocessed/subsets",
-	paste0("dich_fits_chrom_", chr, ".rds")))
-
-write.table(data_fit_PCA_dich[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("dich_fitsPCA_chrom_", chr, ".txt")),
-              quote = FALSE,
-              row.names = FALSE)
+data_fit_PCA[,2]<-NULL
 ```
 #Population
 ```{r, warning=FALSE}
@@ -352,42 +259,20 @@ data_fit_Pop <-
 	unnest(stat)
    toc()
 
-   
-data_fit_Pop_dich <- 
-	data_genotype %>%
-	as_tibble() %>%
-	transmute(
-	fit = future_pmap(., fit_glm_dich,
-	LF= testModel, 
-	trait=avg_qual_mean),
-		rsID=labels)  %>%
-	unnest(fit) %>%
-	mutate(l= rep(c("data","stat"), n()/2))%>%
-	spread(l, fit)%>%
-	unnest(stat)
-   toc()   
 ```
 ```{r}
 
 saveRDS(data_fit_Pop, 
 	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, ".rds")))
+	paste0("fits_chrom_", chr, "_Pop.rds")))
 
-write.table(data_fit[-2], 
+write.table(data_fit_Pop[-2], 
               file.path("./data/preprocessed/subsets", 
-                        paste0("fitsPOP_chrom_", chr, ".txt")),
+                        paste0("fits_chrom_", chr, "_Pop.txt")),
               quote = FALSE,
               row.names = FALSE)
 
-saveRDS(data_fit_Pop_dich, 
-	file.path("./data/preprocessed/subsets",
-	paste0("dich_fits_chrom_", chr, ".rds")))
-
-write.table(data_fit_dich[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("dich_fitsPOP_chrom_", chr, ".txt")),
-              quote = FALSE,
-              row.names = FALSE)
+data_fit_Pop[,2]<-NULL
 ```
 
 ```{r}
