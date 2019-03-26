@@ -92,24 +92,29 @@ GWAS
 ```{r}
   
 if(!file.exists(paste0(miscPath,
-                       'jointAF.txt'))){
-
+                       'jointAF.txt'))) {
   #Load Allele Frequency files
   AF.1kGP <- paste0(filterPath,
-                  '1kGP_GenomeWide_JPT_1.frq')
-  JPT <- fread(AF.1kGP, fill = TRUE, 
-               col.names = c('Chr','Pos','N_ALLELES',
-                           'N_CHR','JPT_AF','JPT_MAF'))
+                    '1kGP_GenomeWide_JPT_1.frq')
+  JPT <- fread(
+    AF.1kGP,
+    fill = TRUE,
+    col.names = c('Chr', 'Pos', 'N_ALLELES',
+                  'N_CHR', 'JPT_AF', 'JPT_MAF')
+  )
   AF.NAG <- paste0(filterPath,
-                 'NAG_GenomeWide.4bed_filtered.freq.frq')
-  NAG <- fread(AF.NAG, fill = TRUE,
-               col.names = c('Chr','Pos','N_ALLELES',
-                           'N_CHR','NAG_AF','NAG_MAF'))
+                   'NAG_GenomeWide.4bed_filtered.freq.frq')
+  NAG <- fread(
+    AF.NAG,
+    fill = TRUE,
+    col.names = c('Chr', 'Pos', 'N_ALLELES',
+                  'N_CHR', 'NAG_AF', 'NAG_MAF')
+  )
   
   #merge them together to get joint frequency spectrum
-  join <- merge(JPT[which(JPT$JPT_AF <= 1),],
- 			          NAG[which(NAG$NAG_AF <= 1),], 
- 			          by = c('Chr','Pos'), all = TRUE)
+  join <- merge(JPT[which(JPT$JPT_AF <= 1), ],
+                NAG[which(NAG$NAG_AF <= 1), ],
+                by = c('Chr', 'Pos'), all = TRUE)
   join[is.na(join)] <- 0 #missing positions are frequency of 0
   
   #REMOVE  HWE SITES
@@ -120,27 +125,27 @@ if(!file.exists(paste0(miscPath,
                     'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
   NAG_hwe <- fread(hwe_NAG)
   
-  hwe <- merge(NAG_hwe[,c('V1','V2')], 
-              JPT_hwe[,c('V1','V2')], 
-              by = c('V1','V2'), 
-              all = TRUE)
+  hwe <- merge(NAG_hwe[, c('V1', 'V2')],
+               JPT_hwe[, c('V1', 'V2')],
+               by = c('V1', 'V2'),
+               all = TRUE)
   #remove sites from AF that don't meet HWE
-  join <- join[! paste(join$CHROM, join$POS) 
-               %in% c(paste(hwe$V1,hwe$V2)), ]
-
-  join <- join[,c('Chr','Pos','JPT_MAF',
-                  'JPT_AF','NAG_MAF','NAG_AF')]
+  join <- join[!paste(join$CHROM, join$POS)
+               %in% c(paste(hwe$V1, hwe$V2)),]
+  
+  join <- join[, c('Chr', 'Pos', 'JPT_MAF',
+                   'JPT_AF', 'NAG_MAF', 'NAG_AF')]
   #make numeric
-  join <- sapply(join, as.numeric )
-  join <- join[complete.cases(join),]
-
+  join <- sapply(join, as.numeric)
+  join <- join[complete.cases(join), ]
+  
   rm(NAG) #free up memory
   rm(JPT)
   rm(hwe)
-  #save to file  
-  write.table(join, 
+  #save to file
+  write.table(join,
               paste0(miscPath,
-                           'jointAF.txt'))
+                     'jointAF.txt'))
 }
 #to save time, load file if it already exists
 if(file.exists(paste0(miscPath,

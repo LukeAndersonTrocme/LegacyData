@@ -1,7 +1,8 @@
 ---
-title: "HGP analysis: fit model"
+title: "TGP Quality-Variants Association"
+subtitle: "Fitting model for Chromosome `r commandArgs(trailingOnly=T)[1]`"
 author: 
-- name: Rick Farouni, 
+- name: Rick Farouni, Luke Anderson-Trocmé 
   affiliation:
   - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
@@ -15,73 +16,61 @@ output:
       smooth_scroll: false
 ---
   
-  
-  # Preparations
+# Preparations
   
 ```{r setup}
-knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(),
+                     fig.width=10)
 options(scipen=999)
+
+# Rscript -e 'library(rmarkdown); rmarkdown::render("test.Rmd", "all")'  "chr22_10000" 
+chr <- commandArgs(trailingOnly=T)[1]
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(lfa)
 library(furrr)
 library(glm2)
 library(tictoc)
-options(future.globals.maxSize= 1000000000000)
+library(data.table)
+options(future.globals.maxSize= 10000000000000)
 plan(multicore)
 ```
 
+## Define functions
 
+```{r functions}
+# modified from https://github.com/StoreyLab/gcatest/blob/master/R/gcat.R
 
-
-```{r}
-data_genotype <- read.bed("./data/plink/ALL_Pops")
-message("plink data loaded")
-```
-
-
-```{r}
-loci <- c(1:dim(data_genotype)[1])
-```
-
-
-```{r read lf}
-LF <- readRDS( "./data/preprocessed/lf5.rds")
-```
-
-```{r}
-lreg <- function(y, X){
+lreg <- function(y, X) {
   X <- rbind(X, X)
-  y1 <- as.numeric((y==1) | (y==2))
-  y2 <- as.numeric(y==2)
-  y <- c(y1,y2)
-  b <- glm2(cbind(y, 2-y) ~ -1 + X, family="binomial")$coef
+  y1 <- as.numeric((y == 1) | (y == 2))
+  y2 <- as.numeric(y == 2)
+  y <- c(y1, y2)
+  b <- glm2(cbind(y, 2 - y) ~ -1 + X, family = "binomial")$coef
   
   return(b)
   
 }
 
-fit_glm <- function(..., LF, trait){
+fit_glm <- function(..., LF, trait) {
   snp <- c(...)
-  
   ind <- !is.na(snp) #logical index vector
   snp_no_na <- snp[ind]
-  LF_no_na <- LF[ind,]
+  LF_no_na <- LF[ind, ]
   p0 <- rep(NA, length(snp))
   p1 <- rep(NA, length(snp))
   trait_no_na <- trait[ind]
-  b0 <- lreg(snp_no_na, LF_no_na) #coefficients from logreg 
+  b0 <- lreg(snp_no_na, LF_no_na) #coefficients from logreg
   b1 <- lreg(snp_no_na, cbind(LF_no_na, trait_no_na))
   est0 <- .Call("mv", LF_no_na, b0)
   est1 <- .Call("mv", cbind(LF_no_na, trait_no_na), b1)
-  p0[ind] <- exp(est0)/(1+exp(est0))
-  p1[ind] <- exp(est1)/(1+exp(est1))
-  
+  p0[ind] <- exp(est0) / (1 + exp(est0))
+  p1[ind] <- exp(est1) / (1 + exp(est1))
   
   dataset <-
-    tibble(snp=snp,
+    tibble(snp = snp,
            p0 = p0,
            p1 = p1)
   
@@ -98,67 +87,239 @@ fit_glm <- function(..., LF, trait){
       dev_logp = -log10(pchisq(devdiff,
                                1,
                                lower.tail = FALSE))
-    ) %>% 
-    mutate(nobs = sum(ind),
-           b=b1[length(b1)])
+    ) %>%
+    mutate(#num_nas = sum(!ind),
+      #num_zeros= sum(snp_no_na ==0),
+      b = b1[length(b1)],
+      dev1 = NULL,
+      dev0 = NULL)
   
-  return(list(dataset=dataset, stat=stat))
-         
+  return(list(dataset = dataset, stat = stat))
+  
+}
+get_plot <- function(data, data_stats) {
+  p <- ggplot(bind_cols(data,
+                        bas_dt %>%
+                          select(Population,
+                                 avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean,
+                   snp),
+               size = 1.5,
+               alpha = 0.7) +
+    geom_point(aes(avg_qual_mean,
+                   p0,
+                   colour = "p0"),
+               size = .5,
+               alpha = 0.6) +
+    geom_point(aes(avg_qual_mean,
+                   p1 - p0,
+                   colour = "p1-p0"),
+               size = .7) +
+    annotate(
+      "text",
+      x = 45,
+      y = .75,
+      label = sprintf(
+        "-10log(deviance) = %4f
+beta=%4f",
+data_stats$dev_logp,
+data_stats$b
+      ),
+size = 3
+    ) +
+    theme_bw() #+
+  # facet_wrap( ~ Population, ncol=4)
+  
+  return(p)
 }
 ```
 
+## Define filepaths and directories
 
-```{r}
-gc()
+```{r filepaths}
+plink_data_dir <- "./data/plink/by_chunk"
+metadata_dir <- "./data/metadata"
+preprocessed_dir <- "./data/preprocessed"
+file_name <- paste0("Split_", chr)
+bim_filepath <- file.path(plink_data_dir,
+                          paste0(file_name ,'.bim'))
+fam_filepath <- file.path(plink_data_dir,
+                          paste0(file_name , '.fam'))
+bas_filepath <- file.path(metadata_dir,
+                          "average_quality_fam.txt")
+bed_filepath <- file.path(plink_data_dir,
+                          file_name )
+lf_filepath <-   file.path(preprocessed_dir,
+                           "lf5.rds")  
+fits_filepath <- 	file.path(preprocessed_dir, 
+                            "subsets",
+                            paste0("fit_", chr, ".rds"))
+fits_table_filepath <- file.path(preprocessed_dir, 
+                            "tables",
+                            paste0("fit_", chr, ".txt"))
 ```
 
-```{r}
-bas_filepath <- "./data/metadata/average_quality_dt.txt"
+# Run analysis
+
+## Load data
+
+### Load metadata
+
+get rsIDs and add them as rownames for genotype data
+```{r load_bim}
+tic("reading rsIDS.")
+data_bim <- fread(bim_filepath, 
+                  col.names = c('Chr','rsID','X',
+                                'Pos','Ref','Alt')) %>%
+  select(rsID)
+
+toc()
+```
+
+```{r message=FALSE, warning=FALSE}
+# add suffix to rsIDs that are associated with multiple genomic loci
+data_bim <- 
+  data_bim %>%  
+  rowid_to_column() %>% 
+  mutate(rsID= if_else(!duplicated(rsID),
+                       rsID,
+                       paste(rsID,
+                             rowid,
+                             sep="_" ))) %>% 
+  select(-rowid)
+```
+### Load quality data
+
+```{r load_bas, message=FALSE, warning=FALSE}
 bas_dt <- read_tsv(bas_filepath)
-avg_qual_mean <- bas_dt$avg_qual_mean
+trait <- bas_dt$avg_qual_mean
+#trait <- bas_dt$avg_qual_min
+#trait <- bas_dt$avg_qual_max
+bas_dt
+```
+
+
+### Load genotype data
+
+```{r load_genotype}
+tic("loading plink data.")
+data_genotype <- read.bed(bed_filepath)
+rownames(data_genotype) <- data_bim$rsID
+colnames(data_genotype) <- bas_dt$sample
+toc()
+data_genotype[1:5,1:5]
+```
+
+
+### Load logistic factor analysis results
+```{r load_lf}
+#LF <- lfa(data_genotype, 5)
+#saveRDS(LF, "./data/preprocessed/lf5.rds")
+tic("load logistic factors.")
+LF <- readRDS(lf_filepath)
+toc()
+LF[1:5,]
+```
+
+## Fit Logistic Regression
+
+```{r fit_data, warning=FALSE}
+labels <- rownames(data_genotype)
+data_genotype <- 
+	data_genotype %>%
+	as_tibble()
+
+tic("fitting model")
+data_genotype <- 
+	data_genotype %>%
+	transmute(
+	fit = future_pmap(., fit_glm,
+	LF=LF, 
+	trait=trait),
+		rsID=labels)  %>%
+	unnest(fit) %>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+toc()
+```
+
+
+
+## Plot top hits
+
+
+### Show top hits by dev_logp
+
+
+```{r subsets}
+subsets_top <-  
+  data_genotype  %>%
+  top_n(3,dev_logp) 
+subsets_top
+```
+
+
+```{r, fig.width=14}
+subsets_plots <-
+ subsets_top %>%
+  select(-data) %>%
+  nest(-rsID, .key="data_stats") %>%
+    mutate(data=subsets_top$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r plots, fig.width=10, message=FALSE, warning=FALSE}
+subsets_plots
+```
+
+### Show top hits by b
+
+
+
+
+```{r subsets_b}
+subsets_top <-  
+  data_genotype  %>%
+  top_n(3,abs(b) )
+subsets_top
+```
+
+```{r, fig.width=10}
+subsets_plots <-
+ subsets_top %>%
+  select(-data) %>%
+  nest(-rsID, .key="data_stats") %>%
+    mutate(data=subsets_top$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r plots_b, fig.width=10, message=FALSE, warning=FALSE}
+subsets_plots
+```
+
+
+### Save results
+```{r}
+tic("saving fit")
+saveRDS(data_genotype %>% 
+          filter(dev_logp > 8 | abs(b) > 10),
+        fits_filepath)
+toc()
 ```
 
 ```{r}
-head(avg_qual_mean)
+write_tsv(data_genotype %>%
+            select(-data),
+          fits_table_filepath )
 ```
 
-
-```{r}
-fit_subset <- function(sub_index) {
-
-  data_sub <- 
-    data_genotype[sub_index,] %>%
-    as_tibble() %>%
-    transmute(
-      locus=loci[sub_index],
-      fit = future_pmap(., fit_glm,
-                        LF=LF, 
-                        trait=avg_qual_mean))  %>%
-    unnest(fit) %>%
-    mutate(l= rep(c("data","stat"), n()/2))%>%
-    spread(l, fit)%>%
-    unnest(stat)
-  return(data_sub)
-  
-}
-```
-
-
-```{r}
-S <-30
-m <- 76871
-subset <- vector("list", length = S)
-for(i in 1:S){
-  strt <- m*(i-1) +1
-  stp <- m*i
-  sub_range <- c(strt:stp)
-  tic()
-  subset <- fit_subset(sub_range) 
-  toc()
-  message("fitting model subset:", i)
-  saveRDS(subset, file.path("./data/preprocessed/subsets", paste0("fits_subset_", i, ".rds")))
-}
-```
 
 
 ```{r}
@@ -166,8 +327,7 @@ gc()
 ```
 
 
-
-```{r}
+```{r session_info}
 sessionInfo()
 ```
 

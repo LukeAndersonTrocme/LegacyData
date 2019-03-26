@@ -1,0 +1,209 @@
+---
+title: "HGP analysis: plot"
+author: 
+- name: Rick Farouni, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+
+# Preparations
+
+```{r setup}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
+options(scipen=999)
+```
+
+```{r}
+library(tidyverse)
+library(furrr)
+library(tictoc)
+options(future.globals.maxSize= 1000000000000)
+plan(multicore)
+```
+
+
+
+```{r}
+gc()
+```
+
+```{r}
+gcinfo(TRUE) 
+```
+
+```{r}
+bas_filepath <- "./data/metadata/average_quality_dt.txt"
+bas_dt <- read_tsv(bas_filepath)
+avg_qual_mean <- bas_dt$avg_qual_mean
+```
+```{r}
+head(avg_qual_mean)
+```
+
+
+
+
+```{r}
+S <-30
+subsets <- vector("list", length = S)
+for(i in 1:S){
+  subsets[[i]] <-readRDS(file.path("./data/preprocessed/subsets", 
+                                   paste0("fits_subset_",
+                                          i,
+                                          ".rds")))
+}
+subsets <- bind_rows(subsets)
+```
+
+```{r}
+subsets
+```
+
+
+```{r}
+gc()
+```
+
+
+
+
+
+```{r}
+
+get_plot <- function(data, data_stats) {
+  p <- ggplot(bind_cols(data,
+                        bas_dt %>%
+                          select(Population,
+                                 avg_qual_mean))) +
+    geom_point(aes(avg_qual_mean,
+                   snp),
+               size = 1.5,
+               alpha = 0.7) +
+    geom_point(aes(avg_qual_mean,
+              p0,
+              colour = "iaf"),
+                             size = .5,
+                alpha = 0.6) +
+    geom_point(aes(avg_qual_mean,
+                  p1,
+                  colour = "predicted"),
+                size = .7) + 
+    annotate(
+      "text",
+      x = 45,
+      y = .15,
+      label = sprintf("-10log(deviance) = %4f 
+                      number of NAs= %4d
+                      number of zeros= %4d
+                      Av. Quality beta_hat=%4f",
+                      data_stats$dev_logp,
+                      data_stats$num_nas,
+                      data_stats$num_zeros,
+                      data_stats$b),
+      size = 3
+    ) +
+    theme_bw()# +
+  # facet_wrap( ~ Population)
+  
+  return(p)
+}
+
+```
+```{r}
+ggplot(subsets) +
+    geom_point(aes(b,
+                   dev_logp),
+               size = .7,
+               alpha = 0.4
+) 
+```
+
+
+```{r}
+subsets_top <-  
+  subsets %>%
+  top_n(5,dev_logp) 
+subsets_top
+```
+
+
+```{r, fig.width=20}
+subsets_plots <-
+ subsets_top %>%
+  select(-data) %>%
+  nest(-locus, .key="data_stats") %>%
+    mutate(data=subsets_top$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r, fig.width=12}
+subsets_plots
+```
+
+```{r}
+subsets_top_b <-  
+  subsets %>%
+  top_n(5,b) 
+subsets_top_b
+```
+
+```{r, fig.width=20}
+subsets_plots_b <-
+ subsets_top_b %>%
+  select(-data) %>%
+  nest(-locus, .key="data_stats") %>%
+    mutate(data=subsets_top_b$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r, fig.width=12}
+subsets_plots_b
+```
+
+```{r}
+subsets_top_high_dev0 <-  
+  subsets %>%
+  arrange(dev0) %>%
+  slice(1:100000) %>%
+  top_n(5,dev_logp) 
+subsets_top_high_dev0
+```
+
+
+```{r, fig.width=20}
+subsets_plots_high_dev0 <-
+ subsets_top_high_dev0 %>%
+  select(-data) %>%
+  nest(-locus, .key="data_stats") %>%
+    mutate(data=subsets_top_high_dev0$data,
+           plotted= future_map2(data,
+                                data_stats,
+                               get_plot))  %>%
+  pull(plotted)
+```
+
+```{r, fig.width=16}
+subsets_plots_high_dev0
+```
+```{r}
+sessionInfo()
+```
+
+
+

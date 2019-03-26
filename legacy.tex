@@ -164,17 +164,20 @@ We therefore performed the same reverse GWAS approach in all populations indepen
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
 To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with population as a covariate to account for population structure.
-This method identifies a total of 11,416 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}): 
+
+This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
+
+
 
 \begin{table}[h]
 \centering
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 2,007 & 8,009 \\  
-{INDEL} & 330 & 1,070 \\ \hline
+{SNP}  & 5,186 & 17,124 \\  
+{INDEL} & 509 & 1,571 \\ \hline
 \end{tabular}
-\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. The total number of 11,416 are statistically significantly associated to $Q$.}
+\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. The total number of 24,390 are statistically significantly associated to $Q$.}
 \label{sigTable}
 \end{table}
 
@@ -218,12 +221,13 @@ In these plots we are comparing the deviance from the null model in 50,000 varia
 %Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
 %This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
 
+
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
 After restricting the analysis to individuals present in both datasets, we find 296 suspicious variants polymorphic in 1kGP. Of those, 9 are present in the resequenced data \ref{90HanSFS}.
 While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites, some variants associated to $Q$ may be present in the population but have biased genotypes.
 
 We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
-Of the 11,416 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
+Of the 24,390 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
 From this subset, only 613 of these variants are present in the resequenced data, the rest are missing entirely.
 Figure \ref{90HanSFS_full} shows a weak correlation to allele frequency for the variants present in the resequenced data.
 Whereas the vast majority of the SNPs are absent in resequenced data, a high proportion of INDELs are fixed in the resequenced data.
@@ -258,24 +262,41 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 \todo{UPDATE LOG ODDDS}
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
-  {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)} & \multicolumn{1}{p{1cm}}{\centering Odds \\ ratio}     \\ \hline
- 28654678	& PLoS One	& rs201130852	& 5.05	& 73.18 & 0.65\\
- 	& 		& rs201761909	& 5.70	& 72.90 & 0.63\\
- 	& 		& rs200655768	& 6.53	& 69.28 & 0.66\\
- 	& 		& rs201255786	& 5.70	& 61.20 & 0.65\\
- 	& 		& rs80274284	& 6.00	& 57.76 & 0.70\\		
- 	& 		& rs184202621	& 5.52	& 53.72 & 0.68\\
-	& 		& rs200699422	& 5.30	& 6.33 & 0.87\\	
-	&		&			&		&		&\\
-23527680 &	\multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics}	& rs6057648	& 5.40	& 14.17 & 0.82\\  
-21386085 &	\multicolumn{1}{p{3cm}}{\raggedright Diabetes\\} &	rs301 &*10.52	 & 9.21 & 0.90\\
-28928442	& \multicolumn{1}{p{3cm}}{\raggedright Nature Communications}	& rs201471471	& 6.52	& 2.5 & 0.67\\
+  {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)}      \\ \hline
+28654678 & PLoS One & rs201761909 & 5.7 & 78.11\\
+	& 	&  	rs201130852 & 5.05 & 72.28\\
+	& 	&  	rs201255786 & 5.7 & 68.97\\
+	& 	&  	rs200655768 & 6.52 & 66.67\\
+	& 	&  	rs184202621 & 5.52 & 60.45\\
+	& 	& 	rs80274284 & 6 & 56.15\\
+	& 	& 	rs200699422 & 5.3 & 7.43\\
+23527680 & \multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics} & rs6057648 & 5.4 & 20.5\\
+28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs201471471 & 6.52 & 7.87\\
+28270201 & \multicolumn{1}{p{3cm}}{\raggedright Genome Medicine} & rs453755 & 7.52 & 5.29\\
+23023329 & \multicolumn{1}{p{3cm}}{\raggedright Nature Genetics} & rs103294 & *15.3 & 4.32\\
+28334899 & \multicolumn{1}{p{3cm}}{\raggedright Human Molecular Genetics} & rs103294 & *29.3 & 4.32\\
+28240269 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs103294 & *72.7 & 4.32\\
+27863252 & \multicolumn{1}{p{3cm}}{\raggedright Cell\\} & rs3794738 & *13.15 & 3.73\\
+29534301 & \multicolumn{1}{p{3cm}}{\raggedright Hepatology\\} & rs9273062 & *9.7 & 3.36\\
+21386085 & \multicolumn{1}{p{3cm}}{\raggedright Diabetes\\}  & rs301 & *10.52 & 3.02\\
+26830138 & \multicolumn{1}{p{3cm}}{\raggedright Molecular Psychiatry} & rs77894924 & 6.7 & 2.77\\
+29617998 & \multicolumn{1}{p{3cm}}{\raggedright Human Molecular Genetics} & rs4963156 & *22.4 & 2.52\\
+28698626 & \multicolumn{1}{p{3cm}}{\raggedright Scientific Reports} & rs11015915 & 5.05 & 2.45\\
+26974007 & \multicolumn{1}{p{3cm}}{\raggedright Nature Genetics} & rs3124998 & *8.05 & 2.33\\
+26634245 & \multicolumn{1}{p{3cm}}{\raggedright BMC Genetics} & rs451000 & 6 & 2.28\\
+ 	& 	& 	rs443874 & 5.3 & 2.26\\
+	& 	&	rs400942 & 6 & 2.2\\
+26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & rs60136336 & 5.7 & 2.25\\
+
+25918132 & \multicolumn{1}{p{3cm}}{\raggedright Toxicological Sciences} & rs76780579 & 6 & 2.09\\
 
  \hline
 \end{tabular}
-\caption{A list of four recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
+\caption{A list of recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
 \label{gwasTable}
 \end{table}
+
+%& \multicolumn{1}{p{1cm}}{\centering Odds \\ ratio}
 
 %\begin{figure}
 %\includegraphics[width=15cm,keepaspectratio]{./Figures/PublishedSNPs.jpg}
@@ -382,7 +403,7 @@ To test the null hypothesis, we used the chi-square likelihood ratio test statis
 The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
 
 Given the large number of tests (of which there are $S$), the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
-By using a nominal Type-I error rate $\alpha = 0.01$, a total of 11,416 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
+By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
 
 \subsection{Mutation Spectrum}
 We calculated the mutation spectrum of triplets for the list of significant variants for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}
@@ -414,13 +435,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NORepeat_SNPs.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatSNPs.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/NORepeat_SNPs_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatSNPs.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -430,13 +451,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NORepeat_Indels.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatIndels.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/NORepeat_Indels_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatIndels.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -446,13 +467,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_Repeat_SNPs.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatSNPs.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/Repeat_SNPs_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatSNPs.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -462,13 +483,13 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
   
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_Repeat_Indels.jpg}
+        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatIndels.jpg}
         \label{fig:a}
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=90mm]{./Figures/Repeat_Indels_QQ.jpg}
+        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatIndels.jpg}
         \label{fig:b}    
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the -log10 p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach p values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -493,7 +514,7 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=10cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
+\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 296 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
 Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
 \label{90HanSFS}
@@ -501,8 +522,8 @@ Because the resequencing did not include all the individuals from the original 1
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/Han_1kGP_SFS.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  7,607 significant SNPs and INDELs identified in the reverse GWAS model including all populations. Only 613 of the variants are present in the high depth resequenced individuals.}  
+\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_FullModel.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  11,946 significant SNPs and INDELs identified in the reverse GWAS model including all populations. Only 1,586 of the variants are present in the high depth resequenced individuals.}  
 \label{90HanSFS_full}
 \end{figure}
 

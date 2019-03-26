@@ -1,0 +1,310 @@
+---
+title: "Process Regression Results"
+author: 
+- name: Luke Anderson-Trocmé, 
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+  
+##Load Libraries
+```{r}
+library(dplyr)
+library(magrittr)
+library(data.table)
+library(ggplot2)
+library(multtest)
+library(cowplot)
+library(reshape2)
+
+#Directories
+DataPath <- '~/Documents/QualityPaper/ProcessedData/'
+figurePath <- '~/Documents/QualityPaper/Figures/'
+```
+
+##Load Data
+```{r}
+##read Regression results
+Regression <- fread(paste0(DataPath,'GenomeWide_LFA.txt'),
+                    fill = TRUE,
+                    col.names = c('rsID','devdiff','dev_logp','b'),
+                    colClasses = c('character','numeric','numeric','numeric'))
+
+##read Repeats
+Repeats <- fread(paste0(DataPath,'Reg_strictMask_nestedRepeats.POS'),
+                 fill = TRUE,
+                 col.names = c('Chr','Pos'))
+Repeats$Repeat='yes'
+
+##read Indels
+Indels <- fread(paste0(DataPath,'Reg_indels.POS'),
+                header = TRUE)
+Indels$Indel = 'yes'
+
+#read in rsIDs (used for GWAS catalogue search)
+rsID<-fread(paste0(DataPath,'rsID.txt'),
+            col.names = c('Chr','Pos','rsID'))
+```
+
+
+```{r}
+##Combine the data
+Regression <- left_join(Regression, 
+                        rsID, 
+                        by = 'rsID')
+
+Regression <- left_join(Regression, 
+                        Repeats, 
+                        by = c('Chr','Pos'))
+
+Regression <- left_join(Regression, 
+                        Indels, 
+                        by = c('Chr','Pos'))
+#remove missing data
+Regression <- Regression[which(!is.na(Regression$devdiff)),]
+##save memory
+rm(rsID)
+rm(Repeats)
+rm(Indels)
+```
+
+```{r}
+Repeat_Indels <- unique(Regression[which(
+                        Regression$Indel=='yes' &
+								        Regression$Repeat=='yes'),])
+
+NORepeat_Indels <- unique(Regression[which(
+                        Regression$Indel=='yes' &
+								        is.na(Regression$Repeat)),])
+								
+Repeat_SNPs <- unique(Regression[which(
+                        is.na(Regression$Indel) &
+								        Regression$Repeat=='yes'),])
+								
+NORepeat_SNPs <- unique(Regression[which(
+                        is.na(Regression$Indel) &
+								        is.na(Regression$Repeat)),])
+
+```
+
+```{r}
+## two-stage Benjamini & Hochberg (2006) step-up FDR-controlling
+TSBH <-function(df){	
+procedures <- c( "TSBH") 
+
+df$p <- pchisq(df$devdiff,
+               1,
+               lower.tail = FALSE)
+
+adjusted <- mt.rawp2adjp(df$p, 
+                         procedures, 
+                         alpha = 0.01)
+
+adj <- as.data.frame(adjusted$adj[
+              order(adjusted$index),])
+
+df$Adjusted_Log10p <- -log10(adj$TSBH_0.01)
+df$Adjusted_p <- adj$TSBH_0.01
+
+return(df)
+}
+
+Repeat_Indels <-TSBH(Repeat_Indels)
+NORepeat_Indels <-TSBH(NORepeat_Indels)
+Repeat_SNPs <-TSBH(Repeat_SNPs)
+NORepeat_SNPs <-TSBH(NORepeat_SNPs)
+
+Regression <- do.call("rbind", 
+                      list(Repeat_Indels, 
+                           NORepeat_Indels, 
+                           Repeat_SNPs, 
+                           NORepeat_SNPs))
+```
+
+
+```{r}
+makePlot <- function(df,Name){
+sig.20<-df[which((df$Adjusted_Log10p >= 20)),]
+sig.20$Adjusted_Log10p=20
+sig.19<-df[which((df$Adjusted_Log10p < 20)),]
+nSig <- nrow(df[which(df$Adjusted_Log10p > -log10(0.01)),])
+             
+ggplot(sig.19, 
+       aes(x=Pos, 
+           y = Adjusted_Log10p, 
+           color=as.factor(Chr)))+
+  geom_point(alpha = 0.3, 
+             size = 1) +
+  geom_point(data = sig.20, 
+             aes(x = Pos, 
+                 y = Adjusted_Log10p),
+             shape = 1) +
+  facet_grid(~Chr, 
+             scales = 'free_x', 
+             space = 'free_x', 
+             switch = 'x') +
+  scale_color_manual(values = rep(
+                        c("grey", "black"), 
+                        22)) +
+  scale_y_continuous(expand = c(0,0)) +
+  expand_limits(y=c(0,21))  +
+  geom_hline(yintercept = -log10(0.01), 
+             color = 'blue') +
+  labs(y = '-log10(p)', 
+       x = 'Chromosome', 
+       title = Name, 
+       subtitle = paste('Number of loci tested =',
+                        nrow(df),
+                        '\n',
+                        'Number of significant loci =',
+                        nSig)) +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5), 
+        plot.subtitle = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.line.x = element_blank(), 
+        strip.background = element_blank(),
+        strip.text.x = element_text(size = 6)) +
+  guides(color = F)
+
+dir=paste0(figurePath,
+              'ManhattanPlot_')
+ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
+ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
+
+}
+
+makeQQ <- function(pvalues, name){
+set.seed(1234)
+pvalue <- runif(length(pvalues), min=0, max=1)
+inflation <- function(ps) {
+  chisq <- qchisq(1 - pvalue, 1)
+  lambda <- median(chisq) / qchisq(0.5, 1)
+  lambda
+}
+inflation(pvalue)
+
+gg_qqplot(pvalues, name) +
+  theme_bw(base_size = 24) +
+  annotate(
+    geom = "text",
+    x = -Inf,
+    y = Inf,
+    hjust = -0.15,
+    vjust = 1 + 0.15 * 3,
+    label = sprintf("λ = %.2f", inflation(ps)),
+    size = 8
+  ) +
+  theme(
+    axis.ticks = element_line(size = 0.5),
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5)
+  )
+
+dir=paste0(figurePath,
+              'QQPlot_')
+ggsave(paste(dir,name,'.jpg',sep=''), height=5, width=10)
+ggsave(paste(dir,name,'.tiff',sep=''), height=5, width=10)
+
+ }
+ ##modified from : https://slowkow.com/notes/ggplot2-qqplot/
+ gg_qqplot <- function(ps,name) {
+  n  <- length(ps)
+  df <- data.frame(
+    observed = -log10(sort(ps)),
+    expected = -log10(ppoints(n)))
+  log10Pe <- expression(paste("Expected -log"[10], plain(P)))
+  log10Po <- expression(paste("Observed -log"[10], plain(P)))
+  ggplot(df) +
+    geom_point(aes(expected, observed), shape = 1, size = 3) +
+    geom_abline(intercept = 0, slope = 1, alpha = 0.5) +
+    xlab(log10Pe) +
+    ylab(log10Po)
+}
+
+```
+##Make the Manhattan Plots
+```{r}
+makePlot(Repeat_Indels, 
+         'Repeat Indels')
+
+makePlot(NORepeat_Indels, 
+         'Non Repeat Indels')
+
+makePlot(Repeat_SNPs, 
+         'Repeat SNPs')
+
+makePlot(NORepeat_SNPs, 
+         'Non Repeat SNPs')
+```
+#Make the QQ Plots
+```{r}
+makeQQ(Repeat_Indels$p, 
+       'Repeat Indels')
+
+makeQQ(NORepeat_Indels$p, 
+       'Non Repeat Indels')
+
+makeQQ(Repeat_SNPs$p, 
+       'Repeat SNPs')
+
+makeQQ(NORepeat_SNPs $p, 
+       'Non Repeat SNPs')
+```
+
+## GWAS publications
+```{r}
+catalog <- fread(paste0(DataPath,
+                        'gwas_catalog_cut.txt'),
+                 fill = TRUE,
+                 sep = '\t')
+catalog$rsID <- catalog$SNPS
+
+catalog <- merge(catalog, Regression[,c('Chr','Pos', 'rsID','Adjusted_Log10p')], by='rsID')
+
+write.table(catalog[which(catalog$Adjusted_Log10p > -log10(0.01)),], 
+            file = paste0(DataPath,
+                          'SignificantPublications.txt'),
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = ',')
+
+table <- catalog[which(catalog$log10P_0.01 > -log10(0.01)),
+                 c('PUBMEDID','JOURNAL','SNPS',
+                   'PVALUE_MLOG','Adjusted_Log10p')]
+print(table[order(-Adjusted_Log10p),])
+```
+
+##OMNI CHIP
+```{r}
+omni <- fread(paste0(DataPath,
+                     'HumanOmni2-5-8-v1-2-A-b138-rsIDs.txt'),
+              header = T)
+omni <- merge(omni, 
+              Regression, 
+              by.x='RsID', 
+              by.y='rsID')
+omni <- omni[which(omni$RsID != '.'),]
+
+ggplot(omni[which(omni$log10P_0.01 > 2),], 
+       aes(x = ID, 
+           y = log10P_0.01)) +
+  geom_point(shape = 1) +
+  labs(x = 'Allele Frequency',
+       y = 'Adjusted -log10(p)') +
+  ggtitle('219 SNPs present in the Omni 2.5 Microarray')
+
+ggsave(paste0(figurePath,'Omni_AF.jpg'), 
+       height = 5, 
+       width = 10)
+
+```

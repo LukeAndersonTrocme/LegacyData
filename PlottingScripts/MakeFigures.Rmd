@@ -1,72 +1,102 @@
 ---
 title: "Legacy Data Confounds Modern Genomics Studies"
-output: html_notebook
+author: 
+- name: Luke Anderson-Trocmé, Rick Farouni
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
 ---
+  
+
 load libraries
-```{r}
+```{r, message = FALSE}
 library(ggplot2)
 library(RColorBrewer)
 library(plotly)
 library(colorspace)
 library(cowplot)
 library(data.table)
+library(tidyverse)
+library(purrr)
 
+#Directories
+DataPath <- '~/Documents/QualityPaper/ProcessedData/'
+figurePath <- '~/Documents/QualityPaper/Figures/'
+
+#Load the custom population colors
+#Hex colors taken from https://www.nature.com/articles/nature15393
+colors<-read.table(paste0(DataPath,
+                          'NamePopBigPop_color.html.txt'), 
+                   comment.char = '>',
+                   col.names = c('Population',
+                                 'hex',
+                                 'BigPop'))
+MyColour <- as.character(colors$hex)
+names(MyColour) <- colors$Population
+```
+
+# Figure 1
+## Reverse GWAS in JPT
+```{r}
+
+SigPos <- readRDS(paste0(DataPath,
+                   'SigPos.rds'))
+
+NotSig <- readRDS(paste0(DataPath,
+                   'NotSig.rds'))
+
+#make manhattan plot
+GWAS <- ggplot(NotSig, aes(x = Pos, 
+                           y = plog10, 
+                           color = as.factor(Chr))) +
+              geom_point(alpha = 0.3, 
+                         size = 1) +
+              geom_point(data = SigPos, 
+                         aes(x = Pos, 
+                             y = plog10,),
+                         color = 'black',
+                         shape = 3) +
+              facet_grid(~Chr, 
+                           scales = 'free_x', 
+                           space = 'free_x', 
+                           switch = 'x') +
+              scale_y_continuous(expand = c(0,0)) +
+              scale_fill_brewer(palette = 'Spectral') +
+              labs(y = '-log10(p)', x = 'Chromosome') +
+              guides(color = FALSE) + 
+              theme_classic() +
+              theme(plot.title = element_text(hjust = 0.5), 
+                    plot.subtitle = element_text(hjust = 0.5), 
+                    axis.text.x = element_blank(), 
+                    axis.ticks.x = element_blank(),
+                    axis.line.x = element_blank(), 
+                    strip.background = element_blank(),
+                    strip.text.x = element_text(size = 6))
+GWAS
 ```
 
 
-load data
+## Joint Frequency Spectrum
 ```{r}
-#Directories
-filterPath <- '/Users/luke/genomes/genomes/1kGP_4bedFiltered/'
-miscPath <- '~/Documents/QualityPaper/Misc/'
-  
-if(!file.exists(paste0(miscPath,'jointAF.txt'))){
-  #file names for Allele Frequency and HWE files
-
-  f1kGP <- paste0(filterPath,'1kGP_GenomeWide_JPT_1.frq')
-  fnag <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered.freq.frq')
-  hwe_1kGP <- paste0(filterPath,'1kGP_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  hwe_NAG <- paste0(filterPath,'NAG_GenomeWide.4bed_filtered_sig6.freq.hwe')
-  
-  #Load Allele Frequency files
-  JPT <- fread(f1kGP, fill=T, col.names=c('CHROM','POS','N_ALLELES','N_CHR','JPT_AF','JPT_MAF'))
-  NAG <- fread(fnag, fill=T,col.names=c('CHROM','POS','N_ALLELES','N_CHR','NAG_AF','NAG_MAF'))
-  
-  #merge them together to get joint frequency spectrum
-  join <- merge(JPT[which(JPT$JPT_AF <= 1),],
- 			          NAG[which(NAG$NAG_AF <= 1),], 
- 			          by = c('CHROM','POS'), all=T)
-  join[is.na(join)] <- 0 #missing positions are frequency of 0
-  rm(NAG) #free up memory
-  rm(JPT)
-  
-  #REMOVE  HWE SITES
-  NAG_hwe <- fread(hwe_NAG)
-  JPT_hwe <- fread(hwe_1kGP)
-  hwe <- merge(NAG_hwe[,c('V1','V2')], 
-              JPT_hwe[,c('V1','V2')], 
-              by = c('V1','V2'), all=T)
-  #remove sites from AF that don't meet HWE
-  join <- join[! paste(join$CHROM, join$POS) 
-               %in% c(paste(hwe$V1,hwe$V2)), ]
-  join <- join[,c('CHROM','POS','JPT_MAF','JPT_AF','NAG_MAF','NAG_AF')]
-  #make numeric
-  join <- sapply(join, as.numeric )
-  join <- join[complete.cases(join),]
-  #save to file
-  write.table(join, paste0(miscPath,'jointAF.txt'))
-}
-
-#to save time, load file if it already exists
-if(file.exists(paste0(miscPath,'jointAF.txt'))){
-join <- fread(paste0(miscPath,'jointAF.txt'))}
+#load file if it already exists
+#see MakeFiles.Rmd for info on jointAF.txt
+join <- readRDS(paste0(DataPath,
+               'jointAF.rds'))
 
 #load poisitons that reach -log10(p) > 6
-sig.6 <- fread(paste0(miscPath,'JPT_sig6.Pos'), col.names=c('CHROM','POS'))
+sig.6 <- SigPos[,c('Chr','Pos')]
 sig.6$sig <- 'Significant' #add dummy variable for joining
 join <- merge(join, 
               sig.6, 
-              by=c('CHROM', 'POS'), 
+              by=c('Chr', 'Pos'), 
               all.x=T)
 join <- join[which(join$JPT_MAF + join$NAG_MAF != 0),] #remove fixed
 jj <- join[complete.cases(join),]
@@ -76,7 +106,8 @@ SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAF)) +
           geom_point(data = jj, size = 0.8, alpha = 0.7, shape = 3) +
           scale_fill_distiller(palette = "Spectral",
                                trans = "log",
-                               breaks = c(1,10,100,1000,10000,100000,1000000), 
+                               breaks = c(1,10,100,1000,
+                                          10000,100000,1000000), 
                                labels = c('1','10', '100', '1,000', 
                                           '10,000', '100,000', '1,000,000')) +
           scale_x_continuous(expand = c(0.01,0.01)) +
@@ -89,84 +120,390 @@ SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAF)) +
                 axis.ticks.y = element_blank())
 
 HIST <- ggplot(jj, aes(x = JPT_MAF)) +
-            geom_histogram(binwidth=0.01, 
-                         fill='grey') +
+            geom_histogram(binwidth = 0.01, 
+                         fill = 'grey') +
             scale_x_continuous(limits = c(0,1),
-                             expand = c(0.01,0.01)) +
-            scale_y_reverse(expand = c(0.01,0.01), 
-                          breaks = c(10,50,100)) +
-            xlab(label = "1000 Genomes Project") +
-            coord_flip()+xlab('')+ylab('') +
+                             expand = c(0.01, 0.01)) +
+            scale_y_reverse(expand = c(0.01, 0.01), 
+                          breaks = c(10, 50, 100)) +
+            labs(x = "1000 Genomes Project",
+                 y = "") +
+            coord_flip() +
             theme_classic() +
             theme(axis.line = element_blank(),
-                  axis.text.x = element_text(angle=90))
+                  axis.text.x = element_text(angle = 90))
 
-B <- plot_grid(HIST, SFS,
-               nrow=1, rel_widths=c(1,5), 
-               align = 'h', labels=c('','B'))
+B <- plot_grid(HIST, 
+               SFS,
+               nrow = 1, 
+               rel_widths = c(1, 5), 
+               align = 'h', 
+               labels=c('','B'))
+
+rm(join)#save memory
+rm(SFS)
 B
 ```
-#Reverse GWAS in JPT
+
+
+## Mutation Spectrum enrichment
 ```{r}
-#Load single population regression results
-Reg <- fread(paste0(miscPath,'GenomeWide.Regression_JPT.csv'))
-#Clean up input data
-Reg <- Reg[which(Reg$Pos != 'Pos'),]
-Reg$Chr <- as.numeric(as.character(Reg$Chr))
-Reg$Pos <- as.numeric(as.character(Reg$Pos))
-Reg$dev <- as.numeric(as.character(Reg$dev))
-Reg$Pop <- NULL
+#load mutation spectrum for suspicious SNPs
+SNP <- readRDS(paste0(DataPath,
+                   'SNP_Context.rds'))
+#load mutation spectrum for control SNPs
+rSNP <- readRDS(paste0(DataPath,
+                   'rSNP_Context.rds'))
+#make color scale comparable between plots
+maxFreq <- max(SNP$Freq)
 
-#Compute P values from deviance from null model
-Reg$plog10 <- -pchisq(Reg$dev, 1, lower.tail=F, log.p=T)/log(10)
-Reg$p<- pchisq(Reg$dev, 1, lower.tail=F)
+plotContext <- function(data, name){
+  
+plt <- ggplot(data, 
+              aes(x = End, 
+                  y = Start, 
+                  fill = Freq)) +
+    geom_tile() +
+    facet_grid(Mut~., 
+               switch = "y") +
+    labs(subtitle = name) +
+    theme_classic() +
+    theme(axis.title = element_blank(),
+          axis.line = element_blank(),
+          legend.position = "bottom",
+          strip.placement = "outside",
+          strip.background = element_blank(),
+          panel.border = element_rect(colour = "black", 
+                                      fill = NA, 
+                                      size = 1)) +
+    scale_fill_gradient(limits = c(0, maxFreq),
+                        low = 'white', 
+                        high = 'blue',
+                        guide = guide_legend(title = 'Count',
+                                             title.position = "top"))
+return(plt)
+}
 
-#split data into sig / not sig for plotting
-sig.6<-Reg[which(Reg$plog10 > 6),]
-NotSig<-Reg[which(Reg$plog10 < 6),]
-rm(Reg) #save memory
+SNPplt <- plotContext(SNP,'Suspicious SNPs')
+rSNPplt <- plotContext(rSNP,'Control SNPs')
 
-#make manhattan plot
-GWAS <- ggplot(NotSig, aes(x = Pos, 
-                           y = plog10, 
-                           color = as.factor(Chr)))+
-              geom_point(alpha=0.3, 
-                         size=1)+
-              geom_point(data=sig.6, aes(x=Pos, 
-                             y = plog10,),
-                         color='black',
-                         shape=3)+
-              facet_grid(~Chr, 
-                           scales = 'free_x', 
-                           space = 'free_x', 
-                           switch = 'x')+
-              scale_y_continuous(expand = c(0,0))+
-              scale_fill_brewer(palette = 'Spectral')+
-              labs(y='-log10(p)', x='Chromosome')+
-              guides(color=F) + 
-              theme_classic()+
-              theme(plot.title = element_text(hjust = 0.5), 
-                    plot.subtitle = element_text(hjust = 0.5), 
-                    axis.text.x=element_blank(), 
-                    axis.ticks.x=element_blank(),
-                    axis.line.x=element_blank(), 
-                    strip.background = element_blank(),
-                    strip.text.x = element_text(size = 6))
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend <- function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, 
+                      function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
 
-GWAS
+mylegend <- g_legend(SNPplt)
+
+A <- plot_grid(plot_grid(
+              SNPplt + 
+                theme(legend.position = "none"),
+              rSNPplt + 
+                theme(legend.position = "none")),
+              mylegend,
+              nrow = 2,
+              rel_heights = c(1, 0.1),
+              labels = c('A'))
+
+A
+```
+## Put all plots together and save
+```{r}
+AB <- plot_grid(A, B,
+               rel_widths = c(1, 2.7))
+fig1 <- plot_grid(AB,
+               GWAS,
+               ncol = 1,
+               rel_heights = c(2, 1),
+               labels = c('','C'))
+
+#figure takes time to save so skip if already done
+if(!file.exists(paste0(figurePath,
+                       'Figure1.pdf'))){ 
+ggsave(paste0(figurePath,
+              'Figure1.jpg'),
+       fig1, 
+       height = 12,
+       width = 12)
+ggsave(paste0(figurePath,
+              'Figure1.pdf'),
+       fig1,
+       height = 12,
+       width = 12)
+}
+AB
+
+#save memory
+rm(GWAS)
+rm(fig1)
+rm(A)
+rm(B)
+rm(AB)
+
 ```
 
-#Mutation Spectrum enrichment
+#Figure 2
+This plot illustrates the quality of the date from the 1000 Genomes Project over time.
+Before we can plot this, we must download and parse the data.
+See ProcessPlotData.Rmd for info
+
+### Quality per population
 ```{r}
-#To get mutation context, use paste0(miscPath,'AncestralContext.py')
-#Then select positions reaching significance in JPT regression
-set.seed(123)
-sig.pos <- sig.6[,c('Chr','Pos')]
+metaData <- readRDS(paste0(DataPath,
+                           'metaData.rds'))
 
-random.pos <- rand
+a <- ggplot(metaData, 
+            aes(x = sample, 
+                y = avg_qual,
+                color = Population,
+                shape = as.factor(Phase))) +
+            geom_point() +
+            geom_hline(yintercept = 30, 
+                       linetype = 2, 
+                       color = 'grey') +
+            scale_colour_manual(values = MyColour, 
+                                breaks = unique(metaData$Population)) +
+            scale_x_discrete(expand = c(0.1,0)) +
+            scale_shape_manual(values = c(1,3)) +
+            guides(color = guide_legend(title = "Population",
+                                        shape = F,
+                                        ncol = 1,
+                                        override.aes = list(shape = 15,
+                                                            size = 3))) +
+            labs(title = "Data quality over time",
+                 x = "Populations ranked by sequencing date",
+                 y = "Average quality of mapped bases") +
+            theme(plot.title = element_text(hjust = 0.5), 
+                  axis.text.x = element_blank(), 
+                  axis.ticks.x = element_blank())
 
-SNP<-read.table(paste0(miscPath,'JPT_sig6.Context'), sep='\t', header=F,
-                col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
-rSNP<-read.table(paste0(miscPath,'1kGP_GenomeWide_JPT_INT_randomNOTsig6.Context.txt'), sep='\t', header=F, col.names=c('Chr','Pos','Ref','Alt','Flip','Context'))
+a
+```
+### Quality by sequencing center
+```{r}
+b <- ggplot(metaData, 
+            aes(x = SUBMISSION_DATE, 
+                y = avg_qual, 
+                color = CENTER_NAME, 
+                shape = as.factor(Phase))) +
+            geom_point() + 
+            geom_hline(yintercept = 30, 
+                       linetype = 2, 
+                       color = 'grey') +
+            scale_shape_manual(values = c(1,3),
+                               name = 'Phase') +
+            guides(color = guide_legend(title = "Sequencing\n    Center",
+                                        override.aes = list(shape = 15,
+                                                            size = 5))) +
+            labs(y = "Average quality of mapped bases") +
+            theme(axis.title.x = element_blank(),
+                  axis.text.x = element_blank(),
+                  axis.ticks.x = element_blank(), 
+                  axis.line.x = element_blank())
+b
+```
+
+### Sequencing technology use over time
+```{r}
+c <- ggplot(metaData, 
+            aes(x = SUBMISSION_DATE, 
+                y = INSTRUMENT_MODEL,
+                shape = INSTRUMENT_MODEL)) +
+            geom_point() +
+            labs(x = "Individuals ranked by sequencing date", 
+                 y = 'Sequencer') +
+            guides(shape = guide_legend(title = "",
+                                        label = FALSE,
+                                        override.aes = list(alpha = 0))) +
+            scale_x_date(date_labels = "%Y",
+                         date_breaks = "1 year") +
+            theme(axis.line.y = element_blank(),
+                  axis.text.y = element_text(size = 10,
+                                             hjust = 0))
+
+c
+```
+
+Put it all together and save it
+```{r}
+d <- plot_grid(a,b,c, 
+            nrow = 3, 
+            labels = c('A', 'B', ''),
+            rel_heights = c(4, 4, 1),
+            align = 'v')
+ggsave(paste0(figurePath,
+              "MapQualOverTime.jpg"),
+       d,
+       height = 14,
+       width = 9)
+ggsave(paste0(figurePath,
+              "MapQualOverTime.pdf"),
+       d,
+       height = 14,
+       width = 9)
+
+d
+```
+
+#Figure 3
+
+This figure shows the overlap of sites associated to qualiy independantly in each single population regression.
+See ProcessPlotData.Rmd for info on the overLap file
+
+### Overlap of significant SNPs
+```{r}
+overLap <- readRDS(paste0(DataPath,
+                           'overLap.rds'))
+
+p1 <- ggplot(overLap, 
+          aes(x = Pos,
+              y = reorder(title, -Freq), 
+              color = Population, 
+              size = Pcat)) +
+          geom_point(shape = 108) +
+          scale_size(breaks = c(2, 3, 4), 
+                     range = c(1, 3),
+                     labels = c('6-8', '8-10', '10+'), 
+                     guide = guide_legend(direction = "horizontal"),
+                                          name = '-log10(p)') +
+          scale_color_manual(breaks = overLap$Population,
+                             values = MyColour) +
+          guides(color = FALSE) +
+          ylab('Population') +
+          ggtitle('Overlap of Significant SNPs') +
+          theme_classic() +
+          theme(legend.position = c(0.85, 0.95),
+                legend.box.background = element_rect(colour = "black"), 
+                plot.title = element_text(hjust = 0.5), 
+                axis.title.x = element_blank(),
+                axis.text.x = element_blank(), 
+                axis.ticks.x = element_blank(), 
+                plot.margin = unit(c(1,1,0,1), "cm"))
+p1
 
 ```
+
+### Frequency of occurence
+```{r}
+p2 <- ggplot(overLap,
+             aes(x = Pos,
+                 y = SigHits, 
+                 group=1))+
+             geom_hline(yintercept = 1, 
+                        color = 'grey', 
+                        linetype = 2) +
+             geom_hline(yintercept = 5,
+                        color = 'grey',
+                        linetype = 2) +
+             geom_hline(yintercept = 10,
+                        color = 'grey',
+                        linetype = 2) +
+             geom_line() +
+             scale_y_continuous(limits = c(0,16),
+                                breaks = c(1,5,10,15)) +
+             scale_x_discrete(expand = c(0.01,0),
+                              breaks  = xaxis$Pos, 
+                              labels = xaxis$nrow) + 
+             theme_classic() +
+             theme(plot.title = element_text(hjust = 0.5),
+                   plot.margin = unit(c(0,1,1,1), "cm"),
+                   axis.text.x = element_text(angle = 60, 
+                                              hjust = 1)) +
+             labs(x = 'SNPs ranked by frequency of occurence and genomic position', 
+                  y = 'Frequency\nof occurence')
+p2
+```
+
+put it all together and save it
+```{r}
+p3 <- plot_grid(p1, p2, 
+                ncol = 1, 
+                align = "v", 
+                rel_heights = c(3, 1))
+
+ggsave(paste0(figurePath,
+              'SNPOverlap6.jpg'),
+              p3, 
+              height = 10, 
+              width = 10)
+
+ggsave(paste0(figurePath,
+              'SNPOverlap6.PDF'),
+              p3, 
+              height = 10, 
+              width = 10)
+
+p3
+```
+
+
+#Supplementary Figures
+
+## Comparing 1kGP to Resequenced Han
+###Single Population Test
+```{r}
+#using the sites associated to Quality in the single population test
+HanKgpAF <- readRDS(paste0(DataPath,
+                   'HanKgpAF.rds'))
+
+#Load joint frequency for SNPs
+combo <- readRDS(paste0(DataPath,
+                   'HanKgp_AF.rds'))
+
+ggplot(HanKgpAF, 
+       aes(x = hanAF/2, 
+           y = kgpAF/2))+
+  geom_bin2d(bins = 83)+
+  scale_fill_distiller(palette = "Spectral")+
+  labs(x = 'Resequenced Han', 
+       y = '1000 Genomes Project')+
+  ggtitle('Joint frequency plot of 296 suspicious SNPs\nfrom single population test')
+
+ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_singlePop.jpg',height=10, width=10)
+
+ggplot(combo, 
+        aes(x = han.AF/166, 
+            y = kgp.AF/166)) +
+     geom_bin2d(bins = 83) +
+     scale_fill_distiller(palette = "Spectral") +
+    labs(x = 'Resequenced Han', 
+         y = '1000 Genomes Project')+
+    ggtitle('Joint frequency plot of 11,946 suspicious SNPs\nfrom combined test')
+
+ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_FullModel.jpg',height=10, width=10)
+
+```
+
+
+```{r}
+readRDS(paste0(DataPath,
+                   'AF30.rds'))
+
+af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=200)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af1
+
+af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
+  geom_bin2d(bins=100)+
+  scale_fill_distiller(palette = "Spectral")+
+  geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+  geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+  labs(x='Samples with Q < 30',y='Samples with Q > 30')
+af2
+
+plot_grid(af1, af2,ncol=1)
+
+ggsave(paste0(figurePath,'OverUnder30.jpg'),height=11,width=8)
+ggsave(paste0(figurePath,'OverUnder30.pdf'),height=11,width=8)
+```
+```{r}
+sessionInfo()
+```
+

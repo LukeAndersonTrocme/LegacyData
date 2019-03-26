@@ -150,3 +150,21 @@ rick/data_list.temp
 *.RData
 
 *.pdf
+
+*.rds
+
+rick/final/.Rhistory
+
+PlottingScripts/.Rhistory
+
+PlottingScripts/.Rhistory
+
+*.bim
+
+*.ped
+
+*.fam
+
+*.nosex
+
+*.map
