@@ -29,7 +29,7 @@ setwd(path)
 plinkPath <- '/Users/luke/Documents/QualityPaper/ProcessedData' #'/Users/luke/genomes/genomes/hg19/plink/'
 
 #chr <- args[3]
-chr <- 'PublishedVariants'
+plinkName <- 'PublishedVariants'
 
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
 options(scipen=999)
@@ -48,7 +48,7 @@ plan(multicore)
 ```
 load plink format genotype data
 ```{r}
-data_genotype <- read.bed(paste0(plinkPath,'chr',chr))
+data_genotype <- read.bed(paste0(plinkPath,plinkName))
 
 message("plink data loaded")
 ```
