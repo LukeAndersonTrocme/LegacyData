@@ -388,6 +388,11 @@ p1
 
 ### Frequency of occurence
 ```{r}
+#this is for the labels of the xaxis
+xaxis <- overLap[!duplicated(overLap[,c('SigHits')]),]
+xaxis <- xaxis[which(xaxis$SigHits < 11),]
+xaxis <- rbind(xaxis,tail(overLap, 1))
+
 p2 <- ggplot(overLap,
              aes(x = Pos,
                  y = SigHits, 
@@ -442,6 +447,87 @@ p3
 
 #Supplementary Figures
 
+##Comparig models
+```{r}
+#load data
+LFA <- fread(paste0(DataPath,
+                    "fits_chrom_22_10000_LFA.txt"))
+  
+Pop <- fread(paste0(DataPath,
+                    "fits_chrom_22_10000_Pop.txt"))
+  
+PCA <- fread(paste0(DataPath,
+                    "fits_chrom_22_10000_PCA.txt"))
+
+plt <- merge(LFA, 
+             Pop, 
+             by=c('rsID'), 
+             suffixes = c('LFA','PCA'))
+plt <- merge(plt, 
+             PCA, 
+             by=c('rsID'))
+
+p1a<-ggplot(plt, aes(dev0, dev0PCA)) +
+  geom_abline(color='grey') +
+  geom_point(shape=1) +
+  labs(x='Pop', y='PCA') +
+  ggtitle('Null Model')
+
+p1b<-ggplot(plt, aes(dev0, dev0LFA)) +
+  geom_abline(color='grey') +
+  geom_point(shape=1) +
+  labs(x='Pop', y='LFA')
+
+p1c<-ggplot(plt, 
+            aes(dev0LFA, 
+                dev0PCA)) +
+    geom_abline(color='grey') +
+  geom_point(shape=1) +
+  labs(x='LFA', y='PCA')
+
+p2a<-ggplot(plt, 
+            aes(devdiff, 
+                devdiffPCA))+
+  geom_abline(color='grey')+
+  geom_point(shape=1)+
+  labs(x='Pop', y='PCA')+
+  ggtitle('Deviance')
+p2b<-ggplot(plt, 
+            aes(devdiff, 
+                devdiffLFA))+
+  geom_abline(color='grey')+
+  geom_point(shape=1)+
+  labs(x='Pop', y='LFA')
+p2c<-ggplot(plt, 
+            aes(devdiffLFA, 
+                devdiffPCA))+
+  geom_abline(color='grey')+
+  geom_point(shape=1)+
+  labs(x='LFA', y='PCA')
+
+p3a<-p2a +
+  xlim(c(0,50)) +
+  ylim(c(0,50)) +
+  ggtitle('Deviance\nZoom In')
+p3b<-p2b +
+  xlim(c(0,50)) +
+  ylim(c(0,50))
+p3c<-p2c +
+  xlim(c(0,50)) +
+  ylim(c(0,50))
+
+plot_grid(p1a,p2a,p3a,
+          p1b,p2b,p3b,
+          p1c,p2c,p3c,
+          nrow=3)
+
+ggsave(paste0(figurePath,
+              'CompareModels.jpg'),
+              height=10, 
+              width=10)
+```
+
+
 ## Comparing 1kGP to Resequenced Han
 ###Single Population Test
 ```{r}
@@ -479,10 +565,10 @@ ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_FullModel.jpg',height=10, 
 
 
 ```{r}
-readRDS(paste0(DataPath,
+AF30 <- readRDS(paste0(DataPath,
                    'AF30.rds'))
 
-af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
+af1 <- ggplot(AF30, aes(x=uAF, y=oAF))+
   geom_bin2d(bins=200)+
   scale_fill_distiller(palette = "Spectral")+
   geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
@@ -490,7 +576,7 @@ af1 = ggplot(AF30, aes(x=uAF, y=oAF))+
   labs(x='Samples with Q < 30',y='Samples with Q > 30')
 af1
 
-af2 = ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
+af2 <- ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
   geom_bin2d(bins=100)+
   scale_fill_distiller(palette = "Spectral")+
   geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+

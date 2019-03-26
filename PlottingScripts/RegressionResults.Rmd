@@ -92,7 +92,7 @@ Repeat_SNPs <- unique(Regression[which(
 NORepeat_SNPs <- unique(Regression[which(
                         is.na(Regression$Indel) &
 								        is.na(Regression$Repeat)),])
-
+NORepeat_SNPs <- NORepeat_SNPs[which(!is.na(NORepeat_SNPs$Chr)),]
 ```
 
 ```{r}
@@ -127,6 +127,26 @@ Regression <- do.call("rbind",
                            NORepeat_Indels, 
                            Repeat_SNPs, 
                            NORepeat_SNPs))
+
+
+write.table(Regression[which(
+            Regression$Adjusted_Log10p 
+            > -log10(0.01)),] $ rsID, 
+            file = paste0(DataPath, 
+                          'Significant_rsID.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE)
+
+write.table(Regression[which(
+            Regression$Adjusted_Log10p 
+            > -log10(0.01)),c('Chr','Pos')], 
+            file = paste0(DataPath, 
+                          'Significant_Positions.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE,
+            sep = '\t')
 ```
 
 
@@ -271,12 +291,18 @@ catalog$rsID <- catalog$SNPS
 
 catalog <- merge(catalog, Regression[,c('Chr','Pos', 'rsID','Adjusted_Log10p')], by='rsID')
 
-write.table(catalog[which(catalog$Adjusted_Log10p > -log10(0.01)),], 
+sigTable <- catalog[which(catalog$Adjusted_Log10p > -log10(0.01)),
+                    c('PUBMEDID','JOURNAL','rsID',
+                      'PVALUE_MLOG','Adjusted_Log10p')]
+sigTable <- sigTable[order(-sigTable$Adjusted_Log10p),]
+sigTable$PVALUE_MLOG <- round(sigTable$PVALUE_MLOG,2)
+sigTable$Adjusted_Log10p <- round(sigTable$Adjusted_Log10p,2)
+write.table(sigTable, 
             file = paste0(DataPath,
-                          'SignificantPublications.txt'),
+                          'SignificantPublications_table.txt'),
             row.names = FALSE, 
             quote = FALSE, 
-            sep = ',')
+            sep = ' & ')
 
 table <- catalog[which(catalog$log10P_0.01 > -log10(0.01)),
                  c('PUBMEDID','JOURNAL','SNPS',

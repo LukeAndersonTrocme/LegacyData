@@ -388,10 +388,7 @@ overLap$Pcat <- 4
 overLap[which(overLap$plog10 < 8),]$Pcat <- 2
 overLap[which((overLap$plog10 > 8) & 
               (overLap$plog10 < 10)),]$Pcat <- 3
-#this is for the labels of the xaxis
-xaxis <- overLap[!duplicated(overLap[,c('SigHits')]),]
-xaxis <- xaxis[which(xaxis$SigHits < 11),]
-xaxis <- rbind(xaxis,tail(overLap, 1))
+
 
 overLap
 
