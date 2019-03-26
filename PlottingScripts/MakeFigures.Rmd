@@ -449,23 +449,16 @@ p3
 
 ##Comparig models
 ```{r}
+fitsName = 'fits_PublishedVariants_'
 #load data
-LFA <- fread(paste0(DataPath,
-                    "fits_chrom_22_10000_LFA.txt"))
+LFA <- fread(paste0(DataPath,fitsName,"LFA.txt"))
   
-Pop <- fread(paste0(DataPath,
-                    "fits_chrom_22_10000_Pop.txt"))
+Pop <- fread(paste0(DataPath,fitsName,"Pop.txt"))
   
-PCA <- fread(paste0(DataPath,
-                    "fits_chrom_22_10000_PCA.txt"))
+PCA <- fread(paste0(DataPath,fitsName,"PCA.txt"))
 
-plt <- merge(LFA, 
-             Pop, 
-             by=c('rsID'), 
-             suffixes = c('LFA','PCA'))
-plt <- merge(plt, 
-             PCA, 
-             by=c('rsID'))
+plt <- merge(LFA,Pop,by=c('rsID'),suffixes = c('LFA','PCA'))
+plt <- merge(plt,PCA,by=c('rsID'))
 
 p1a<-ggplot(plt, aes(dev0, dev0PCA)) +
   geom_abline(color='grey') +
@@ -521,7 +514,7 @@ plot_grid(p1a,p2a,p3a,
           p1c,p2c,p3c,
           nrow=3)
 
-ggsave(paste0(figurePath,
+ggsave(paste0(figurePath,fitsName,
               'CompareModels.jpg'),
               height=10, 
               width=10)

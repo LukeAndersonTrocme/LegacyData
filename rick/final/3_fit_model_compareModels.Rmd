@@ -26,10 +26,10 @@ path <- '/Users/luke/Documents/QualityPaper/rick/final/'
 setwd(path)
 
 #plinkPath <- args[2] 
-plinkPath <- '/Users/luke/Documents/QualityPaper/ProcessedData' #'/Users/luke/genomes/genomes/hg19/plink/'
-
+plinkPath <- '/Users/luke/Documents/QualityPaper/ProcessedData/' #'/Users/luke/genomes/genomes/hg19/plink/'
+DataPath <- '~/Documents/QualityPaper/ProcessedData/'
 #chr <- args[3]
-plinkName <- 'PublishedVariants'
+plinkName <- 'Significant_Positions'
 
 knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file(), fig.width=16)
 options(scipen=999)
@@ -54,7 +54,7 @@ message("plink data loaded")
 ```
 get rsIDs and add them as rownames for genotype data
 ```{r}
-data_bim <- fread(paste0(plinkPath,'chr',chr,'.bim'), 
+data_bim <- fread(paste0(plinkPath,plinkName,'.bim'), 
                   col.names = c('Chr','rsID','X',
                                 'Pos','Ref','Alt'))
 
@@ -153,7 +153,7 @@ gc()
 ```
 
 ```{r}
-fam_file <-fread(paste0(plinkPath,'chr',chr,'.fam'), 
+fam_file <-fread(paste0(plinkPath,plinkName,'.fam'), 
                   col.names=c('sample','a','b','c','d','e'))
                  
 bas_filepath <- "./data/metadata/average_quality_dt.txt"
@@ -185,12 +185,12 @@ data_fit <-
 	unnest(stat)
  
 saveRDS(data_fit, 
-	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, "_LFA.rds")))
+	file.path(DataPath,
+	paste0("fits_",plinkName, "_LFA.rds")))
 
 write.table(data_fit[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("fits_chrom_", chr, "_LFA.txt")),
+              file.path(DataPath, 
+                        paste0("fits_",plinkName,"_LFA.txt")),
               quote = FALSE,
               row.names = FALSE)
 rm(data_fit)
@@ -219,12 +219,12 @@ data_fit_PCA <-
 	unnest(stat)
 
 saveRDS(data_fit_PCA, 
-	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, "_PCA.rds")))
+	file.path(DataPath,
+	paste0("fits_",plinkName, "_PCA.rds")))
 
 write.table(data_fit_PCA[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("fits_chrom_", chr, "_PCA.txt")),
+              file.path(DataPath, 
+                        paste0("fits_",plinkName, "_PCA.txt")),
               quote = FALSE,
               row.names = FALSE)
 rm(data_fit_PCA)
@@ -234,33 +234,48 @@ rm(data_fit_PCA)
 
 testModel <- model.matrix(data = bas_dt, object = ~Population)  
 
+#split data to run separately
+chunks <- split(as.data.frame(data_genotype), (as.numeric(1:nrow(data_genotype)) - 1) %/% 5000) 
+i<-1
+out = list()
+for(chunk in chunks){
+	print(i)
+
 tic("fitting model")
-labels <- rownames(data_genotype)
-data_fit_Pop <- 
-	data_genotype %>%
+labels <- rownames(chunk)
+out <- 
+	chunk %>%
 	as_tibble() %>%
 	transmute(
-	fit = future_pmap(., fit_glm,
-	LF= testModel, 
-	trait=avg_qual_mean),
-		rsID=labels)  %>%
-	unnest(fit) %>%
+	          fit = future_pmap(., fit_glm,
+	          LF = testModel, 
+	          trait = avg_qual_mean),
+		        rsID = labels)  %>%
+	unnest(fit)%>%
 	mutate(l= rep(c("data","stat"), n()/2))%>%
 	spread(l, fit)%>%
 	unnest(stat)
    toc()
-
-saveRDS(data_fit_Pop, 
-	file.path("./data/preprocessed/subsets",
-	paste0("fits_chrom_", chr, "_Pop.rds")))
-
-write.table(data_fit_Pop[-2], 
-              file.path("./data/preprocessed/subsets", 
-                        paste0("fits_chrom_", chr, "_Pop.txt")),
+   
+   if(i==1){
+   write.table(unlist(out), 
+              file.path(DataPath, 
+                        paste0("fits_",plinkName, "_Pop.txt")),
               quote = FALSE,
-              row.names = FALSE)
+              row.names = FALSE)}
+      if(i!=1){
+   write.table(unlist(out), 
+               append = TRUE,
+               file.path(DataPath, 
+                        paste0("fits_",plinkName, "_Pop.txt")),
+              quote = FALSE,
+              row.names = FALSE,
+              col.names = FALSE)}
+   
+i <- i+1
+}
 
-rm(data_fit_Pop)
+
 ```
 
 ```{r}
