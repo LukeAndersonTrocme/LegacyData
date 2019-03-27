@@ -45,7 +45,7 @@ names(MyColour) <- colors$Population
 
 # Figure 1
 ## Reverse GWAS in JPT
-```{r}
+```{r,fig.height=5,fig.width=8}
 
 SigPos <- readRDS(paste0(DataPath,
                    'SigPos.rds'))
@@ -85,7 +85,7 @@ GWAS
 
 
 ## Joint Frequency Spectrum
-```{r}
+```{r,fig.height=5,fig.width=5}
 #load file if it already exists
 #see MakeFiles.Rmd for info on jointAF.txt
 join <- readRDS(paste0(DataPath,
@@ -147,7 +147,7 @@ B
 
 
 ## Mutation Spectrum enrichment
-```{r}
+```{r,fig.height=5,fig.width=2}
 #load mutation spectrum for suspicious SNPs
 SNP <- readRDS(paste0(DataPath,
                    'SNP_Context.rds'))
@@ -211,7 +211,7 @@ A <- plot_grid(plot_grid(
 A
 ```
 ## Put all plots together and save
-```{r}
+```{r,fig.height=11,fig.width=8}
 AB <- plot_grid(A, B,
                rel_widths = c(1, 2.7))
 fig1 <- plot_grid(AB,
@@ -251,7 +251,7 @@ Before we can plot this, we must download and parse the data.
 See ProcessPlotData.Rmd for info
 
 ### Quality per population
-```{r}
+```{r,fig.height=5,fig.width=5}
 metaData <- readRDS(paste0(DataPath,
                            'metaData.rds'))
 
@@ -269,7 +269,7 @@ a <- ggplot(metaData,
             scale_x_discrete(expand = c(0.1,0)) +
             scale_shape_manual(values = c(1,3)) +
             guides(color = guide_legend(title = "Population",
-                                        shape = F,
+                                        shape = FALSE,
                                         ncol = 1,
                                         override.aes = list(shape = 15,
                                                             size = 3))) +
@@ -283,7 +283,7 @@ a <- ggplot(metaData,
 a
 ```
 ### Quality by sequencing center
-```{r}
+```{r,fig.height=5,fig.width=5}
 b <- ggplot(metaData, 
             aes(x = SUBMISSION_DATE, 
                 y = avg_qual, 
@@ -307,7 +307,7 @@ b
 ```
 
 ### Sequencing technology use over time
-```{r}
+```{r,fig.height=2,fig.width=6}
 c <- ggplot(metaData, 
             aes(x = SUBMISSION_DATE, 
                 y = INSTRUMENT_MODEL,
@@ -328,7 +328,7 @@ c
 ```
 
 Put it all together and save it
-```{r}
+```{r,fig.height=11,fig.width=8}
 d <- plot_grid(a,b,c, 
             nrow = 3, 
             labels = c('A', 'B', ''),
@@ -354,7 +354,7 @@ This figure shows the overlap of sites associated to qualiy independantly in eac
 See ProcessPlotData.Rmd for info on the overLap file
 
 ### Overlap of significant SNPs
-```{r}
+```{r,fig.height=5,fig.width=5}
 overLap <- readRDS(paste0(DataPath,
                            'overLap.rds'))
 
@@ -387,7 +387,7 @@ p1
 ```
 
 ### Frequency of occurence
-```{r}
+```{r,fig.height=2,fig.width=5}
 #this is for the labels of the xaxis
 xaxis <- overLap[!duplicated(overLap[,c('SigHits')]),]
 xaxis <- xaxis[which(xaxis$SigHits < 11),]
@@ -423,7 +423,7 @@ p2
 ```
 
 put it all together and save it
-```{r}
+```{r,fig.height=11,fig.width=8}
 p3 <- plot_grid(p1, p2, 
                 ncol = 1, 
                 align = "v", 
@@ -448,8 +448,8 @@ p3
 #Supplementary Figures
 
 ##Comparig models
-```{r}
-fitsName = 'fits_PublishedVariants_'
+```{r,fig.height=11,fig.width=8}
+fitsName = 'fits_Significant_Positions_'
 #load data
 LFA <- fread(paste0(DataPath,fitsName,"LFA.txt"))
   
@@ -460,20 +460,20 @@ PCA <- fread(paste0(DataPath,fitsName,"PCA.txt"))
 plt <- merge(LFA,Pop,by=c('rsID'),suffixes = c('LFA','PCA'))
 plt <- merge(plt,PCA,by=c('rsID'))
 
-p1a<-ggplot(plt, aes(dev0, dev0PCA)) +
+p1a<-ggplot(plt, aes(b, bPCA)) +
   geom_abline(color='grey') +
   geom_point(shape=1) +
-  labs(x='Pop', y='PCA') +
-  ggtitle('Null Model')
+  labs(x='Pop', y='PCA')
 
-p1b<-ggplot(plt, aes(dev0, dev0LFA)) +
+p1b<-ggplot(plt, aes(b, bLFA)) +
   geom_abline(color='grey') +
   geom_point(shape=1) +
-  labs(x='Pop', y='LFA')
+  labs(x='Pop', y='LFA') +
+  ggtitle('Beta')
 
 p1c<-ggplot(plt, 
-            aes(dev0LFA, 
-                dev0PCA)) +
+            aes(bLFA, 
+                bPCA)) +
     geom_abline(color='grey') +
   geom_point(shape=1) +
   labs(x='LFA', y='PCA')
@@ -483,14 +483,14 @@ p2a<-ggplot(plt,
                 devdiffPCA))+
   geom_abline(color='grey')+
   geom_point(shape=1)+
-  labs(x='Pop', y='PCA')+
-  ggtitle('Deviance')
+  labs(x='Pop', y='PCA')
 p2b<-ggplot(plt, 
             aes(devdiff, 
                 devdiffLFA))+
   geom_abline(color='grey')+
   geom_point(shape=1)+
-  labs(x='Pop', y='LFA')
+  labs(x='Pop', y='LFA')+
+  ggtitle('Deviance')
 p2c<-ggplot(plt, 
             aes(devdiffLFA, 
                 devdiffPCA))+
@@ -498,39 +498,24 @@ p2c<-ggplot(plt,
   geom_point(shape=1)+
   labs(x='LFA', y='PCA')
 
-p3a<-p2a +
-  xlim(c(0,50)) +
-  ylim(c(0,50)) +
-  ggtitle('Deviance\nZoom In')
-p3b<-p2b +
-  xlim(c(0,50)) +
-  ylim(c(0,50))
-p3c<-p2c +
-  xlim(c(0,50)) +
-  ylim(c(0,50))
-
-plot_grid(p1a,p2a,p3a,
-          p1b,p2b,p3b,
-          p1c,p2c,p3c,
+plot_grid(p1b,p2b,
+          p1a,p2a,
+          p1c,p2c,
           nrow=3)
 
 ggsave(paste0(figurePath,fitsName,
               'CompareModels.jpg'),
               height=10, 
-              width=10)
+              width=8)
 ```
 
 
 ## Comparing 1kGP to Resequenced Han
 ###Single Population Test
-```{r}
+```{r,fig.height=5,fig.width=5}
 #using the sites associated to Quality in the single population test
 HanKgpAF <- readRDS(paste0(DataPath,
                    'HanKgpAF.rds'))
-
-#Load joint frequency for SNPs
-combo <- readRDS(paste0(DataPath,
-                   'HanKgp_AF.rds'))
 
 ggplot(HanKgpAF, 
        aes(x = hanAF/2, 
@@ -541,23 +526,40 @@ ggplot(HanKgpAF,
        y = '1000 Genomes Project')+
   ggtitle('Joint frequency plot of 296 suspicious SNPs\nfrom single population test')
 
-ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_singlePop.jpg',height=10, width=10)
+ggsave(paste0(figurePath,'Han_1kGP_SFS_singlePop.jpg'),height=10, width=10)
+
+```
+##Full Model
+```{r,fig.height=5,fig.width=5}
+#Load joint frequency for SNPs
+##from plink --freq
+kgpAF <- fread(paste0(DataPath,'Significant_Positions.frq'))
+hanAF <- fread(paste0(DataPath,'Significant_Positions_Han.frq'))
+combo <- merge(hanAF, kgpAF, 
+               by=c('CHR','SNP'), 
+               suffixes = c('.HAN','.KGP'), 
+               all = T)
+combo[is.na(combo)] <- 0
+#keep only sites present in 83 KGP samples
+combo <- combo[which(combo$MAF.KGP > 0),]
+nHan <- nrow(combo[which(combo$MAF.HAN > 0),])
 
 ggplot(combo, 
-        aes(x = han.AF/166, 
-            y = kgp.AF/166)) +
-     geom_bin2d(bins = 83) +
-     scale_fill_distiller(palette = "Spectral") +
+        aes(x = MAF.HAN, 
+            y = MAF.KGP)) +
+     geom_bin2d(bins = 100) +
+     scale_fill_distiller(palette = "Spectral")+
     labs(x = 'Resequenced Han', 
          y = '1000 Genomes Project')+
-    ggtitle('Joint frequency plot of 11,946 suspicious SNPs\nfrom combined test')
+    ggtitle(paste0('Joint frequency spectrum of \n',nrow(combo),' suspicious variants from combined test\n(',nHan, ' variants present in Han)'))
 
-ggsave('~/Documents/QualityPaper/Figures/Han_1kGP_SFS_FullModel.jpg',height=10, width=10)
+ggsave(paste0(figurePath,'Han_1kGP_SFS_FullModel.jpg'),height=10, width=10)
+
 
 ```
 
 
-```{r}
+```{r,fig.height=11,fig.width=8}
 AF30 <- readRDS(paste0(DataPath,
                    'AF30.rds'))
 

@@ -152,8 +152,6 @@ For population genetic analyses sensitive to the accumulation of rare variants, 
 For other analyses where quality of imputation matters, identifying suspicious variants may be preferable. 
 
 
-Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \luke{link to file here} \sgcomment{Add this after all variants identified.}.
-
 \subsection{Identifying suspicious variants in the 1kGP}
 The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
 This variability could result from evolving sequence platform and protocols or variation between sequencing centres. 
@@ -167,7 +165,7 @@ To build a test statistic to represent the association across all populations si
 
 This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-
+Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \luke{link to file here}.
 
 
 \begin{table}[h]
@@ -202,15 +200,6 @@ To ensure that population structure was properly taken into account, we consider
 %We found that these three models to be consistent except a small number of variants with higher associations with the PC model.
 %We chose the more conservative approach using Population membership as the sole covariate (See Figure \ref{CompareModel}).
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/dev_Pop_PC_PopPC.jpg}
-\caption{Comparison of three logistic regression models for testing association to $Q$.
-These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or both (PopPC) as a covariate.
-In these plots we are comparing the deviance from the null model in 50,000 variants from chromosome 22.}  
-\label{CompareModel}
-\end{figure}
-
 \subsection{Cell line or technical artifact}
 %
 %To determine whether this signal is the result of a cell line or technical artifact, we investigated other sequencing projects that used the same cell lines.
@@ -227,10 +216,9 @@ After restricting the analysis to individuals present in both datasets, we find 
 While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites, some variants associated to $Q$ may be present in the population but have biased genotypes.
 
 We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
-Of the 24,390 suspicious variants identified globally, only 7,607 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
-From this subset, only 613 of these variants are present in the resequenced data, the rest are missing entirely.
-Figure \ref{90HanSFS_full} shows a weak correlation to allele frequency for the variants present in the resequenced data.
-Whereas the vast majority of the SNPs are absent in resequenced data, a high proportion of INDELs are fixed in the resequenced data.
+Of the 24,390 suspicious variants identified globally, only 12,086 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
+From this subset, only 1,637 of these variants are present in the resequenced data, the rest are missing entirely.
+Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in the resequenced data.
 A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are real but genotyped incorrectly.
 
 \subsection{Suspicious variants impact modern genomics analyses}
@@ -246,7 +234,7 @@ This suggests that the imputation reference panel still includes individuals wit
 
 \subsubsection{Microarrays}
 
-We found that 219 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
+We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
 
 \subsubsection{GWAS}
 
@@ -377,8 +365,8 @@ For the reverse GWAS, the only filtration used was the application of an allele 
 \begin{table}[h]
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 8,393,467 & 26,241,186   \\  
-{INDEL} &  756,889  & 2,309,280 \\ \hline
+{SNP}  & 6,312,620 & 19,846,786   \\  
+{INDEL} &  586,342  & 1,770,315 \\ \hline
 \end{tabular}
 \caption{Number of variants included in the analysis by category}
 \label{totTable}
@@ -429,6 +417,15 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
 \clearpage
 \section{Supplementary Figures}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/fits_Significant_Positions_CompareModels.jpg}
+\caption{Comparison of three logistic regression models for testing association to $Q$.
+These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
+In these plots we are comparing the deviance from the null model in the 24,390 variants identified using the LFA model.}  
+\label{CompareModel}
+\end{figure}
 
 \renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0}   	
@@ -497,6 +494,39 @@ We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
   \label{RI_Manhattan}
   \end{figure}
 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 296 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
+Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
+\label{90HanSFS}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_FullModel.jpg}
+\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequenced data. 
+This plot shows  12,086 significant variants identified in the reverse GWAS model including all populations.
+ Only 1,637 of the variants are present in the high depth resequenced individuals.}  
+\label{90HanSFS_full}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/OverUnder30.jpg}
+\caption{Site frequency spectrum plot comparing the frequency of suspicious variants for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30.}  
+\label{90HanSFS_full}
+\end{figure}
+
+\begin{figure}[h]
+\includegraphics[width=\hsize,keepaspectratio]{./Figures/Omni_AF.jpg}
+\caption{We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. 
+This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. 
+Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.}
+\label{HapMap_GnomAD}
+\end{figure}
+
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/PC1_Correlation.jpg}
 \caption{Plots of data metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
@@ -512,34 +542,6 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 \label{MutSpect}
 \end{figure}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot only shows significant SNPs identified in the single population tests of CHS and CHB populations. Only 9 of the 296 significant SNPs identified in the resequenced Han samples \citep{Lan2017}.
-Because the resequencing did not include all the individuals from the original 1kGP dataset, we downsampled the data to match the resequenced individuals.}  
-\label{90HanSFS}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_FullModel.jpg}
-\caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data. This plot shows  11,946 significant SNPs and INDELs identified in the reverse GWAS model including all populations. Only 1,586 of the variants are present in the high depth resequenced individuals.}  
-\label{90HanSFS_full}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/OverUnder30.jpg}
-\caption{Site frequency spectrum plot comparing the frequency of suspicious variants for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30.}  
-\label{90HanSFS_full}
-\end{figure}
-
-
-\begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/Hap.jpg}
-\caption{Frequencies of $Q$-associated variants polymorphic in both 1000G and either HapMap or GnomAD. \sgcomment{Change title, check targeted  sequencing region. Specify proportion of SNPs not included} The blue and green dots in the HapMap plot are the variants reported in \citep{Mandage2017} and \citep{Kraja2011} respectively. There are 17 such variants in HapMap and 186 in the GnomAD.}
-\label{HapMap_GnomAD}
-\end{figure}
 
 \end{document}
 

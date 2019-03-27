@@ -167,6 +167,57 @@ avg_qual_mean <- bas_dt$avg_qual_mean
 ```{r}
 head(avg_qual_mean)
 ```
+#Population
+```{r, warning=FALSE}
+
+testModel <- model.matrix(data = bas_dt, object = ~Population)  
+
+#split data to run separately
+chunks <- split(as.data.frame(data_genotype), (as.numeric(1:nrow(data_genotype)) - 1) %/% 1000) 
+i<-1
+out = list()
+for(chunk in chunks){
+	print(i)
+options(future.globals.maxSize= 25000000000)
+plan(multicore)
+
+tic("fitting model")
+labels <- rownames(chunk)
+data_fit_Pop <- 
+	chunk %>%
+	as_tibble() %>%
+	transmute(
+	          fit = future_pmap(., fit_glm,
+	          LF = testModel, 
+	          trait = avg_qual_mean),
+		        rsID = labels)  %>%
+	unnest(fit)%>%
+	mutate(l= rep(c("data","stat"), n()/2))%>%
+	spread(l, fit)%>%
+	unnest(stat)
+   toc()
+   
+   if(i==1){
+   write.table(data_fit_Pop[-2], 
+              file.path(DataPath, 
+                        paste0("fits_",plinkName, "_Pop.txt")),
+              quote = FALSE,
+              row.names = FALSE)}
+      if(i!=1){
+   write.table(data_fit_Pop[-2], 
+               append = TRUE,
+               file.path(DataPath, 
+                        paste0("fits_",plinkName, "_Pop.txt")),
+              quote = FALSE,
+              row.names = FALSE,
+              col.names = FALSE)}
+   
+i <- i+1
+}
+
+
+```
+
 #LFA
 ```{r, warning=FALSE}
 tic("fitting model")
@@ -229,54 +280,7 @@ write.table(data_fit_PCA[-2],
               row.names = FALSE)
 rm(data_fit_PCA)
 ```
-#Population
-```{r, warning=FALSE}
 
-testModel <- model.matrix(data = bas_dt, object = ~Population)  
-
-#split data to run separately
-chunks <- split(as.data.frame(data_genotype), (as.numeric(1:nrow(data_genotype)) - 1) %/% 5000) 
-i<-1
-out = list()
-for(chunk in chunks){
-	print(i)
-
-tic("fitting model")
-labels <- rownames(chunk)
-out <- 
-	chunk %>%
-	as_tibble() %>%
-	transmute(
-	          fit = future_pmap(., fit_glm,
-	          LF = testModel, 
-	          trait = avg_qual_mean),
-		        rsID = labels)  %>%
-	unnest(fit)%>%
-	mutate(l= rep(c("data","stat"), n()/2))%>%
-	spread(l, fit)%>%
-	unnest(stat)
-   toc()
-   
-   if(i==1){
-   write.table(unlist(out), 
-              file.path(DataPath, 
-                        paste0("fits_",plinkName, "_Pop.txt")),
-              quote = FALSE,
-              row.names = FALSE)}
-      if(i!=1){
-   write.table(unlist(out), 
-               append = TRUE,
-               file.path(DataPath, 
-                        paste0("fits_",plinkName, "_Pop.txt")),
-              quote = FALSE,
-              row.names = FALSE,
-              col.names = FALSE)}
-   
-i <- i+1
-}
-
-
-```
 
 ```{r}
 gc()
