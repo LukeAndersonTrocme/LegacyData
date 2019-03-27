@@ -247,7 +247,7 @@ Two studies genotyped individuals and imputed the data using the HapMap II as a 
 All four papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for some biological traits.
-\todo{UPDATE LOG ODDDS}
+
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
   {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)}      \\ \hline
@@ -284,13 +284,6 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 \label{gwasTable}
 \end{table}
 
-%& \multicolumn{1}{p{1cm}}{\centering Odds \\ ratio}
-
-%\begin{figure}
-%\includegraphics[width=15cm,keepaspectratio]{./Figures/PublishedSNPs.jpg}
-%\caption{For each of the suspicious variants identified in the GWAS catalogue a plot of the average quality of mapped bases $Q$ compared to the predicted value from logistic regression. The strong correlation of $Q$ and the predicted value indicates that $Q$ is strongly associated to genotype for these variants. A negative correlation indicates that individuals with low $Q$ have higher likelihood of having a variant, whereas a positive correlation indicates that these individuals have a lower likelihood of having a variant at this position.}  
-%\label{PubSig}
-%\end{figure}
 \section{Discussion}
 
 \subsection{Technical Artifact}
@@ -360,7 +353,7 @@ The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/201305
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 we're considered.
 In total, 57,838,849 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
 
-For the reverse GWAS, the only filtration used was the application of an allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) as well as a strict removal of sites with any missing data resulting in a total of 37,700,882 variants ($S$) included in the test (see Table \ref{totTable}). We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
+For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons)  resulting in a total of 28,516,063 variants ($S$) included in the test (see Table \ref{totTable}). We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
 
 \begin{table}[h]
 \begin{tabular}{l  r r}
