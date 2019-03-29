@@ -161,14 +161,14 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
-To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with population as a covariate to account for population structure.
+To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure \citep{song2015testing}.
 
 This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
 Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \luke{link to file here}.
 
 
-\begin{table}[h]
+\begin{table}
 \centering
 \begin{tabular}{l  r r}
                       & {Repeat}  & {Non-Repeat}       \\ \hline
@@ -280,7 +280,7 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 
  \hline
 \end{tabular}
-\caption{A list of recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of -$\log_{10} p > 2$ are deemed significant. }
+\caption{A list of recent publications that reported suspicious variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). Note : with a FDR ($\alpha = 0.01$) p-value adjustment, values of $ p > -\log_{10}(\alpha)$ are deemed statistically significant. }
 \label{gwasTable}
 \end{table}
 
