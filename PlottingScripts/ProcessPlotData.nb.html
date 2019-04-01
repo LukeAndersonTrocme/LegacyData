@@ -340,7 +340,7 @@ div.tocify {
 <h1 class="title toc-ignore">Legacy Data Confounds Modern Genomics Studies</h1>
 <h4 class="author"><em>Luke Anderson-Trocmé, Rick Farouni</em></h4>
 <address class="author_afil">
-Department of Human Genetics, McGill University, Montreal, Canada<br><h4 class="date"><em>2019-March-27</em></h4>
+Department of Human Genetics, McGill University, Montreal, Canada<br><h4 class="date"><em>2019-April-01</em></h4>
 
 </div>
 
@@ -1077,7 +1077,7 @@ saveRDS(AF30,
 <h2>OMNI CHIP</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub21uaSA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsXG4gICAgICAgICAgICAgICAgICAgICAnSHVtYW5PbW5pMi01LTgtdjEtMi1BLWIxMzgtcnNJRHMudHh0JyksXG4gICAgICAgICAgICAgIGhlYWRlciA9IFQpXG5vbW5pIDwtIG1lcmdlKG9tbmksIFxuICAgICAgICAgICAgICBwbHQsIFxuICAgICAgICAgICAgICBieS54PSdSc0lEJywgXG4gICAgICAgICAgICAgIGJ5Lnk9J3JzSUQnKVxub21uaSA8LSBvbW5pW3doaWNoKG9tbmkkUnNJRCAhPSAnLicpLF1cblxuI3NhdmUgdG8gZmlsZVxuc2F2ZVJEUyhvbW5pLFxuICAgICAgICAgICAgcGFzdGUwKERhdGFQYXRoLFxuICAgICAgICAgICAgICAgICAgICdvbW5pLnJkcycpKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub21uaSA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsXG4gICAgICAgICAgICAgICAgICAgICAnSHVtYW5PbW5pMi01LTgtdjEtMi1BLWIxMzgtcnNJRHMudHh0JyksXG4gICAgICAgICAgICAgIGhlYWRlciA9IFQpXG5vbW5pIDwtIG1lcmdlKG9tbmksIFxuICAgICAgICAgICAgICBwbHQsIFxuICAgICAgICAgICAgICBieS54PSdSc0lEJywgXG4gICAgICAgICAgICAgIGJ5Lnk9J3JzSUQnKVxub21uaSA8LSBvbW5pW3doaWNoKG9tbmkkUnNJRCAhPSAnLicpLF1cbiNzYXZlIHRvIGZpbGVcbnNhdmVSRFMob21uaSxcbiAgICAgICAgICAgIHBhc3RlMChEYXRhUGF0aCxcbiAgICAgICAgICAgICAgICAgICAnb21uaS5yZHMnKSlcbmBgYCJ9 -->
 <pre class="r"><code>omni &lt;- fread(paste0(DataPath,
                      'HumanOmni2-5-8-v1-2-A-b138-rsIDs.txt'),
               header = T)
@@ -1086,7 +1086,6 @@ omni &lt;- merge(omni,
               by.x='RsID', 
               by.y='rsID')
 omni &lt;- omni[which(omni$RsID != '.'),]
-
 #save to file
 saveRDS(omni,
             paste0(DataPath,

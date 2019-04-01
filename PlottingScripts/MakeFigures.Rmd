@@ -462,12 +462,12 @@ plt <- merge(plt,PCA,by=c('rsID'))
 
 p1a<-ggplot(plt, aes(b, bPCA)) +
   geom_abline(color='grey') +
-  geom_point(shape=1) +
+  geom_point(shape=1, alpha=0.2) +
   labs(x='Pop', y='PCA')
 
 p1b<-ggplot(plt, aes(b, bLFA)) +
   geom_abline(color='grey') +
-  geom_point(shape=1) +
+  geom_point(shape=1, alpha=0.2) +
   labs(x='Pop', y='LFA') +
   ggtitle('Beta')
 
@@ -475,27 +475,27 @@ p1c<-ggplot(plt,
             aes(bLFA, 
                 bPCA)) +
     geom_abline(color='grey') +
-  geom_point(shape=1) +
+  geom_point(shape=1, alpha=0.2) +
   labs(x='LFA', y='PCA')
 
 p2a<-ggplot(plt, 
             aes(devdiff, 
                 devdiffPCA))+
   geom_abline(color='grey')+
-  geom_point(shape=1)+
+  geom_point(shape=1, alpha=0.2)+
   labs(x='Pop', y='PCA')
 p2b<-ggplot(plt, 
             aes(devdiff, 
                 devdiffLFA))+
   geom_abline(color='grey')+
-  geom_point(shape=1)+
+  geom_point(shape=1, alpha=0.2)+
   labs(x='Pop', y='LFA')+
   ggtitle('Deviance')
 p2c<-ggplot(plt, 
             aes(devdiffLFA, 
                 devdiffPCA))+
   geom_abline(color='grey')+
-  geom_point(shape=1)+
+  geom_point(shape=1, alpha=0.2)+
   labs(x='LFA', y='PCA')
 
 plot_grid(p1b,p2b,
@@ -542,6 +542,7 @@ combo <- merge(hanAF, kgpAF,
 combo[is.na(combo)] <- 0
 #keep only sites present in 83 KGP samples
 combo <- combo[which(combo$MAF.KGP > 0),]
+combo$diff <- abs(combo$MAF.KGP - combo$MAF.HAN)
 nHan <- nrow(combo[which(combo$MAF.HAN > 0),])
 
 ggplot(combo, 
@@ -584,6 +585,45 @@ plot_grid(af1, af2,ncol=1)
 ggsave(paste0(figurePath,'OverUnder30.jpg'),height=11,width=8)
 ggsave(paste0(figurePath,'OverUnder30.pdf'),height=11,width=8)
 ```
+##Over Under 30 for published variants
+```{r}
+pub<-fread(paste0(DataPath, 'fits_PublishedVariants_LFA.txt'))
+pub <- merge(pub, AF30, by='rsID')
+pub$text <- paste(pub$rsID, '\n -log10P : ',round(pub$dev_logp, 2))
+library(ggrepel)
+ggplot(pub, aes(x=uAF, y=oAF, label=text))+
+     geom_point()+
+     geom_text_repel(size=3)+
+     geom_abline(intercept=0, slope = 2279/225, linetype=2, color='black')+
+     geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
+     labs(x='Samples with Q < 30',y='Samples with Q > 30')+
+     ggtitle('Published Variants')
+ggsave(paste0(figurePath,'Published_OverUnder30.jpg'),height=7,width=8)
+pub$ratio <- pub$oAF/pub$uAF
+pub$limit <- pub$ratio > 2279/450
+write.table(pub,paste0(figurePath,'Published_OverUnder30.txt'),)
+
+```
+
+```{r,fig.height=5,fig.width=10}
+#load file
+omni <- readRDS(paste0(DataPath,'omni.rds'))
+
+ggplot(omni, 
+       aes(x = (2504 - num_zeros)/2504, 
+           y = dev_logpLFA)) +
+  geom_point(shape = 1) +
+  labs(x = 'Global Allele Frequency',
+       y = '-log10(p)') +
+  ggtitle(paste0(nrow(omni),' SNPs present in the Omni 2.5 Microarray'))
+
+ggsave(paste0(figurePath,'Omni_AF.jpg'), 
+       height = 5, 
+       width = 10)
+
+```
+
+
 ```{r}
 sessionInfo()
 ```

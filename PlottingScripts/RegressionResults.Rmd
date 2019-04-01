@@ -310,27 +310,3 @@ table <- catalog[which(catalog$log10P_0.01 > -log10(0.01)),
 print(table[order(-Adjusted_Log10p),])
 ```
 
-##OMNI CHIP
-```{r}
-omni <- fread(paste0(DataPath,
-                     'HumanOmni2-5-8-v1-2-A-b138-rsIDs.txt'),
-              header = T)
-omni <- merge(omni, 
-              Regression, 
-              by.x='RsID', 
-              by.y='rsID')
-omni <- omni[which(omni$RsID != '.'),]
-
-ggplot(omni[which(omni$log10P_0.01 > 2),], 
-       aes(x = ID, 
-           y = log10P_0.01)) +
-  geom_point(shape = 1) +
-  labs(x = 'Allele Frequency',
-       y = 'Adjusted -log10(p)') +
-  ggtitle('219 SNPs present in the Omni 2.5 Microarray')
-
-ggsave(paste0(figurePath,'Omni_AF.jpg'), 
-       height = 5, 
-       width = 10)
-
-```

@@ -65,8 +65,6 @@ The second phase of the 1kGP implemented multiple technological and analytical i
 
 
 Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions.
-%Even though such batch effects clearly have the potential to confound analyses, the unrestricted availability of the 1kGP 
-%data lead to ubiquitous use making batch effects particularly insidious.   
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
 Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
 
@@ -76,9 +74,6 @@ Different mutagenic processes may preferentially affect different DNA motifs.
 Certain mutagens in tobacco smoke, for example, have been shown to preferentially bind to certain genomic motifs leading to an excess of G to T transversions \citep{Pfeifer2002,Pleasance2010}. 
 Thus, exposure of populations to different mutational processes can be inferred by considering the DNA context of polymorphism in search of \textit{signatures} of different mutational processes \citep{Alexandrov2013,Shiraishi2015a}. 
 Such genome-wide mutational signatures have been used as diagnostic tools for cancers (e.g., \cite{Alexandrov2013,Shiraishi2015a}).
-%This means that the genomic context of a mutation can be used to gain insight into the cause of this mutation \cite{Pleasance2010}.
-%While certain mutagens have very distinct mutational signatures, others are more subtle and difficult to identify because they tend to occur less frequently and with less genomic specificity \cite{Pleasance2010}.
-%Large cohorts have recently become available to increase statistical power to resolve some of these fine scale mutational signatures.
 
 In addition to somatic mutational signatures, there has been recent interest in population variation in germline mutational signatures which can be revealed in large sequencing panels. 
 In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European populations compared to African populations, and this was replicated in a different cohort in 2017 \citep{Harris2015a, Harris2017a, Mathieson2017a}. 
@@ -193,23 +188,7 @@ The same variants identified as being low quality independently in each populati
 \end{figure}
 To ensure that population structure was properly taken into account, we considered alternative models with principal components (PCs), Population membership or both as a covariate. These models were broadly consistent (See Figure \ref{CompareModel}).
 
-%\subsection{Model selection}
-%We considered multiple approaches to account for population structure in order to best capture the variants associated to $Q$.
-%Each of these methods is somewhat similar to the genotype-conditional association test described by Song et al. \citep{song2015testing}.
-%These methods model each genotype as a logistic function using principal components (PCs), Population membership or both as a covariate. 
-%We found that these three models to be consistent except a small number of variants with higher associations with the PC model.
-%We chose the more conservative approach using Population membership as the sole covariate (See Figure \ref{CompareModel}).
-
 \subsection{Cell line or technical artifact}
-%
-%To determine whether this signal is the result of a cell line or technical artifact, we investigated other sequencing projects that used the same cell lines.
-%Conveniently, the HapMap project sequenced some of the same cell lines as in the 1kGP with a different sequencing platform.
-%The technological artifacts in one platform aren't expected to be present in another sequencing platform as the technological biases vary from platform to platform \citep{Minoche2011}.
-%If the variants we've identified are the result of a cell line artifact, then we would expect the same variants to be present in the data from two separate platforms.
-%From the list of 11,416 variants identified as being associated to $Q$, only 17 variants were present in HapMap \citep{HapMap2005}.
-%Indeed, we find that while there are some variants that are present in HapMap, the number is within the expected number of false discoveries based on our FDR adjustment.
-%This result suggests that there is no cell line artifact and that the variants identified in the 1kGP are the result of technological artifact.
-
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
 After restricting the analysis to individuals present in both datasets, we find 296 suspicious variants polymorphic in 1kGP. Of those, 9 are present in the resequenced data \ref{90HanSFS}.
@@ -239,27 +218,27 @@ We found that 613 of the variants we identified as being associated to $Q$ were 
 \subsubsection{GWAS}
 
 We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
-The NHGRI-EBI Catalog of published genome-wide association studies identified eight recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
+The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
-One of these studies used the 1kGP in their reference panel for imputation \citep{tian2017genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-Two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013}.
+Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence data \citep{yucesoy2015genome, ellinghaus2016analysis}
 
-All four papers used strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+All papers used a variety of strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for some biological traits.
 
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
   {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$ -$\log_{10} p$\\(adjusted)}      \\ \hline
-28654678 & PLoS One & rs201761909 & 5.7 & 78.11\\
-	& 	&  	rs201130852 & 5.05 & 72.28\\
-	& 	&  	rs201255786 & 5.7 & 68.97\\
-	& 	&  	rs200655768 & 6.52 & 66.67\\
-	& 	&  	rs184202621 & 5.52 & 60.45\\
-	& 	& 	rs80274284 & 6 & 56.15\\
-	& 	& 	rs200699422 & 5.3 & 7.43\\
-23527680 & \multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics} & rs6057648 & 5.4 & 20.5\\
-28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs201471471 & 6.52 & 7.87\\
+28654678 & PLoS One & *rs201761909 & 5.7 & 78.11\\
+	& 	&  	*rs201130852 & 5.05 & 72.28\\
+	& 	&  	*rs201255786 & 5.7 & 68.97\\
+	& 	&  	*rs200655768 & 6.52 & 66.67\\
+	& 	&  	*rs184202621 & 5.52 & 60.45\\
+	& 	& 	*rs80274284 & 6 & 56.15\\
+	& 	& 	*rs200699422 & 5.3 & 7.43\\
+23527680 & \multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics} & *rs6057648 & 5.4 & 20.5\\
+28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & *rs201471471 & 6.52 & 7.87\\
 28270201 & \multicolumn{1}{p{3cm}}{\raggedright Genome Medicine} & rs453755 & 7.52 & 5.29\\
 23023329 & \multicolumn{1}{p{3cm}}{\raggedright Nature Genetics} & rs103294 & *15.3 & 4.32\\
 28334899 & \multicolumn{1}{p{3cm}}{\raggedright Human Molecular Genetics} & rs103294 & *29.3 & 4.32\\
@@ -274,7 +253,7 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 26634245 & \multicolumn{1}{p{3cm}}{\raggedright BMC Genetics} & rs451000 & 6 & 2.28\\
  	& 	& 	rs443874 & 5.3 & 2.26\\
 	& 	&	rs400942 & 6 & 2.2\\
-26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & rs60136336 & 5.7 & 2.25\\
+26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & *rs60136336 & 5.7 & 2.25\\
 
 25918132 & \multicolumn{1}{p{3cm}}{\raggedright Toxicological Sciences} & rs76780579 & 6 & 2.09\\
 
@@ -367,7 +346,7 @@ For the reverse GWAS, the only filtration used was the application of an minor a
 
 \subsection{Testing the association of quality to genotype}
 When conducting a statistical analysis of population genetics data, 
-an essential consideration is  to adjust or account for population structure (i.e. the heterogeneity in biallelic frequencies observed in individuals). Examples of models that widely used to account population structure include the Balding-Nichols model (Balding  Nichols, 1995) \luke{add citation}, and the Pritchard- Stephens-Donnelly model (Pritchard et al., 2000) \luke{add citation}. These and several other simlilar models used in GWAS studies can be understood in terms of the following matrix factorization. 
+an essential consideration is  to adjust or account for population structure (i.e. the heterogeneity in biallelic frequencies observed in individuals). Examples of models that widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. These and several other simlilar models used in GWAS studies can be understood in terms of the following matrix factorization. 
 \begin{align}
 \mathbf{L }= \mathbf{AH}
 \end{align} 
@@ -377,11 +356,11 @@ y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big)
 \end{align} 
 for $s=1\hdots S$ and $i=i,\cdots, I$, where $y_{si} \in \{0,1,2\}$ and $logit(\pi_{si})$ is the $(s,i)$ element of the matrix $\mathbf{L}$ such that  $\pi_{si}$ is the individual-specific allele frequency.
 
-To test whether quality is associated to genotype while adjusting for population structure, we performed the Genotype-Conditional Aassociation Test  (GCAT) proposed by ....  \luke{add citation} The GCAT is a reverse regression approach that assumes the following model.
+To test whether quality is associated to genotype while adjusting for population structure, we performed the Genotype-Conditional Aassociation Test  (GCAT) proposed by \citep{song2015testing} The GCAT is a reverse regression approach that assumes the following model.
 \begin{align}\label{gcat}
  y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, logit^{-1}\Big( \sum_{k=0}^{K} a_{sk} h_{ki} + \beta_s q_i\Big) \bigg)
 \end{align} 
-for $s=1\hdots S$ and $i=i,\cdots, I$ \luke{Plug in the values of S and I} and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \luke{add citation} and plugged in the model. We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. The matrix \luke{Describe matrix}
+for $s=1\hdots S$ and $i=i,\cdots, I$ \luke{Plug in the values of S and I} and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and plugged in the model. We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. The matrix \luke{Describe matrix}
 
 Under the null hypothesis the slope coefficient is zero $\beta_s=0$ and Model \ref{gcat} reduces to Model \ref{lfa}. $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. To test the null hypothesis, the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
 
