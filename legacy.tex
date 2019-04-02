@@ -21,7 +21,7 @@
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
 \newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
 \newcommand{\alex}[1]{\textcolor{red}{Alex: #1}}
-
+\newcommand{\logit}{\operatorname{logit}}
 %\newcommand{\qq}{m}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -204,7 +204,7 @@ A number of variants shared across cohorts suggests that roughly 10\% of the var
 
 \subsubsection{Imputation}
 
-The state of the art imputation servers use a combination of many databases including some that are not freely available.
+State of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
 To investigate the proportion of suspicious variants that are being imputed, we submitted the first two chromosomes of  the 1kGP genotype data to the Michigan Imputation Server.
@@ -266,45 +266,44 @@ Despite using state-of-the-art quality controls, these erroneous variants manage
 \section{Discussion}
 
 \subsection{Technical Artifact}
-The variants identified in this study are likely to be technical artifacts from legacy technology.
+The variants identified in this study are likely to be technical artifacts from legacy technologies.
 Different sequencing technologies will have different error profiles. 
-A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011}, with, for instance, different patterns of quality decrease along reads (known as B-tails). 
+A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. %(known as B-tails). 
 Differences in read quality and error profiles in turn require different calling pipelines.
  
-We were not able to pinpoint the precise technical source of the discrepancy. 
-Further inquiries into the details of sample preparation and data processing would be required to identify the source of this signal. 
-For instance, our test was limited by the genome wide resolution of the quality per sample.
-Data quality at a SNP-wise resolution would be a better metric to use, but unfortunately was not available.
+To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kgp. Given the progress in sequencing and calling that occurred since the early phases of the 1kgp (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
-If the Illumina Genome Analyzer sequencing platforms are no longer being used, then it it likely that these sequencer specific artifacts are no longer being actively introduced in recent sequence data.
-However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes.
-Our model only reveals association to quality; some variants may be false positives in cases where only individuals with low $Q$ scores have the variant and other variants may be false negatives, in cases where individuals with low $Q$ appear to have lower calling rates for particular.
 
-The imputation of incorrect variants can lead to milder problems such as the addition of noise in polygenic risk scores, biases in fine mapping analyses as well as impact population specific allele frequency estimates.
-These variants do have a sizeable effect on population analyses that compare populations based on mutational profiles. 
-Even though we expect that present-day technologies will be less sensitive to such artefacts, if is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
+%For instance, our test was limited by the genome wide resolution of the quality per sample.
+%Data quality at a SNP-wise resolution would be a better metric to use, but unfortunately was not available.
 
-For \textit{conventional} GWAS, we do not see evidence that these contaminated hits impact the conclusions made in each of these publications.
-However, considering many polygenic risk score estimates use the association scores from multiple sources, the inclusion of these variants could possibly impact downstream analyses.  
+%If the Illumina Genome Analyzer sequencing platforms are no longer being used, then it it likely that these sequencer specific artifacts are no longer 
+However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. The significant association of a variant with a quality metric is not in itself an indication that the variant is spurious. It may simply be subject to a weak but significant calling bias --- not an extraordinary surprise in a low-coverage dataset with a complex, joint sample variant calling pipeline. It may nevertheless be prudent to discard such variants from analyses that may be sensitive to calling biases, such as mutation profiles and allele frequency estimates. The imputation of such variants can also lead to milder problems such as the addition of noise in polygenic risk scores, biases in fine mapping analyses.
+
+
+%Even though we expect that present-day technologies will be less sensitive to such artefacts, it is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
+
+%For conventional GWAS, we do not see evidence that these contaminated hits impact the conclusions made in each of these publications.
+%However, considering many polygenic risk score estimates use the association scores from multiple sources, the inclusion of these variants could possibly impact downstream analyses.  
 
 \subsection{Recommendations}
 While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
-In order to avoid spurious results, the most conservative approach would be to remove all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$.
-We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signal.
-Another approach is to remove all the sites that reach a significance below $ p < 10^{-2}$ in the reverse GWAS (See supplementary material for lists of variants statistically associated to $Q$).
-We also recommend the resequencing of samples below an acceptable $Q$ threshold to render them usable.
+In order to avoid spurious results, the most conservative approach would be to remove or resequence all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$. 
+We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signals (Supplementary Figure \ref{}).
+Another approach, for researchers relying on imputation servers where reference panel individuals cannot be filtered out, is to remove sites that reach a significance below $ p < 10^{-2}$ in the reverse GWAS. (The supplementary material contains a list of variants statistically associated to $Q$).
+
 
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome wide simple logistic regression analysis approach is straightforward, and should probably be a standard in a variety of -omics studies. 
+The genome-wide simple logistic regression analysis approach is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding and produces robust results. Both approaches produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
 However, cleaning up data is also important to avoid generating spurious results. 
-The present findings suggest that a substantial fraction of the final release of the 1kGP project is overdue for removal or re-sequencing.
+The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for removal or re-sequencing.
 
-We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
+%We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
 
 
 \section{Methods}
@@ -345,26 +344,36 @@ For the reverse GWAS, the only filtration used was the application of an minor a
 \end{table}
 
 \subsection{Testing the association of quality to genotype}
-When conducting a statistical analysis of population genetics data, 
-an essential consideration is  to adjust or account for population structure (i.e. the heterogeneity in biallelic frequencies observed in individuals). Examples of models that widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. These and several other simlilar models used in GWAS studies can be understood in terms of the following matrix factorization. 
-\begin{align}
-\mathbf{L }= \mathbf{AH}
-\end{align} 
-where the $i$'th column ($\boldsymbol{h}^{(i)}$) of the $K \times I$ matrix $\mathbf{H}$ encodes the population structure of the $i$'th individual and the $s$'th row of the $S \times K$ matrix $\mathbf{A}$ determines how that structure is manifested in SNP $s$. When Hardy-Weinberg equilibrium holds, observed genotype can be assumed to be generated by the following Binomial model.
+When conducting a statistical analysis of population genetics data, an essential consideration is  to adjust or account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. Here we have the opposite situation, where the quantitative variable ($Q$) is used as an explanatory variable. So we consider models where the genotype $y$ is a function of an expected frequency $\pi_{si},$ based on population structure, and $Q$. The null model is 
 \begin{align} \label{lfa}
-y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big) 
+y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big)
 \end{align} 
-for $s=1\hdots S$ and $i=i,\cdots, I$, where $y_{si} \in \{0,1,2\}$ and $logit(\pi_{si})$ is the $(s,i)$ element of the matrix $\mathbf{L}$ such that  $\pi_{si}$ is the individual-specific allele frequency.
+The expected frequency for a SNP $s$ and individual $i$ can be estimated using principal component analysis, categorical population labels, or logistic factor analysis \citep{song2015testing}. The alternative model then takes in $Q$ as a covariate: 
 
-To test whether quality is associated to genotype while adjusting for population structure, we performed the Genotype-Conditional Aassociation Test  (GCAT) proposed by \citep{song2015testing} The GCAT is a reverse regression approach that assumes the following model.
 \begin{align}\label{gcat}
- y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, logit^{-1}\Big( \sum_{k=0}^{K} a_{sk} h_{ki} + \beta_s q_i\Big) \bigg)
+ y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, \logit^{-1}\Big(\logit(\pi_{si}) + \beta_s q_i\Big) \bigg)
 \end{align} 
-for $s=1\hdots S$ and $i=i,\cdots, I$ \luke{Plug in the values of S and I} and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and plugged in the model. We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. The matrix \luke{Describe matrix}
 
-Under the null hypothesis the slope coefficient is zero $\beta_s=0$ and Model \ref{gcat} reduces to Model \ref{lfa}. $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. To test the null hypothesis, the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
 
-We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests (of which there are $S$), the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
+%Examples of models that are widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. These and several other similar models used in GWAS studies can be understood in terms of the following matrix factorization. 
+%\begin{align}
+%\mathbf{L }= \mathbf{AH}
+%\end{align} 
+%where the $i^\text{th}$ column ($\boldsymbol{h}^{(i)}$) of the $K \times I$ matrix $\mathbf{H}$ encodes the population structure of the $i$'th individual and the $s$'th row of the $S \times K$ matrix $\mathbf{A}$ determines how that structure is manifested in SNP $s$. When Hardy-Weinberg equilibrium holds, observed genotype can be assumed to be generated by the following Binomial model.
+%\begin{align} \label{lfa}
+%y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big) 
+%\end{align} 
+%for $s=1\hdots S$ and $i=i,\cdots, I$, where $y_{si} \in \{0,1,2\}$ and $logit(\pi_{si})$ is the $(s,i)$ element of the matrix $\mathbf{L}$ such that  $\pi_{si}$ is the individual-specific allele frequency.
+%
+%To test whether quality is associated to genotype while adjusting for population structure, we performed the Genotype-Conditional Association Test  (GCAT) proposed by \citep{song2015testing} The GCAT is a regression approach that assumes the following model.
+%\begin{align}\label{gcat}
+% y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, logit^{-1}\Big( \sum_{k=0}^{K} a_{sk} h_{ki} + \beta_s q_i\Big) \bigg)
+%\end{align} 
+%for $s=1\hdots S$ and $i=i,\cdots, I$ \luke{Plug in the values of S and I} and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and plugged in the model. We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. The matrix \luke{Describe matrix}
+
+Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \ref{gcat} reduces to Model \ref{lfa}. $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. To test the null hypothesis, we use the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
+
+We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
 By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. See supplementary file {here}. \luke{make this file}
 
 
