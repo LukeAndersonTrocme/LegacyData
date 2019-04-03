@@ -49,7 +49,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. 
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. 
 \end{abstract}
 
 \section{Introduction}
@@ -61,7 +61,7 @@ Reference cohorts such as the International HapMap Project \citep{HapMap2005}, t
 Many more genomes are available indirectly through servers providing imputation services \citep{HapMap2005} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
 The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved.  
-The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012}, leading to heterogeneous sample preparations and data quality.
+The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012} \sgcomment{also cite phase 3}, leading to heterogeneous sample preparations and data quality.
 
 
 Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions.
@@ -156,7 +156,7 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
-To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure \citep{song2015testing}.
+To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure \citep{song2015testing}. \sgcomment{We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population labels as covariates.   }
 
 This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
@@ -192,13 +192,13 @@ To ensure that population structure was properly taken into account, we consider
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
 After restricting the analysis to individuals present in both datasets, we find 296 suspicious variants polymorphic in 1kGP. Of those, 9 are present in the resequenced data \ref{90HanSFS}.
-While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites, some variants associated to $Q$ may be present in the population but have biased genotypes.
+While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites: some variants that are associated to $Q$ may be present in the population but have biased genotypes.
 
-We did a similar analysis using the variants identified in the \textit{5PC} model present in the 83 resequenced individuals.
-Of the 24,390 suspicious variants identified globally, only 12,086 of them are found in the 83 individuals in the original 1kGP data. (See Figure \ref{90HanSFS_full})
+We did a similar analysis using the variants identified in the \textit{5PC} \sgcomment{I don't think that this has been described? I also don't understand why the 5pc approach has so many more variants than the logistic factor analysis above} model present in the 83 resequenced individuals.
+Of the 24,390 suspicious variants identified globally, only 12,086 of them are found in the 83 individuals in the original 1kGP data (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,637 of these variants are present in the resequenced data, the rest are missing entirely.
 Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in the resequenced data.
-A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are real but genotyped incorrectly.
+A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are present in the cell lines real but exhibit genotyping bias.
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
@@ -212,20 +212,24 @@ We found that all of the variants associated with $Q$ were imputed back in the s
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
 \subsubsection{Microarrays}
-
+\sgcomment{It seems like this paragraph is out of place and would fit better in the validation section, above? }
 We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
 
 \subsubsection{GWAS}
+\sgcomment{"these dubious", below, refers to all dubious positions rather than only the ones on the chips, right? Even more reason to move the previous paragraph. }
 
-We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biologic al trait, even though there is no particular reason for these variants to be associated with phenotypes.
+We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
 Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence data \citep{yucesoy2015genome, ellinghaus2016analysis}
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence data \citep{yucesoy2015genome, ellinghaus2016analysis}.
 
-All papers used a variety of strict quality thresholds, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+All papers used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for some biological traits.
+Despite using state-of-the-art quality controls, these erroneous \sgcomment{we don't know that all or even most are erroneous} variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
+
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two. \sgcomment{you know, we could simply compare the relative effect size to predicted frequency $\pi$} 
+
 
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
