@@ -1,13 +1,9 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ELIFE ARTICLE TEMPLATE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% PREAMBLE 
-\documentclass[9pt,lineno]{elife}
-
-\usepackage[export]{adjustbox}
-\usepackage{lscape}
-\usepackage{afterpage}
-\usepackage{graphicx}
+% PREAMBLE 
+%\documentclass[9pt,lineno]{elife}
+\documentclass[custompaper]{MBE}%
+%\DeclareOption{a4paper}
+\usepackage{url}
+\usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \hypersetup{
@@ -19,38 +15,43 @@
 
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
-\newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
-\newcommand{\alex}[1]{\textcolor{red}{Alex: #1}}
 \newcommand{\logit}{\operatorname{logit}}
-%\newcommand{\qq}{m}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ARTICLE SETUP
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Legacy Data Confounds Genomics Studies}
+%\jshort{mst}
 
-\author[1,2]{Luke Anderson-Trocm\'e}
-\author[1,2]{Rick Farouni}
-\author[1,2]{Mathieu Bourgey}
-\author[3]{Fumihiko Matsuda}
-\author[3]{Yoichiro Kamatani}
-\author[1,2]{Simon Gravel}
+%\volname{}
 
-\affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
-\affil[2]{McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada}
-\affil[3]{Center for Genomic Medicine, Graduate School of Medicine, Kyoto University, Kyoto 606-8501, Japan}
-\corr{simon.gravel@mcgill.ca}{SG}
+%\jvolume{0}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ARTICLE START
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\jvol{}
+
+%\jissue{0}
+
+%\pubyear{2019}
+
+\mstype{Article}
+
+%\artid{012}
+
+%\access{Advance Access publication March 3, 2013}
 
 \begin{document}
 
+\keyword{1000 Genomes Project, Batch Effect, Population Structure, GWAS, GCAT}
+
+\title{\ Legacy Data Confounds Genomics Studies}
+
+\author[Anderson-Trocm\'e et al.]{\ Luke \surname{Anderson-Trocm\'e},$^{\ast,1,2}$ Rick Farouni,$^{1,2}$ Mathieu Bourgey,$^{1,2}$ Fumihiko Matsuda,$^{3}$, Yoichiro Kamatani$^{3}$, and Simon Gravel$^{1,2}$,}
+
+\address{$^{1}$Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada\\
+$^{2}$McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada\\ 
+$^{3}$Center for Genomic Medicine, Graduate School of Medicine, Kyoto University, Kyoto 606-8501, Japan}
+
+\coresp{simon.gravel@mcgill.ca}
+
+\abstract{Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. }
+
 \maketitle
-\begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. 
-\end{abstract}
 
 \section{Introduction}
 	
@@ -295,7 +296,7 @@ The present findings suggest that a substantial fraction of data from the final 
 
 %We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
 
-
+\newpage{}
 \section{Methods}
 \subsection{Metadata}
 The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
@@ -388,6 +389,8 @@ The VCF file returned from the server was then downloaded and used to search for
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
+
+\bibliographystyle{natbib}
 \bibliography{Legacy.bib}
 
 \clearpage

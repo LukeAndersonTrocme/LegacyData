@@ -1,6 +1,6 @@
 ---
 title: "TGP Quality-Variants Association"
-subtitle: "Fitting model for Chromosome `r commandArgs(trailingOnly=T)[1]`"
+subtitle: "Fitting model for Published Variants"
 author: 
 - name: Rick Farouni, Luke Anderson-Trocmé 
   affiliation:
@@ -140,13 +140,14 @@ size = 3
 plink_data_dir <- "./data/plink/by_chunk"
 metadata_dir <- "./data/metadata"
 preprocessed_dir <- "./data/preprocessed"
-file_name <- paste0("Split_", chr)
+file_name <- 'PublishedVariants'
+#file_name <- paste0("Split_", chr)
 bim_filepath <- file.path(plink_data_dir,
                           paste0(file_name ,'.bim'))
 fam_filepath <- file.path(plink_data_dir,
                           paste0(file_name , '.fam'))
 bas_filepath <- file.path(metadata_dir,
-                          "average_quality_fam.txt")
+                          "average_quality_dt.txt")
 bed_filepath <- file.path(plink_data_dir,
                           file_name )
 lf_filepath <-   file.path(preprocessed_dir,
@@ -191,7 +192,12 @@ data_bim <-
 ### Load quality data
 
 ```{r load_bas, message=FALSE, warning=FALSE}
+fam <- read.table(fam_filepath,
+                  col.names=c('sample','a','b','c','d','e'))
 bas_dt <- read_tsv(bas_filepath)
+bas_dt <- merge(fam,
+                bas_dt,
+                by = 'sample')
 trait <- bas_dt$avg_qual_mean
 #trait <- bas_dt$avg_qual_min
 #trait <- bas_dt$avg_qual_max
@@ -254,8 +260,8 @@ toc()
 
 ```{r subsets}
 subsets_top <-  
-  data_genotype  %>%
-  top_n(3,dev_logp) 
+  data_genotype  #%>%
+  #top_n(3,dev_logp) 
 subsets_top
 ```
 
