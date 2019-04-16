@@ -1,9 +1,13 @@
-% PREAMBLE 
-%\documentclass[9pt,lineno]{elife}
-\documentclass[custompaper]{MBE}%
-%\DeclareOption{a4paper}
-\usepackage{url}
-\usepackage{xcolor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ELIFE ARTICLE TEMPLATE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PREAMBLE 
+\documentclass[9pt,lineno]{elife}
+
+\usepackage[export]{adjustbox}
+\usepackage{lscape}
+\usepackage{afterpage}
+\usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \hypersetup{
@@ -15,54 +19,49 @@
 
 \newcommand{\sgcomment}[1]{\textcolor{blue}{SG: #1}}
 \newcommand{\luke}[1]{\textcolor{blue}{Luke: #1}}
+\newcommand{\todo}[1]{\textcolor{blue}{*#1*}}
+\newcommand{\alex}[1]{\textcolor{red}{Alex: #1}}
 \newcommand{\logit}{\operatorname{logit}}
+%\newcommand{\qq}{m}
 
-%\jshort{mst}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ARTICLE SETUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Legacy Data Confounds Genomics Studies}
 
-%\volname{}
+\author[1,2]{Luke Anderson-Trocm\'e}
+\author[1,2]{Rick Farouni}
+\author[1,2]{Mathieu Bourgey}
+\author[3]{Fumihiko Matsuda}
+\author[3]{Yoichiro Kamatani}
+\author[1,2]{Simon Gravel}
 
-%\jvolume{0}
+\affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
+\affil[2]{McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada}
+\affil[3]{Center for Genomic Medicine, Graduate School of Medicine, Kyoto University, Kyoto 606-8501, Japan}
+\corr{simon.gravel@mcgill.ca}{SG}
 
-%\jvol{}
-
-%\jissue{0}
-
-%\pubyear{2019}
-
-\mstype{Article}
-
-%\artid{012}
-
-%\access{Advance Access publication March 3, 2013}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ARTICLE START
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\keyword{1000 Genomes Project, Batch Effect, Population Structure, GWAS, GCAT}
-
-\title{\ Legacy Data Confounds Genomics Studies}
-
-\author[Anderson-Trocm\'e et al.]{\ Luke \surname{Anderson-Trocm\'e},$^{\ast,1,2}$ Rick Farouni,$^{1,2}$ Mathieu Bourgey,$^{1,2}$ Fumihiko Matsuda,$^{3}$, Yoichiro Kamatani$^{3}$, and Simon Gravel$^{1,2}$,}
-
-\address{$^{1}$Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada\\
-$^{2}$McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada\\ 
-$^{3}$Center for Genomic Medicine, Graduate School of Medicine, Kyoto University, Kyoto 606-8501, Japan}
-
-\coresp{simon.gravel@mcgill.ca}
-
-\abstract{Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. }
-
 \maketitle
+\begin{abstract}
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. 
+\end{abstract}
 
 \section{Introduction}
 	
 \subsection{Batch Effects in Aging Reference Cohort Data}			
 
 The last 5 years have seen a drastic increase in the amount and quality of human genome sequence data. 
-Reference cohorts such as the International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project (1kGP)\citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
-Many more genomes are available indirectly through servers providing imputation services \citep{HapMap2005} or summary statistics for variant frequency estimation \citep{Lek2016}.
+Reference cohorts such as the International HapMap Project \citep{HapMap2005}, the 1000 Genomes Project (1kGP)\citep{1000GenomesProjectConsortium2010,The1000GenomesProjectConsortium2012,phase3}, and the Simons Diversity project \citep{Mallick2016}, for example, have made thousands of genome sequences publicly available for population and medical genetic analyses. 
+Many more genomes are available indirectly through servers providing imputation services \citep{mccarthy2016reference} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
 The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved.  
-The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012} \sgcomment{also cite phase 3}, leading to heterogeneous sample preparations and data quality.
+The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012,phase3}, leading to heterogeneous sample preparations and data quality.
 
 Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions.
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
@@ -156,11 +155,13 @@ By 2011, older sequencing technologies were phased out, and methods became more 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 24 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
-To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure \citep{song2015testing}. \sgcomment{We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population labels as covariates.   }
+To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
+We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population labels as covariates (Supplementary Figure \ref{CompareModel}). 
 
 This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
-To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \luke{link to file here}.
+To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
+We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
+Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \ref{rsIDList}.
 
 
 \begin{table}
@@ -170,7 +171,10 @@ Lists of suspicious variants and individuals with low $Q$ are provided as supple
 {SNP}  & 5,186 & 17,124 \\  
 {INDEL} & 509 & 1,571 \\ \hline
 \end{tabular}
-\caption{Number of statistically significant variants per category. Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. The total number of 24,390 are statistically significantly associated to $Q$.}
+\caption{Number of statistically significant variants per category. 
+Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. 
+SNPs and INDELs were also analyzed separately. 
+The total number of 24,390 are statistically significantly associated to $Q$.}
 \label{sigTable}
 \end{table}
 
@@ -186,7 +190,8 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 The same variants identified as being low quality independently in each population are found in other populations. }
   \label{OverLap}
 \end{figure}
-To ensure that population structure was properly taken into account, we considered alternative models with principal components (PCs), Population membership or both as a covariate. These models were broadly consistent (See Figure \ref{CompareModel}).
+To ensure that population structure was properly taken into account, we considered alternative models with principal components (PCs), Population membership or both as a covariate. 
+These models were broadly consistent (See Figure \ref{CompareModel}).
 
 \subsection{Cell line or technical artifact}
 
@@ -194,15 +199,18 @@ In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{
 After restricting the analysis to individuals present in both datasets, we find 296 suspicious variants polymorphic in 1kGP. Of those, 9 are present in the resequenced data \ref{90HanSFS}.
 While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites: some variants that are associated to $Q$ may be present in the population but have biased genotypes.
 
-We did a similar analysis using the variants identified in the \textit{5PC} \sgcomment{I don't think that this has been described? I also don't understand why the 5pc approach has so many more variants than the logistic factor analysis above} model present in the 83 resequenced individuals.
+We did a similar analysis using the variants identified in the GCAT model present in the 83 resequenced individuals.
 Of the 24,390 suspicious variants identified globally, only 12,086 of them are found in the 83 individuals in the original 1kGP data (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,637 of these variants are present in the resequenced data, the rest are missing entirely.
 Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in the resequenced data.
 A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are present in the cell lines real but exhibit genotyping bias.
 
-\subsection{Suspicious variants impact modern genomics analyses}
 
-\subsubsection{Imputation}
+We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. 
+This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. 
+Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
+
+\subsection{Suspicious variants impact modern genomics analyses}
 
 State of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
@@ -210,13 +218,6 @@ From the perspective of researchers, they act as black-box imputation machines t
 To investigate the proportion of suspicious variants that are being imputed, we submitted the first two chromosomes of  the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
-
-\subsubsection{Microarrays}
-\sgcomment{It seems like this paragraph is out of place and would fit better in the validation section, above? }
-We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
-
-\subsubsection{GWAS}
-\sgcomment{"these dubious", below, refers to all dubious positions rather than only the ones on the chips, right? Even more reason to move the previous paragraph. }
 
 We searched the literature for any GWAS that might have reported these dubious variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
@@ -226,9 +227,9 @@ One study used an in-house reference panel for imputation \citep{nishida2018key}
 
 All papers used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
-Despite using state-of-the-art quality controls, these erroneous \sgcomment{we don't know that all or even most are erroneous} variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
+Despite using state-of-the-art quality controls, these variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
 
-These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two. \sgcomment{you know, we could simply compare the relative effect size to predicted frequency $\pi$} 
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two.
 
 
 \begin{table}[h]
@@ -245,7 +246,7 @@ These associations are not necessarily incorrect -- a weak but significant bias 
 28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs201471471 & 6.52 & 7.87\\
 26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & rs60136336 & 5.7 & 2.25\\ \hline
 \textcolor{gray}{28270201} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Genome Medicine}} & \textcolor{gray}{rs453755} & \textcolor{gray}{7.52} & \textcolor{gray}{5.29}\\
-\textcolor{gray}{23023329} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Genetics}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*15.3} & \textcolor{gray}{4.32}}\\
+\textcolor{gray}{23023329} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Genetics}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*15.3} & \textcolor{gray}{4.32}\\
 \textcolor{gray}{28334899} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Human Molecular Genetics}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*29.3} & \textcolor{gray}{4.32}\\
 \textcolor{gray}{28240269} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Communications}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*72.7} & \textcolor{gray}{4.32}\\
 \textcolor{gray}{27863252} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Cell}\\} & \textcolor{gray}{rs3794738} & \textcolor{gray}{*13.15} & \textcolor{gray}{3.73}\\
@@ -268,28 +269,15 @@ These associations are not necessarily incorrect -- a weak but significant bias 
 
 \section{Discussion}
 
-\subsection{Technical Artifact}
 The variants identified in this study are likely to be technical artifacts from legacy technologies.
 Different sequencing technologies will have different error profiles. 
-A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. %(known as B-tails). 
+A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. 
 Differences in read quality and error profiles in turn require different calling pipelines.
  
 To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kgp. Given the progress in sequencing and calling that occurred since the early phases of the 1kgp (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
-
-%For instance, our test was limited by the genome wide resolution of the quality per sample.
-%Data quality at a SNP-wise resolution would be a better metric to use, but unfortunately was not available.
-
-%If the Illumina Genome Analyzer sequencing platforms are no longer being used, then it it likely that these sequencer specific artifacts are no longer 
 However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. The significant association of a variant with a quality metric is not in itself an indication that the variant is spurious. It may simply be subject to a weak but significant calling bias --- not an extraordinary surprise in a low-coverage dataset with a complex, joint sample variant calling pipeline. It may nevertheless be prudent to discard such variants from analyses that may be sensitive to calling biases, such as mutation profiles and allele frequency estimates. The imputation of such variants can also lead to milder problems such as the addition of noise in polygenic risk scores, biases in fine mapping analyses.
 
-
-%Even though we expect that present-day technologies will be less sensitive to such artefacts, it is worth pointing out that cancer mutational signature analysis can also be sensitive to technological artefacts that are difficult to detect using classical quality metrics. 
-
-%For conventional GWAS, we do not see evidence that these contaminated hits impact the conclusions made in each of these publications.
-%However, considering many polygenic risk score estimates use the association scores from multiple sources, the inclusion of these variants could possibly impact downstream analyses.  
-
-\subsection{Recommendations}
 While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
 In order to avoid spurious results, the most conservative approach would be to remove or resequence all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$. 
 We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signals (Supplementary Figure \ref{MutSpect}).
@@ -307,7 +295,7 @@ The present findings suggest that a substantial fraction of data from the final 
 
 %We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
 
-\newpage{}
+
 \section{Methods}
 \subsection{Metadata}
 The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
@@ -316,7 +304,8 @@ Each BAS file has metadata regarding each sequencing event for each sample.
 If a sample was sequenced more than once, we took the average of the each $Q$ score from each sequencing instance. 
 The submission dates and sequencing centres for each sample in the analysis was available in the sequence index files \ref{ProcessPlotData.Rmd}.
 
-\subsection{Data Availability}
+\subsection{Code and data availability}
+For more details regarding data processing or figure plotting, our pipelines and R Notebooks are publicly available \href{https://github.com/LukeAndersonTrocme/QualityPaper}{here}.
 
 Index of BAS files \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/1000genomes.low_coverage.GRCh38DH.alignment.index}{available here}.
 
@@ -362,7 +351,7 @@ The deviance test statistic is approximately chi-square distributed with one deg
 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
 By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. 
-See supplementary file {here}. \luke{make this file}
+See supplementary file  \ref{rsIDList}.
 
 \subsection{Individual-specific allele frequency}
 Examples of models that are widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. 
@@ -396,20 +385,10 @@ Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for
 We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} genotype data.
 The VCF file returned from the server was then downloaded and used to search for the number of significant variants successfully imputed. 
 
-%\subsection{Frequencies of variants in other datasets}
-%Using the allele frequency files for the Japanese HapMap samples, we extracted the positions we identified as being significantly associated to the average quality of mapped bases. We then compared the frequencies of these 70 variants in the 1kGP Japanese samples to those of the HapMap Japanese samples. Figure \ref{HapMap_GnomAD} compares the allele frequencies for suspicious sites that are present in HapMap.
-
-%Similarly, using the allele frequencies from GnomAD, we were able to extract 186 sites that are statistically significantly associated to the average quality of mapped bases. However, in this case we compared global allele frequencies in both the 1kGP and GnomAD (Figure \ref{HapMap_GnomAD}). 
-
-\section{Code Availability}
-https://github.com/LukeAndersonTrocme/QualityPaper
-
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
 
-
-\bibliographystyle{natbib}
-\bibliography{Legacy.bib}
+\bibliography{Legacy}
 
 \clearpage
 \section{Supplementary Figures}
@@ -540,4 +519,3 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 
 
 \end{document}
-
