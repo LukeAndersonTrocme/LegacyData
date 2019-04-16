@@ -16,7 +16,7 @@ for f in `seq 1 22`
   #download VCF if needed
   if [ ! -f $GenoPath/ALL.chr${f}.${GenoName}.genotypes.vcf.gz ]; then
     echo "Downloading VCF CHR ${f}"
-    wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr20.${GenoName}.genotypes.vcf.gz
+    wget ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr${f}.${GenoName}.genotypes.vcf.gz
   fi
   #Get header of VCF to keep sample names
   if [ $f = 1 ]; then
