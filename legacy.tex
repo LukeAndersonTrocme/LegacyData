@@ -103,10 +103,9 @@ Finally, we investigate how these variants have impacted modern genomics analyse
 \includegraphics[width=\hsize,keepaspectratio]{./Figures/Figure1.jpg}
 \caption{
 \textbf{A} 
-Mutation spectrum of the 1034 variants that reached a genome wide significance with a \textit{p}-value less than $p < 10^{-6}$  in a GWAS of sequencing quality. 
-The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. There is also a slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. These three enrichments can be summarized as G**${\rightarrow}$GG*. (note: the reverse complement of *AC${\rightarrow}$*CC is GT*${\rightarrow}$GG*)
-\textbf{B} 
-Joint frequency spectrum plot of the Japanese from the 1kGP and a more recent Nagahama dataset.
+Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to a random set of SNPs.
+The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. There is also a slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. These three enrichments can be summarized as G**${\rightarrow}$GG*. \textbf{B} 
+Joint frequency spectrum plot of the Japanese from the 1kGP and a more recent Nagahama dataset \sgcomment{Citation? That will be discussed in more detail elsewhere?}.
 Crosses ( + ) are variants that reached genome wide significance in a GWAS of sequencing quality. 
 The histogram on the left of the plot is the distribution of significant variants. 
 \textbf{C} 
@@ -311,7 +310,7 @@ The present findings suggest that a substantial fraction of data from the final 
 The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
 Average quality of mapped bases $Q$ per sample was obtained from the BAS files associated with each alignment file. 
 Each BAS file has metadata regarding each sequencing event for each sample. 
-If a sample was sequenced more than once, we took the average of the each $Q$ score from each sequencing instance. 
+If a sample was sequenced more than once, we took the average of each $Q$ score from each sequencing instance. 
 The submission dates and sequencing centres for each sample in the analysis was available in the sequence index files \ref{ProcessPlotData.Rmd}.
 
 \subsection{Code and data availability}
@@ -322,13 +321,13 @@ Index of BAS files \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collecti
 Phase3 analysis sequence index file  \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index}{available here} 
 
 \subsection{Quality Controls}
-We reproduced the quality control pipelines used by Harris et. al as they applied the current state of the art quality thresholds to remove questionable sequences especially for the high standards for detecting population level differences. 
+For the mutation spectrum analysis, we reproduced the quality control and data filtering pipelines used by Harris et al. as they applied the current state of the art quality thresholds to remove questionable sequences for detecting population level differences. 
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
 The  1000 Genomes \href{http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/accessible_genome_masks/20141020.strict_mask.whole_genome.bed}{strict mask} was used to remove low quality regions of the genome, highly conserved regions were removed using the \href{http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/phastConsElements100way.txt.gz}{phastCons100way} mask file and highly repetitive regions were also removed using the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file from RepeatMasker. 
-Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 we're considered.
+Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 were considered.
 In total, 57,838,849 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
 
-For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of 28,516,063 variants ($S$) included in the test (see Table \ref{totTable}). We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately.
+For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test (see Table \ref{totTable}). We also used the \href{http://hgdownload.cse.ucsc.edu/goldenpath/hg19/database/nestedRepeats.txt.gz}{NestedRepeats} mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
 
 \begin{table}[h]
 \begin{tabular}{l  r r}
@@ -341,27 +340,27 @@ For the reverse GWAS, the only filtration used was the application of an minor a
 \end{table}
 
 \subsection{Testing the association of quality to genotype}
-When conducting a statistical analysis of population genetics data, an essential consideration is  to adjust or account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
+When conducting a statistical analysis of population genetics data, we must account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
 Here we have the opposite situation, where the quantitative variable ($Q$) is used as an explanatory variable. 
 So we consider models where the genotype $y$ is a function of an expected frequency $\pi_{si},$ based on population structure, and $Q$. 
 The null model is 
 \begin{align} \label{lfa}
-y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big)
+y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big).
 \end{align} 
 The expected frequency for a SNP $s$ and individual $i$ can be estimated using principal component analysis, categorical population labels, or logistic factor analysis \citep{song2015testing}. The alternative model then takes in $Q$ as a covariate: 
 
 \begin{align}\label{gcat}
- y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, \logit^{-1}\Big(\logit(\pi_{si}) + \beta_s q_i\Big) \bigg)
+ y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, \logit^{-1}\Big(\logit(\pi_{si}) + \beta_s q_i\Big) \bigg).
 \end{align} 
 
-Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \ref{gcat} reduces to Model \ref{lfa}. 
+Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \ref{gcat} reduces to Model \ref{lfa}. \sgcomment{Not sure why, but the equation numbers don't line up}
 $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. 
 To test the null hypothesis, we use the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. 
-The deviance test statistic is approximately chi-square distributed with one degrees of freedom.
+The deviance test statistic under the null model is approximately chi-square distributed with one degrees of freedom.
 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
 By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. 
-See supplementary file  \ref{rsIDList}.
+See supplementary file  \ref{rsIDList} for a list of variants.
 
 \subsection{Individual-specific allele frequency}
 Examples of models that are widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. 
@@ -382,17 +381,17 @@ The GCAT is a regression approach that assumes the following model.
  y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, logit^{-1}\Big( \sum_{k=0}^{K} a_{sk} h_{ki} + \beta_s q_i\Big) \bigg)
 \end{align} 
 for $s=1\hdots S$ and $i=i,\cdots, I$  ($S = 28,516,063$ and $I = 2,504$) and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. 
-The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and plugged in the model. 
-We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. 
-The matrix includes the sequence data from the 2,504 individuals from the 1kGP down-sampled to the positions from the \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip}
+The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and are therefore used directly in the model. 
+We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs. \sgcomment{This is not consistent with what is said in the text. Also, population labels? what is M?}
+To avoid possible biases in computing PCA from the biased variants, we considered the genotype matrix $L$ obtained by downsampling 1kGP variants the positions from the \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} \sgcomment{OMNI 1M?}
 
 \subsection{Mutation Spectrum}
-We calculated the mutation spectrum of triplets for the list of significant variants for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}
-We modified the methods as necessary for our purposes, scripts are available \href{https://github.com/LukeAndersonTrocme/QualityPaper}{here}. 
+\sgcomment{This paragraph should perhaps be in the QC section above?}
+We calculated the mutation spectrum of triplets for the list of significant variants for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}. Scripts are available \href{https://github.com/LukeAndersonTrocme/QualityPaper}{here}. 
 
 \subsection{Imputation}
 Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for chromosomes 1 and 2.
-We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni chip} genotype data.
+We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni 1M chip} genotype data.
 The VCF file returned from the server was then downloaded and used to search for the number of significant variants successfully imputed. 
 
 \section{Acknowledgments}
