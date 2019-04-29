@@ -237,11 +237,8 @@ They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
 
 These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. 
-To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two.
-We would expect the variants above this threshold to be enriched in real variants with genotyping biases.
-We also note that the majority of the papers whose GWAS variants are associated to $Q$ are above this threshold (See Figure \ref{Pub_30}).
-However, one study that has 7 variants below this threshold is a study that specifically looked at the copy number variation of EBV.
-The results from this study could be confounded by the data quality of the 1kGP as these 7 variants are only significantly associated to EBV copy number in populations we identified as having strong batch effects.
+To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{...}. \sgcomment{Give the distribution of large and weak}. Most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}).
+However, three studies reported on SNPs with strong bias. One such study reports associations with seven suspicious variants that we find to be highly biased. This study considered copy number of \sgcomment{Epstein-Barr Virus} sequence in the 1kGP as a phenotype. Thus the phenotype in that study is likely confounded by the same technical artefacts.
 
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
