@@ -32,13 +32,18 @@
 \author[1,2]{Luke Anderson-Trocm\'e}
 \author[1,2]{Rick Farouni}
 \author[1,2]{Mathieu Bourgey}
-\author[3]{Fumihiko Matsuda}
 \author[3]{Yoichiro Kamatani}
+\author[3]{Koichiro Higasa}
+\author[4,5]{Jeong-Sun Seo}
+\author[4]{Changhoon Kim}
+\author[3]{Fumihiko Matsuda}
 \author[1,2]{Simon Gravel}
 
 \affil[1]{Department of Human Genetics, McGill University, Montreal, QC H3A 0G1, Canada}
 \affil[2]{McGill University and Genome Quebec Innovation Centre, Montreal, QC H3A 0G1, Canada}
 \affil[3]{Center for Genomic Medicine, Graduate School of Medicine, Kyoto University, Kyoto 606-8501, Japan}
+\affil[4]{Bioinformatics Institute, Macrogen Inc., Seoul, 08511, Republic of Korea}
+\affil[5]{Precision Medicine Center, Seoul National University Bundang Hospital, Seongnam, 13605, Republic of Korea}
 \corr{simon.gravel@mcgill.ca}{SG}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,7 +125,7 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-These mismatches were present despite filtering for low-quality regions of the human genome and Hardy-Weinberg disequilibrium. \sgcomment{Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts? } 
+Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). 
 The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. 
@@ -156,7 +161,8 @@ We therefore performed the same reverse GWAS approach in all populations indepen
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
 To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
-We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population labels as covariates (Supplementary Figure \ref{CompareModel}). 
+We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population membership as covariates. 
+These models were broadly consistent (See Figure \ref{CompareModel}).
 
 This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
@@ -190,14 +196,15 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 The same variants identified as being low quality independently in each population are found in other populations. }
   \label{OverLap}
 \end{figure}
-To ensure that population structure was properly taken into account, we considered alternative models with principal components (PCs), Population membership or both as a covariate. 
-These models were broadly consistent (See Figure \ref{CompareModel}). \sgcomment{Is this not redundant with the paragraph before last?}
 
 \subsection{Cell line or technical artifact}
 
-In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. Here we consider whether variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
+In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
+Here we consider whether variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
 
-Among the 296 variants associated with $Q$ within the 1kGP CHB and CHS, and polymorphic the 83 resequenced individuals, only 9 are present in the resequenced data (Figure \ref{90HanSFS}). This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. However, the vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
+Among the 296 variants associated with $Q$ within the 1kGP CHB and CHS, and polymorphic the 83 resequenced individuals, only 9 are present in the resequenced data (Figure \ref{90HanSFS}). 
+This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
+However, the vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
@@ -207,7 +214,8 @@ Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequen
 Thus roughly 10\% of the variants identified are associated with $Q$ are likely present in the cell lines but exhibit biased genotypes.
 
 
-Among the 24,390 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip \sgcomment{Figure}. These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
+Among the 24,390 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Supplementary Figure \ref{Omni}). 
+These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
@@ -483,7 +491,7 @@ Because the resequencing did not include all the individuals from the original 1
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequenced data. 
 This plot shows  12,086 significant variants identified in the reverse GWAS model including all populations.
  Only 1,637 of the variants are present in the high depth resequenced individuals.}  
-\label{90HanSFS_full}
+\label{90HanSFS_30}
 \end{figure}
 
 \begin{figure}[h]
@@ -498,7 +506,7 @@ This plot shows  12,086 significant variants identified in the reverse GWAS mode
 \caption{We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. 
 This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. 
 Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.}
-\label{HapMap_GnomAD}
+\label{Omni}
 \end{figure}
 
 \begin{figure}[h]
