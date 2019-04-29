@@ -49,7 +49,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, and a community effort may be required to remove or upgrade such legacy sequencing data from reference databases. 
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, it may be time to remove or upgrade such legacy sequencing data from reference databases. 
 \end{abstract}
 
 \section{Introduction}
@@ -61,9 +61,9 @@ Reference cohorts such as the International HapMap Project \citep{HapMap2005}, t
 Many more genomes are available indirectly through servers providing imputation services \citep{mccarthy2016reference} or summary statistics for variant frequency estimation \citep{Lek2016}.
 
 The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved.  
-The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012,phase3}, leading to heterogeneous sample preparations and data quality.
+The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012,phase3}, leading to heterogeneous sample preparations and data quality over the course of the project.
 
-Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used as a reference panel for imputation, allele frequency estimations and to answer a wide range of medical and evolutionary questions.
+Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used to impute untyped variants, to estimate allele frequencies, and to answer a wide range of medical and evolutionary questions.
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
 Here we point out how large and previously unreported batch effects in the early phases of the 1kGP still lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
 
@@ -120,7 +120,7 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-These mismatches were present despite filtering for low-quality regions of the human genome and Hardy-Weinberg disequilibrium. 
+These mismatches were present despite filtering for low-quality regions of the human genome and Hardy-Weinberg disequilibrium. \sgcomment{Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts? } 
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Supplementary Figure \ref{PC1_Correlation}). 
 The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. 
@@ -191,24 +191,23 @@ The same variants identified as being low quality independently in each populati
   \label{OverLap}
 \end{figure}
 To ensure that population structure was properly taken into account, we considered alternative models with principal components (PCs), Population membership or both as a covariate. 
-These models were broadly consistent (See Figure \ref{CompareModel}).
+These models were broadly consistent (See Figure \ref{CompareModel}). \sgcomment{Is this not redundant with the paragraph before last?}
 
 \subsection{Cell line or technical artifact}
 
-In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}.
-After restricting the analysis to individuals present in both datasets, we find 296 suspicious variants polymorphic in 1kGP. Of those, 9 are present in the resequenced data \ref{90HanSFS}.
-While this provides strong validation that the variants are not cell-line specific mutations, it is more than the 0.1\% of the sites: some variants that are associated to $Q$ may be present in the population but have biased genotypes.
+In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. Here we consider whether variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
 
-We did a similar analysis using the variants identified in the GCAT model present in the 83 resequenced individuals.
-Of the 24,390 suspicious variants identified globally, only 12,086 of them are found in the 83 individuals in the original 1kGP data (See Figure \ref{90HanSFS_full}).
-From this subset, only 1,637 of these variants are present in the resequenced data, the rest are missing entirely.
-Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in the resequenced data.
-A number of variants shared across cohorts suggests that roughly 10\% of the variants identified are present in the cell lines real but exhibit genotyping bias.
+Among the 296 variants associated with $Q$ within the 1kGP CHB and CHS, and polymorphic the 83 resequenced individuals, only 9 are present in the resequenced data (Figure \ref{90HanSFS}). This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. However, the vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 
-We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. 
-This does not mean that these variants are false positives, but rather, that in the 1kGP, individuals with low $Q$ were less likely to be called as having a variant in that position. 
-Moreover, using the 1kGP as a reference panel might impact the population allele frequencies observed for these positions.
+We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
+Of the 24,390 suspicious variants identified globally, 12,086 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Supplementary Figure \ref{90HanSFS_full}).
+From this subset, only 1,637 are present in the resequenced data.
+Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in both datasets.
+Thus roughly 10\% of the variants identified are associated with $Q$ are likely present in the cell lines but exhibit biased genotypes.
+
+
+Among the 24,390 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip \sgcomment{Figure}. These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
 
 \subsection{Suspicious variants impact modern genomics analyses}
 
