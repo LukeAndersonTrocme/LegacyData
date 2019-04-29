@@ -222,7 +222,7 @@ These are likely among the small number of variants that are present in the data
 State of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-To investigate the proportion of suspicious variants that are being imputed, we submitted the first two chromosomes of  the 1kGP genotype data to the Michigan Imputation Server.
+To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted \sgcomment{genotype data for} the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
@@ -230,13 +230,13 @@ We searched the literature for any GWAS that might have reported these dubious v
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
 Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence data \citep{yucesoy2015genome, ellinghaus2016analysis}.
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence\sgcomment{genotyping chip?} data \citep{yucesoy2015genome, ellinghaus2016analysis}.
 
-All papers used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+These articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
 
-These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two.
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two. \sgcomment{Some discussion is missing here! Probably discuss the PLOS one in more detail}
 
 
 \begin{table}[h]
@@ -281,23 +281,25 @@ Different sequencing technologies will have different error profiles.
 A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. 
 Differences in read quality and error profiles in turn require different calling pipelines.
  
-To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kgp. Given the progress in sequencing and calling that occurred since the early phases of the 1kgp (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
+To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
-However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. The significant association of a variant with a quality metric is not in itself an indication that the variant is spurious. It may simply be subject to a weak but significant calling bias --- not an extraordinary surprise in a low-coverage dataset with a complex, joint sample variant calling pipeline. It may nevertheless be prudent to discard such variants from analyses that may be sensitive to calling biases, such as mutation profiles and allele frequency estimates. The imputation of such variants can also lead to milder problems such as the addition of noise in polygenic risk scores, biases in fine mapping analyses.
+However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. The significant association of a variant with a quality metric is not in itself an indication that the variant is spurious. As we mentioned above, it may simply be subject to a weak but significant calling bias. It may nevertheless be prudent to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
 
-While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
-In order to avoid spurious results, the most conservative approach would be to remove or resequence all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$. 
-We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signals (Supplementary Figure \ref{MutSpect}).
-Another approach, for researchers relying on imputation servers where reference panel individuals cannot be filtered out, is to remove sites that reach a significance below $ p > -\log_{10}(\alpha)$ in the reverse GWAS. (The supplementary material contains a list of variants statistically associated to $Q$).
+For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the associates SNPs or the individuals with $Q<30$ (lists of such variants and sample IDs are provided in the Supplementary material). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be worth it for the community. 
+
+%While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
+%In order to avoid spurious results, the most conservative approach would be to remove or resequence all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$. 
+%We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signals (Supplementary Figure \ref{MutSpect}).
+%Another approach, for researchers relying on imputation servers where reference panel individuals cannot be filtered out, is to remove sites that reach a significance below $ p > -\log_{10}(\alpha)$ in the reverse GWAS. (The supplementary material contains a list of variants statistically associated to $Q$).
 
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome-wide simple logistic regression analysis approach is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding and produces robust results. Both approaches produce comparable results.  
+The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding and produces more robust results. Both approaches produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
-However, cleaning up data is also important to avoid generating spurious results. 
+However, cleaning up existing databases is also important to avoid generating spurious results. 
 The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for removal or re-sequencing.
 
 %We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
