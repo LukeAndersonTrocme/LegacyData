@@ -164,7 +164,7 @@ To build a test statistic to represent the association across all populations si
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
-This method identifies a total of 24,390 variants associated to $Q$ (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
+This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
 Lists of suspicious variants and individuals with low $Q$ are provided as supplementary material \ref{rsIDList}.
@@ -222,7 +222,7 @@ These are likely among the small number of variants that are present in the data
 State of the art imputation servers use a combination of many databases including some that are not freely available.
 From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
 
-To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted \sgcomment{genotype data for} the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
+To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
 
@@ -230,14 +230,18 @@ We searched the literature for any GWAS that might have reported these dubious v
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
 Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used chip sequence\sgcomment{genotyping chip?} data \citep{yucesoy2015genome, ellinghaus2016analysis}.
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}.
 
 These articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
 
-These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two. \sgcomment{Some discussion is missing here! Probably discuss the PLOS one in more detail}
-
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. 
+To distinguish between weak but significant biases and dubious SNPS, we also considered the effect size and distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two.
+We would expect the variants above this threshold to be enriched in real variants with genotyping biases.
+We also note that the majority of the papers whose GWAS variants are associated to $Q$ are above this threshold (See Figure \ref{Pub_30}).
+However, one study that has 7 variants below this threshold is a study that specifically looked at the copy number variation of EBV.
+The results from this study could be confounded by the data quality of the 1kGP as these 7 variants are only significantly associated to EBV copy number in populations we identified as having strong batch effects.
 
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
@@ -494,6 +498,13 @@ Because the resequencing did not include all the individuals from the original 1
 This plot shows  12,086 significant variants identified in the reverse GWAS model including all populations.
  Only 1,637 of the variants are present in the high depth resequenced individuals.}  
 \label{90HanSFS_30}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/Published_OverUnder30.jpg}
+\caption{Site frequency spectrum plot comparing the frequency of suspicious variants identified in publications, for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Each of the rsIDs of the variants are labelled for clarity.}  
+\label{Pub_30}
 \end{figure}
 
 \begin{figure}[h]
