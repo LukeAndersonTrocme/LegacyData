@@ -565,6 +565,7 @@ ggsave(paste0(figurePath,'Han_1kGP_SFS_FullModel.jpg'),height=10, width=10)
 ```{r,fig.height=11,fig.width=8}
 AF30 <- readRDS(paste0(DataPath,
                    'AF30.rds'))
+AF30$rate <- AF30$oAF/AF30$uAF
 
 af1 <- ggplot(AF30, aes(x=uAF, y=oAF))+
   geom_bin2d(bins=200)+
