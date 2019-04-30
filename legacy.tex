@@ -166,7 +166,7 @@ We therefore performed the same reverse GWAS approach in all populations indepen
 Over 3,826 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
 
 To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
-We also considered two alternative approaches to account for confounders, namely using the leading five  principal component analysis, and using population membership as covariates. 
+We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
 This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
@@ -345,17 +345,16 @@ When conducting a statistical analysis of population genetics data, we must acco
 Here we have the opposite situation, where the quantitative variable ($Q$) is used as an explanatory variable. 
 So we consider models where the genotype $y$ is a function of an expected frequency $\pi_{si},$ based on population structure, and $Q$. 
 The null model is 
-\begin{align} \label{lfa}
+\begin{align} \label{lfa_basic}
 y_{si} \mid \pi_{si}  &\sim Binomial\big( 2, \pi_{si} \big).
 \end{align} 
 The expected frequency for a SNP $s$ and individual $i$ can be estimated using principal component analysis, categorical population labels, or logistic factor analysis \citep{song2015testing}. The alternative model then takes in $Q$ as a covariate: 
 
-\begin{align}\label{gcat}
+\begin{align}\label{gcat_basic}
  y_{si} \mid q_i, \boldsymbol{h}^{(i)} &\sim Binomial\bigg( 2, \logit^{-1}\Big(\logit(\pi_{si}) + \beta_s q_i\Big) \bigg).
 \end{align} 
 
-Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \ref{gcat} reduces to Model \ref{lfa}. 
-\sgcomment{Not sure why, but the equation numbers don't line up}
+Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \eqref{gcat_basic} reduces to Model \eqref{lfa_basic}. 
 $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. 
 To test the null hypothesis, we use the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. 
 The deviance test statistic under the null model is approximately chi-square distributed with one degrees of freedom.
@@ -384,8 +383,7 @@ The GCAT is a regression approach that assumes the following model.
 \end{align} 
 for $s=1\hdots S$ and $i=i,\cdots, I$  ($S = 28,516,063$ and $I = 2,504$) and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. 
 The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and are therefore used directly in the model. 
-We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M$ SNPs ($M =2,306,130$ from the 1kGP OMNI 2.5). 
-\sgcomment{This is not consistent with what is said in the text. Also, population labels? what is M?}
+We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M = 2,306,130$ SNPs (we picked SNPs from the 1kGP OMNI 2.5). 
 To avoid possible biases in computing PCA from the biased variants, we considered the genotype matrix $L$ obtained by downsampling 1kGP variants the positions from the \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{OMNI 2.5M chip}
 
 \subsection{Imputation}
