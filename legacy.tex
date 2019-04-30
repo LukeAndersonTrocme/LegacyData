@@ -175,7 +175,7 @@ We tested SNPs, INDELs and repetitive regions separately as they may have differ
 Lists of $Q$-associated variants and individuals with low $Q$ are provided as supplementary material \ref{rsIDList}.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
-At a 10kb scale, we also see rather uniform distribution with a small number of regions showing a strong enrichment for such variants (Figure \ref{VariantDensity}). We identify 56 regions of 10kb each that collectively contain 1132 $Q$- associated (less than 5\% of problematic variants). These regions, which include known challenging regions such as HLA and other immunoglobulin receptor genes, are provided in Supplementary file \sgcomment{XX}. Distribution of association statistics in a sample of these regions is provided in Figure \ref{x}.
+At a 10kb scale, we also see rather uniform distribution with a small number of regions showing a strong enrichment for such variants (Figure \ref{VariantDensity}). We identify 56 regions of 10kb each that collectively contain 1,132 $Q$- associated (less than 5\% of problematic variants). These regions, which include known challenging regions such as HLA and other immunoglobulin receptor genes, are provided in Supplementary file RegionsOver10\_geneID.bed. Distribution of association statistics in a sample of these regions is provided in Figure \ref{Top10}.
 
 \begin{table}
 \centering
@@ -294,11 +294,6 @@ However, because the 1kGP data is widely used as a reference database, these var
 
 For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the associates SNPs or the individuals with $Q<30$ (lists of such variants and sample IDs are provided in the Supplementary material). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be worth it for the community. 
 
-%While it may be difficult to determine the exact source of the bias in the data, we have been able to identify individuals and loci that do not meet quality standards expected from high-quality sequencing data.
-%In order to avoid spurious results, the most conservative approach would be to remove or resequence all individuals that do not meet the quality threshold as well as all the variants associated to low $Q$. 
-%We found that a cut-off of $Q = 30$ was sufficient to remove the most egregious spurious signals (Supplementary Figure \ref{MutSpect}).
-%Another approach, for researchers relying on imputation servers where reference panel individuals cannot be filtered out, is to remove sites that reach a significance below $ p > -\log_{10}(\alpha)$ in the reverse GWAS. (The supplementary material contains a list of variants statistically associated to $Q$).
-
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
@@ -308,8 +303,6 @@ More generally, to improve the quality of genomic reference datasets, we can pro
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
 However, cleaning up existing databases is also important to avoid generating spurious results. 
 The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for removal or re-sequencing.
-
-%We have not identified the precise mechanism through which the technical artifact was introduced. Given that modern platforms seem to have resolved this technical issue, but that recent studies continue to be affected by the legacy batch effect, we found it worthwhile to draw attention to the statistical artefact while a sequencing forensics investigation can take place. 
 
 
 \section{Methods}
@@ -369,7 +362,7 @@ The deviance test statistic under the null model is approximately chi-square dis
 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
 By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. 
-See supplementary file  \ref{rsIDList} for a list of variants.
+See supplementary file rsIDList.txt for a list of variants and adjusted \textit{p}-values.
 
 \subsection{Individual-specific allele frequency}
 Examples of models that are widely used to account population structure include the Balding-Nichols model \citep{balding1995method}, and the Pritchard- Stephens-Donnelly model \citep{pritchard2000inference}. 
@@ -432,8 +425,16 @@ In these plots we are comparing the deviance from the null model in the 24,390 v
 \includegraphics[width=15cm,keepaspectratio]{./Figures/VariantDensity.jpg}
 \caption{The number of $Q$-associated variants per 10kb window across the genome. 
 56 regions have more than 10 variants per window. 
-These regions are listed in the \ref{RegionsOver10.bed}{Bed} file.}  
+These regions are listed in the Supplementary file RegionsOver10.bed.}  
 \label{VariantDensity}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{./Figures/top10.jpg}
+\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the ten 10kb windows with the most  $Q$-associated variants per 10kb across the genome. 
+These regions are listed in the Supplementary file RegionsOver10.bed.}  
+\label{Top10}
 \end{figure}
 
 \begin{figure} \centering
