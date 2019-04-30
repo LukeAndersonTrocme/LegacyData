@@ -243,7 +243,7 @@ They also removed rare alleles and alleles with high degrees of missingness.
 Despite using state-of-the-art quality controls, these variants managed not only to be imputed onto real genotype data, but they also reached genome wide significance for association with biological traits.
 
 These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. 
-To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{...}. \sgcomment{Give the distribution of large and weak}. Most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}).
+To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between low- and high-$Q$ individuals is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}. \luke{One the one hand,18,930 variants are strongly biased, whereas 3,430 are weakly biased}. Most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}).
 However, three studies reported on SNPs with strong bias. One such study reports associations with seven $Q$-associated variants that we find to be highly biased. This study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. Thus the phenotype in that study is likely confounded by the same technical artefacts.
 
 \begin{table}[h]
@@ -407,7 +407,7 @@ We would also like to thank the members of the Gravel lab for their help with co
 \includegraphics[width=15cm,keepaspectratio]{./Figures/fits_Significant_Positions_CompareModels.jpg}
 \caption{Comparison of three logistic regression models for testing association to $Q$.
 These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
-In these plots we are comparing the deviance from the null model in the 24,390 variants identified using the LFA model. \sgcomment{label axes}}  
+In these plots we are comparing the deviance from the null model in the 24,390 variants identified using the LFA model.}  
 \label{CompareModel}
 \end{figure}
 
