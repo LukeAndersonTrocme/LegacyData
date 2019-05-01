@@ -55,8 +55,8 @@ rsID<-fread(paste0(DataPath,'rsID.txt'),
             col.names = c('Chr','Pos','rsID'))
 
 strictMask <- fread(paste0(DataPath,
-                           '20141020.strict_mask.whole_genome.bed'),
-            col.names = c('Chr','start_bp','end_bp','mask'))
+                           '1kGP_StrictMask.bed'),
+            col.names = c('Chr','Pos','Pos.1','rsID'))
 ```
 
 
@@ -133,8 +133,12 @@ Regression <- do.call("rbind",
                            Repeat_SNPs, 
                            NORepeat_SNPs))
 
-write.table(Regression[which(
-            Regression$Adjusted_Log10p 
+RegressionMasked <- left_join(Regression, 
+                          strictMask, 
+                          by = c('Chr','Pos'))
+
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
             > -log10(0.01)),] $ rsID, 
             file = paste0(DataPath, 
                           'Significant_rsID.txt'),
@@ -142,8 +146,8 @@ write.table(Regression[which(
             row.names = FALSE,
             col.names = FALSE)
 
-write.table(Regression[which(
-            Regression$Adjusted_Log10p 
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
             > -log10(0.01)),c('Chr','Pos')], 
             file = paste0(DataPath, 
                           'Significant_Positions.txt'),
@@ -152,8 +156,8 @@ write.table(Regression[which(
             col.names = FALSE,
             sep = '\t')
 
-write.table(Regression[which(
-            Regression$Adjusted_Log10p 
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
             > -log10(0.01)),c('Chr','Pos','rsID','b','Adjusted_Log10p')], 
             file = paste0(DataPath, 
                           'Significant_Positions_and_Pvals.txt'),
