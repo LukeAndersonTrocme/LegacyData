@@ -383,12 +383,12 @@ The GCAT is a regression approach that assumes the following model.
 \end{align} 
 for $s=1\hdots S$ and $i=i,\cdots, I$  ($S = 28,516,063$ and $I = 2,504$) and where $\hat{h}_{0i}=1$ so that $a_{s0}$ is the intercept term and $logit(\pi_{si})=\sum_{k=0}^{K} a_{sk} h_{ki}$. 
 The vectors $\boldsymbol{h}^{i}$ of the matrix $\mathbf{H}$ are unobserved but can be estimated using Logistic Factor Analysis (LFA) \citep{song2015testing} and are therefore used directly in the model. 
-We approximated the population structure using $K=4$ latent components from a subsampled genotype matrix consisting of $M = 2,306,130$ SNPs (we picked SNPs from the 1kGP OMNI 2.5). 
+We approximated the population structure using $K=5$ latent components from a subsampled genotype matrix consisting of $M = 2,306,130$ SNPs (we picked SNPs from the 1kGP OMNI 2.5). 
 To avoid possible biases in computing PCA from the biased variants, we considered the genotype matrix $L$ obtained by downsampling 1kGP variants the positions from the \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{OMNI 2.5M chip}
 
 \subsection{Imputation}
 Using the Michigan Imputation Server, we imputed the genotype data from 1kGP for chromosomes 1 and 2.
-We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni 1M chip} genotype data.
+We used the genotyped data from the 1kGP \href{ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/ALL.chip.omni_broad_sanger_combined.20140818.snps.genotypes.vcf.gz}{Omni 2.5M chip} genotype data.
 The VCF file returned from the server was then downloaded and used to search for the number of significant variants successfully imputed. 
 
 \section{Acknowledgments}
