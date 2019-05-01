@@ -585,6 +585,9 @@ plot_grid(af1, af2,ncol=1)
 
 ggsave(paste0(figurePath,'OverUnder30.jpg'),height=11,width=8)
 ggsave(paste0(figurePath,'OverUnder30.pdf'),height=11,width=8)
+
+print(nrow(AF30[which(AF30$rate <= 2279/450),])/nrow(AF30))
+print(nrow(AF30[which(AF30$rate > 2279/450),])/nrow(AF30))
 ```
 ##Over Under 30 for published variants
 ```{r}

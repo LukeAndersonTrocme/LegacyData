@@ -27,8 +27,8 @@ library(reshape2)
 library(tidyr)
 library(scales)
 #Directories
-DataPath <- '~/Documents/QualityPaper/ProcessedData/'
-figurePath <- '~/Documents/QualityPaper/Figures/'
+DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+figurePath <- '~/Documents/LegacyData/Figures/'
 ```
 
 ##Load Data
@@ -53,6 +53,10 @@ Indels$Indel = 'yes'
 #read in rsIDs (used for GWAS catalogue search)
 rsID<-fread(paste0(DataPath,'rsID.txt'),
             col.names = c('Chr','Pos','rsID'))
+
+strictMask <- fread(paste0(DataPath,
+                           '20141020.strict_mask.whole_genome.bed'),
+            col.names = c('Chr','start_bp','end_bp','mask'))
 ```
 
 
@@ -128,7 +132,6 @@ Regression <- do.call("rbind",
                            NORepeat_Indels, 
                            Repeat_SNPs, 
                            NORepeat_SNPs))
-
 
 write.table(Regression[which(
             Regression$Adjusted_Log10p 
