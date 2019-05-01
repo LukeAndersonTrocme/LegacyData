@@ -126,7 +126,7 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
+Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts. \sgcomment{Something missing}
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Figure \ref{PC1_Correlation}). 
 The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. 
@@ -248,12 +248,11 @@ Despite using state-of-the-art quality controls, these variants managed not only
 
 These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. 
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
-The majority (83.6\%) of the $Q$-associated variants are more than twice as frequent in individuals with low-$Q$ data.
-Most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}).
-However, three studies reported on SNPs with strong bias. 
-One such study reports associations with seven $Q$-associated variants that we find to be highly biased. 
+The majority (83.6\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
+By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
+One study reports associations with seven $Q$-associated variants that we find to be highly biased \cite{}. 
 This study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
-Thus the phenotype in that study is likely confounded by the same technical artefacts.
+Thus the phenotype in that study is likely confounded by the same technical artefacts that lead to biased SNP calling.
 
 \begin{table}[h]
 \begin{tabular}{l l l r r r}
