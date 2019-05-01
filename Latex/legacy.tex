@@ -100,7 +100,7 @@ Finally, we investigate how these variants have impacted modern genomics analyse
   
 
 \begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/Figure1.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}
 \caption{
 \textbf{A} 
 Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to a random set of SNPs.
@@ -133,7 +133,7 @@ The average quality of mapped bases  $Q$ per individual stood out as a strong co
 Thus, sequences called from low-$Q$ data contain variants that reproduce poorly across studies and exhibit a particular mutational signature. 
 
 \begin{figure}
-\includegraphics[width=0.95\hsize,keepaspectratio]{./Figures/MapQualOverTime.jpg}
+\includegraphics[width=0.95\hsize,keepaspectratio]{../Figures/MapQualOverTime.jpg}
 
 \caption{\textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
@@ -192,7 +192,7 @@ A total of 24,390 are statistically significantly associated to $Q$.}
 \end{table}
 
 \begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/SNPOverlap6.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/SNPOverlap6.jpg}
 
 \caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
 The size of the vertical bars ( I ) are proportional to the -log10(p) value of that SNP.
@@ -404,7 +404,7 @@ We would also like to thank the members of the Gravel lab for their help with co
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/fits_Significant_Positions_CompareModels.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/fits_Significant_Positions_CompareModels.jpg}
 \caption{Comparison of three logistic regression models for testing association to $Q$.
 These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
 In these plots we are comparing the deviance from the null model in the 24,390 variants identified using the LFA model.}  
@@ -413,14 +413,14 @@ In these plots we are comparing the deviance from the null model in the 24,390 v
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/CountPerChrom.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/CountPerChrom.jpg}
 \caption{The proportion of $Q$-associated variants per chromosome.}  
 \label{CountPerChrom}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/VariantDensity.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/VariantDensity.jpg}
 \caption{The number of $Q$-associated variants per 10kb window across the genome. 
 56 regions have more than 10 variants per window. 
 These regions are listed in the Supplementary file RegionsOver10.bed.}  
@@ -429,7 +429,7 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/top10.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/top10.jpg}
 \caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the ten 10kb windows with the most  $Q$-associated variants per 10kb across the genome. 
 These regions are listed in the Supplementary file RegionsOver10.bed.}  
 \label{Top10}
@@ -437,13 +437,13 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatSNPs.jpg}
+        \includegraphics[width=\hsize]{../Figures/ManhattanPlot_NonRepeatSNPs.jpg}
 
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatSNPs.jpg}
+        \includegraphics[width=\hsize]{../Figures/QQPlot_NonRepeatSNPs.jpg}
     
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -453,13 +453,13 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_NonRepeatIndels.jpg}
+        \includegraphics[width=\hsize]{../Figures/ManhattanPlot_NonRepeatIndels.jpg}
 
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=\hsize]{./Figures/QQPlot_NonRepeatIndels.jpg}
+        \includegraphics[width=\hsize]{../Figures/QQPlot_NonRepeatIndels.jpg}
     
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -469,13 +469,13 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
 
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatSNPs.jpg}
+        \includegraphics[width=\hsize]{../Figures/ManhattanPlot_RepeatSNPs.jpg}
 
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatSNPs.jpg}
+        \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatSNPs.jpg}
     
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -485,13 +485,13 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
   
 \begin{figure} \centering
     \begin{subfigure}[b]{\linewidth}
-        \includegraphics[width=\hsize]{./Figures/ManhattanPlot_RepeatIndels.jpg}
+        \includegraphics[width=\hsize]{../Figures/ManhattanPlot_RepeatIndels.jpg}
 
     \end{subfigure} %
 
     \begin{subfigure}[b]{\linewidth}
     	\center    
-        \includegraphics[width=\hsize]{./Figures/QQPlot_RepeatIndels.jpg}
+        \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatIndels.jpg}
     
     \end{subfigure} 
     \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
@@ -502,7 +502,7 @@ These regions are listed in the Supplementary file RegionsOver10.bed.}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_singlePop.jpg}
+\includegraphics[width=12cm,keepaspectratio]{../Figures/Han_1kGP_SFS_singlePop.jpg}
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data for variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
 Among the 296 variants associated with $Q$ in the single population tests within the 1kGP CHB and CHS, 9 are present in the resequenced data \citep{Lan2017}.}  
 \label{90HanSFS}
@@ -510,7 +510,7 @@ Among the 296 variants associated with $Q$ in the single population tests within
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=12cm,keepaspectratio]{./Figures/Han_1kGP_SFS_FullModel.jpg}
+\includegraphics[width=12cm,keepaspectratio]{../Figures/Han_1kGP_SFS_FullModel.jpg}
 \caption{Site frequency spectrum plot comparing the original 1kGP data to the high depth resequence data for variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
 Among the 12,086 variants associated with $Q$ in the GCAT model including all populations, 1,637 are present in the high depth resequenced individuals.}  
 \label{90HanSFS_30}
@@ -518,32 +518,32 @@ Among the 12,086 variants associated with $Q$ in the GCAT model including all po
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/Published_OverUnder30.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/Published_OverUnder30.jpg}
 \caption{Site frequency spectrum plot comparing the frequency of $Q$-associated variants identified in publications, for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Each of the rsIDs of the variants are labelled for clarity.}  
 \label{Pub_30}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{./Figures/OverUnder30.jpg}
+\includegraphics[width=15cm,keepaspectratio]{../Figures/OverUnder30.jpg}
 \caption{Site frequency spectrum plot comparing the frequency of $Q$-associated variants for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30.}  
 \label{90HanSFS_full}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/Omni_AF.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/Omni_AF.jpg}
 \caption{We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
 \label{Omni}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/PC1_Correlation.jpg}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/PC1_Correlation.jpg}
 \caption{Plots of data metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
 \label{PC1_Correlation}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=\hsize,keepaspectratio]{./Figures/MutationSpectrum_cutOff.png}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/MutationSpectrum_cutOff.png}
 \caption{\textbf{A} 
 The  *AC${\rightarrow}$*CC mutational signature in JPT remains despite removing variants associated to quality.
 \textbf{B} 
