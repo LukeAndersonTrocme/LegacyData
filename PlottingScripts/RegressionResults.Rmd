@@ -25,7 +25,7 @@ library(multtest)
 library(cowplot)
 library(reshape2)
 library(tidyr)
-
+library(scales)
 #Directories
 DataPath <- '~/Documents/QualityPaper/ProcessedData/'
 figurePath <- '~/Documents/QualityPaper/Figures/'
@@ -322,6 +322,7 @@ print(table[order(-Adjusted_Log10p),])
 
 ##Density of Significant SNPs per Chromosome
 ```{r}
+
 sigPerChrom <- as.data.frame(table(Regression[which(Regression$Adjusted_Log10p > -log10(0.01)),]$Chr))
 PerChrom <- as.data.frame(table(Regression$Chr))
 sigPerChrom <- merge(sigPerChrom, PerChrom, by='Var1')
@@ -332,6 +333,11 @@ ggplot(sigPerChrom,
   geom_bar(stat="identity")+
   labs(x='Chromsome',
        y='proportion of significant variants')
+
+ggsave(paste0(figurePath,
+                'CountPerChrom.jpg'), 
+       height=5, 
+       width=10)
 
 ChromLength <- fread(paste0(DataPath,
                             'GRCh37_ChromLength.txt'),
@@ -377,14 +383,25 @@ for(chrom in seq(1,22,1)){
   bins[[chrom]] <- as.data.frame(table(c))
 }
 
+ TotalBins <- bins %>% bind_rows(.id = "source")
+ ppHist <- ggplot(TotalBins, aes(x = Freq)) +
+            geom_histogram(binwidth=1) +
+            scale_y_log10() +
+            theme_classic() +
+            labs(x='Number of Q-associated variants in a 10kb window',
+                 y='log10 Frequency')
+            
 relWidths <- unlist(ChromLength$Length)/100000000
 relWidths[[1]] <- relWidths[[1]]*1.5
 p <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
+
+p2 <- plot_grid(p, ppHist,nrow=2)
 
 ggsave(paste0(figurePath,
                 'VariantDensity.jpg'), 
        height=5, 
        width=10)
+
 
 #get 10kb regions with more than 10 sig snps
 over10  <- bins %>%
@@ -405,7 +422,7 @@ write.table(over10,
             sep = '\t')
 
  makeSubPlot <- function(df,Name){
-ggplot(df, 
+p<-ggplot(df, 
        aes(x=Pos, 
            y = Adjusted_Log10p))+
   geom_point(size = 1) +
@@ -419,17 +436,17 @@ ggplot(df,
         axis.text.x = element_blank(), 
         axis.ticks.x = element_blank())
 
-dir=paste0(figurePath,
-              'Sub_Regions/Sub_ManhattanPlot_')
-ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
+return(p)
 }
 
+top10<-head(over10[order(-over10$Freq),],10)
+ 
  sub <- list()
- plt_sub <- list()
- for(i in seq(1,nrow(over10))){
-   chr <- over10[i,]$Chr
-   start <- over10[i,]$start_bp
-   end <- over10[i,]$end_bp
+ pp <- list()
+ for(i in seq(1,nrow(top10))){
+   chr <- top10[i,]$Chr
+   start <- top10[i,]$start_bp
+   end <- top10[i,]$end_bp
    title <- paste0('Chr',chr, ':',start,'-',end)
    sub[[i]] <- Regression[which((Regression$Chr == chr) &
                               (Regression$Pos > start) &
@@ -437,9 +454,19 @@ ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
                               c('Chr','Pos','rsID',
                                 'Adjusted_Log10p',
                                 'Repeat','Indel')]
-   makeSubPlot(sub[[i]],title)
+   pp[[i]] <- makeSubPlot(sub[[i]],title)
  }
 
+
+ 
+ pp1 <- plot_grid(pp[[1]],pp[[2]],pp[[3]],pp[[4]],pp[[5]],pp[[6]],pp[[7]],pp[[8]],pp[[9]],pp[[10]],ncol=2)
+ 
+ ggsave(paste0(figurePath,
+                'top10.jpg'), 
+       height=12, 
+       width=8)
+ 
+ 
  library(Homo.sapiens)
  library(annotate)
  mycoords.gr = over10 %>%
