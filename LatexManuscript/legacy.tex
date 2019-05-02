@@ -51,7 +51,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus contaminates modern studies in hidden ways, it may be time to remove or upgrade such legacy sequencing data from reference databases. 
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to contaminate modern studies in hidden ways. It may be time to retire or upgrade such legacy sequencing data. 
 \end{abstract}
 
 \section{Introduction}
@@ -167,16 +167,17 @@ To build a test statistic to represent the association across all populations si
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
-This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome with 15,270 passing the 1kGP strict mask filter (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
+This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome with 15,270 passing the 1kGP strict mask filter (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). Most analyses below focus on the 15,270 variants satisfying the strict mask, since these variants are unlikely to be filtered by standard pipelines.
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-We apply the 1kGP strict mask after FDR-adjustments to allow the method to identify problematic regions already flagged as such.
-There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask.
+
+%We apply the 1kGP strict mask after FDR-adjustments to allow the method to identify problematic regions already flagged as such.
+There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask. \sgcomment{Inconsistent?}
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
-We identify a 10kb region in chromosome 17 has 35 $Q$-associated variants.
+An outlying 10kb region in chromosome 17 \sgcomment{give coordinates} has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
 
 \begin{table}
@@ -208,10 +209,8 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 
 \subsection{Cell line or technical artifact}
 
-In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
-Here we consider whether variants that, in the 1kGP, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
-
-Among the 296 variants associated with $Q$ within the 1kGP CHB and CHS, and polymorphic the 83 resequenced individuals, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
+In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
+Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
 This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
 
 
