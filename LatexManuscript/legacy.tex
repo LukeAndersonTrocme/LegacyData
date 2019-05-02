@@ -123,7 +123,7 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-\luke{These mismatches were maintained despite} considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
+These mismatches were maintained despite only considering sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
 
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Figure \ref{PC1_Correlation}). 
@@ -143,7 +143,7 @@ The bottom plot indicates the sequencing technologies used over time.}
 
 To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
 Traditionally, genome wide association studies use genotypes as the independent variable. 
-Here we perform a ``reverse GWAS'' or Genotype-Conditional Association Test, in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
+Here we perform a ``reverse GWAS'', in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}A).
@@ -167,17 +167,17 @@ To build a test statistic to represent the association across all populations si
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
-This method identifies a total of 15,270 variants associated to $Q$ distributed across the genome (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
+This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome with 15,270 passing the 1kGP strict mask filter (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
 We apply the 1kGP strict mask after FDR-adjustments to allow the method to identify problematic regions already flagged as such.
+There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask.
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
-At a 10kb scale, we also see rather uniform distribution with a small number of regions showing a strong enrichment for such variants (Figure \ref{VariantDensity}). 
-These regions, which include known challenging regions such as HLA and other immunoglobulin receptor genes, are provided in Supplementary Data. 
-Distribution of association statistics in the region with the most $Q$-associated variants is provided in Figure \ref{Top10}.
-\luke{There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask.}
+At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
+We identify a 10kb region in chromosome 17 has 35 $Q$-associated variants.
+Distribution of association statistics in this region is provided in Figure \ref{Top10}.
 
 \begin{table}
 \centering
@@ -213,15 +213,14 @@ Here we consider whether variants that, in the 1kGP, are both associated with $Q
 
 Among the 296 variants associated with $Q$ within the 1kGP CHB and CHS, and polymorphic the 83 resequenced individuals, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
 This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
-However, the vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
 Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
-From this subset, only 1,139 are present in the resequenced data.
-Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in both datasets.
-Thus roughly 10\% of the variants identified are associated with $Q$ are likely present in the cell lines but exhibit biased genotypes.
-
+From this subset, only 1,139 (or 18\%) are present in the resequenced data.
+The allele frequencies of these variants are nearly identical between datasets suggesting that for these 83 individuals, these variants are properly genotyped in the 1kGP.
+There are 5 alleles that show differing frequencies between both datasets that are likely explained by biased genotypes.
+The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 Among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
 These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
@@ -335,7 +334,8 @@ We calculated the mutation spectrum of triplets for the list of significant vari
 
 For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
 We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
-\luke{We filtered out variants surpassing the significance threshold  flagged by the 1kGP strict mask after the FDR adjustment. }
+Variants flagged by the 1kGP strict mask are included in the association test and included in the FDR adjustment. 
+These variants are only removed after the FDR and excluded from downstream analyses.
 
 \subsection{Testing the association of quality to genotype}
 When conducting a statistical analysis of population genetics data, we must account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
