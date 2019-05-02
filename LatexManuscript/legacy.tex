@@ -176,9 +176,8 @@ Lists of $Q$-associated variants and individuals with low $Q$ are provided in Su
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing a strong enrichment for such variants (Figure \ref{VariantDensity}). 
 These regions, which include known challenging regions such as HLA and other immunoglobulin receptor genes, are provided in Supplementary Data. 
-Distribution of association statistics in a sample of these regions is provided in Figure \ref{Top10}.
-
-Repeat Indels : 181 Repeat SNPs : 3369 NonRepeat Indels : 657 NonRepeat SNPs : 11059
+Distribution of association statistics in the region with the most $Q$-associated variants is provided in Figure \ref{Top10}.
+\luke{There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask.}
 
 \begin{table}
 \centering
@@ -188,7 +187,7 @@ Repeat Indels : 181 Repeat SNPs : 3369 NonRepeat Indels : 657 NonRepeat SNPs : 1
 {INDEL} & 181 & 657 & 838\\ \hline
 {Total} & 3,550 & 11,716 & 15,270\\
 \end{tabular}
-\caption{Number of statistically significant variants per category. 
+\caption{Number of statistically significant variants  passing the 1kGP strict mask per category. 
 Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. All four variant categories were subjected to a distinct FDR estimation.
 A total of 15,270 are statistically significantly associated to $Q$. 
 The number of variants included in the analysis for SNPs, SNPs in repeat regions, INDELs and INDELs in repeat regions are  19,846,786, 6,312,620, 1,770,315 and 586,342 respectively.}
@@ -420,8 +419,7 @@ In these plots we are comparing the deviance from the null model in the 15,270 v
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/VariantDensity.jpg}
 \caption{The number of $Q$-associated variants per 10kb window across the genome. 
-56 regions have more than 10 variants per window. 
-These regions are listed in the Supplementary Data.}  
+One region in chromosome 17 has more than 10 variants per window.}  
 \label{VariantDensity}
 \end{figure}
 
