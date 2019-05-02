@@ -454,7 +454,6 @@ ggsave(paste0(figurePath,
        height=5, 
        width=10)
 
-
 #get 10kb regions with more than 10 sig snps
 over10  <- bins %>%
    bind_rows(.id = "source") %>%

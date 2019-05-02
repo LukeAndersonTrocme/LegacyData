@@ -593,7 +593,7 @@ print(nrow(AF30[which(AF30$rate > 2279/450),])/nrow(AF30))
 ```{r}
 pub<-fread(paste0(DataPath, 'fits_PublishedVariants_LFA.txt'))
 pub <- merge(pub, AF30, by='rsID')
-pub$text <- paste(pub$rsID, '\n -log10P : ',round(pub$dev_logp, 2))
+pub$text <- paste(pub$rsID, 'P : ',round(pub$dev_logp, 2))
 library(ggrepel)
 ggplot(pub, aes(x=uAF, y=oAF, label=text))+
      geom_point()+
