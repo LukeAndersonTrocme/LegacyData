@@ -1,8 +1,5 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ELIFE ARTICLE TEMPLATE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% PREAMBLE 
-\documentclass[9pt,lineno]{elife}
+\documentclass[9pt,lineno]{template}
 
 \usepackage[export]{adjustbox}
 \usepackage{lscape}
@@ -126,7 +123,8 @@ Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\r
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
-Despite considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts. \sgcomment{Something missing}
+\luke{These mismatches were maintained despite} considering only sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
+
 
 When mismatch sites are removed from the 1kGP data, the  *AC${\rightarrow}$*CC signal disappears (Figure \ref{SFS}). To identify possible technical reasons for the difference, we performed regressions of the prevalence of the  *AC${\rightarrow}$*CC mutational signature against different individual-level quality metrics provided by the 1kGP (see Figure \ref{PC1_Correlation}). 
 The average quality of mapped bases  $Q$ per individual stood out as a strong correlate : Individuals with low $Q$ show elevated rates of the signature. 
@@ -169,29 +167,31 @@ To build a test statistic to represent the association across all populations si
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
-This method identifies a total of 24,390 variants associated to $Q$ distributed across the genome (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
+This method identifies a total of 15,270 variants associated to $Q$ distributed across the genome (Figures \ref{NRS_Manhattan},\ref{NRI_Manhattan}, \ref{RS_Manhattan}, and \ref{RI_Manhattan}). 
 To account for the large number of tests, we used a two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the p-values using a nominal Type-I error rate $\alpha = 0.01$ \citep{Benjamini2006}. 
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
-\luke{We also note that 37.5\% of the variants are found within regions flagged by the 1kGP strict callability mask.}
+We apply the 1kGP strict mask after FDR-adjustments to allow the method to identify problematic regions already flagged as such.
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing a strong enrichment for such variants (Figure \ref{VariantDensity}). 
-We identify 56 regions of 10kb each that collectively contain 1,132 $Q$- associated (less than 5\% of problematic variants). 
 These regions, which include known challenging regions such as HLA and other immunoglobulin receptor genes, are provided in Supplementary Data. 
 Distribution of association statistics in a sample of these regions is provided in Figure \ref{Top10}.
+
+Repeat Indels : 181 Repeat SNPs : 3369 NonRepeat Indels : 657 NonRepeat SNPs : 11059
 
 \begin{table}
 \centering
 \begin{tabular}{l  r r r}
                       & {Repeat}  & {Non-Repeat}   & {Total}    \\ \hline
-{SNP}  & 5,186 & 17,124 & 22,310\\  
-{INDEL} & 509 & 1,571 & 2,080\\ \hline
-{Total} & 5,695 & 18,695 & 24,390\\
+{SNP}  & 3,369 & 11,059 & 14,428\\  
+{INDEL} & 181 & 657 & 838\\ \hline
+{Total} & 3,550 & 11,716 & 15,270\\
 \end{tabular}
 \caption{Number of statistically significant variants per category. 
 Variants that are flagged by the 1kGP nested repeat mask file were analyzed separately. SNPs and INDELs were also analyzed separately. All four variant categories were subjected to a distinct FDR estimation.
-A total of 24,390 are statistically significantly associated to $Q$.}
+A total of 15,270 are statistically significantly associated to $Q$. 
+The number of variants included in the analysis for SNPs, SNPs in repeat regions, INDELs and INDELs in repeat regions are  19,846,786, 6,312,620, 1,770,315 and 586,342 respectively.}
 \label{sigTable}
 \end{table}
 
@@ -218,13 +218,13 @@ However, the vast majority of polymorphisms associated with $Q$ are not present 
 
 
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
-Of the 24,390 $Q$-associated variants identified globally, 12,086 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
+Of the 15,270 $Q$-associated variants identified globally, 12,086 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,637 are present in the resequenced data.
 Figure \ref{90HanSFS_full} shows a relatively weak correlation to allele frequency for the variants present in both datasets.
 Thus roughly 10\% of the variants identified are associated with $Q$ are likely present in the cell lines but exhibit biased genotypes.
 
 
-Among the 24,390 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
+Among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
 These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
 
 \subsection{Suspicious variants impact modern genomics analyses}
@@ -248,7 +248,7 @@ Despite using state-of-the-art quality controls, these variants managed not only
 
 These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations. 
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
-The majority (83.6\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
+The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
 One study reports associations with seven $Q$-associated variants that we find to be highly biased \cite{}. 
 This study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
@@ -334,17 +334,9 @@ Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF 
 In total, 57,838,849 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
 We calculated the mutation spectrum of triplets for the list of significant variants for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}.
 
-For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test (see Table \ref{totTable}). We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
-
-\begin{table}[h]
-\begin{tabular}{l  r r}
-                      & {Repeat}  & {Non-Repeat}       \\ \hline
-{SNP}  & 6,312,620 & 19,846,786   \\  
-{INDEL} &  586,342  & 1,770,315 \\ \hline
-\end{tabular}
-\caption{Number of variants included in the analysis by category.}
-\label{totTable}
-\end{table}
+For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
+We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
+\luke{We filtered out variants surpassing the significance threshold  flagged by the 1kGP strict mask after the FDR adjustment. }
 
 \subsection{Testing the association of quality to genotype}
 When conducting a statistical analysis of population genetics data, we must account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
@@ -366,7 +358,7 @@ To test the null hypothesis, we use the generalized likelihood ratio test statis
 The deviance test statistic under the null model is approximately chi-square distributed with one degrees of freedom.
 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
-By using a nominal Type-I error rate $\alpha = 0.01$, a total of 24,390 variants were found to be statistically significance. 
+By using a nominal Type-I error rate $\alpha = 0.01$, a total of 15,270 variants were found to be statistically significance. 
 See Supplementary Data for a list of variants and adjusted \textit{p}-values.
 
 \subsection{Individual-specific allele frequency}
@@ -413,7 +405,7 @@ We would also like to thank the members of the Gravel lab for their help with co
 \includegraphics[width=15cm,keepaspectratio]{../Figures/fits_Significant_Positions_CompareModels.jpg}
 \caption{Comparison of three logistic regression models for testing association to $Q$.
 These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
-In these plots we are comparing the deviance from the null model in the 24,390 variants identified using the LFA model.}  
+In these plots we are comparing the deviance from the null model in the 15,270 variants identified using the LFA model.}  
 \label{CompareModel}
 \end{figure}
 
@@ -435,16 +427,15 @@ These regions are listed in the Supplementary Data.}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm,keepaspectratio]{../Figures/top10.jpg}
-\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the ten 10kb windows with the most  $Q$-associated variants per 10kb across the genome. 
-These regions are listed in the Supplementary Data.}  
+\includegraphics[width=15cm,keepaspectratio]{../Figures/RegionOver10.jpg}
+\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the 10kb window with the most  $Q$-associated variants per 10kb across the genome.}  
 \label{Top10}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/OverUnder30.jpg}
-\caption{Site frequency spectrum plot comparing the allele frequency difference between individuals with low- and high-$Q$. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Two clusters of are visible, where the majority (83.6\%) of the $Q$-associated variants are more than twice as frequent in individuals with low-$Q$ data.}  
+\caption{Site frequency spectrum plot comparing the allele frequency difference between individuals with low- and high-$Q$. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Two clusters of are visible, where the majority (92.7\%) of the $Q$-associated variants are more than twice as frequent in individuals with low-$Q$ data.}  
 \label{90HanSFS_full}
 \end{figure}
 

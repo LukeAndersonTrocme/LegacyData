@@ -28,8 +28,8 @@ library(tidyverse)
 library(purrr)
 
 #Directories
-DataPath <- '~/Documents/QualityPaper/ProcessedData/'
-figurePath <- '~/Documents/QualityPaper/Figures/'
+DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+figurePath <- '~/Documents/LegacyData/Figures/'
 
 #Load the custom population colors
 #Hex colors taken from https://www.nature.com/articles/nature15393

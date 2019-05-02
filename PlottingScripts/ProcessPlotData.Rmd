@@ -29,8 +29,8 @@ library(purrr)
 library(lfa)
 
 #Directories
-DataPath <- '~/Documents/QualityPaper/ProcessedData/'
-figurePath <- '~/Documents/QualityPaper/Figures/'
+DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+figurePath <- '~/Documents/LegacyData/Figures/'
 ```
 
 ##GWAS
@@ -254,7 +254,7 @@ BasPath = '/Users/luke/genomes/bas_file/1000GenomesBAS/'
 
 #load bas_dt
 #see 1_make_quality_dt.Rmd for making this file
-load('/Users/luke/Documents/QualityPaper/rick/bas_dt')
+load(paste0(DataPath,'bas_dt'))
 
 #get the index files for extra meta data
 #wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index
@@ -344,6 +344,15 @@ Reg <- fread(paste0(DataPath,
                            'Population','deviance'), 
              colClasses = c('numeric', 'numeric', 
                             'character', 'numeric'))
+
+strictMask <- fread(paste0(DataPath,
+                           '1kGP_StrictMask.bed'),
+            col.names = c('Chr','Pos','Pos.1','rsID'))
+#remove positions that don't pass strict mask
+Reg <- anti_join(Reg,
+                 strictMask,
+                 by = c('Chr','Pos'))
+
 #Get P-Values and significant sites
 Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, 
                             lower.tail = FALSE))
@@ -454,7 +463,7 @@ saveRDS(HanKgpAF,
 ```
 ##Extract Significant Positions from 1kGP Data
 ```{bash}
-DataPath='/Users/luke/Documents/QualityPaper/ProcessedData'
+DataPath='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData'
 RawDataPath='/Users/luke/genomes/genomes/hg19/phase3'
 VCF='.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz'
 
@@ -489,11 +498,31 @@ vcftools \
 --bfile $DataPath/Significant_Positions \
 --freq \
 --out $DataPath/Significant_Positions
+
+
+#bcftools doesn't take rsID
+#this deals with indels and other mulitallelic variants
+vcftools \
+--vcf $DataPath/Significant_Positions.vcf \
+--snps $DataPath/Significant_rsID.txt \
+--recode --recode-INFO-all \
+--out $DataPath/Significant_Positions_allPop
+
+/Users/luke/bin/plink_mac/plink \
+--vcf $DataPath/Significant_Positions_allPop.recode.vcf \
+--make-bed \
+--out $DataPath/Significant_Positions_allPop
+
+#Get Allele Frequencies
+/Users/luke/bin/plink_mac/plink \
+--bfile $DataPath/Significant_Positions_allPop \
+--freq \
+--out $DataPath/Significant_Positions_allPop
 ```
 
 ##Extract Significant Positions from Han Resequence Data
 ```{bash}
-DataPath='/Users/luke/Documents/QualityPaper/ProcessedData'
+DataPath='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData'
 RawDataPath='/Users/luke/genomes/genomes/Han90/90_Han_Chinese_SNP_gatkvqsr_20170424_chr'
 VCF='_validator.vcf.gz'
 
@@ -538,19 +567,19 @@ vcftools \
 ##Compare Over and Under Qual 30
 ```{r}
 data_bim <- fread(paste0(DataPath,
-                         'Significant_Positions.bim'), 
+                         'Significant_Positions_allPop.bim'), 
                   col.names = c('Chr','rsID','X',
                                 'Pos','Ref','Alt')) %>%
   select(rsID)
 
 data_fam <- fread(paste0(DataPath,
-                         'Significant_Positions.fam'), 
+                         'Significant_Positions_allPop.fam'), 
                   col.names = c('familyID','sample',
                                 'father','mother',
                                 'sex','pheno')) %>%
   select(sample)
 
-data_genotype <- read.bed(paste0(DataPath,'Significant_Positions'))
+data_genotype <- read.bed(paste0(DataPath,'Significant_Positions_allPop'))
 rownames(data_genotype) <- data_bim$rsID
 colnames(data_genotype) <- data_fam$sample
 data_genotype[1:5,1:5]

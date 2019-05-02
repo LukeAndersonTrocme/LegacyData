@@ -30,7 +30,21 @@ library(scales)
 DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
 figurePath <- '~/Documents/LegacyData/Figures/'
 ```
+##StrictMask
+```{bash}
+DataPath='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData/'
 
+#from all positions create a pseudo BED file
+cat $DataPath/rsID.txt | \
+awk '{print $1,$2,$2+1,$3}' | \
+tr ' ' '\t' \
+> $DataPath/1kGP_pseudoBed.bed
+#subtract the strict mask from the 1kGP
+bedtools subtract \
+-a $DataPath/1kGP_pseudoBed.bed \
+-b $DataPath/20141020.strict_mask.whole_genome.bed \
+> $DataPath/1kGP_StrictMask.bed
+```
 ##Load Data
 ```{r}
 ##read Regression results
@@ -73,6 +87,7 @@ Regression <- left_join(Regression,
 Regression <- left_join(Regression, 
                         Indels, 
                         by = c('Chr','Pos'))
+
 #remove missing data
 Regression <- Regression[which(!is.na(Regression$devdiff)),]
 ##save memory
@@ -133,9 +148,10 @@ Regression <- do.call("rbind",
                            Repeat_SNPs, 
                            NORepeat_SNPs))
 
-RegressionMasked <- left_join(Regression, 
-                          strictMask, 
-                          by = c('Chr','Pos'))
+#remove positions that don't pass strict mask
+RegressionMasked <- anti_join(Regression, 
+                        strictMask,
+                        by = c('Chr','Pos','rsID'))
 
 write.table(RegressionMasked[which(
             RegressionMasked$Adjusted_Log10p 
@@ -164,6 +180,35 @@ write.table(RegressionMasked[which(
             quote = FALSE,
             row.names = FALSE,
             sep = '\t')
+
+nsigRepIndel <- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &
+                    RegressionMasked$Repeat=='yes' &
+                    RegressionMasked$Adjusted_Log10p 
+                    > -log10(0.01)),]))
+
+nsigRepSNP <- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &
+                    RegressionMasked$Repeat=='yes' &
+                    RegressionMasked$Adjusted_Log10p 
+                    > -log10(0.01)),]))
+
+nsigNonRepIndel <- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &
+                    is.na(RegressionMasked$Repeat) &
+                    RegressionMasked$Adjusted_Log10p 
+                    > -log10(0.01)),]))
+
+nsigNonRepSNP <- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &
+                    is.na(RegressionMasked$Repeat) &
+                    RegressionMasked$Adjusted_Log10p 
+                    > -log10(0.01)),]))
+
+print(paste0('Repeat Indels : ',nsigRepIndel,
+             ' Repeat SNPs : ',nsigRepSNP,
+             ' NonRepeat Indels : ',nsigNonRepIndel,
+             ' NonRepeat SNPs : ',nsigNonRepSNP))
 ```
 
 
@@ -215,8 +260,8 @@ ggplot(sig.19,
 
 dir=paste0(figurePath,
               'ManhattanPlot_')
-ggsave(paste(dir,Name,'.jpg',sep=''), height=5, width=10)
-ggsave(paste(dir,Name,'.tiff',sep=''), height=5, width=10)
+ggsave(paste(dir,Name,'_strict.jpg',sep=''), height=5, width=10)
+ggsave(paste(dir,Name,'_strict.tiff',sep=''), height=5, width=10)
 
 }
 
@@ -249,8 +294,8 @@ gg_qqplot(pvalues, name) +
 
 dir=paste0(figurePath,
               'QQPlot_')
-ggsave(paste(dir,name,'.jpg',sep=''), height=5, width=10)
-ggsave(paste(dir,name,'.tiff',sep=''), height=5, width=10)
+ggsave(paste(dir,name,'_strict.jpg',sep=''), height=5, width=10)
+ggsave(paste(dir,name,'_strict.tiff',sep=''), height=5, width=10)
 
  }
  ##modified from : https://slowkow.com/notes/ggplot2-qqplot/
@@ -330,8 +375,8 @@ print(table[order(-Adjusted_Log10p),])
 ##Density of Significant SNPs per Chromosome
 ```{r}
 
-sigPerChrom <- as.data.frame(table(Regression[which(Regression$Adjusted_Log10p > -log10(0.01)),]$Chr))
-PerChrom <- as.data.frame(table(Regression$Chr))
+sigPerChrom <- as.data.frame(table(RegressionMasked[which(RegressionMasked$Adjusted_Log10p > -log10(0.01)),]$Chr))
+PerChrom <- as.data.frame(table(RegressionMasked$Chr))
 sigPerChrom <- merge(sigPerChrom, PerChrom, by='Var1')
 sigPerChrom$density <- sigPerChrom$Freq.x/sigPerChrom$Freq.y
 
@@ -354,8 +399,8 @@ plts <- list()
 bins <- list()
 for(chrom in seq(1,22,1)){
   print(chrom)
-  df <- Regression[which((Regression$Chr == chrom) &
-                           (Regression$Adjusted_Log10p 
+  df <- RegressionMasked[which((RegressionMasked$Chr == chrom) &
+                           (RegressionMasked$Adjusted_Log10p 
                             > -log10(0.01))),
                    c('Chr','Pos')]
   l = ChromLength[which(ChromLength$Chr == chrom),
@@ -364,7 +409,7 @@ for(chrom in seq(1,22,1)){
   if(chrom == 1){
     plts[[chrom]]<-ggplot(df, aes(x=Pos)) +
     geom_freqpoly(breaks = b) +
-    ylim(0,80)+
+    ylim(0,50)+
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
           axis.line = element_blank(),
@@ -376,7 +421,7 @@ for(chrom in seq(1,22,1)){
   else{
   plts[[chrom]]<-ggplot(df, aes(x=Pos)) +
     geom_freqpoly(breaks = b) +
-    ylim(0,80)+
+    ylim(0,50)+
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.title.y = element_blank(),
@@ -455,19 +500,21 @@ top10<-head(over10[order(-over10$Freq),],10)
    start <- top10[i,]$start_bp
    end <- top10[i,]$end_bp
    title <- paste0('Chr',chr, ':',start,'-',end)
-   sub[[i]] <- Regression[which((Regression$Chr == chr) &
-                              (Regression$Pos > start) &
-                              (Regression$Pos < end)),
+   sub[[i]] <- RegressionMasked[which((RegressionMasked$Chr == chr) &
+                              (RegressionMasked$Pos > start) &
+                              (RegressionMasked$Pos < end)),
                               c('Chr','Pos','rsID',
                                 'Adjusted_Log10p',
                                 'Repeat','Indel')]
    pp[[i]] <- makeSubPlot(sub[[i]],title)
  }
 
-
- 
- pp1 <- plot_grid(pp[[1]],pp[[2]],pp[[3]],pp[[4]],pp[[5]],pp[[6]],pp[[7]],pp[[8]],pp[[9]],pp[[10]],ncol=2)
- 
+ pp[[1]]
+  ggsave(paste0(figurePath,
+                'RegionOver10.jpg'), 
+       height=5, 
+       width=8)
+  
  ggsave(paste0(figurePath,
                 'top10.jpg'), 
        height=12, 
