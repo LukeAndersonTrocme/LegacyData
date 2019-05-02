@@ -218,7 +218,7 @@ This is more than our nominal false positive rate of 1\% of the sites. Thus a sm
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
 Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,139 (or 18\%) are present in the resequenced data.
-The allele frequencies of these variants are nearly identical between datasets suggesting that for these 83 individuals, these variants are properly genotyped in the 1kGP.
+The allele frequencies of these variants are nearly identical between datasets suggesting that among these 83 individuals, these variants are properly genotyped in the 1kGP.
 There are 5 alleles that show differing frequencies between both datasets that are likely explained by biased genotypes.
 The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
@@ -238,7 +238,7 @@ We searched the literature for any GWAS that might have reported these dubious v
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
 
 Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}.
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}. 
 
 These articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
@@ -248,8 +248,8 @@ These associations are not necessarily incorrect -- a weak but significant bias 
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
 The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
-One study reports associations with seven $Q$-associated variants that we find to be highly biased \cite{}. 
-This study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
+One study reports associations with seven $Q$-associated variants that we find to be highly biased \sgcomment{cite!}\cite{}. 
+That study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
 Thus the phenotype in that study is likely confounded by the same technical artefacts that lead to biased SNP calling.
 
 \begin{table}[h]
@@ -296,26 +296,26 @@ Differences in read quality and error profiles in turn require different calling
  
 To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
-However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. The significant association of a variant with a quality metric is not in itself an indication that the variant is spurious. As we mentioned above, it may simply be subject to a weak but significant calling bias. It may nevertheless be prudent to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
+However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. Even though significant association of a variant with a quality metric is not in itself an indication that the variant is spurious, we would recommend to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
 
-For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the associates SNPs or the individuals with $Q<30$ (lists of such variants and sample IDs are provided in the Supplementary Data). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be worth it for the community. 
+For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the $Q$-associated SNPs or the individuals with $Q<30$ (lists of such variants and sample IDs are provided in the Supplementary Data). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be a worthwhile investment for the community. 
 
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding and produces more robust results. Both approaches produce comparable results.  
+The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding but produces produces more robust results \sgcomment{We never explained this!}. Both approaches produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
 However, cleaning up existing databases is also important to avoid generating spurious results. 
-The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for removal or re-sequencing.
+The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for retirement or re-sequencing.
 
 
 \section{Methods}
 \subsection{Code and data availability}
-Our pipelines are fully reproducible and publicly available on \href{https://github.com/LukeAndersonTrocme/LegacyData}{GitHub}.
-This repository has all the scripts used for data download, processing, analysis and plotting.
-Supplementary data as well as preprocessed data for plotting are also available on GitHub.
+Since this data is primarily performed using publicly available data, we provide fully reproducible and publicly available on \href{https://github.com/LukeAndersonTrocme/LegacyData}{GitHub}.
+This repository includes scripts used for data download, processing, analysis and plotting.
+%Supplementary data as well as preprocessed data for plotting are also available on GitHub.
 
 \subsection{Metadata}
 The metadata used in this analysis was compiled from each of the index files from the 1000 Genomes file system. 
@@ -327,15 +327,15 @@ The submission dates and sequencing centres for each sample in the analysis was 
 \subsection{Quality Controls}
 For the mutation spectrum analysis, we reproduced the quality control and data filtering pipelines used by Harris et al. as they applied the current state of the art quality thresholds to remove questionable sequences for detecting population level differences. 
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
-The 1kGP strict mask was used to remove low quality regions of the genome, highly conserved regions were removed using the phastCons100way mask file and highly repetitive regions were also removed using the NestedRepeats mask file from RepeatMasker.
+The 1kGP strict mask was used to remove low quality regions of the genome, highly conserved regions were removed using the phastCons100way mask file and highly repetitive regions were removed using the NestedRepeats mask file from RepeatMasker.
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 were considered.
 In total, 57,838,849 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
-We calculated the mutation spectrum of triplets for the list of significant variants for the JPT population using a similar method as described in Harris et al. 2017. \citep{Harris2017a}.
+We calculated the mutation spectrum of base pair triplets for the list of significant variants for the JPT population using a similar method as described in  \citep{Harris2017a}.
 
-For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
+For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test \sgcomment{Explain why is this larger than the previous number?}. 
 We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
 Variants flagged by the 1kGP strict mask are included in the association test and included in the FDR adjustment. 
-These variants are only removed after the FDR and excluded from downstream analyses.
+These variants are only removed after the FDR and excluded from downstream discussion of error patterns, since most population genetics analyses use the strict mask as a filter, and we expect to find problematic variants in filtered regions.
 
 \subsection{Testing the association of quality to genotype}
 When conducting a statistical analysis of population genetics data, we must account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
@@ -390,7 +390,7 @@ The VCF file returned from the server was then downloaded and used to search for
 
 \section{Acknowledgments}
 We would like to thank Kelly Harris for sharing her mutation spectrum scripts.
-We would also like to thank the members of the Gravel lab for their help with coding and brainstorming ideas.
+We would also like to thank the members of the Gravel lab for their help with coding and useful discussions.
 
 \bibliography{Legacy}
 
