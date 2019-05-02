@@ -403,12 +403,19 @@ for(chrom in seq(1,22,1)){
                            (RegressionMasked$Adjusted_Log10p 
                             > -log10(0.01))),
                    c('Chr','Pos')]
+  mask <- Regression[which((Regression$Chr == chrom) &
+                           (Regression$Adjusted_Log10p 
+                            > -log10(0.01)) &
+                             !(Regression$rsID %in% RegressionMasked$rsID)),
+                   c('Chr','Pos')]
+  
   l = ChromLength[which(ChromLength$Chr == chrom),
                   c('Length')][[1]]
   b = seq(1,l,by=10000)
   if(chrom == 1){
-    plts[[chrom]]<-ggplot(df, aes(x=Pos)) +
-    geom_freqpoly(breaks = b) +
+    plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
+    geom_freqpoly(breaks = b, color = 'red') +
+    geom_freqpoly(data = df, breaks = b) +
     ylim(0,50)+
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
@@ -419,8 +426,9 @@ for(chrom in seq(1,22,1)){
     labs(x=chrom,y='Significant variants per 10kb window')
   }
   else{
-  plts[[chrom]]<-ggplot(df, aes(x=Pos)) +
-    geom_freqpoly(breaks = b) +
+  plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
+    geom_freqpoly(breaks = b, color = 'red') +
+    geom_freqpoly(data = df, breaks = b) +
     ylim(0,50)+
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
@@ -457,13 +465,12 @@ ggsave(paste0(figurePath,
 #get 10kb regions with more than 10 sig snps
 over10  <- bins %>%
    bind_rows(.id = "source") %>%
-   filter(Freq > 10) %>%
+   filter(Freq >= 5) %>%
    separate(c, c("start_bp", "end_bp"), ",")
 
 over10$start_bp <- as.numeric(as.character(substring(over10$start_bp,2)))
 over10$end_bp <- as.numeric(as.character(substring(over10$end_bp,1,
                                                     nchar(over10$end_bp)-1)))
-
 names(over10)[c(1,4)]<-c('Chr','Freq_Sig_Var')
 write.table(over10,
             file = paste0(DataPath,
@@ -527,17 +534,18 @@ top10<-head(over10[order(-over10$Freq),],10)
    mutate(chrom=paste0('chr', chrom)) %>%
    makeGRangesFromDataFrame
  
- GeneRegsions <- subsetByOverlaps(genes(TxDb.Hsapiens.UCSC.hg19.knownGene), mycoords.gr)
+ GeneRegions <- subsetByOverlaps(genes(TxDb.Hsapiens.UCSC.hg19.knownGene), mycoords.gr)
  
-out <- data.frame(seqnames=seqnames(GeneRegsions),
-  starts=start(GeneRegsions)-1,
-  ends=end(GeneRegsions),
-  names=c(rep(".", length(GeneRegsions))),
-  scores=c(rep(".", length(GeneRegsions))),
-  strands=strand(GeneRegsions),
-  gene_id=GeneRegsions$gene_id,
-  gene_symbol=getSYMBOL(as.character(unlist(out$gene_id)), 
-                        data='org.Hs.eg'))
+out <- data.frame(seqnames=seqnames(GeneRegions),
+  starts=start(GeneRegions)-1,
+  ends=end(GeneRegions),
+  names=c(rep(".", length(GeneRegions))),
+  scores=c(rep(".", length(GeneRegions))),
+  strands=strand(GeneRegions),
+  gene_id=GeneRegions$gene_id)
+
+out$gene_symbol <- getSYMBOL(as.character(unlist(out$gene_id)), 
+                        data='org.Hs.eg')
 
 write.table(out, file = paste0(DataPath,
                           'RegionsOver10_geneID.bed'), 
