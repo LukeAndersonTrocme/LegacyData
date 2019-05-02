@@ -172,14 +172,14 @@ To account for the large number of tests, we used a two-stage Benjamini \& Hochb
 We tested SNPs, INDELs and repetitive regions separately as they may have different error rates (Table \ref{sigTable}).
 
 %We apply the 1kGP strict mask after FDR-adjustments to allow the method to identify problematic regions already flagged as such.
-There are 9,124 $Q$-associated variants that are within the flagged regions of the 1kGP strict mask. \sgcomment{Inconsistent?}
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
 An outlying 10kb region in chromosome 17 \sgcomment{give coordinates} has 35 $Q$-associated variants.
-
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
+By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome(Figure \ref{VariantDensity}).
+
 
 \begin{table}
 \centering
