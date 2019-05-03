@@ -177,7 +177,7 @@ Lists of $Q$-associated variants and individuals with low $Q$ are provided in Su
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
-An outlying 10kb region in chromosome 17 \sgcomment{give coordinates} has 35 $Q$-associated variants.
+An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome(Figure \ref{VariantDensity}).
 
@@ -249,7 +249,7 @@ These associations are not necessarily incorrect -- a weak but significant bias 
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
 The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
-One study reports associations with seven $Q$-associated variants that we find to be highly biased \sgcomment{cite!}\cite{}. 
+One study reports associations with seven $Q$-associated variants that we find to be highly biased \citep{Mandage2017}. 
 That study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
 Thus the phenotype in that study is likely confounded by the same technical artefacts that lead to biased SNP calling.
 
@@ -304,7 +304,7 @@ For analyses where individual variants cannot be examined individually (mutation
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding but produces produces more robust results \sgcomment{We never explained this!}. Both approaches produce comparable results.  
+The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding but produces more robust results \sgcomment{We never explained this!}. Both approaches produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
@@ -330,10 +330,10 @@ For the mutation spectrum analysis, we reproduced the quality control and data f
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
 The 1kGP strict mask was used to remove low quality regions of the genome, highly conserved regions were removed using the phastCons100way mask file and highly repetitive regions were removed using the NestedRepeats mask file from RepeatMasker.
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 were considered.
-In total, 57,838,849 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
+In total, 7,786,023 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
 We calculated the mutation spectrum of base pair triplets for the list of significant variants for the JPT population using a similar method as described in  \citep{Harris2017a}.
 
-For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test \sgcomment{Explain why is this larger than the previous number?}. 
+For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
 We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
 Variants flagged by the 1kGP strict mask are included in the association test and included in the FDR adjustment. 
 These variants are only removed after the FDR and excluded from downstream discussion of error patterns, since most population genetics analyses use the strict mask as a filter, and we expect to find problematic variants in filtered regions.
