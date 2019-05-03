@@ -99,7 +99,7 @@ Finally, we investigate how these variants have impacted modern genomics analyse
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}
 \caption{
-\textbf{A} 
+Suspicious mutations carried by individuals with low mapping quality have distinct mutational profiles, reproduce poorly across studies, and are distributed across the genome. \textbf{A} 
 Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to a random set of SNPs.
 The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. 
 There is also a slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. 
@@ -133,7 +133,8 @@ Thus, sequences called from low-$Q$ data contain variants that reproduce poorly 
 \begin{figure}
 \includegraphics[width=0.95\hsize,keepaspectratio]{../Figures/MapQualOverTime.jpg}
 
-\caption{\textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. 
+\caption{Sampling and sequencing technologies over time in the 1kGP.
+\textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes sequencing project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
  \textbf{B} The x-axis is sorted by the sequencing date per individual. 
 The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. 
@@ -283,7 +284,7 @@ Thus the phenotype in that study is likely confounded by the same technical arte
 
  \hline
 \end{tabular}
-\caption{A list of recent publications that reported $Q$-associated variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). The black text colour indicates that this variant is twice as frequent in individuals with $Q$ < 30, grey text colour indicates that these variants are less than twice as frequent in individuals with $Q$ < 30 (See Figure \ref{Pub_30}).}
+\caption{Recent publications that reported $Q$-associated variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). The black text colour indicates that this variant is twice as frequent in individuals with $Q$ < 30, grey text colour indicates that these variants are less than twice as frequent in individuals with $Q$ < 30 (See Figure \ref{Pub_30}).}
 \label{gwasTable}
 \end{table}
 
@@ -470,7 +471,8 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
         \includegraphics[width=\hsize]{../Figures/QQPlot_NonRepeatSNPs.jpg}
     
     \end{subfigure} 
-    \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of SNPS in non-repetitive regions with $Q$.
+    \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions.}
   \label{NRS_Manhattan}
   \end{figure}
@@ -483,7 +485,7 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
         \includegraphics[width=\hsize]{../Figures/QQPlot_NonRepeatIndels.jpg}
     
     \end{subfigure} 
-    \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of indels in non-repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions.}
   \label{NRI_Manhattan}
   \end{figure}
@@ -496,7 +498,7 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
         \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatSNPs.jpg}
     
     \end{subfigure} 
-    \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of SNPS in repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions.}
   \label{RS_Manhattan}
   \end{figure}
@@ -508,26 +510,27 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
     	\center    
         \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatIndels.jpg}
     \end{subfigure} 
-    \caption{\textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of indels in repetitive regions with $Q$.  \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions.}
   \label{RI_Manhattan}
   \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/Omni_AF.jpg}
-\caption{We found that 613 of the variants we identified as being associated to $Q$ were present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
+\caption{Estimated frequency and association strength of $Q$- associated variants present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
 \label{Omni}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/PC1_Correlation.jpg}
-\caption{Plots of data metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
+\caption{Sequencing metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1kGP. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
 \label{PC1_Correlation}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/MutationSpectrum_cutOff.png}
-\caption{\textbf{A} 
+
+\caption{Comparing mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  \textbf{A} 
 The  *AC${\rightarrow}$*CC mutational signature in JPT remains despite removing variants associated to quality.
 \textbf{B} 
 Removing individuals with average quality per mapped bases $Q$ below a threshold of 30 removes the mutational signature completely. }
