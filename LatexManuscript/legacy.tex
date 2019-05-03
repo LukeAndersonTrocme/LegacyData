@@ -84,7 +84,7 @@ Harris and Pritchard further identified distinct mutational spectra across a ran
 In particular, the latter two studies  identified a heterogeneous mutational signature within 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals. 
+We therefore decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama. 
 
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in a number of recent publications.
@@ -178,7 +178,7 @@ Distribution of association statistics in this region is provided in Figure \ref
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome(Figure \ref{VariantDensity}).
 
 
-\begin{table}
+\begin{table}[h!]
 \centering
 \begin{tabular}{l  r r r}
                       & {Repeat}  & {Non-Repeat}   & {Total}    \\ \hline
@@ -249,7 +249,7 @@ One study reports associations with seven $Q$-associated variants that we find t
 That study considered copy number of Epstein-Barr virus sequence in the 1kGP as a phenotype. 
 Thus the phenotype in that study is likely confounded by the same technical artefacts that lead to biased SNP calling.
 
-\begin{table}[h]
+\begin{table}[h!]
 \begin{tabular}{l l l r r r}
   {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$\\-$\log_{10} p$\\(adjusted)}      \\ \hline
 28654678 & PLoS One & rs201761909 & 5.7 & 78.11\\
