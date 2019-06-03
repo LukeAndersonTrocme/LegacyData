@@ -414,7 +414,7 @@ for(chrom in seq(1,22,1)){
   b = seq(1,l,by=10000)
   if(chrom == 1){
     plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
-    geom_freqpoly(breaks = b, color = 'red') +
+    geom_freqpoly(breaks = b, color = 'grey60') +
     geom_freqpoly(data = df, breaks = b) +
     ylim(0,50)+
     theme(axis.text.x = element_blank(),
@@ -427,7 +427,7 @@ for(chrom in seq(1,22,1)){
   }
   else{
   plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
-    geom_freqpoly(breaks = b, color = 'red') +
+    geom_freqpoly(breaks = b, color = 'grey60') +
     geom_freqpoly(data = df, breaks = b) +
     ylim(0,50)+
     theme(axis.text = element_blank(),

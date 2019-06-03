@@ -53,23 +53,39 @@ SigPos <- readRDS(paste0(DataPath,
 NotSig <- readRDS(paste0(DataPath,
                    'NotSig.rds'))
 
+facet_names <- 
+  list('1'="1",'2'="",'3'="",'4'="",
+       '5'="5",'6'="",'7'="",'8'="",'9'="",
+       '10'="10",'11'="",'12'="",'13'="",'14'="",
+       '15'="15",'16'="",'17'="",'18'="",'19'="",
+       '20'="",'21'="",'22'="")
+
+facet_labeller <- function(variable,value){
+  return(facet_names[value])
+}
+
+
 #make manhattan plot
 GWAS <- ggplot(NotSig, aes(x = Pos, 
                            y = plog10, 
                            color = as.factor(Chr))) +
               geom_point(alpha = 0.3, 
-                         size = 1) +
+                         size = 0.5) +
               geom_point(data = SigPos, 
                          aes(x = Pos, 
                              y = plog10,),
-                         color = 'black',
-                         shape = 3) +
+                         color = 'blue',
+                         shape = 3,
+                         size = 0.5) +
               facet_grid(~Chr, 
                            scales = 'free_x', 
                            space = 'free_x', 
-                           switch = 'x') +
+                           switch = 'x',
+                         labeller = facet_labeller) +
               scale_y_continuous(expand = c(0,0)) +
-              scale_fill_brewer(palette = 'Spectral') +
+              scale_color_manual(values = rep(
+                        c("grey", "black"), 
+                        22)) +
               labs(y = '-log10(p)', x = 'Chromosome') +
               guides(color = FALSE) + 
               theme_classic() +
@@ -103,53 +119,68 @@ join <- merge(join,
 join <- join[which(join$JPT_MAF + join$NAG_MAF != 0),] #remove fixed
 jj <- join[complete.cases(join),]
 
-SFS <- ggplot(join, aes(x = NAG_MAF, y = JPT_MAF)) +
-          geom_bin2d(binwidth = c(1/884, 1/104)) +
-          geom_point(data = jj, size = 0.8, alpha = 0.7, shape = 3) +
-          scale_fill_distiller(palette = "Spectral",
-                               trans = "log",
-                               breaks = c(1,10,100,1000,
-                                          10000,100000,1000000), 
-                               labels = c('1','10', '100', '1,000', 
-                                          '10,000', '100,000', '1,000,000')) +
-          scale_x_continuous(expand = c(0.01,0.01)) +
-          scale_y_continuous(expand = c(0.01,0.01)) + 
-          xlab(label = "Nagahama Frequency") +
-          theme_classic() +
-          theme(axis.line = element_blank(), 
-                axis.title.y = element_blank(), 
-                axis.text.y = element_blank(), 
-                axis.ticks.y = element_blank())
+SFS <- 
+  ggplot(join, 
+         aes(x = NAG_MAF, 
+             y = JPT_MAF)) +
+  geom_bin2d(binwidth = c(1/884, 1/104)) +
+  geom_point(data = jj,
+             color = 'blue',
+             size = 0.8, 
+             alpha = 0.7, 
+             shape = 3) +
+  scale_fill_distiller(palette = "Greys",
+                       trans = "log",
+                       breaks = c(1,10,100,
+                                  1000,10000,
+                                  100000,1000000), 
+                       labels = c('1','10', '100', 
+                                  '1,000','10,000', 
+                                  '100,000', '1,000,000')) +
+  scale_x_continuous(expand = c(0.01,0.01), 
+                     limits = c(0,0.5)) +
+  scale_y_continuous(expand = c(0.01,0.01), 
+                     limits = c(0,0.5)) + 
+  xlab(label = "Nagahama Frequency") +
+  theme_classic() +
+  theme(axis.line = element_blank(), 
+        axis.title.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank())
 
-HIST <- ggplot(jj, aes(x = JPT_MAF)) +
-            geom_histogram(binwidth = 0.01, 
-                         fill = 'grey') +
-            scale_x_continuous(limits = c(0,1),
-                             expand = c(0.01, 0.01)) +
-            scale_y_reverse(expand = c(0.01, 0.01), 
-                          breaks = c(10, 50, 100)) +
-            labs(x = "1000 Genomes Project Frequency",
-                 y = "") +
-            coord_flip() +
-            theme_classic() +
-            theme(axis.line = element_blank(),
-                  axis.text.x = element_text(angle = 90))
+HIST <- 
+  ggplot(jj, 
+         aes(x = JPT_MAF)) +
+  geom_histogram(binwidth = 0.01, 
+                 fill = 'grey') +
+  scale_x_continuous(limits = c(0,1),
+                     expand = c(0.01, 0.01)) +
+  scale_y_reverse(expand = c(0.01, 0.01), 
+                  breaks = c(10, 50, 100)) +
+  labs(x = "1000 Genomes Project Frequency",
+       y = "") +
+  coord_flip() +
+  theme_classic() +
+  theme(axis.line = element_blank(),
+        axis.text.x = element_text(angle = 90)) +
+  xlim(c(0,0.5))
 
-B <- plot_grid(HIST, 
-               SFS,
-               nrow = 1, 
-               rel_widths = c(1, 5), 
-               align = 'h', 
-               labels=c('','B'))
+B <- 
+  plot_grid(HIST, 
+            SFS,
+            nrow = 1, 
+            rel_widths = c(3, 5), 
+            align = 'h', 
+            labels=c('','B'))
 
-rm(join)#save memory
-rm(SFS)
+#rm(join)#save memory
+#rm(SFS)
 B
 ```
 
 
 ## Mutation Spectrum enrichment
-```{r,fig.height=5,fig.width=2}
+```{r,fig.height=5,fig.width=6}
 #load mutation spectrum for suspicious SNPs
 SNP <- readRDS(paste0(DataPath,
                    'SNP_Context.rds'))
@@ -186,8 +217,8 @@ plt <- ggplot(data,
 return(plt)
 }
 
-SNPplt <- plotContext(SNP,'Suspicious SNPs')
-rSNPplt <- plotContext(rSNP,'Control SNPs')
+SNPplt <- plotContext(SNP %>% filter(Mut == 'A-> C'),'Suspicious SNPs')
+rSNPplt <- plotContext(rSNP %>% filter(Mut == 'A-> C'),'Control SNPs')
 
 #extract legend
 #https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
@@ -207,35 +238,36 @@ A <- plot_grid(plot_grid(
                 theme(legend.position = "none")),
               mylegend,
               nrow = 2,
-              rel_heights = c(1, 0.1),
+              rel_heights = c(1, 0.5),
               labels = c('A'))
 
 A
 ```
 ## Put all plots together and save
 ```{r,fig.height=11,fig.width=8}
-AB <- plot_grid(A, B,
-               rel_widths = c(1, 2.7))
-fig1 <- plot_grid(AB,
+#AB <- plot_grid(A, B,
+#               rel_widths = c(1, 2.7))
+fig1 <- plot_grid(A,
+                  B,
                GWAS,
                ncol = 1,
-               rel_heights = c(2, 1),
-               labels = c('','C'))
+               rel_heights = c(1,2,1),
+               labels = c('A','B','C'))
 
 #figure takes time to save so skip if already done
-if(!file.exists(paste0(figurePath,
-                       'Figure1.pdf'))){ 
+#if(!file.exists(paste0(figurePath,
+#                       'Figure1.pdf'))){ 
 ggsave(paste0(figurePath,
-              'Figure1.jpg'),
+              'Figure1.1.jpg'),
        fig1, 
        height = 12,
        width = 12)
-ggsave(paste0(figurePath,
-              'Figure1.pdf'),
-       fig1,
-       height = 12,
-       width = 12)
-}
+#ggsave(paste0(figurePath,
+#              'Figure1.pdf'),
+#       fig1,
+#       height = 12,
+#       width = 12)
+#}
 fig1
 
 #save memory
@@ -434,14 +466,14 @@ p3 <- plot_grid(p1, p2,
 ggsave(paste0(figurePath,
               'SNPOverlap6.jpg'),
               p3, 
-              height = 10, 
-              width = 10)
+              height = 8, 
+              width = 8)
 
 ggsave(paste0(figurePath,
               'SNPOverlap6.PDF'),
               p3, 
-              height = 10, 
-              width = 10)
+              height = 8, 
+              width = 8)
 
 p3
 ```
@@ -526,7 +558,7 @@ ggplot(HanKgpAF,
   scale_fill_distiller(palette = "Spectral")+
   labs(x = 'Resequenced Han', 
        y = '1000 Genomes Project')+
-  ggtitle('Joint frequency plot of 296 suspicious SNPs\nfrom single population test')
+  ggtitle(paste0('Joint frequency plot of ',nrow(HanKgpAF),' suspicious SNPs\nfrom single population test'))
 
 ggsave(paste0(figurePath,'Han_1kGP_SFS_singlePop.jpg'),height=10, width=10)
 
@@ -561,6 +593,132 @@ ggsave(paste0(figurePath,'Han_1kGP_SFS_FullModel.jpg'),height=10, width=10)
 
 ```
 
+##NYGC Frequencies
+```{bash}
+for f in `seq 1 22`; \
+do vcftools \
+--gzvcf ./CCDG_13607_B01_GRM_WGS_2019-02-19_chr${f}.recalibrated_variants.vcf.gz \
+--freq --out ./chr${f}; \
+done
+```
+
+##NYGC ReSequence Data
+```{r,fig.height=5,fig.width=5}
+#Load joint frequency for SNPs
+##from plink --freq
+kgpAF <- fread('/Users/luke/genomes/genomes/hg19/Freq/genomeWide_1kGP.frq',
+               col.names = c('Chr','Pos','N_Alleles','N_Counts','AF1','AF2'))
+kgpAF <- kgpAF %>%
+  separate(AF1, c("Allele1", "AF1"), ":")
+kgpAF <- kgpAF %>%
+  separate(AF2, c("Allele2", "AF2"), ":")
+nygcAF <- fread(paste0(DataPath,'NYGC/genomeWide_NYGC_lifted_1-9.frq'),
+               col.names = c('Chr','Pos','PosPlus1','N_Counts','AF1','Af2'))
+nygcAF <- nygcAF %>%
+  separate(AF1, c("Allele1", "AF1"), ":")
+nygcAF$Chr <- as.numeric(as.character(gsub(pattern = 'chr',replacement = '',x = nygcAF$Chr)))
+
+sigPos <- fread(paste0(DataPath,'Significant_Positions.txt'), 
+                col.names = c('Chr','Pos'))
+
+strictMask <- fread(paste0(DataPath,
+                           '1kGP_StrictMask.bed'),
+            col.names = c('Chr','Pos','Pos.1','rsID'))
+
+combo <- merge(nygcAF, kgpAF, 
+               by=c('Chr','Pos'),
+               suffixes = c('.NYGC','.KGP'), 
+               all = T)
+
+combo <- combo[which(combo$Allele1.KGP == combo$Allele1.NYGC),]
+
+combo$AF1.NYGC <- as.numeric(as.character(combo$AF1.NYGC))
+combo$AF1.KGP <- as.numeric(as.character(combo$AF1.KGP))
+
+combo[is.na(combo)] <- 0
+combo$diff <- abs(combo$AF1.KGP - combo$AF1.NYGC)
+
+
+sig <- merge(combo, sigPos, by=c('Chr','Pos'))
+
+combo <- anti_join(combo,
+                   strictMask,
+                   by = c('Chr','Pos'))
+
+combo <- combo[which((combo$AF1.NYGC > 0) &
+                       (combo$AF1.KGP > 0)),]
+combo <- combo[which((combo$AF1.NYGC < 1) &
+                       (combo$AF1.KGP < 1)),]
+
+sfs <- ggplot(sig, 
+        aes(x = 1-AF1.NYGC, 
+            y = 1-AF1.KGP)) +
+     geom_bin2d(bins=250) +
+     scale_fill_distiller(palette = "Spectral",
+                          trans = "log",
+                          breaks = c(5,50,500,5000))+
+     scale_y_continuous(limits = c(0,1),
+                        expand = c(0.01, 0.01)) +
+    labs(x = 'Resequenced NYGC', 
+         y = '1000 Genomes Project') +
+    ggtitle('Suspicious Variants in Chromosome 1-9')
+
+sfs
+
+ggsave(paste0(figurePath,'NYGC_Chr1-9.jpg'),height=10, width=10)
+
+allsfs <- ggplot(combo, 
+        aes(x = 1-AF1.NYGC, 
+            y = 1-AF1.KGP)) +
+     geom_bin2d(bins=250) +
+     scale_fill_distiller(palette = "Spectral",
+                          trans = "log",
+                          breaks = c(1,10,100,1000,10000,100000,1000000))+
+     scale_y_continuous(limits = c(0,1),
+                        expand = c(0.01, 0.01)) +
+    labs(x = 'Resequenced NYGC', 
+         y = '1000 Genomes Project') +
+    ggtitle('All Variants in Chromosome 1-9')
+
+
+
+allsfs
+
+ggsave(paste0(figurePath,'NYGC_Chr1-9_all.jpg'),height=10, width=10)
+
+sfsPlus <- ggplot(combo, 
+        aes(x = 1-AF1.NYGC, 
+            y = 1-AF1.KGP)) +
+     geom_bin2d(bins=250) +
+     geom_point(data = sig, size = 0.8, alpha = 0.7, shape = 3) +
+     scale_fill_distiller(palette = "Spectral",
+                          trans = "log",
+                          breaks = c(1,10,100,1000,10000,100000,1000000))+
+     scale_y_continuous(limits = c(0,1),
+                        expand = c(0.01, 0.01)) +
+    labs(x = 'Resequenced NYGC', 
+         y = '1000 Genomes Project') +
+    ggtitle('All Variants in Chromosome 1-9')
+
+
+
+sfsPlus
+
+ggsave(paste0(figurePath,'NYGC_Chr1-9_allPlus.jpg'),height=10, width=10)
+```
+```{r}
+hist <- ggplot(sig, aes(x=diff)) +
+            geom_histogram(binwidth = 0.01) +
+            scale_x_continuous(limits = c(0,1),
+                             expand = c(0.01, 0.05)) +
+            scale_y_reverse(limits=c(3000,0)) +
+            labs(x = "Difference in Frequency",
+                 y = "") +
+            coord_flip() +
+            theme_classic() +
+            theme(axis.line = element_blank())
+
+```
 
 ```{r,fig.height=11,fig.width=8}
 AF30 <- readRDS(paste0(DataPath,
@@ -593,7 +751,7 @@ print(nrow(AF30[which(AF30$rate > 2279/450),])/nrow(AF30))
 ```{r}
 pub<-fread(paste0(DataPath, 'fits_PublishedVariants_LFA.txt'))
 pub <- merge(pub, AF30, by='rsID')
-pub$text <- paste(pub$rsID, 'P : ',round(pub$dev_logp, 2))
+pub$text <- paste(pub$rsID, 'p ',round(pub$dev_logp, 2))
 library(ggrepel)
 ggplot(pub, aes(x=uAF, y=oAF, label=text))+
      geom_point()+
