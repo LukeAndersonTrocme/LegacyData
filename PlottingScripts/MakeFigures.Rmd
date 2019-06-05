@@ -27,7 +27,7 @@ library(data.table)
 library(tidyverse)
 library(purrr)
 library(ggrepel)
-
+library(OneR)
 #Directories
 DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
 figurePath <- '~/Documents/LegacyData/Figures/'
@@ -74,7 +74,7 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                          size = 0.5) +
               geom_point(data = SigPos, 
                          aes(x = Pos, 
-                             y = plog10,),
+                             y = plog10),
                          color = 'blue',
                          shape = 3,
                          size = 0.5) +
@@ -85,7 +85,7 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                          labeller = facet_labeller) +
               scale_y_continuous(expand = c(0,0)) +
               scale_color_manual(values = rep(
-                        c("grey60", "grey40"), 
+                        c("grey70", "grey30"), 
                         22)) +
               labs(y = '-log10(p)', x = 'Chromosome') +
               guides(color = FALSE) + 
@@ -96,10 +96,8 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                     axis.ticks.x = element_blank(),
                     axis.line.x = element_blank(), 
                     strip.background = element_blank(),
-                    strip.text.x = element_text(size = 12),
-                    axis.text.y = element_text(size = 20),
+                    axis.text = element_text(size = 20),
                     axis.title = element_text(size = 20))
-GWAS
 ```
 
 
@@ -126,74 +124,88 @@ SFS <-
   ggplot(join, 
          aes(x = NAG_MAF, 
              y = JPT_MAF)) +
-  geom_bin2d(binwidth = c(1/884, 1/104)) +
-  geom_point(data = jj,
-             color = 'blue',
-             size = 1, 
-             alpha = 0.7, 
-             shape = 3) +
-  scale_fill_gradient(low = "grey80",
+  geom_bin2d(binwidth = c(1/104, 1/104)) +
+  geom_bin2d(data = jj,
+             fill = 'blue',
+             binwidth = c(1/104, 1/104), 
+             alpha = 0.7) +
+  scale_fill_gradient(name = 'log10\ncount',
+                      low = "grey95",
                       high = "black",
-                       trans = "log",
-                       breaks = c(1,10,100,
-                                  1000,10000,
-                                  100000,1000000), 
-                       labels = c('1','10', '100', 
-                                  '1,000','10,000', 
-                                  '100,000', '1,000,000')) +
+                      trans = "log",
+                      breaks = c(1,10,100,
+                                 1000,10000,
+                                 100000,1000000), 
+                      labels = c('0','1', '2', 
+                                 '3','4', 
+                                 '5', '6')) +
   scale_x_continuous(expand = c(0.01,0.01), 
-                     limits = c(0,0.5)) +
+                     limits = c(-0.01,0.5)) +
   scale_y_continuous(expand = c(0.01,0.01), 
-                     limits = c(0,0.5)) + 
+                     limits = c(-0.01,0.5)) + 
   labs(x = "Nagahama Frequency",
        y = "1000 Genomes Project Frequency") +
   theme_classic() +
-  theme(axis.line = element_blank())
+  theme(axis.line = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 20))
 
-freq_gw <- as.data.frame(table(round(join$JPT_MAF, 2)))
-freq_gw <- freq_gw %>% filter(Var1 != "0")
-freq_gw$proportion <- freq_gw$Freq / sum(freq_gw$Freq) *100
-freq_gw$group <- "All SNPs"
-freq_gw$Var1 <- as.numeric(as.character(freq_gw$Var1))
+freq_gw <- as.data.frame(table(round(join$JPT_MAF, 2))) #as.data.frame(table(bin(join$JPT_MAF, 104)))
+freq_gw <- freq_gw %>% filter(Var1 != "0") #(-0.001,0.00962]
+freq_gw$proportion <- freq_gw$Freq / sum(freq_gw$Freq) * 100
+freq_gw$SNPs <- "All"
+freq_gw$Var1 <- as.numeric(as.character(freq_gw$Var1)) #as.numeric(as.character(substr(freq_gw$Var1, 2, 7)))
 
-freq_sig <- as.data.frame(table(round(jj$JPT_MAF, 2)))
-freq_sig$proportion <- freq_sig$Freq / sum(freq_sig$Freq) *100
-freq_sig$group <- "Suspicious SNPs"
+freq_sig <- as.data.frame(table(round(jj$JPT_MAF, 2))) # as.data.frame(table(bin(jj$JPT_MAF, 104)))
+freq_sig$proportion <- freq_sig$Freq / sum(freq_sig$Freq) * 100
+freq_sig$SNPs <- "Suspicious"
 freq_sig$Var1 <- as.numeric(as.character(freq_sig$Var1))
 
 freq <- rbind(freq_sig, freq_gw)
 freq$Var1 <- as.numeric(as.character(freq$Var1))
 
+freq_gw <- data.frame('freq' = join$JPT_MAF,
+                      'SNPs' = 'All')
+freq_sig <- data.frame('freq' = jj$JPT_MAF,
+                      'SNPs' = 'Suspicious')
+freq_hist <- rbind(freq_sig, freq_gw)
+
 HIST <- 
-  ggplot()+
-  geom_histogram(data = freq_gw,
-                 aes(x=Var1, 
-                     y = proportion), 
-                 fill = 'grey',
-                 stat = "identity")+
-  geom_histogram(data = freq_sig,
-                 aes(x=Var1, 
-                     y = proportion),
-                 fill = 'blue',
-                 alpha=0.7,
-                 stat = "identity")+
+    ggplot(data = freq_hist %>%
+             filter(freq > 0),
+                 aes(x=freq, 
+                 fill = SNPs))+
+  geom_histogram(binwidth = 1/104,
+                 alpha=0.8, 
+                 position="identity",
+                 aes(y=..density..))+
   coord_flip()+
-  scale_x_continuous(limits = c(0,0.5),
+  scale_fill_manual(values=c("blue", "grey30")) +
+  scale_x_continuous(limits = c(-0.01,0.5),
                      expand = c(0.01, 0.01)) +
   scale_y_reverse(expand = c(0.01, 0.01))+
-  labs(y="Density",
-       x="Allele Frequency") +
+  labs(y="Density") +
   theme_classic() +
-  theme(axis.line = element_blank())
+  theme(legend.position = c(0.1, 0.8),
+        axis.line = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(size = 20),
+        axis.title = element_text(size = 20))
+  
+  
+  
 
 
-B <- 
+
+SFS_HIST <- 
   plot_grid(HIST, 
             SFS,
             nrow = 1, 
             rel_widths = c(3, 5), 
             align = 'h', 
-            labels=c('','C'))
+            labels=c('','D'))
 
 #rm(join)#save memory
 #rm(SFS)
@@ -220,30 +232,30 @@ plt <- ggplot(data,
                   y = Start, 
                   fill = Freq)) +
     geom_tile() +
-    facet_grid(.~Mut,
-               switch = "y") +
+    facet_grid(.~Mut) +
     labs(y = name) +
     theme_classic() +
     theme(axis.title.x = element_blank(),
           axis.line = element_blank(),
-          legend.position = "bottom",
+          axis.text = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
           strip.placement = "outside",
           strip.background = element_blank(),
+          strip.text = element_text(size = 20),
           panel.border = element_rect(colour = "black", 
                                       fill = NA, 
-                                      size = 1)) +
-  
-    scale_y_discrete(position = "bottom") +
+                                      size = 1),
+          plot.margin = unit(c(0,0,0,1.5), "lines")) +
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
                         high = 'blue',
-                        guide = guide_legend(title = 'Count',
+                        guide = guide_legend(title = 'count',
                                              direction = 'vertical'))
 return(plt)
 }
 
-SNPplt <- plotContext(SNP,'Suspicious SNPs')
-rSNPplt <- plotContext(rSNP,'Control SNPs')
+SNPplt <- plotContext(SNP,'Suspicious')
+rSNPplt <- plotContext(rSNP,'Control')
 
 #extract legend
 #https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
@@ -256,18 +268,19 @@ g_legend <- function(a.gplot){
 
 mylegend <- g_legend(SNPplt)
 
-A <- plot_grid(plot_grid(
+Mut_Spect <- 
+  plot_grid(
+            plot_grid(
               SNPplt + 
                 theme(legend.position = "none"),
               rSNPplt + 
                 theme(legend.position = "none"),
               nrow = 2),
-              mylegend,
-              ncol = 2,
-              rel_widths = c(1, 0.1),
-              labels = c('A'))
+            mylegend,
+            ncol = 2,
+            rel_widths = c(1,0.1))
 
-A
+Mut_Spect
 
 
 ```
@@ -275,12 +288,12 @@ A
 ```{r,fig.height=11,fig.width=8}
 #AB <- plot_grid(A, B,
 #               rel_widths = c(1, 2.7))
-fig1 <- plot_grid(A,
-                  B,
-               GWAS,
+fig1 <- plot_grid(GWAS,
+                  Mut_Spect,
+                  SFS_HIST,
                ncol = 1,
-               rel_heights = c(1,2,1),
-               labels = c('A','B','D'))
+               rel_heights = c(1,1.25,2),
+               labels = c('A','B','C'))
 
 #figure takes time to save so skip if already done
 #if(!file.exists(paste0(figurePath,
@@ -298,9 +311,9 @@ ggsave(paste0(figurePath,
 #}
 #fig1
 
-
-
 ```
+
+
 ```{r}
 #save memory
 rm(GWAS)
