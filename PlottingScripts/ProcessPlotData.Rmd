@@ -228,6 +228,7 @@ binCount$Start <- substr(binCount$Var1,4,4)
 binCount$End <- substr(binCount$Var1,6,6)
 binCount$Mut <- paste(substr(binCount$Var1,1,3),
                       substr(binCount$Var1,5,5))
+binCount$Mut <- gsub('->', ' →',binCount$Mut)
 return(binCount)
 }
 

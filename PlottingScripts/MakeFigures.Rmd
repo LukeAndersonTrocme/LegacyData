@@ -96,6 +96,7 @@ GWAS <- ggplot(NotSig, aes(x = Pos,
                     axis.ticks.x = element_blank(),
                     axis.line.x = element_blank(), 
                     strip.background = element_blank(),
+                    strip.text = element_text(size = 20),
                     axis.text = element_text(size = 20),
                     axis.title = element_text(size = 20))
 ```
@@ -148,21 +149,8 @@ SFS <-
   theme_classic() +
   theme(axis.line = element_blank(),
         axis.text = element_text(size = 20),
-        axis.title = element_text(size = 20))
-
-freq_gw <- as.data.frame(table(round(join$JPT_MAF, 2))) #as.data.frame(table(bin(join$JPT_MAF, 104)))
-freq_gw <- freq_gw %>% filter(Var1 != "0") #(-0.001,0.00962]
-freq_gw$proportion <- freq_gw$Freq / sum(freq_gw$Freq) * 100
-freq_gw$SNPs <- "All"
-freq_gw$Var1 <- as.numeric(as.character(freq_gw$Var1)) #as.numeric(as.character(substr(freq_gw$Var1, 2, 7)))
-
-freq_sig <- as.data.frame(table(round(jj$JPT_MAF, 2))) # as.data.frame(table(bin(jj$JPT_MAF, 104)))
-freq_sig$proportion <- freq_sig$Freq / sum(freq_sig$Freq) * 100
-freq_sig$SNPs <- "Suspicious"
-freq_sig$Var1 <- as.numeric(as.character(freq_sig$Var1))
-
-freq <- rbind(freq_sig, freq_gw)
-freq$Var1 <- as.numeric(as.character(freq$Var1))
+        axis.title.x = element_text(size = 20),
+        axis.title.y = element_blank())
 
 freq_gw <- data.frame('freq' = join$JPT_MAF,
                       'SNPs' = 'All')
@@ -184,20 +172,16 @@ HIST <-
   scale_x_continuous(limits = c(-0.01,0.5),
                      expand = c(0.01, 0.01)) +
   scale_y_reverse(expand = c(0.01, 0.01))+
-  labs(y="Density") +
+  labs(y="Density",
+       x = "1000 Genomes Project Frequency") +
   theme_classic() +
   theme(legend.position = c(0.1, 0.8),
         axis.line = element_blank(),
         axis.ticks.y = element_blank(),
         axis.text.y = element_blank(),
-        axis.title.y = element_blank(),
         axis.text.x = element_text(size = 20),
         axis.title = element_text(size = 20))
   
-  
-  
-
-
 
 SFS_HIST <- 
   plot_grid(HIST, 
