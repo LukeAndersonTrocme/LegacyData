@@ -67,38 +67,40 @@ facet_labeller <- function(variable,value){
 
 
 #make manhattan plot
-GWAS <- ggplot(NotSig, aes(x = Pos, 
-                           y = plog10, 
-                           color = as.factor(Chr))) +
-              geom_point(alpha = 0.3, 
-                         size = 0.5) +
-              geom_point(data = SigPos, 
-                         aes(x = Pos, 
-                             y = plog10),
-                         color = 'blue',
-                         shape = 3,
-                         size = 0.5) +
-              facet_grid(~Chr, 
-                           scales = 'free_x', 
-                           space = 'free_x', 
-                           switch = 'x',
-                         labeller = facet_labeller) +
-              scale_y_continuous(expand = c(0,0)) +
-              scale_color_manual(values = rep(
-                        c("grey70", "grey30"), 
-                        22)) +
-              labs(y = '-log10(p)', x = 'Chromosome') +
-              guides(color = FALSE) + 
-              theme_classic() +
-              theme(plot.title = element_text(hjust = 0.5), 
-                    plot.subtitle = element_text(hjust = 0.5), 
-                    axis.text.x = element_blank(), 
-                    axis.ticks.x = element_blank(),
-                    axis.line.x = element_blank(), 
-                    strip.background = element_blank(),
-                    strip.text = element_text(size = 20),
-                    axis.text = element_text(size = 20),
-                    axis.title = element_text(size = 20))
+GWAS <- 
+  ggplot(NotSig, aes(x = Pos, 
+                     y = plog10, 
+                     color = as.factor(Chr))) +
+  geom_point(alpha = 0.3, 
+             size = 0.5) +
+  geom_point(data = SigPos, 
+             aes(x = Pos, 
+                 y = plog10),
+             color = 'blue',
+             shape = 3,
+             size = 0.5) +
+  facet_grid(~Chr, 
+             scales = 'free_x', 
+             space = 'free_x', 
+             switch = 'x',
+             labeller = facet_labeller) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_color_manual(values = rep(
+    c("grey70", "grey30"), 
+    22)) +
+  labs(y = '-log10(p)', x = 'Chromosome') +
+  guides(color = FALSE) + 
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5), 
+        plot.subtitle = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank(),
+        axis.line.x = element_blank(), 
+        strip.background = element_blank(),
+        strip.text = element_text(size = 20),
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 20,
+                                  vjust = -5))
 ```
 
 
@@ -145,43 +147,51 @@ SFS <-
   scale_y_continuous(expand = c(0.01,0.01), 
                      limits = c(-0.01,0.5)) + 
   labs(x = "Nagahama Frequency",
-       y = "1000 Genomes Project Frequency") +
+       y = "1kGP Frequency") +
   theme_classic() +
   theme(axis.line = element_blank(),
         axis.text = element_text(size = 20),
         axis.title.x = element_text(size = 20),
-        axis.title.y = element_blank())
+        axis.title.y = element_blank(),
+        legend.text = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        plot.margin = unit(c(0,0,1.5,0), "lines"))
 
 freq_gw <- data.frame('freq' = join$JPT_MAF,
                       'SNPs' = 'All')
 freq_sig <- data.frame('freq' = jj$JPT_MAF,
-                      'SNPs' = 'Suspicious')
+                       'SNPs' = 'Suspicious')
 freq_hist <- rbind(freq_sig, freq_gw)
 
 HIST <- 
-    ggplot(data = freq_hist %>%
-             filter(freq > 0),
-                 aes(x=freq, 
-                 fill = SNPs))+
+  ggplot(data = freq_hist %>%
+           filter(freq > 0),
+         aes(x=freq, 
+             fill = SNPs))+
   geom_histogram(binwidth = 1/104,
                  alpha=0.8, 
                  position="identity",
                  aes(y=..density..))+
-  coord_flip()+
+  geom_hline(yintercept = 16.5, 
+             color = 'white',
+             size = 5) +
+  coord_flip(ylim = c(0, 18)) +
   scale_fill_manual(values=c("blue", "grey30")) +
   scale_x_continuous(limits = c(-0.01,0.5),
                      expand = c(0.01, 0.01)) +
-  scale_y_reverse(expand = c(0.01, 0.01))+
-  labs(y="Density",
-       x = "1000 Genomes Project Frequency") +
+  scale_y_reverse(expand = c(0.01, 0.01), 
+                  breaks = c(0,5,10,15,16.5,18),
+                  labels = c('0','5','10','15','...','30'))+
+  labs(y="Density") +
   theme_classic() +
   theme(legend.position = c(0.1, 0.8),
         axis.line = element_blank(),
-        axis.ticks.y = element_blank(),
+        axis.ticks = element_blank(),
         axis.text.y = element_blank(),
         axis.text.x = element_text(size = 20),
-        axis.title = element_text(size = 20))
-  
+        axis.title.x = element_blank(),
+        plot.margin = unit(c(0,0,1.5,0), "lines"))
+
 
 SFS_HIST <- 
   plot_grid(HIST, 
@@ -226,6 +236,8 @@ plt <- ggplot(data,
           strip.placement = "outside",
           strip.background = element_blank(),
           strip.text = element_text(size = 20),
+          legend.text = element_text(size = 20),
+          legend.title = element_text(size = 20),
           panel.border = element_rect(colour = "black", 
                                       fill = NA, 
                                       size = 1),
@@ -274,9 +286,9 @@ Mut_Spect
 #               rel_widths = c(1, 2.7))
 fig1 <- plot_grid(GWAS,
                   Mut_Spect,
-                  SFS_HIST,
+                  SFS,
                ncol = 1,
-               rel_heights = c(1,1.25,2),
+               rel_heights = c(1,2,4),
                labels = c('A','B','C'))
 
 #figure takes time to save so skip if already done
