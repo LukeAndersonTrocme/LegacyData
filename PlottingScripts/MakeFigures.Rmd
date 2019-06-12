@@ -99,8 +99,10 @@ GWAS <-
         strip.background = element_blank(),
         strip.text = element_text(size = 20),
         axis.text = element_text(size = 20),
-        axis.title = element_text(size = 20,
-                                  vjust = -5))
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20,
+                                  vjust = 7),
+        plot.margin = unit(c(1.5,5,0,1.5), "lines"))
 ```
 
 
@@ -131,17 +133,13 @@ SFS <-
   geom_bin2d(data = jj,
              fill = 'blue',
              binwidth = c(1/104, 1/104), 
-             alpha = 0.7) +
+             alpha = 0.4) +
   scale_fill_gradient(name = 'log10\ncount',
                       low = "grey95",
                       high = "black",
                       trans = "log",
-                      breaks = c(1,10,100,
-                                 1000,10000,
-                                 100000,1000000), 
-                      labels = c('0','1', '2', 
-                                 '3','4', 
-                                 '5', '6')) +
+                      breaks = c(1,100,10000,1000000), 
+                      labels = c('0','2','4', '6')) +
   scale_x_continuous(expand = c(0.01,0.01), 
                      limits = c(-0.01,0.5)) +
   scale_y_continuous(expand = c(0.01,0.01), 
@@ -151,11 +149,10 @@ SFS <-
   theme_classic() +
   theme(axis.line = element_blank(),
         axis.text = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_blank(),
+        axis.title = element_text(size = 20),
         legend.text = element_text(size = 20),
         legend.title = element_text(size = 20),
-        plot.margin = unit(c(0,0,1.5,0), "lines"))
+        plot.margin = unit(c(0,0,1.5,1.5), "lines"))
 
 freq_gw <- data.frame('freq' = join$JPT_MAF,
                       'SNPs' = 'All')
@@ -253,6 +250,11 @@ return(plt)
 SNPplt <- plotContext(SNP,'Suspicious')
 rSNPplt <- plotContext(rSNP,'Control')
 
+SNPplt <- SNPplt + geom_point(data = SNP[which(SNP$p_val < 0.001),], 
+                              aes(x=End, y = Start), 
+                              shape = '*', 
+                              color = 'black',
+                              size = 20)
 #extract legend
 #https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
 g_legend <- function(a.gplot){
@@ -262,7 +264,7 @@ g_legend <- function(a.gplot){
   legend <- tmp$grobs[[leg]]
   return(legend)}
 
-mylegend <- g_legend(SNPplt)
+mylegend <- g_legend(rSNPplt)
 
 Mut_Spect <- 
   plot_grid(
@@ -274,7 +276,7 @@ Mut_Spect <-
               nrow = 2),
             mylegend,
             ncol = 2,
-            rel_widths = c(1,0.1))
+            rel_widths = c(1,0.15))
 
 Mut_Spect
 
@@ -282,30 +284,19 @@ Mut_Spect
 ```
 ## Put all plots together and save
 ```{r,fig.height=11,fig.width=8}
-#AB <- plot_grid(A, B,
-#               rel_widths = c(1, 2.7))
+
 fig1 <- plot_grid(GWAS,
                   Mut_Spect,
                   SFS,
-               ncol = 1,
-               rel_heights = c(1,2,4),
-               labels = c('A','B','C'))
+                  ncol = 1,
+                  rel_heights = c(2,2,6),
+                  labels = c('A','B','C'))
 
-#figure takes time to save so skip if already done
-#if(!file.exists(paste0(figurePath,
-#                       'Figure1.pdf'))){ 
 ggsave(paste0(figurePath,
               'Figure1.1.jpg'),
        fig1, 
-       height = 14,
+       height = 18,
        width = 12)
-#ggsave(paste0(figurePath,
-#              'Figure1.pdf'),
-#       fig1,
-#       height = 12,
-#       width = 12)
-#}
-#fig1
 
 ```
 
@@ -317,7 +308,6 @@ rm(fig1)
 rm(A)
 rm(B)
 rm(AB)
-
 ```
 
 #Figure 2
@@ -393,6 +383,7 @@ c <- ggplot(metaData,
             guides(shape = guide_legend(title = "",
                                         label = FALSE,
                                         override.aes = list(alpha = 0))) +
+            scale_shape_discrete(values = c(4,5,6))
             scale_x_date(date_labels = "%Y",
                          date_breaks = "1 year") +
             theme(axis.line.y = element_blank(),

@@ -147,7 +147,7 @@ The bottom plot indicates the sequencing technologies used over time.}
 
 To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
 Traditionally, genome wide association studies use genotypes as the independent variable. 
-Here we perform a ``reverse GWAS'', in the sense that genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
+Here we perform a \luke{genotype conditional association test (GCAT), where} genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}A).
@@ -185,8 +185,8 @@ By contrast, variants that do not pass the 1kGP strict mask are more unevenly di
 \centering
 \begin{tabular}{l  r r r}
                       & {Repeat}  & {Non-Repeat}   & {Total}    \\ \hline
-{SNP}  & 3,369 & 11,059 & 14,428\\  
-{INDEL} & 181 & 657 & 838\\ \hline
+{SNP}  & 3,369 \luke{(0.53\textperthousand)} & 11,059 (0.56\textperthousand) & 14,428\\  
+{INDEL} & 181 (0.3\textperthousand) & 657 (0.66\textperthousand) & 838\\ \hline
 {Total} & 3,550 & 11,716 & 15,270\\
 \end{tabular}
 \caption{Number of statistically significant variants  passing the 1000 Genomes Project strict mask per category. 
@@ -196,30 +196,19 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 \label{sigTable}
 \end{table}
 
-\begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{../Figures/SNPOverlap6.jpg}
-
-\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
-The size of the vertical bars ( I ) are proportional to the -log10(p) value of that SNP.
-The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
-Phase 1 populations are marked by a star ( * ).
-The line plot underneath shows the number of populations for which a variant has reached significance.
-The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$.}
-  \label{OverLap}
-\end{figure}
-
 \subsection{Cell line or technical artifact}
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
 Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
-This is more than our nominal false positive rate of 1\% of the sites. Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
+This is more than our nominal false discovery rate of \luke{$\alpha = 0.01$} of the sites. 
+Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
 
 
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
 Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,139 (or 18\%) are present in the resequenced data.
 The allele frequencies of these variants are nearly identical between datasets suggesting that among these 83 individuals, these variants are properly genotyped in the 1kGP.
-There are 5 alleles that show differing frequencies between both datasets that are likely explained by biased genotypes.
+There are 5 \luke{variants} that show differing frequencies between both datasets that are likely explained by biased genotypes.
 The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 Among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
@@ -254,32 +243,32 @@ Thus the phenotype in that study is likely confounded by the same technical arte
 
 \begin{table}[h!]
 \begin{tabular}{l l l r r r}
-  {Pubmed ID}  & {Journal} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$\\-$\log_{10} p$\\(adjusted)}      \\ \hline
-28654678 & PLoS One & rs201761909 & 5.7 & 78.11\\
-	& 	&  	rs201130852 & 5.05 & 72.28\\
+  {Pubmed ID}  & {Disease/Trait} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$\\-$\log_{10} p$\\(adjusted)}      \\ \hline
+28654678 & EBV copy number in & rs201761909 & 5.7 & 78.11\\
+	&   lymphoblastoid cell lines	&  	rs201130852 & 5.05 & 72.28\\
 	& 	&  	rs201255786 & 5.7 & 68.97\\
 	& 	&  	rs200655768 & 6.52 & 66.67\\
 	& 	&  	rs184202621 & 5.52 & 60.45\\
 	& 	& 	rs80274284 & 6 & 56.15\\
 	& 	& 	rs200699422 & 5.3 & 7.43\\
-23527680 & \multicolumn{1}{p{3cm}}{\raggedright Twin Research and\\Human Genetics} & rs6057648 & 5.4 & 20.5\\
-28928442 & \multicolumn{1}{p{3cm}}{\raggedright Nature Communications} & rs201471471 & 6.52 & 7.87\\
-26053186 & \multicolumn{1}{p{3cm}}{\raggedright PLoS One} & rs60136336 & 5.7 & 2.25\\ \hline
-\textcolor{gray}{28270201} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Genome Medicine}} & \textcolor{gray}{rs453755} & \textcolor{gray}{7.52} & \textcolor{gray}{5.29}\\
-\textcolor{gray}{23023329} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Genetics}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*15.3} & \textcolor{gray}{4.32}\\
-\textcolor{gray}{28334899} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Human Molecular Genetics}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*29.3} & \textcolor{gray}{4.32}\\
-\textcolor{gray}{28240269} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Communications}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*72.7} & \textcolor{gray}{4.32}\\
-\textcolor{gray}{27863252} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Cell}\\} & \textcolor{gray}{rs3794738} & \textcolor{gray}{*13.15} & \textcolor{gray}{3.73}\\
-\textcolor{gray}{29534301} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Hepatology}\\} & \textcolor{gray}{rs9273062} & \textcolor{gray}{*9.7} & \textcolor{gray}{3.36}\\
-\textcolor{gray}{21386085} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Diabetes}\\}  & \textcolor{gray}{rs301} & \textcolor{gray}{*10.52} & \textcolor{gray}{3.02}\\
-\textcolor{gray}{26830138} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Molecular Psychiatry}} & \textcolor{gray}{rs77894924} & \textcolor{gray}{6.7} & \textcolor{gray}{2.77}\\
-\textcolor{gray}{29617998} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Human Molecular Genetics}} & \textcolor{gray}{rs4963156} & \textcolor{gray}{*22.4} & \textcolor{gray}{2.52}\\
-\textcolor{gray}{28698626} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Scientific Reports}} & \textcolor{gray}{rs11015915} & \textcolor{gray}{5.05} & \textcolor{gray}{2.45}\\
-\textcolor{gray}{26974007} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Nature Genetics}} & \textcolor{gray}{rs3124998} & \textcolor{gray}{*8.05} & \textcolor{gray}{2.33}\\
-\textcolor{gray}{26634245} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{BMC Genetics}} & \textcolor{gray}{rs451000} & \textcolor{gray}{6} & \textcolor{gray}{2.28}\\
+23527680 & \multicolumn{1}{p{3cm}}{\raggedright Attention deficit\\hyperactivity disorder} & rs6057648 & 5.4 & 20.5\\
+28928442 & \multicolumn{1}{p{3cm}}{\raggedright Cold sores} & rs201471471 & 6.52 & 7.87\\
+26053186 & \multicolumn{1}{p{3cm}}{\raggedright HMPMA levels in smokers} & rs60136336 & 5.7 & 2.25\\ \hline
+\textcolor{gray}{28270201} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{HDL cholesterol}} & \textcolor{gray}{rs453755} & \textcolor{gray}{7.52} & \textcolor{gray}{5.29}\\
+\textcolor{gray}{23023329} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Prostate cancer}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*15.3} & \textcolor{gray}{4.32}\\
+\textcolor{gray}{28334899} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{HDL cholesterol}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*29.3} & \textcolor{gray}{4.32}\\
+\textcolor{gray}{28240269} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Blood protein levels}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*72.7} & \textcolor{gray}{4.32}\\
+\textcolor{gray}{27863252} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{High light scatter\\reticulocyte count}\\} & \textcolor{gray}{rs3794738} & \textcolor{gray}{*13.15} & \textcolor{gray}{3.73}\\
+\textcolor{gray}{29534301} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Response to\\hepatitis B vaccine}\\} & \textcolor{gray}{rs9273062} & \textcolor{gray}{*9.7} & \textcolor{gray}{3.36}\\
+\textcolor{gray}{21386085} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Metabolic syndrome}\\}  & \textcolor{gray}{rs301} & \textcolor{gray}{*10.52} & \textcolor{gray}{3.02}\\
+\textcolor{gray}{26830138} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Alzheimer disease\\and age of onset}} & \textcolor{gray}{rs77894924} & \textcolor{gray}{6.7} & \textcolor{gray}{2.77}\\
+\textcolor{gray}{29617998} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Intraocular pressure}} & \textcolor{gray}{rs4963156} & \textcolor{gray}{*22.4} & \textcolor{gray}{2.52}\\
+\textcolor{gray}{28698626} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Immunoglobulin A vasculitis}} & \textcolor{gray}{rs11015915} & \textcolor{gray}{5.05} & \textcolor{gray}{2.45}\\
+\textcolor{gray}{26974007} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Chronic inflammatory diseases}} & \textcolor{gray}{rs3124998} & \textcolor{gray}{*8.05} & \textcolor{gray}{2.33}\\
+\textcolor{gray}{26634245} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Post bronchodilator FEV1/FVC ratio}} & \textcolor{gray}{rs451000} & \textcolor{gray}{6} & \textcolor{gray}{2.28}\\
  	& 	& 	\textcolor{gray}{rs443874} & \textcolor{gray}{5.3} & \textcolor{gray}{2.26}\\
 	& 	&	\textcolor{gray}{rs400942} & \textcolor{gray}{6} & \textcolor{gray}{2.2}\\
-\textcolor{gray}{25918132} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Toxicological Sciences}} & \textcolor{gray}{rs76780579} & \textcolor{gray}{6} & \textcolor{gray}{2.09}\\
+\textcolor{gray}{25918132} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Diisocyanate-induced asthma}} & \textcolor{gray}{rs76780579} & \textcolor{gray}{6} & \textcolor{gray}{2.09}\\
 
  \hline
 \end{tabular}
@@ -406,6 +395,18 @@ We would also like to thank the members of the Gravel lab for their help with co
 These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
 In these plots we are comparing the deviance from the null model in the 15,270 variants identified using the LFA model.}  
 \label{CompareModel}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{../Figures/SNPOverlap6.jpg}
+
+\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
+The size of the vertical bars ( I ) are proportional to the -log10(p) value of that SNP.
+The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
+Phase 1 populations are marked by a star ( * ).
+The line plot underneath shows the number of populations for which a variant has reached significance.
+The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$.}
+  \label{OverLap}
 \end{figure}
 
 \begin{figure}[h]

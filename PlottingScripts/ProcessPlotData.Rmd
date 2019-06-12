@@ -229,12 +229,33 @@ binCount$End <- substr(binCount$Var1,6,6)
 binCount$Mut <- paste(substr(binCount$Var1,1,3),
                       substr(binCount$Var1,5,5))
 binCount$Mut <- gsub('->', ' →',binCount$Mut)
+
+binCount$Var1 <- NULL
+
 return(binCount)
 }
 
 
 SNP <- processContext(SNP)
 rSNP <- processContext(rSNP)
+
+#Chi-square test of independence
+chi_test <- merge(SNP, rSNP, 
+                  by = c('Start','End', 'Mut'), 
+                  all =T)
+
+chi_test$chi <- 
+  (chi_test$Freq.x - chi_test$Freq.y)^2 / chi_test$Freq.y
+
+chi_test$p_val <- pchisq(chi_test$chi, 
+                         df=96, 
+                         lower.tail=FALSE)
+
+SNP <- merge(SNP, 
+             chi_test %>% 
+               select(c('Start','End', 'Mut',
+                        'chi', 'p_val')), 
+             by = c('Start','End', 'Mut'))
 
 SNP
 #save to file
