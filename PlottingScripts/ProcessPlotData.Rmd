@@ -172,6 +172,23 @@ if [ ! -f $path/sig.pos.context.txt ]; then
   > $path/sig.pos.context.txt
 fi 
 ```
+
+extract context for GCAT test snps of interest
+```{bash}
+#Using GenomeWide.AncestralContext.txt
+#To get mutation context, use $path/AncestralContext.py
+#compare first two columns in both files, extract matches
+path='/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/'
+  
+if [ ! -f $path/gcat.sig.pos.context.txt ]; then
+  echo "sig pos context"
+  awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
+  $path/Significant_Positions.txt \
+  $path/GenomeWide.AncestralContext.txt \
+  > $path/gcat.sig.pos.context.txtt
+fi 
+```
+
 Load mutation context and plot enrichment
 ```{r}
 contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
@@ -239,22 +256,24 @@ return(binCount)
 SNP <- processContext(SNP)
 rSNP <- processContext(rSNP)
 
-#Chi-square test of independence
+#chi-squared contingency table tests
 chi_test <- merge(SNP, rSNP, 
                   by = c('Start','End', 'Mut'), 
                   all =T)
 
-chi_test$chi <- 
-  (chi_test$Freq.x - chi_test$Freq.y)^2 / chi_test$Freq.y
+chi_test[is.na(chi_test)] <- 0
 
-chi_test$p_val <- pchisq(chi_test$chi, 
-                         df=96, 
-                         lower.tail=FALSE)
+chi_test$chi_p <- 
+  lapply(split(chi_test %>% 
+                 select(Freq.x,Freq.y), 
+               (1:nrow(chi_test) - 1)), 
+         function(data) 
+           chisq.test(data)$p.value)
+
 
 SNP <- merge(SNP, 
              chi_test %>% 
-               select(c('Start','End', 'Mut',
-                        'chi', 'p_val')), 
+               select(c('Start','End', 'Mut','chi_p')), 
              by = c('Start','End', 'Mut'))
 
 SNP

@@ -102,18 +102,21 @@ Finally, we investigate how these variants have impacted modern genomics analyse
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}
 \caption{
-Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies, and are distributed across the genome. \textbf{A} 
+Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies, and are distributed across the genome. 
+\textbf{A} 
+Genome wide association of the average quality of mapped bases $Q$ for the 104 Japanese individuals included in the 1000 Genomes Project. 
+This GWAS identified $587\ \  p < 10^{-8}$ and $1034\ \ p < 10^{-6}$ SNPs that were associated to the average $Q$ of SNPs mapped for an individual
+The same analysis was performed independently for each of the populations in the 1000 Genomes Project.
+\textbf{B} 
+Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent Japanese dataset from Nagahama.
+The size of blue dots are proportional to the number of variants that associate with $Q$ in the JPT. 
+\textbf{C} 
 Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to a random set of SNPs.
 The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. 
 There is also a slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. 
-These three enrichments can be summarized as G**${\rightarrow}$GG*. \textbf{B} 
-Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent Japanese dataset from Nagahama.
-Crosses $(+)$ are variants that associate with $Q$ in the JPT. 
-The histogram on the left of the plot is the distribution of significant variants. 
-\textbf{C} 
-Genome wide association of the average quality of mapped bases $Q$ for the 104 Japanese individuals included in the 1000 Genomes Project. 
-This GWAS identified $587\ \  p < 10^{-8}$ and $1034\ \ p < 10^{-6}$ SNPs that were associated to the average $Q$ of SNPs mapped for an individual
-The same analysis was performed independently for each of the populations in the 1000 Genomes Project.}
+These three enrichments can be summarized as G**${\rightarrow}$GG*. 
+Stars ( * ) indicate significant difference from the mutational spectrum of a set of control SNPs.
+}
  \label{SFS}
 \end{figure}
 
@@ -139,9 +142,8 @@ Thus, sequences called from low-$Q$ data contain variants that reproduce poorly 
 \caption{Sampling and sequencing technologies over time in the 1000 Genomes Project.
 \textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes Project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
- \textbf{B} The x-axis is sorted by the sequencing date per individual. 
-The colours indicate the sequencing centres that produced the data for each individual and the shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. 
-The bottom plot indicates the sequencing technologies used over time.}
+The shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. 
+\luke{\textbf{B} The sequencing technologies used over time. A change in technology coincides with an increase in overall quality of data produced.}}
 \label{MapQual}
 \end{figure}
 
@@ -150,8 +152,9 @@ Traditionally, genome wide association studies use genotypes as the independent 
 Here we perform a \luke{genotype conditional association test (GCAT), where} genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
-The variants that are associated to $Q$ have an enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}A).
+The variants that are associated to $Q$ have a significant enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}A).
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
+\luke{Statistical significance of these enrichment is computed using a chi-squared test as described by Harris 2017 \citep{Harris2017a}. }
 
 Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques (Figure \ref{MutSpect}). The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
@@ -251,28 +254,31 @@ Thus the phenotype in that study is likely confounded by the same technical arte
 	& 	&  	rs184202621 & 5.52 & 60.45\\
 	& 	& 	rs80274284 & 6 & 56.15\\
 	& 	& 	rs200699422 & 5.3 & 7.43\\
-23527680 & \multicolumn{1}{p{3cm}}{\raggedright Attention deficit\\hyperactivity disorder} & rs6057648 & 5.4 & 20.5\\
+23527680 & \multicolumn{1}{p{3cm}}{\raggedright ADHD\textsuperscript{\dag}} & rs6057648 & 5.4 & 20.5\\
 28928442 & \multicolumn{1}{p{3cm}}{\raggedright Cold sores} & rs201471471 & 6.52 & 7.87\\
-26053186 & \multicolumn{1}{p{3cm}}{\raggedright HMPMA levels in smokers} & rs60136336 & 5.7 & 2.25\\ \hline
+26053186 & \multicolumn{1}{p{3cm}}{\raggedright HMPMA\textsuperscript{\ddag} levels in smokers} & rs60136336 & 5.7 & 2.25\\ \hline
 \textcolor{gray}{28270201} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{HDL cholesterol}} & \textcolor{gray}{rs453755} & \textcolor{gray}{7.52} & \textcolor{gray}{5.29}\\
 \textcolor{gray}{23023329} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Prostate cancer}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*15.3} & \textcolor{gray}{4.32}\\
 \textcolor{gray}{28334899} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{HDL cholesterol}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*29.3} & \textcolor{gray}{4.32}\\
 \textcolor{gray}{28240269} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Blood protein levels}} & \textcolor{gray}{rs103294} & \textcolor{gray}{*72.7} & \textcolor{gray}{4.32}\\
-\textcolor{gray}{27863252} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{High light scatter\\reticulocyte count}\\} & \textcolor{gray}{rs3794738} & \textcolor{gray}{*13.15} & \textcolor{gray}{3.73}\\
-\textcolor{gray}{29534301} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Response to\\hepatitis B vaccine}\\} & \textcolor{gray}{rs9273062} & \textcolor{gray}{*9.7} & \textcolor{gray}{3.36}\\
-\textcolor{gray}{21386085} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Metabolic syndrome}\\}  & \textcolor{gray}{rs301} & \textcolor{gray}{*10.52} & \textcolor{gray}{3.02}\\
+\textcolor{gray}{27863252} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{High light scatter\\reticulocyte count}} & \textcolor{gray}{rs3794738} & \textcolor{gray}{*13.15} & \textcolor{gray}{3.73}\\
+\textcolor{gray}{29534301} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Response to\\hepatitis B vaccine}} & \textcolor{gray}{rs9273062} & \textcolor{gray}{*9.7} & \textcolor{gray}{3.36}\\
+\textcolor{gray}{21386085} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Metabolic syndrome}}  & \textcolor{gray}{rs301} & \textcolor{gray}{*10.52} & \textcolor{gray}{3.02}\\
 \textcolor{gray}{26830138} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Alzheimer disease\\and age of onset}} & \textcolor{gray}{rs77894924} & \textcolor{gray}{6.7} & \textcolor{gray}{2.77}\\
 \textcolor{gray}{29617998} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Intraocular pressure}} & \textcolor{gray}{rs4963156} & \textcolor{gray}{*22.4} & \textcolor{gray}{2.52}\\
 \textcolor{gray}{28698626} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Immunoglobulin A vasculitis}} & \textcolor{gray}{rs11015915} & \textcolor{gray}{5.05} & \textcolor{gray}{2.45}\\
 \textcolor{gray}{26974007} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Chronic inflammatory diseases}} & \textcolor{gray}{rs3124998} & \textcolor{gray}{*8.05} & \textcolor{gray}{2.33}\\
-\textcolor{gray}{26634245} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Post bronchodilator FEV1/FVC ratio}} & \textcolor{gray}{rs451000} & \textcolor{gray}{6} & \textcolor{gray}{2.28}\\
- 	& 	& 	\textcolor{gray}{rs443874} & \textcolor{gray}{5.3} & \textcolor{gray}{2.26}\\
+\textcolor{gray}{26634245} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Post bronchodilator}} & \textcolor{gray}{rs451000} & \textcolor{gray}{6} & \textcolor{gray}{2.28}\\
+ 	& \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{FEV1/FVC ratio}} 	& 	\textcolor{gray}{rs443874} & \textcolor{gray}{5.3} & \textcolor{gray}{2.26}\\
 	& 	&	\textcolor{gray}{rs400942} & \textcolor{gray}{6} & \textcolor{gray}{2.2}\\
 \textcolor{gray}{25918132} & \multicolumn{1}{p{3cm}}{\raggedright \textcolor{gray}{Diisocyanate-induced asthma}} & \textcolor{gray}{rs76780579} & \textcolor{gray}{6} & \textcolor{gray}{2.09}\\
 
  \hline
 \end{tabular}
-\caption{Recent publications that reported $Q$-associated variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). The black text colour indicates that this variant is twice as frequent in individuals with $Q$ < 30, grey text colour indicates that these variants are less than twice as frequent in individuals with $Q$ < 30 (See Figure \ref{Pub_30}).}
+\caption{Recent publications that reported $Q$-associated variants as close to or above the genome-wide significant threshold. The variants reaching genome wide significance have a star ( * ). The black text colour indicates that this variant is twice as frequent in individuals with $Q$ < 30, grey text colour indicates that these variants are less than twice as frequent in individuals with $Q$ < 30 (See Figure \ref{Pub_30}).
+\textsuperscript{\dag} Attention deficit hyperactivity disorder. 
+\textsuperscript{\ddag} 3-hydroxy-1-methylpropylmercapturic acid.
+}
 \label{gwasTable}
 \end{table}
 
