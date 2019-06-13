@@ -377,38 +377,49 @@ a
 ```
 
 
-### Quality per population
 ```{r,fig.height=10,fig.width=8}
+metaData <- readRDS(paste0(DataPath,
+                           'metaData.rds'))
 
-a_t <- ggplot(metaData %>% arrange(x), 
-            aes(y = sample,
-                x = avg_qual,
-                color = Population,
-                shape = as.factor(Phase))) +
-  geom_point() +
-  facet_wrap(.~Population,  scales = 'free_y', ncol=1, switch = 'x') + #, space = 'free_x'
-  geom_vline(xintercept = 30, 
+last_ind <- metaData %>% 
+             group_by(Population) %>%
+             filter(avg_qual == max(avg_qual))
+last_ind <- last_ind[!duplicated(last_ind[,c('Population')]),]
+m <- names(metaData)
+
+last_ind$text <- last_ind$Population
+
+metaData <- merge(metaData,last_ind, by = m, all = T)
+metaData[is.na(metaData)] <- ""
+
+a <- 
+  ggplot(metaData, 
+         aes(x = sample,
+             y = avg_qual,
+             color = Population,
+             shape = as.factor(Phase))) +
+  geom_point(size=1) +
+  geom_text_repel(#segment.size = 0,
+                  aes(label = text))+
+  geom_hline(yintercept = 30,
+             linetype = 2,
              color = 'grey') +
   scale_colour_manual(values = MyColour, 
                       breaks = unique(metaData$Population)) +
-  scale_y_discrete(expand = c(1,1)) +
+  scale_x_discrete(expand = c(0.1,0.1)) +
   scale_shape_manual(values = c(1,3),
                      name = 'Phase') +
   guides(color = FALSE) +
-  labs(title = "Data quality over time",
-       y = "Populations ranked by sequencing date",
-       x = "Average quality of mapped bases") +
-  theme(plot.title = element_text(hjust = 0.5), 
-        legend.position = c(0.9, 0.95),
-        axis.text.y = element_blank(), 
-        axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
+  labs(x = "Populations ranked by sequencing date",
+       y = "Average quality of mapped bases") +
+  theme(legend.position = c(0.9, 0.95),
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank(),
         panel.spacing = unit(0, "lines"),
         strip.placement = 'inside',
-        strip.background = element_blank(),
-        strip.text.x=element_text(vjust=0))
+        strip.background = element_blank())
 
-a_t
+a
 ```
 
 ### Sequencing technology use over time
@@ -433,6 +444,7 @@ c <-
         plot.margin = unit(c(0,0,0,1.5), "lines"))
 
 c
+
 ```
 
 Put it all together and save it
@@ -441,7 +453,8 @@ d <- plot_grid(a,
                c, 
             nrow = 2, 
             labels = c('A', 'B'),
-            rel_heights = c(5,1))
+            rel_heights = c(5,1),
+            align = 'h')
 ggsave(paste0(figurePath,
               "MapQualOverTime.jpg"),
        d,
