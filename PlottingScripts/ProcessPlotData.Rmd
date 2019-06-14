@@ -368,6 +368,8 @@ metaData <- metaData[with(metaData,
 #set factor with order in mind (for plotting)
 metaData$sample <- factor(metaData$sample, 
                           levels = unique(metaData$sample))
+rownames(metaData) <- NULL
+metaData$order <- rownames(metaData)
 
 metaData
 #save to file
