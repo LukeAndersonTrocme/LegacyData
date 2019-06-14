@@ -399,7 +399,8 @@ a <-
              color = Population,
              shape = as.factor(Phase))) +
   geom_point(size=1) +
-  geom_text_repel(#segment.size = 0,
+  geom_text_repel(segment.size = 0,
+                  #min.segment.length = 1,
                   aes(label = text))+
   geom_hline(yintercept = 30,
              linetype = 2,
