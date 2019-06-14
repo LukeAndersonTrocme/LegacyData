@@ -40,8 +40,22 @@ colors<-read.table(paste0(DataPath,
                    col.names = c('Population',
                                  'hex',
                                  'BigPop'))
+
 MyColour <- as.character(colors$hex)
 names(MyColour) <- colors$Population
+
+MyColour_tab <- as.character(colors$hex)
+names(MyColour_tab) <- sub("^","                                       ",
+                       colors$Population)
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend <- function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, 
+                      function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
 ```
 
 # Figure 1
@@ -76,7 +90,7 @@ GWAS <-
   geom_point(data = SigPos, 
              aes(x = Pos, 
                  y = plog10),
-             color = 'blue',
+             color = 'royalblue1',
              shape = 3,
              size = 0.5) +
   facet_grid(~Chr, 
@@ -99,8 +113,10 @@ GWAS <-
         strip.background = element_blank(),
         strip.text = element_text(size = 20),
         axis.text = element_text(size = 20),
-        axis.title = element_text(size = 20,
-                                  vjust = -5))
+        axis.title.y = element_text(size = 20),
+        axis.title.x = element_text(size = 20,
+                                  vjust = 7),
+        plot.margin = unit(c(1.5,5,0,1.5), "lines"))
 ```
 
 
@@ -123,40 +139,54 @@ jj <- join[complete.cases(join),]
 ```
 
 ```{r}
+sig_points <- 
+  ggplot() +  
+  geom_bin2d(data=jj , 
+             aes(x = NAG_MAF, 
+                 y = JPT_MAF),
+             binwidth = c(1/104, 1/104)) +
+  scale_x_continuous(limits = c(-0.01,0.5)) +
+  scale_y_continuous(limits = c(-0.01,0.5))
+
+sig_points_data <- ggplot_build(sig_points)$data[[1]]
+
 SFS <- 
-  ggplot(join, 
-         aes(x = NAG_MAF, 
-             y = JPT_MAF)) +
-  geom_bin2d(binwidth = c(1/104, 1/104)) +
-  geom_bin2d(data = jj,
-             fill = 'blue',
-             binwidth = c(1/104, 1/104), 
-             alpha = 0.7) +
+  ggplot() + theme_classic() +
+  geom_bin2d(data=join, 
+             aes(x = NAG_MAF, 
+                 y = JPT_MAF), 
+             binwidth = c(1/104, 1/104)) +
   scale_fill_gradient(name = 'log10\ncount',
                       low = "grey95",
                       high = "black",
                       trans = "log",
-                      breaks = c(1,10,100,
-                                 1000,10000,
-                                 100000,1000000), 
-                      labels = c('0','1', '2', 
-                                 '3','4', 
-                                 '5', '6')) +
-  scale_x_continuous(expand = c(0.01,0.01), 
-                     limits = c(-0.01,0.5)) +
-  scale_y_continuous(expand = c(0.01,0.01), 
-                     limits = c(-0.01,0.5)) + 
+                      breaks = c(1,100,10000,1000000), 
+                      labels = c('0','2','4', '6')) +
+  geom_point(data = sig_points_data, 
+             aes(x = x, 
+                 y = y, 
+                 size = count),
+             fill = 'royalblue1',
+             color = 'white',
+             shape = 21) + 
+  scale_size(breaks = c(1, 10, 100), 
+             range = c(1, 5)) +
   labs(x = "Nagahama Frequency",
        y = "1kGP Frequency") +
-  theme_classic() +
+  scale_x_continuous(limits = c(-0.01,0.5)) +
+  scale_y_continuous(limits = c(-0.01,0.5)) +
   theme(axis.line = element_blank(),
         axis.text = element_text(size = 20),
-        axis.title.x = element_text(size = 20),
-        axis.title.y = element_blank(),
+        axis.title = element_text(size = 20),
         legend.text = element_text(size = 20),
         legend.title = element_text(size = 20),
-        plot.margin = unit(c(0,0,1.5,0), "lines"))
+        plot.margin = unit(c(0,0,1.5,1.5), "lines"))
 
+#SFS
+```
+
+
+```{r}
 freq_gw <- data.frame('freq' = join$JPT_MAF,
                       'SNPs' = 'All')
 freq_sig <- data.frame('freq' = jj$JPT_MAF,
@@ -175,11 +205,11 @@ HIST <-
   geom_hline(yintercept = 16.5, 
              color = 'white',
              size = 5) +
-  coord_flip(ylim = c(0, 18)) +
-  scale_fill_manual(values=c("blue", "grey30")) +
+  coord_cartesian(ylim = c(0, 18)) +
+  scale_fill_manual(values=c("royalblue1", "grey30")) +
   scale_x_continuous(limits = c(-0.01,0.5),
                      expand = c(0.01, 0.01)) +
-  scale_y_reverse(expand = c(0.01, 0.01), 
+  scale_y_continuous(expand = c(0.01, 0.01), 
                   breaks = c(0,5,10,15,16.5,18),
                   labels = c('0','5','10','15','...','30'))+
   labs(y="Density") +
@@ -192,18 +222,8 @@ HIST <-
         axis.title.x = element_blank(),
         plot.margin = unit(c(0,0,1.5,0), "lines"))
 
+HIST
 
-SFS_HIST <- 
-  plot_grid(HIST, 
-            SFS,
-            nrow = 1, 
-            rel_widths = c(3, 5), 
-            align = 'h', 
-            labels=c('','D'))
-
-#rm(join)#save memory
-#rm(SFS)
-#B
 ```
 
 
@@ -244,7 +264,7 @@ plt <- ggplot(data,
           plot.margin = unit(c(0,0,0,1.5), "lines")) +
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
-                        high = 'blue',
+                        high = 'royalblue1',
                         guide = guide_legend(title = 'count',
                                              direction = 'vertical'))
 return(plt)
@@ -253,16 +273,16 @@ return(plt)
 SNPplt <- plotContext(SNP,'Suspicious')
 rSNPplt <- plotContext(rSNP,'Control')
 
-#extract legend
-#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
-g_legend <- function(a.gplot){
-  tmp <- ggplot_gtable(ggplot_build(a.gplot))
-  leg <- which(sapply(tmp$grobs, 
-                      function(x) x$name) == "guide-box")
-  legend <- tmp$grobs[[leg]]
-  return(legend)}
+SNPplt <- SNPplt + 
+  geom_point(data = 
+               SNP[which(SNP$chi_p < 0.00001),], 
+             aes(x=End, y = Start), 
+             shape = '*', 
+             color = 'black',
+             size = 10)
 
-mylegend <- g_legend(SNPplt)
+
+mylegend <- g_legend(rSNPplt)
 
 Mut_Spect <- 
   plot_grid(
@@ -274,7 +294,7 @@ Mut_Spect <-
               nrow = 2),
             mylegend,
             ncol = 2,
-            rel_widths = c(1,0.1))
+            rel_widths = c(1,0.15))
 
 Mut_Spect
 
@@ -282,30 +302,20 @@ Mut_Spect
 ```
 ## Put all plots together and save
 ```{r,fig.height=11,fig.width=8}
-#AB <- plot_grid(A, B,
-#               rel_widths = c(1, 2.7))
-fig1 <- plot_grid(GWAS,
-                  Mut_Spect,
-                  SFS,
-               ncol = 1,
-               rel_heights = c(1,2,4),
-               labels = c('A','B','C'))
 
-#figure takes time to save so skip if already done
-#if(!file.exists(paste0(figurePath,
-#                       'Figure1.pdf'))){ 
+fig1 <- plot_grid(GWAS,
+                  SFS,
+                  Mut_Spect,
+                  ncol = 1,
+                  rel_heights = c(2,6,2.5),
+                  labels = c('A','B','C'),
+                  label_size = 20)
+
 ggsave(paste0(figurePath,
-              'Figure1.1.jpg'),
+              'Figure1.jpg'),
        fig1, 
-       height = 14,
-       width = 12)
-#ggsave(paste0(figurePath,
-#              'Figure1.pdf'),
-#       fig1,
-#       height = 12,
-#       width = 12)
-#}
-#fig1
+       height = 20,
+       width = 14)
 
 ```
 
@@ -317,7 +327,6 @@ rm(fig1)
 rm(A)
 rm(B)
 rm(AB)
-
 ```
 
 #Figure 2
@@ -326,37 +335,135 @@ Before we can plot this, we must download and parse the data.
 See ProcessPlotData.Rmd for info
 
 ### Quality per population
-```{r,fig.height=5,fig.width=5}
+```{r,fig.height=10,fig.width=8}
 metaData <- readRDS(paste0(DataPath,
                            'metaData.rds'))
 
-a <- ggplot(metaData, 
-            aes(x = sample, 
+
+
+metaData$Population_tab <- sub("^","                                       ",
+                           metaData$Population)
+metaData$Population <- factor(metaData$Population_tab, levels = unique(metaData$Population_tab))
+#metaData$Population <- factor(metaData$Population, levels = unique(metaData$Population))
+
+a <- ggplot(metaData %>% arrange(x), 
+            aes(x = sample,
                 y = avg_qual,
                 color = Population,
                 shape = as.factor(Phase))) +
-            geom_point() +
-            geom_hline(yintercept = 30, 
-                       linetype = 2, 
-                       color = 'grey') +
-            scale_colour_manual(values = MyColour, 
-                                breaks = unique(metaData$Population)) +
-            scale_x_discrete(expand = c(0.1,0)) +
-            scale_shape_manual(values = c(1,3)) +
-            guides(color = guide_legend(title = "Population",
-                                        shape = FALSE,
-                                        ncol = 1,
-                                        override.aes = list(shape = 15,
-                                                            size = 3))) +
-            labs(title = "Data quality over time",
-                 x = "Populations ranked by sequencing date",
-                 y = "Average quality of mapped bases") +
-            theme(plot.title = element_text(hjust = 0.5), 
-                  axis.text.x = element_blank(), 
-                  axis.ticks.x = element_blank())
+  geom_point(size=1) +
+  facet_wrap(.~Population,  scales = 'free_x', nrow=1, switch = 'y') + #, space = 'free_x'
+  geom_hline(yintercept = 30, 
+             color = 'grey') +
+  scale_colour_manual(values = MyColour_tab, 
+                      breaks = unique(metaData$Population)) +
+  scale_x_discrete(expand = c(0.5,0.5)) +
+  scale_shape_manual(values = c(1,3),
+                     name = 'Phase') +
+  guides(color = FALSE) +
+  labs(title = "Populations ranked by sequencing date",
+       y = "Average quality of mapped bases") +
+  theme(plot.title = element_text(hjust = 0.5), 
+        legend.position = c(0.9, 0.95),
+        axis.text.x = element_blank(), 
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.line.x = element_blank(),
+        panel.spacing = unit(0, "lines"),
+        strip.placement = 'inside',
+        strip.background = element_blank())
 
 a
 ```
+
+
+```{r,fig.height=10,fig.width=8}
+metaData <- readRDS(paste0(DataPath,
+                           'metaData.rds'))
+
+last_ind <- metaData %>% 
+             group_by(Population) %>%
+             filter(avg_qual == max(avg_qual))
+last_ind <- last_ind[!duplicated(last_ind[,c('Population')]),]
+m <- names(metaData)
+
+last_ind$text <- last_ind$Population
+
+metaData <- merge(metaData,last_ind, by = m, all = T)
+metaData[is.na(metaData)] <- ""
+
+a <- 
+  ggplot(metaData, 
+         aes(x = sample,
+             y = avg_qual,
+             color = Population,
+             shape = as.factor(Phase))) +
+  geom_point(size=1) +
+  geom_text_repel(#segment.size = 0,
+                  aes(label = text))+
+  geom_hline(yintercept = 30,
+             linetype = 2,
+             color = 'grey') +
+  scale_colour_manual(values = MyColour, 
+                      breaks = unique(metaData$Population)) +
+  scale_x_discrete(expand = c(0.1,0.1)) +
+  scale_shape_manual(values = c(1,3),
+                     name = 'Phase') +
+  guides(color = FALSE) +
+  labs(x = "Populations ranked by sequencing date",
+       y = "Average quality of mapped bases") +
+  theme(legend.position = c(0.9, 0.95),
+        axis.text.x = element_blank(), 
+        axis.ticks.x = element_blank(),
+        panel.spacing = unit(0, "lines"),
+        strip.placement = 'inside',
+        strip.background = element_blank())
+
+a
+```
+
+### Sequencing technology use over time
+```{r,fig.height=2,fig.width=6}
+c <- 
+  ggplot(metaData, 
+         aes(x = SUBMISSION_DATE, 
+             y = INSTRUMENT_MODEL,
+             shape = INSTRUMENT_MODEL)) +
+  geom_point(size=1) +
+  labs(x = "Sequencing date", 
+       y = 'Sequencer') +
+  guides(shape = guide_legend(title = "",
+                              label = FALSE,
+                              override.aes = list(alpha = 0))) +
+  scale_shape_manual(values = c(2,4,5,6)) +
+  scale_x_date(date_labels = "%Y",
+               date_breaks = "1 year") +
+  theme(axis.line.y = element_blank(),
+        axis.text.y = element_text(size = 10,
+                                   hjust = 0),
+        plot.margin = unit(c(0,0,0,1.5), "lines"))
+
+c
+
+```
+
+Put it all together and save it
+```{r,fig.height=11,fig.width=8}
+d <- plot_grid(a,
+               c, 
+            nrow = 2, 
+            labels = c('A', 'B'),
+            rel_heights = c(5,1),
+            align = 'h')
+ggsave(paste0(figurePath,
+              "MapQualOverTime.jpg"),
+       d,
+       height = 9,
+       width = 9)
+
+d
+```
+
 ### Quality by sequencing center
 ```{r,fig.height=5,fig.width=5}
 b <- ggplot(metaData, 
@@ -381,48 +488,6 @@ b <- ggplot(metaData,
 b
 ```
 
-### Sequencing technology use over time
-```{r,fig.height=2,fig.width=6}
-c <- ggplot(metaData, 
-            aes(x = SUBMISSION_DATE, 
-                y = INSTRUMENT_MODEL,
-                shape = INSTRUMENT_MODEL)) +
-            geom_point() +
-            labs(x = "Individuals ranked by sequencing date", 
-                 y = 'Sequencer') +
-            guides(shape = guide_legend(title = "",
-                                        label = FALSE,
-                                        override.aes = list(alpha = 0))) +
-            scale_x_date(date_labels = "%Y",
-                         date_breaks = "1 year") +
-            theme(axis.line.y = element_blank(),
-                  axis.text.y = element_text(size = 10,
-                                             hjust = 0))
-
-c
-```
-
-Put it all together and save it
-```{r,fig.height=11,fig.width=8}
-d <- plot_grid(a,b,c, 
-            nrow = 3, 
-            labels = c('A', 'B', ''),
-            rel_heights = c(4, 4, 1),
-            align = 'v')
-ggsave(paste0(figurePath,
-              "MapQualOverTime.jpg"),
-       d,
-       height = 14,
-       width = 9)
-ggsave(paste0(figurePath,
-              "MapQualOverTime.pdf"),
-       d,
-       height = 14,
-       width = 9)
-
-d
-```
-
 #Figure 3
 
 This figure shows the overlap of sites associated to qualiy independantly in each single population regression.
@@ -440,9 +505,9 @@ p1 <- ggplot(overLap,
               size = Pcat)) +
           geom_point(shape = 108) +
           scale_size(breaks = c(2, 3, 4), 
-                     range = c(1, 3),
+                     range = c(1, 4),
                      labels = c('6-8', '8-10', '10+'), 
-                     guide = guide_legend(direction = "horizontal"),
+                     guide = guide_legend(direction = "vertical"),
                                           name = '-log10(p)') +
           scale_color_manual(breaks = overLap$Population,
                              values = MyColour) +
@@ -450,8 +515,7 @@ p1 <- ggplot(overLap,
           ylab('Population') +
           ggtitle('Overlap of Significant SNPs') +
           theme_classic() +
-          theme(legend.position = c(0.85, 0.95),
-                legend.box.background = element_rect(colour = "black"), 
+          theme(legend.box.background = element_rect(colour = "black"),
                 plot.title = element_text(hjust = 0.5), 
                 axis.title.x = element_blank(),
                 axis.text.x = element_blank(), 
@@ -465,7 +529,7 @@ p1
 ```{r,fig.height=2,fig.width=5}
 #this is for the labels of the xaxis
 xaxis <- overLap[!duplicated(overLap[,c('SigHits')]),]
-xaxis <- xaxis[which(xaxis$SigHits < 11),]
+xaxis <- xaxis[which(xaxis$SigHits < 9),]
 xaxis <- rbind(xaxis,tail(overLap, 1))
 
 p2 <- ggplot(overLap,

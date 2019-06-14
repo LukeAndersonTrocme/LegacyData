@@ -370,6 +370,14 @@ table <- catalog[which(catalog$log10P_0.01 > -log10(0.01)),
                  c('PUBMEDID','JOURNAL','SNPS',
                    'PVALUE_MLOG','Adjusted_Log10p')]
 print(table[order(-Adjusted_Log10p),])
+
+##edit
+
+catalog <- read_tsv('/Users/luke/Downloads/gwas_catalog_v1.0-associations_e92_r2018-06-25.tsv')
+catalog$rsID <- catalog$SNPS
+sig_rsID <- read.table('/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/Significant_rsID.txt', header=T)
+
+sig_catalog <- merge(catalog, sig_rsID, by= 'rsID')
 ```
 
 ##Density of Significant SNPs per Chromosome
