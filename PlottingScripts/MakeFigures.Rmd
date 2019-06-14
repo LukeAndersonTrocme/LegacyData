@@ -29,12 +29,16 @@ library(purrr)
 library(ggrepel)
 library(OneR)
 #Directories
-DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
-figurePath <- '~/Documents/LegacyData/Figures/'
+project_dir <- getwd()
+data_dir <- file.path(project_dir, "ProcessedData/")
+figure_dir <- file.path(project_dir, "Figures/")
+
+#data_dir <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+#figure_dir <- '~/Documents/LegacyData/Figures/'
 
 #Load the custom population colors
 #Hex colors taken from https://www.nature.com/articles/nature15393
-colors<-read.table(paste0(DataPath,
+colors<-read.table(paste0(data_dir,
                           'NamePopBigPop_color.html.txt'), 
                    comment.char = '>',
                    col.names = c('Population',
@@ -48,10 +52,10 @@ names(MyColour) <- colors$Population
 ## Reverse GWAS in JPT
 ```{r,fig.height=5,fig.width=8}
 
-SigPos <- readRDS(paste0(DataPath,
+SigPos <- readRDS(paste0(data_dir,
                    'SigPos.rds'))
 
-NotSig <- readRDS(paste0(DataPath,
+NotSig <- readRDS(paste0(data_dir,
                    'NotSig.rds'))
 
 facet_names <- 
@@ -108,7 +112,7 @@ GWAS <-
 ```{r,fig.height=5,fig.width=5}
 #load file if it already exists
 #see MakeFiles.Rmd for info on jointAF.txt
-join <- readRDS(paste0(DataPath,
+join <- readRDS(paste0(data_dir,
                'jointAF.rds'))
 
 #load poisitons that reach -log10(p) > 6
@@ -210,10 +214,10 @@ SFS_HIST <-
 ## Mutation Spectrum enrichment
 ```{r,fig.height=3,fig.width=9}
 #load mutation spectrum for suspicious SNPs
-SNP <- readRDS(paste0(DataPath,
+SNP <- readRDS(paste0(data_dir,
                    'SNP_Context.rds'))
 #load mutation spectrum for control SNPs
-rSNP <- readRDS(paste0(DataPath,
+rSNP <- readRDS(paste0(data_dir,
                    'rSNP_Context.rds'))
 
 #make color scale comparable between plots
@@ -292,14 +296,14 @@ fig1 <- plot_grid(GWAS,
                labels = c('A','B','C'))
 
 #figure takes time to save so skip if already done
-#if(!file.exists(paste0(figurePath,
+#if(!file.exists(paste0(figure_dir,
 #                       'Figure1.pdf'))){ 
-ggsave(paste0(figurePath,
+ggsave(paste0(figure_dir,
               'Figure1.1.jpg'),
        fig1, 
        height = 14,
        width = 12)
-#ggsave(paste0(figurePath,
+#ggsave(paste0(figure_dir,
 #              'Figure1.pdf'),
 #       fig1,
 #       height = 12,
@@ -327,7 +331,7 @@ See ProcessPlotData.Rmd for info
 
 ### Quality per population
 ```{r,fig.height=5,fig.width=5}
-metaData <- readRDS(paste0(DataPath,
+metaData <- readRDS(paste0(data_dir,
                            'metaData.rds'))
 
 a <- ggplot(metaData, 
@@ -409,12 +413,12 @@ d <- plot_grid(a,b,c,
             labels = c('A', 'B', ''),
             rel_heights = c(4, 4, 1),
             align = 'v')
-ggsave(paste0(figurePath,
+ggsave(paste0(figure_dir,
               "MapQualOverTime.jpg"),
        d,
        height = 14,
        width = 9)
-ggsave(paste0(figurePath,
+ggsave(paste0(figure_dir,
               "MapQualOverTime.pdf"),
        d,
        height = 14,
@@ -430,7 +434,7 @@ See ProcessPlotData.Rmd for info on the overLap file
 
 ### Overlap of significant SNPs
 ```{r,fig.height=5,fig.width=5}
-overLap <- readRDS(paste0(DataPath,
+overLap <- readRDS(paste0(data_dir,
                            'overLap.rds'))
 
 p1 <- ggplot(overLap, 
@@ -504,13 +508,13 @@ p3 <- plot_grid(p1, p2,
                 align = "v", 
                 rel_heights = c(3, 1))
 
-ggsave(paste0(figurePath,
+ggsave(paste0(figure_dir,
               'SNPOverlap6.jpg'),
               p3, 
               height = 8, 
               width = 8)
 
-ggsave(paste0(figurePath,
+ggsave(paste0(figure_dir,
               'SNPOverlap6.PDF'),
               p3, 
               height = 8, 
@@ -526,11 +530,11 @@ p3
 ```{r,fig.height=11,fig.width=8}
 fitsName = 'fits_Significant_Positions_'
 #load data
-LFA <- fread(paste0(DataPath,fitsName,"LFA.txt"))
+LFA <- fread(paste0(data_dir,fitsName,"LFA.txt"))
   
-Pop <- fread(paste0(DataPath,fitsName,"Pop.txt"))
+Pop <- fread(paste0(data_dir,fitsName,"Pop.txt"))
   
-PCA <- fread(paste0(DataPath,fitsName,"PCA.txt"))
+PCA <- fread(paste0(data_dir,fitsName,"PCA.txt"))
 
 plt <- merge(LFA,Pop,by=c('rsID'),suffixes = c('LFA','PCA'))
 plt <- merge(plt,PCA,by=c('rsID'))
@@ -578,7 +582,7 @@ plot_grid(p1b,p2b,
           p1c,p2c,
           nrow=3)
 
-ggsave(paste0(figurePath,fitsName,
+ggsave(paste0(figure_dir,fitsName,
               'CompareModels.jpg'),
               height=10, 
               width=8)
@@ -589,7 +593,7 @@ ggsave(paste0(figurePath,fitsName,
 ###Single Population Test
 ```{r,fig.height=5,fig.width=5}
 #using the sites associated to Quality in the single population test
-HanKgpAF <- readRDS(paste0(DataPath,
+HanKgpAF <- readRDS(paste0(data_dir,
                    'HanKgpAF.rds'))
 
 ggplot(HanKgpAF, 
@@ -601,15 +605,15 @@ ggplot(HanKgpAF,
        y = '1000 Genomes Project')+
   ggtitle(paste0('Joint frequency plot of ',nrow(HanKgpAF),' suspicious SNPs\nfrom single population test'))
 
-ggsave(paste0(figurePath,'Han_1kGP_SFS_singlePop.jpg'),height=10, width=10)
+ggsave(paste0(figure_dir,'Han_1kGP_SFS_singlePop.jpg'),height=10, width=10)
 
 ```
 ##Full Model
 ```{r,fig.height=5,fig.width=5}
 #Load joint frequency for SNPs
 ##from plink --freq
-kgpAF <- fread(paste0(DataPath,'Significant_Positions.frq'))
-hanAF <- fread(paste0(DataPath,'Significant_Positions_Han.frq'))
+kgpAF <- fread(paste0(data_dir,'Significant_Positions.frq'))
+hanAF <- fread(paste0(data_dir,'Significant_Positions_Han.frq'))
 combo <- merge(hanAF, kgpAF, 
                by=c('CHR','SNP'), 
                suffixes = c('.HAN','.KGP'), 
@@ -629,7 +633,7 @@ ggplot(combo,
          y = '1000 Genomes Project')+
     ggtitle(paste0('Joint frequency spectrum of \n',nrow(combo),' suspicious variants from combined test\n(',nHan, ' variants present in Han)'))
 
-ggsave(paste0(figurePath,'Han_1kGP_SFS_FullModel.jpg'),height=10, width=10)
+ggsave(paste0(figure_dir,'Han_1kGP_SFS_FullModel.jpg'),height=10, width=10)
 
 
 ```
@@ -653,16 +657,16 @@ kgpAF <- kgpAF %>%
   separate(AF1, c("Allele1", "AF1"), ":")
 kgpAF <- kgpAF %>%
   separate(AF2, c("Allele2", "AF2"), ":")
-nygcAF <- fread(paste0(DataPath,'NYGC/genomeWide_NYGC_lifted_1-9.frq'),
+nygcAF <- fread(paste0(data_dir,'NYGC/genomeWide_NYGC_lifted_1-9.frq'),
                col.names = c('Chr','Pos','PosPlus1','N_Counts','AF1','Af2'))
 nygcAF <- nygcAF %>%
   separate(AF1, c("Allele1", "AF1"), ":")
 nygcAF$Chr <- as.numeric(as.character(gsub(pattern = 'chr',replacement = '',x = nygcAF$Chr)))
 
-sigPos <- fread(paste0(DataPath,'Significant_Positions.txt'), 
+sigPos <- fread(paste0(data_dir,'Significant_Positions.txt'), 
                 col.names = c('Chr','Pos'))
 
-strictMask <- fread(paste0(DataPath,
+strictMask <- fread(paste0(data_dir,
                            '1kGP_StrictMask.bed'),
             col.names = c('Chr','Pos','Pos.1','rsID'))
 
@@ -706,7 +710,7 @@ sfs <- ggplot(sig,
 
 sfs
 
-ggsave(paste0(figurePath,'NYGC_Chr1-9.jpg'),height=10, width=10)
+ggsave(paste0(figure_dir,'NYGC_Chr1-9.jpg'),height=10, width=10)
 
 allsfs <- ggplot(combo, 
         aes(x = 1-AF1.NYGC, 
@@ -725,7 +729,7 @@ allsfs <- ggplot(combo,
 
 allsfs
 
-ggsave(paste0(figurePath,'NYGC_Chr1-9_all.jpg'),height=10, width=10)
+ggsave(paste0(figure_dir,'NYGC_Chr1-9_all.jpg'),height=10, width=10)
 
 sfsPlus <- ggplot(combo, 
         aes(x = 1-AF1.NYGC, 
@@ -745,7 +749,7 @@ sfsPlus <- ggplot(combo,
 
 sfsPlus
 
-ggsave(paste0(figurePath,'NYGC_Chr1-9_allPlus.jpg'),height=10, width=10)
+ggsave(paste0(figure_dir,'NYGC_Chr1-9_allPlus.jpg'),height=10, width=10)
 ```
 ```{r}
 hist <- ggplot(sig, aes(x=diff)) +
@@ -762,7 +766,7 @@ hist <- ggplot(sig, aes(x=diff)) +
 ```
 
 ```{r,fig.height=11,fig.width=8}
-AF30 <- readRDS(paste0(DataPath,
+AF30 <- readRDS(paste0(data_dir,
                    'AF30.rds'))
 AF30$rate <- AF30$oAF/AF30$uAF
 
@@ -782,15 +786,15 @@ af2 <- ggplot(AF30[which(AF30$oAF <100),], aes(x=uAF, y=oAF))+
 
 plot_grid(af1, af2,ncol=1)
 
-ggsave(paste0(figurePath,'OverUnder30.jpg'),height=11,width=8)
-ggsave(paste0(figurePath,'OverUnder30.pdf'),height=11,width=8)
+ggsave(paste0(figure_dir,'OverUnder30.jpg'),height=11,width=8)
+ggsave(paste0(figure_dir,'OverUnder30.pdf'),height=11,width=8)
 
 print(nrow(AF30[which(AF30$rate <= 2279/450),])/nrow(AF30))
 print(nrow(AF30[which(AF30$rate > 2279/450),])/nrow(AF30))
 ```
 ##Over Under 30 for published variants
 ```{r}
-pub<-fread(paste0(DataPath, 'fits_PublishedVariants_LFA.txt'))
+pub<-fread(paste0(data_dir, 'fits_PublishedVariants_LFA.txt'))
 pub <- merge(pub, AF30, by='rsID')
 pub$text <- paste(pub$rsID, 'p ',round(pub$dev_logp, 2))
 library(ggrepel)
@@ -801,16 +805,16 @@ ggplot(pub, aes(x=uAF, y=oAF, label=text))+
      geom_abline(intercept=0, slope = 2279/450, linetype=3, color='red')+
      labs(x='Samples with Q < 30',y='Samples with Q > 30')+
      ggtitle('Published Variants')
-ggsave(paste0(figurePath,'Published_OverUnder30.jpg'),height=7,width=8)
+ggsave(paste0(figure_dir,'Published_OverUnder30.jpg'),height=7,width=8)
 pub$ratio <- pub$oAF/pub$uAF
 pub$limit <- pub$ratio > 2279/450
-write.table(pub,paste0(figurePath,'Published_OverUnder30.txt'),)
+write.table(pub,paste0(figure_dir,'Published_OverUnder30.txt'),)
 
 ```
 
 ```{r,fig.height=5,fig.width=10}
 #load file
-omni <- readRDS(paste0(DataPath,'omni.rds'))
+omni <- readRDS(paste0(data_dir,'omni.rds'))
 
 ggplot(omni, 
        aes(x = (2504 - num_zeros)/2504, 
@@ -820,7 +824,7 @@ ggplot(omni,
        y = '-log10(p)') +
   ggtitle(paste0(nrow(omni),' SNPs present in the Omni 2.5 Microarray'))
 
-ggsave(paste0(figurePath,'Omni_AF.jpg'), 
+ggsave(paste0(figure_dir,'Omni_AF.jpg'), 
        height = 5, 
        width = 10)
 
