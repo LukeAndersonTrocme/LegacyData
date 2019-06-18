@@ -52,7 +52,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and \luke{some questionable \sout{suspicious}} GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to \luke{impact \sout{contaminate}} modern studies in hidden ways. \luke{As technologies and analytical methods improve, it is important that we renew and update these data resources accordingly}\sout{It may be time to retire or upgrade such legacy sequencing data.}
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and \todo{some questionable \sout{suspicious}} GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to \todo{impact \sout{contaminate}} modern studies in hidden ways. \todo{As technologies and analytical methods improve, it is important that we renew and update these data resources accordingly}\sout{It may be time to retire or upgrade such legacy sequencing data.}
 \vspace{5mm}
 
 \textbf{Key words} : Batch Effect, Mutational Signature, Statistical Genetics, Population Genetics, Reference Cohorts, Imputation
@@ -88,8 +88,8 @@ Harris and Pritchard further identified distinct mutational spectra across a ran
 In particular, the latter two studies  identified a heterogeneous mutational signature within 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-\luke{Given this signature had not been reproduced in another dataset}, we \sout{therefore} decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.
-\luke{Our initial goal was to explore the population structure that might be responsible for such an intriguing mutational signature.}
+\todo{Given this signature had not been reproduced in another dataset}, we \sout{therefore} decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.
+\todo{Our initial goal was to explore the population structure that might be responsible for such an intriguing mutational signature.}
 
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in a number of recent publications.
@@ -145,26 +145,26 @@ Thus, sequences called from low-$Q$ data contain variants that reproduce poorly 
 \textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes Project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
 The shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. 
-\luke{\textbf{B} The sequencing technologies used over time. A change in technology coincides with an increase in overall quality of data produced.}}
+\todo{\textbf{B} The sequencing technologies used over time. A change in technology coincides with an increase in overall quality of data produced.}}
 \label{MapQual}
 \end{figure}
 
 To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
 Traditionally, genome wide association studies use genotypes as the independent variable. 
-Here we perform a \luke{genotype conditional association test (GCAT), where} genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
+Here we perform a \todo{genotype conditional association test (GCAT), where} genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have a significant enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}C).
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
-\luke{Statistical significance of these enrichment is computed using a chi-squared test as described by Harris 2017 \citep{Harris2017a}. }
+\todo{Statistical significance of these enrichment is computed using a chi-squared test as described by Harris 2017 \citep{Harris2017a}. }
 
-Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques \luke{due to lack of power (Supplementary Figure 000}).
+Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques \todo{due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps})}.
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses where quality of imputation matters, identifying $Q$-associated variants may be preferable. 
 
 \subsection{Identifying suspicious variants in the 1000 Genomes Project}
-The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual}).
+The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual} and Figure \ref{quality_by_center}).
 This variability could result from evolving sequence platform and protocols or variation between sequencing centres. 
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 
@@ -185,6 +185,8 @@ At a 10kb scale, we also see rather uniform distribution with a small number of 
 An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome(Figure \ref{VariantDensity}).
+\todo{The mutational 3-mer substitution patterns of this list of variants is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
+However, another enrichment profile is significantly enriched : TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT.}
 
 
 \begin{table}[h!]
@@ -198,6 +200,7 @@ By contrast, variants that do not pass the 1kGP strict mask are more unevenly di
 \caption{Number of statistically significant variants  passing the 1000 Genomes Project strict mask per category. 
 Variants that are flagged by the 1000 Genomes Project nested repeat mask file were analyzed separately for FDR calculation. SNPs and INDELs were also analyzed separately.
 A total of 15,270 are statistically significantly associated to $Q$. 
+The grey text is the proportion of significant associations per category.
 The number of variants included in the analysis for SNPs, SNPs in repeat regions, INDELs and INDELs in repeat regions are  19,846,786, 6,312,620, 1,770,315 and 586,342 respectively.}
 \label{sigTable}
 \end{table}
@@ -206,7 +209,7 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
 Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
-This is more than our nominal false discovery rate of \luke{$\alpha = 0.01$} of the sites. 
+This is more than our nominal false discovery rate of \todo{$\alpha = 0.01$} of the sites. 
 Thus a small number of variants associated to $Q$ are present in the population but with somewhat biased genotypes. 
 
 
@@ -214,9 +217,9 @@ We did a similar analysis using all variants identified in the GCAT model (rathe
 Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
 From this subset, only 1,139 (or 18\%) are present in the resequenced data.
 The allele frequencies of these variants are nearly identical between datasets suggesting that among these 83 individuals, these variants are properly genotyped in the 1kGP.
-\luke{In the GCAT test, a variant may be significantly associated to $Q$ in some populations, but not necessarily all populations. 
+\todo{In the GCAT test, a variant may be significantly associated to $Q$ in some populations, but not necessarily all populations. 
 Thus, the 1,139 variants present in the resequenced Han might have stronger associations to $Q$ in in individuals from other populations.}
-There are 5 \luke{variants} that show differing frequencies between both datasets that are likely explained by biased genotypes.
+There are 5 \todo{variants} that show differing frequencies between both datasets that are likely explained by biased genotypes.
 The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
 
 Among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
@@ -230,11 +233,11 @@ From the perspective of researchers, they act as black-box imputation machines t
 To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
-\luke{These  $Q$-associated variants could also compromise the imputation of real variants that happen to be  close by, causing not only improper imputation, but also false negatives for real variants.}
+\todo{These  $Q$-associated variants could also compromise the imputation of real variants that happen to be  close by, causing not only improper imputation, but also false negatives for real variants.}
 
 We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
-\luke{Some of these publications noted that these variants were not flanked by linkage disequilibrium peaks \citep{Mandage2017}.
+\todo{Some of these publications noted that these variants were not flanked by linkage disequilibrium peaks \citep{Mandage2017}.
 Indeed, we expect a large number of these variants to be filtered out by some quality controls like the Hardy-Weinberg  equilibrium test.
 However, the fact that some of these variants are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.}
 
@@ -251,7 +254,7 @@ The majority (92.7\%) of the $Q$-associated variants are strongly biased in that
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
 One study reports associations with seven $Q$-associated variants that we find to be highly biased \citep{Mandage2017}. 
 That study considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype. 
-\luke{It is unlikely that EBV copy number associations to these seven $Q$-associated variants could be explained by population structure as the data quality of an individual is also correlated with sequencing date.
+\todo{It is unlikely that EBV copy number associations to these seven $Q$-associated variants could be explained by population structure as the data quality of an individual is also correlated with sequencing date.
 This suggests that there may be issues with how EBV is mapped to the genomes of individuals with low quality sequence data.}
 Thus the phenotype in that study is likely confounded by the same technical artefacts that lead to biased SNP calling.
 
@@ -407,7 +410,7 @@ We would also like to thank the members of the Gravel lab for their help with co
 \renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0}   	
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \includegraphics[width=13cm,keepaspectratio]{../Figures/fits_Significant_Positions_CompareModels.jpg}
 \caption{Comparison of three logistic regression models for testing association to $Q$.
@@ -415,6 +418,22 @@ These methods model each genotype as a logistic function using principal compone
 In these plots we are comparing the deviance from the null model in the 15,270 variants identified using the LFA model.}  
 \label{CompareModel}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=13cm,keepaspectratio]{../Figures/histogram_of_sig_snps.jpg}
+\caption{Frequency distribution of the 1034 $Q$ associated SNPs from the single population test in the JPT in blue and all SNPs in black. The association test lacks power to identify variants at low frequencies.}  
+\label{histogram_of_sig_snps}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=13cm,keepaspectratio]{../Figures/quality_by_center.jpg}
+\caption{Sequencing date of samples included in the 1kGP coloured by sequencing centre. Improvements in sequencing platforms coincides with improvement in sequencing quality.}  
+\label{quality_by_center}
+\end{figure}
+
 
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/SNPOverlap6.jpg}
@@ -428,14 +447,22 @@ The populations that tend to have the most individuals with low $Q$ also tend to
   \label{OverLap}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
+\centering
+\includegraphics[width=13cm,keepaspectratio]{../Figures/strict_gcat_mutational_enrichment.jpg}
+\caption{Mutation spectrum of the 15,270 $Q$-associated variants that pass the 1kGP strict mask filter, compared to a random set of non-associated variants. A large fraction of the  $Q$-associated variants have the *AC${\rightarrow}$*CC mutational pattern. There is also an enrichment in TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT. Stars ( * ) indicate significant difference from the mutational spectrum of a set of control variants of equal size.}  
+\label{strict_gcat_mutational_enrichment}
+\end{figure}
+
+
+\begin{figure}[ht]
 \centering
 \includegraphics[width=11cm,keepaspectratio]{../Figures/CountPerChrom.jpg}
 \caption{The proportion of $Q$-associated variants per chromosome.}  
 \label{CountPerChrom}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/VariantDensity.jpg}
 \caption{The number of $Q$-associated variants per 10kb window across the genome.
@@ -444,28 +471,28 @@ One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 
 \label{VariantDensity}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=10cm,keepaspectratio]{../Figures/RegionOver10.jpg}
 \caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the 10kb window with the most  $Q$-associated variants per 10kb across the genome.}  
 \label{Top10}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/OverUnder30.jpg}
 \caption{Site frequency spectrum plot comparing the allele frequency difference between individuals with low- and high-$Q$. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Two clusters of are visible, where the majority (92.7\%) of the $Q$-associated variants are more than twice as frequent in individuals with low-$Q$.}  
 \label{90HanSFS_full}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/Published_OverUnder30.jpg}
 \caption{Site frequency spectrum plot comparing the frequency of $Q$-associated variants identified in publications, for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Each of the rsIDs of the variants are labelled for clarity.}  
 \label{Pub_30}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=9cm,keepaspectratio]{../Figures/Han_1kGP_SFS_singlePop.jpg}
 \caption{Site frequency spectrum plot comparing the original 1000 Genomes Project data to the high depth resequence data for variants that, in the 1000 Genomes Project, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
@@ -473,7 +500,7 @@ Among the 296 variants associated with $Q$ in the single population tests within
 \label{90HanSFS}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=9cm,keepaspectratio]{../Figures/Han_1kGP_SFS_FullModel.jpg}
 \caption{Site frequency spectrum plot comparing the original 1000 Genomes Project data to the high depth resequence data for variants that, in the 1000 Genomes Project, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
@@ -534,19 +561,19 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
   \label{RI_Manhattan}
   \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=12cm,keepaspectratio]{../Figures/Omni_AF.jpg}
 \caption{Estimated frequency and association strength of $Q$- associated variants present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
 \label{Omni}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=12cm,keepaspectratio]{../Figures/PC1_Correlation.jpg}
 \caption{Sequencing metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1000 Genomes Project. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
 \label{PC1_Correlation}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \includegraphics[width=12cm,keepaspectratio]{../Figures/MutationSpectrum_cutOff.png}
 
 \caption{Comparing mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  \textbf{A} 

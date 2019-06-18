@@ -126,6 +126,7 @@ saveRDS(join,
 
 ## Mutation Spectrum enrichment
 ```{r}
+########### JPT 1kGP ###########
 #get positions of significant SNPs
 sig.pos <- SigPos[,c('Chr','Pos')]
 write.table(sig.pos, 
@@ -149,6 +150,62 @@ write.table(random.pos,
             quote = FALSE, 
             sep = '\t')
 rm(NotSig) #save memory
+
+########### GCAT 1kGP ###########
+#see RegressionResults.rmd for Regression
+
+#get positions of random SNPs as control
+set.seed(123)
+
+number_of_sig <- 
+  nrow(Regression[which(
+    Regression$Adjusted_Log10p 
+    > -log10(0.01)),])
+
+gcat.random.pos <- 
+  Regression[sample(nrow(Regression), 
+                    number_of_sig),
+             c('Chr','Pos')]
+
+write.table(gcat.random.pos, 
+            file = paste0(DataPath,
+                        'gcat.random.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+
+strict_sig <- nrow(RegressionMasked[which(
+    RegressionMasked$Adjusted_Log10p 
+    > -log10(0.01)),])
+
+strict.gcat.random.pos <- 
+  RegressionMasked[sample(nrow(RegressionMasked), 
+                    strict_sig),
+             c('Chr','Pos')]
+
+write.table(strict.gcat.random.pos, 
+            file = paste0(DataPath,
+                        'strict.gcat.random.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+
+strict.gcat.pos <- 
+  RegressionMasked[which(
+    RegressionMasked$Adjusted_Log10p 
+    > -log10(0.01)),
+    c('Chr','Pos')]
+
+write.table(strict.gcat.pos, 
+            file = paste0(DataPath,
+                        'strict.gcat.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+
 ```
 extract context for snps of interest
 ```{bash}
@@ -178,14 +235,23 @@ extract context for GCAT test snps of interest
 #Using GenomeWide.AncestralContext.txt
 #To get mutation context, use $path/AncestralContext.py
 #compare first two columns in both files, extract matches
-path='/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/'
-  
-if [ ! -f $path/gcat.sig.pos.context.txt ]; then
+out_path='/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/'
+path='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData/'
+
+if [ ! -f $path/strict.gcat.random.pos.context.txt ]; then
+  echo "gcat random pos context"
+  awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
+  $path/strict.gcat.random.pos.txt \
+  $path/GenomeWide.AncestralContext.txt \
+  > $path/strict.gcat.random.pos.context.txt
+fi  
+
+if [ ! -f $path/strict.gcat.sig.pos.context.txt ]; then
   echo "sig pos context"
   awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
-  $path/Significant_Positions.txt \
+  $path/strict.gcat.pos.txt \
   $path/GenomeWide.AncestralContext.txt \
-  > $path/gcat.sig.pos.context.txtt
+  > $path/strict.gcat.sig.pos.context.txt
 fi 
 ```
 
@@ -193,13 +259,16 @@ Load mutation context and plot enrichment
 ```{r}
 contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
 
+#toggle for all snps or just JPT 1kGP snps
+name <- 'strict.gcat.' #'gcat.' # ''
+
 #load SNP context
-SNP <- read.table(paste0(DataPath,
-                         'sig.pos.context.txt'), 
+SNP <- read.table(paste0(DataPath, name,'sig.pos.context.txt'), 
                 sep = '\t', 
                 header  = FALSE,
                 col.names = contextHeader)
-rSNP <- read.table(paste0(DataPath,
+
+rSNP <- read.table(paste0(DataPath, name,
                           'random.pos.context.txt'), 
                 sep = '\t',
                 header = FALSE,
@@ -279,12 +348,12 @@ SNP <- merge(SNP,
 SNP
 #save to file
 saveRDS(SNP,
-            paste0(DataPath,
+            paste0(DataPath, name,
                    'SNP_Context.rds'))
 
 #save to file
 saveRDS(rSNP,
-            paste0(DataPath,
+            paste0(DataPath, name,
                    'rSNP_Context.rds'))
 ```
 
