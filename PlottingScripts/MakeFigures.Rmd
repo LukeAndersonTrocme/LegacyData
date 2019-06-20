@@ -85,16 +85,15 @@ dummy <-
   ggplot(SigPos, 
          aes(x = Pos, 
              y = deviance, 
-             shape = SigPos$deviance > 40)) +
+             shape = SigPos$Population)) +
   geom_point() +
-  scale_shape_manual(values = c(3,16),
-                     labels = c('Yes', 'No')) +
+  scale_shape_manual(values = c(16,16),
+                     labels = c('Suspicious')) +
   guides(shape = 
-           guide_legend(title = 'Suspicious',
+           guide_legend(title = '',
                         override.aes = 
-                          list(size = 8,
-                               color = c('blue',
-                                         'grey70'))))+
+                          list(size = 4,
+                               color = c('royalblue1'))))+
   theme(legend.title = element_text(size = 20),
         legend.text = element_text(size = 20))
 
@@ -111,7 +110,6 @@ gwas <-
              aes(x = Pos, 
                  y = plog10),
              color = 'royalblue1',
-             shape = 3,
              size = 0.5) +
   facet_grid(~Chr, 
              scales = 'free_x', 
@@ -122,7 +120,7 @@ gwas <-
   scale_color_manual(values = rep(
     c("grey70", "grey30"), 
     22)) +
-  labs(title = "Association of variant frequency to the average quality of mapped bases in 1kGP",
+  labs(title = "Association to the average quality of mapped bases in the 1kGP JPT",
        y = '-log10(p)', x = 'Chromosome') +
   guides(color = FALSE) + 
   theme_classic() +
@@ -138,12 +136,12 @@ gwas <-
         axis.title.y = element_text(size = 20),
         axis.title.x = element_text(size = 20,
                                   vjust = 7),
-        plot.margin = unit(c(1.5,5,0,1.5), "lines"))
+        plot.margin = unit(c(1.5,1.5,0,1.5), "lines"))
 
 GWAS <- plot_grid(gwas,
                   mylegend,
                   nrow = 1,
-                  rel_widths = c(1,0.1))
+                  rel_widths = c(1,0.15))
 ```
 
 
@@ -183,12 +181,11 @@ SFS <-
              aes(x = NAG_MAF, 
                  y = JPT_MAF), 
              binwidth = c(1/104, 1/104)) +
-  scale_fill_gradient(name = 'background\nvariants\nlog10\ncounts',
+  scale_fill_gradient(name = 'All variants\ncounts',
                       low = "grey98",
-                      high = "grey30",
+                      high = "grey45",
                       trans = "log",
-                      breaks = c(1,100,10000,1000000), 
-                      labels = c('0','2','4', '6')) +
+                      breaks = c(1,100,10000,1000000)) +
   geom_point(data = sig_points_data, 
              aes(x = x, 
                  y = y, 
@@ -196,11 +193,11 @@ SFS <-
              fill = 'royalblue1',
              color = 'black',
              shape = 21) + 
-  scale_size(name = 'suspicious\nvariants\ncounts',
+  scale_size(name = 'Suspicious\nvariants\ncounts',
              breaks = c(1, 10, 100), 
              range = c(1, 6)) +
-  labs(x = "Nagahama Frequency",
-       y = "1kGP Frequency") +
+  labs(x = "Nagahama frequency",
+       y = "1kGP JPT frequency") +
   scale_x_continuous(limits = c(-0.01,0.5)) +
   scale_y_continuous(limits = c(-0.01,0.5)) +
   theme(axis.line = element_blank(),
@@ -214,49 +211,6 @@ SFS <-
 ```
 
 
-```{r}
-freq_gw <- data.frame('freq' = join$JPT_MAF,
-                      'SNPs' = 'All')
-freq_sig <- data.frame('freq' = jj$JPT_MAF,
-                       'SNPs' = 'Suspicious')
-
-freq_hist <- rbind(freq_sig, freq_gw)
-
-HIST <- 
-  ggplot(data = freq_hist %>%
-           filter(freq > 0),
-         aes(x=freq, 
-             fill = SNPs))+
-  geom_histogram(bins = 100,
-                 alpha=0.8, 
-                 position="identity",
-                 aes(y=..density..))+
-  geom_hline(yintercept = 16.5, 
-             color = 'white',
-             size = 5) +
-  coord_cartesian(ylim = c(0, 18)) +
-  scale_fill_manual(values=c("royalblue1", "grey30")) +
-  scale_x_continuous(expand = c(0.01, 0.01)) +
-  scale_y_continuous(expand = c(0.01, 0.01), 
-                  breaks = c(0,5,10,15,16.5,18),
-                  labels = c('0','5','10','15','...','30'))+
-  labs(y="Density",
-       x = "1kGP Allele Frequency") +
-  theme_classic() +
-  theme(axis.line = element_blank(),
-        axis.ticks = element_blank(),
-        axis.text = element_text(size = 20),
-        axis.title = element_text(size = 20))
-
-HIST
-
-ggsave(paste0(figurePath,
-              "histogram_of_sig_snps.jpg"),
-       HIST,
-       height = 6,
-       width = 9)
-
-```
 
 
 ## Mutation Spectrum enrichment
@@ -297,7 +251,7 @@ plt <- ggplot(data,
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
                         high = 'royalblue1',
-                        guide = guide_legend(title = 'count',
+                        guide = guide_legend(title = 'Variant\ncount',
                                              direction = 'vertical'))
 return(plt)
 }
@@ -307,11 +261,19 @@ rSNPplt <- plotContext(rSNP,'Control')
 
 SNPplt <- SNPplt + 
   geom_point(data = 
-               SNP[which(SNP$chi_p < 0.00001),], 
+               SNP[which(SNP$Freq > 5 &
+                           SNP$chi_p < 0.00001),], 
              aes(x=End, y = Start), 
              shape = '*', 
              color = 'black',
-             size = 10)
+             size = 10) + 
+  geom_point(data = 
+               SNP[which(SNP$Freq < 5 &
+                           SNP$chi_p < 0.00001),], 
+             aes(x=End, y = Start), 
+             shape = 16, 
+             color = 'black',
+             size = 1)
 
 
 mylegend <- g_legend(rSNPplt)
@@ -655,6 +617,51 @@ ggsave(paste0(figurePath,
               'strict_gcat_mutational_enrichment.jpg'),
               height=4, 
               width=10)
+```
+
+
+```{r}
+freq_gw <- data.frame('freq' = join$JPT_MAF,
+                      'SNPs' = 'All')
+freq_sig <- data.frame('freq' = jj$JPT_MAF,
+                       'SNPs' = 'Suspicious')
+
+freq_hist <- rbind(freq_sig, freq_gw)
+
+HIST <- 
+  ggplot(data = freq_hist %>%
+           filter(freq > 0),
+         aes(x=freq, 
+             fill = SNPs))+
+  geom_histogram(bins = 100,
+                 alpha=0.8, 
+                 position="identity",
+                 aes(y=..density..))+
+  geom_hline(yintercept = 16.5, 
+             color = 'white',
+             size = 5) +
+  coord_cartesian(ylim = c(0, 18)) +
+  scale_fill_manual(values=c("royalblue1", "grey30")) +
+  scale_x_continuous(expand = c(0.01, 0.01)) +
+  scale_y_continuous(expand = c(0.01, 0.01), 
+                  breaks = c(0,5,10,15,16.5,18),
+                  labels = c('0','5','10','15','...','30'))+
+  labs(y="Density",
+       x = "1kGP Allele Frequency") +
+  theme_classic() +
+  theme(axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_text(size = 20),
+        axis.title = element_text(size = 20))
+
+HIST
+
+ggsave(paste0(figurePath,
+              "histogram_of_sig_snps.jpg"),
+       HIST,
+       height = 6,
+       width = 9)
+
 ```
 
 ##Comparig models
