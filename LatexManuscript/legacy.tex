@@ -102,7 +102,7 @@ Finally, we investigate how these variants have impacted modern genomics analyse
   
 
 \begin{figure}
-\includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}
+\scalebox{0.85}{\includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}}
 \caption{
 Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies, and are distributed across the genome. 
 \textbf{A} 
@@ -156,7 +156,7 @@ We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have a significant enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}C).
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
-\todo{Statistical significance of these enrichment is computed using a chi-squared test as described by Harris 2017 \citep{Harris2017a}. }
+\todo{Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}. }
 
 Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques \todo{due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps})}.
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
@@ -184,7 +184,7 @@ $Q$-associated variants are distributed across the genome, with chromosome 1 sho
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
 An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
-By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome(Figure \ref{VariantDensity}).
+By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{VariantDensity}).
 \todo{The mutational 3-mer substitution patterns of this list of variants is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
 However, another enrichment profile is significantly enriched : TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT.}
 
