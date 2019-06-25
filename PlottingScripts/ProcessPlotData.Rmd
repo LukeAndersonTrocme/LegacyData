@@ -260,7 +260,7 @@ Load mutation context and plot enrichment
 contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
 
 #toggle for all snps or just JPT 1kGP snps
-name <- 'strict.gcat.' #'gcat.' # ''
+name <-''#'strict.gcat.' #'gcat.' # '' #
 
 #load SNP context
 SNP <- read.table(paste0(DataPath, name,'sig.pos.context.txt'), 
@@ -268,8 +268,7 @@ SNP <- read.table(paste0(DataPath, name,'sig.pos.context.txt'),
                 header  = FALSE,
                 col.names = contextHeader)
 
-rSNP <- read.table(paste0(DataPath, name,
-                          'random.pos.context.txt'), 
+rSNP <- read.table(paste0(DataPath,'GenomeWide.AncestralContext.txt'), 
                 sep = '\t',
                 header = FALSE,
                 col.names = contextHeader)
@@ -323,7 +322,19 @@ return(binCount)
 
 
 SNP <- processContext(SNP)
+
 rSNP <- processContext(rSNP)
+rSNP <- 
+  rSNP %>%
+  filter(Start != "N" &
+           End != "N")
+  
+#get proportions
+total_count <- sum(rSNP$Freq)
+total_sample <- sum(SNP$Freq)
+rSNP$Freq <- rSNP$Freq / total_count * total_sample
+
+
 
 #chi-squared contingency table tests
 chi_test <- merge(SNP, rSNP, 

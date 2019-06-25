@@ -88,7 +88,7 @@ dummy <-
              shape = SigPos$Population)) +
   geom_point() +
   scale_shape_manual(values = c(16,16),
-                     labels = c('Suspicious')) +
+                     labels = c('Suspicious\nvariant')) +
   guides(shape = 
            guide_legend(title = '',
                         override.aes = 
@@ -181,7 +181,7 @@ SFS <-
              aes(x = NAG_MAF, 
                  y = JPT_MAF), 
              binwidth = c(1/104, 1/104)) +
-  scale_fill_gradient(name = 'All variants\ncounts',
+  scale_fill_gradient(name = 'All variant\ncount',
                       low = "grey98",
                       high = "grey45",
                       trans = "log",
@@ -193,7 +193,7 @@ SFS <-
              fill = 'royalblue1',
              color = 'black',
              shape = 21) + 
-  scale_size(name = 'Suspicious\nvariants\ncounts',
+  scale_size(name = 'Suspicious\nvariant\ncount',
              breaks = c(1, 10, 100), 
              range = c(1, 6)) +
   labs(x = "Nagahama frequency",
@@ -259,21 +259,16 @@ return(plt)
 SNPplt <- plotContext(SNP,'Suspicious')
 rSNPplt <- plotContext(rSNP,'Control')
 
+chisq_min <- 5
+
 SNPplt <- SNPplt + 
   geom_point(data = 
-               SNP[which(SNP$Freq > 5 &
+               SNP[which(SNP$Freq > chisq_min &
                            SNP$chi_p < 0.00001),], 
              aes(x=End, y = Start), 
              shape = '*', 
              color = 'black',
-             size = 10) + 
-  geom_point(data = 
-               SNP[which(SNP$Freq < 5 &
-                           SNP$chi_p < 0.00001),], 
-             aes(x=End, y = Start), 
-             shape = 16, 
-             color = 'black',
-             size = 1)
+             size = 10) 
 
 
 mylegend <- g_legend(rSNPplt)
@@ -586,10 +581,12 @@ return(plt)
 
 SNPplt <- plotContext(SNP,'Suspicious')
 rSNPplt <- plotContext(rSNP,'Control')
+chisq_min <- 5
 
 SNPplt <- SNPplt + 
   geom_point(data = 
-               SNP[which(SNP$chi_p < 1e-8),], 
+               SNP[which(SNP$Freq > chisq_min &
+                           SNP$chi_p < 1e-8),], 
              aes(x=End, y = Start), 
              shape = '*', 
              color = 'black',
@@ -598,7 +595,7 @@ SNPplt <- SNPplt +
 
 mylegend <- g_legend(rSNPplt)
 
-Mut_Spect <- 
+Mut_Spect_gcat <- 
   plot_grid(
             plot_grid(
               SNPplt + 
@@ -610,7 +607,7 @@ Mut_Spect <-
             ncol = 2,
             rel_widths = c(1,0.15))
 
-Mut_Spect
+Mut_Spect_gcat
 
 
 ggsave(paste0(figurePath,
@@ -652,7 +649,9 @@ HIST <-
   theme(axis.line = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_text(size = 20),
-        axis.title = element_text(size = 20))
+        axis.title = element_text(size = 20),
+        legend.title = element_text(size = 20),
+        legend.text = element_text(size = 20))
 
 HIST
 
