@@ -1,0 +1,213 @@
+---
+title: "Comparing Results with Mafessoni et al."
+author: 
+- name: Luke Anderson-Trocmé
+  affiliation:
+  - &cruk Department of Human Genetics, McGill University,  Montreal, Canada
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_notebook:
+    df_print: paged
+    code_folding: show
+    toc: yes
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+---
+
+load libraries
+```{r, message = FALSE}
+library(ggplot2)
+library(data.table)
+library(tidyverse)
+
+#Directories
+DataPath <- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+figurePath <- '~/Documents/LegacyData/Figures/'
+```
+
+define functions
+```{r, include = FALSE}
+ReverseComp <- function(x)
+        chartr("ATGC","TACG",
+        sapply(
+          lapply(
+          strsplit(x, NULL), 
+          rev), 
+          paste, 
+          collapse = ""))
+
+processContext <- function(data){
+  
+#get reverse complement of context, ref and alt
+data$Rev<-ReverseComp(as.character(data$Context))
+data$RevRef<-ReverseComp(as.character(data$Ref))
+data$RevAlt<-ReverseComp(as.character(data$Alt))
+#only get one half (to fold over)
+AC<-data[which(data$Ref 
+               %in% 
+                 c('A','C')),]
+TG<-data[which(data$Ref 
+               %in% 
+                 c('T','G')),]
+#fold over
+TG$Context <- TG$Rev
+TG$Ref <- TG$RevRef
+TG$Alt <- TG$RevAlt
+#bind them together
+data <- rbind(AC,TG)
+#combine it all together to get a context
+data$Mut <- paste0(data$Ref,'->', 
+                substr(data$Context,1,1),
+                data$Alt,
+                substr(data$Context,3,3))
+#get the counts of each bin
+binCount <- as.data.frame(table(data$Mut))
+#process for plotting
+binCount$Start <- substr(binCount$Var1,4,4)
+binCount$End <- substr(binCount$Var1,6,6)
+binCount$Mut <- paste(substr(binCount$Var1,1,3),
+                      substr(binCount$Var1,5,5))
+binCount$Mut <- gsub('->', ' →',binCount$Mut)
+
+binCount$Var1 <- NULL
+
+return(binCount)
+}
+
+
+plotContext <- function(data, name){
+  
+plt <- ggplot(data, 
+              aes(x = End, 
+                  y = Start, 
+                  fill = Freq)) +
+    geom_tile() +
+    facet_grid(.~Mut) +
+    labs(y = name) +
+    theme_classic() +
+    theme(axis.title.x = element_blank(),
+          axis.line = element_blank(),
+          axis.text = element_text(size = 20),
+          axis.title.y = element_text(size = 20),
+          strip.placement = "outside",
+          strip.background = element_blank(),
+          strip.text = element_text(size = 20),
+          legend.text = element_text(size = 20),
+          legend.title = element_text(size = 20),
+          panel.border = element_rect(colour = "black", 
+                                      fill = NA, 
+                                      size = 1),
+          plot.margin = unit(c(0,0,0,1.5), "lines")) +
+    scale_fill_gradient(limits = c(0, maxFreq),
+                        low = 'white', 
+                        high = 'royalblue1',
+                        guide = guide_legend(title = 'Variant\ncount',
+                                             direction = 'vertical'))
+return(plt)
+}
+```
+
+load data
+```{r}
+t4 <- fread('/Users/luke/Downloads/evy199_supp/TableS4.bed',skip=1)
+t5 <- fread('/Users/luke/Downloads/evy199_supp/TableS5.bed',skip=1)
+t6 <- fread('/Users/luke/Downloads/evy199_supp/TableS6.bed',skip=1)
+t7 <- fread('/Users/luke/Downloads/evy199_supp/TableS7.bed',skip=1)
+t8 <- fread('/Users/luke/Downloads/evy199_supp/TableS8.bed',skip=1)
+
+us <- fread('/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/Significant_Positions_and_Pvals.txt')
+
+totalT<- unique(rbind(t4,t5,t6,t7,t8))
+totalTus <- merge(us, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'))
+totalTusX <- merge(us, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
+totalTusX[is.na(totalTusX)] <- 1
+
+
+
+```
+
+```{r}
+p_comp <- 
+  ggplot(totalTusX, 
+       aes(x=Adjusted_Log10p, 
+           y= -log10(V5))) +
+  geom_point(shape = 1) +
+  labs(x = 'Q-association',
+       y = 'LD-association')
+
+p_comp
+```
+
+```{r}
+mafessoni_snps <- 
+  totalT[,c('V1','V3')]
+
+write.table(mafessoni_snps, 
+            file = paste0(DataPath,
+                        'mafessoni_snps.pos.txt'), 
+            col.names = FALSE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = '\t')
+
+```
+
+extract context for Mafessoni SNPs
+```{bash}
+#Using GenomeWide.AncestralContext.txt
+#To get mutation context, use $path/AncestralContext.py
+#compare first two columns in both files, extract matches
+out_path='/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/'
+path='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData/'
+
+if [ ! -f $path/mafessoni_snps.pos.context.txt ]; then
+  echo "pos context"
+  awk 'NR==FNR{a[$1,$2];next} ($1,$2) in a' \
+  $path/mafessoni_snps.pos.txt \
+  $path/GenomeWide.AncestralContext.txt \
+  > $path/mafessoni_snps.pos.context.txt
+fi  
+```
+
+```{r}
+contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
+
+#load SNP context
+mSNP <- read.table(paste0(DataPath, 
+                          'mafessoni_snps.pos.context.txt'), 
+                sep = '\t', 
+                header  = FALSE,
+                col.names = contextHeader)
+
+mSNP <- processContext(mSNP)
+
+maxFreq <- max(mSNP$Freq)
+mSNPplt <- plotContext(mSNP,'Mafessoni')
+
+
+m_plot <-
+  plot_grid(p_comp,
+          mSNPplt,
+          ncol = 1,
+          rel_heights = c(2, 1))
+
+ggsave(paste0(figurePath,
+              'Mafessoni_MutSpect.jpg'),
+       m_plot, 
+       height = 10,
+       width = 18)
+
+m_plot
+```
+
+```{r}
+
+
+```
+
+
+```{r}
+
+
+```
