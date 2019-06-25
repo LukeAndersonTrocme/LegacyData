@@ -52,7 +52,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and \todo{some questionable \sout{suspicious}} GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to \todo{impact \sout{contaminate}} modern studies in hidden ways. \todo{As technologies and analytical methods improve, it is important that we renew and update these data resources accordingly}\sout{It may be time to retire or upgrade such legacy sequencing data.}
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and a small number of suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to contaminate modern studies in hidden ways. It may be time to retire or upgrade such legacy sequencing data.
 \vspace{5mm}
 
 \textbf{Key words} : Batch Effect, Mutational Signature, Statistical Genetics, Population Genetics, Reference Cohorts, Imputation
@@ -88,8 +88,7 @@ Harris and Pritchard further identified distinct mutational spectra across a ran
 In particular, the latter two studies  identified a heterogeneous mutational signature within 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-\todo{Given this signature had not been reproduced in another dataset}, we \sout{therefore} decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.
-\todo{Our initial goal was to explore the population structure that might be responsible for such an intriguing mutational signature.}
+Given that this signature had not yet been reproduced in another dataset, we decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.
 
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in a number of recent publications.
@@ -113,11 +112,11 @@ The same analysis was performed independently for each of the populations in the
 Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent Japanese dataset from Nagahama.
 The size of blue dots are proportional to the number of variants that associate with $Q$ in the JPT. 
 \textbf{C} 
-Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to a random set of SNPs.
+Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to the proportional distribution of all SNPs.
 The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. 
-There is also a slight enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. 
+There is also an enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. 
 These three enrichments can be summarized as G**${\rightarrow}$GG*. 
-Stars ( * ) indicate significant difference from the mutational spectrum of a set of control SNPs.
+Stars ( * ) indicate a significant deviation from the expected mutational spectrum from all SNPs.
 }
  \label{SFS}
 \end{figure}
@@ -129,6 +128,7 @@ Stars ( * ) indicate significant difference from the mutational spectrum of a se
 \subsection{A peculiar mutational signature in Japan}			
 	
 Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\rightarrow}$*CC in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
+\todo{Our initial goal was to determine if this signature could be explained by population structure or technological error.}
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
@@ -145,20 +145,20 @@ Thus, sequences called from low-$Q$ data contain variants that reproduce poorly 
 \textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes Project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
 The shape indicates whether the individual belongs to Phase 1 or Phase 3 of the 1000 Genomes project. 
-\todo{\textbf{B} The sequencing technologies used over time. A change in technology coincides with an increase in overall quality of data produced.}}
+\textbf{B} Sequencing technologies used over the course of the 1000 Genomes Project.}
 \label{MapQual}
 \end{figure}
 
 To identify SNPs that are likely to reproduce poorly across cohorts without having access to a second cohort, we performed an association study in the JPT for SNPs that associate strongly with low $Q$ (Figure \ref{SFS}).
 Traditionally, genome wide association studies use genotypes as the independent variable. 
-Here we perform a \todo{genotype conditional association test (GCAT), where} genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
+Here we perform a genotype conditional association test (GCAT), where genotypes are now the dependent variable that we attempt to predict using the continuous variable $Q$ as the independent variable \citep{song2015testing}.
 We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p < 10^{-8}$ and 1034 SNPs with $ p < 10^{-6}$. 
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have a significant enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}C).
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
-\todo{Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}. }
+Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}.
 
-Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques \todo{due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps})}.
+Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps}).
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses where quality of imputation matters, identifying $Q$-associated variants may be preferable. 
