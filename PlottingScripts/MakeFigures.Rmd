@@ -259,12 +259,10 @@ return(plt)
 SNPplt <- plotContext(SNP,'Suspicious')
 rSNPplt <- plotContext(rSNP,'Control')
 
-chisq_min <- 5
 
 SNPplt <- SNPplt + 
   geom_point(data = 
-               SNP[which(SNP$Freq > chisq_min &
-                           SNP$chi_p < 0.00001),], 
+               SNP[which(SNP$chi_p < 0.00001),], 
              aes(x=End, y = Start), 
              shape = '*', 
              color = 'black',
