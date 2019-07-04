@@ -71,8 +71,7 @@ The second phase of the 1kGP implemented multiple technological and analytical i
 
 Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used to impute untyped variants, to estimate allele frequencies, and to answer a wide range of medical and evolutionary questions.
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
-\todo{Mafessoni et al. recently identified a batch effect in the 1kGP without using any quality control metrics, but instead, using an approach that identifies individuals and loci with unusual linkage disequilibrium (LD) patterns, these result partially overlap with the variants we identified using a more statistically powerful method \citep{mafessoni2018turning}.}\sgcomment{You are talking about things that have not been introduced yet... Maybe: Mafessoni et al. recently identified batch effects in the 1kGP by looking for individuals with excess LD among distant variants. 
-}
+\todo{Mafessoni et al. recently identified batch effects in the 1kGP by looking for individuals with excess LD among distant variants. \citep{mafessoni2018turning}.}
 Here we point out how these and additional unreported batch effects in the early phases of the 1kGP lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
 
 \subsection{Mutational Signatures}
@@ -130,7 +129,7 @@ Stars ( * ) indicate a significant deviation from the expected mutational spectr
 \subsection{A peculiar mutational signature in Japan}			
 	
 Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\rightarrow}$*CC in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
-\todo{Our initial goal was to determine if \sgcomment{whether?} this signature could be explained by population structure or technological error.}
+Our initial goal was to determine whether this signature could be explained by population structure or technological error.
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
 When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
@@ -191,11 +190,11 @@ By contrast, variants that do not pass the 1kGP strict mask are more unevenly di
 \todo{The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
 However, another enrichment profile is significantly enriched : TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT.}
 
-\todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics.
-They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ \ref{Mafessoni_MutSpect}.
+\todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics \citep{mafessoni2018turning}.
+They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ (Figure \ref{Mafessoni_MutSpect}).
 We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method \ref{Mafessoni_MutSpect}.
 We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. 
-Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above \ref{Mafessoni_MutSpect}.
+Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
 These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suit of association tests.}
 
 
@@ -217,8 +216,11 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 
 \subsection{Cell line or technical artifact}
 \todo{
-To assess whether or not $Q$-associated variants results from mutations occurring in the creation or maintenance of the cell lines, or from technical artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
-Variants that do not reproduce across these cohorts are likely the result of technical artifacts. By contrast, if the same mutations are observed at identical frequencies in independently sequenced cohorts, we can conclude that recurrent cell line mutations are likely to blame. Finally, to complicate matters, we may have a third situation where a real variant has a genotyping error probability that correlates with $Q$. In this case, we expect the variant may reproduce, but at different frequency.
+To assess whether or not $Q$-associated variants result from mutations occurring in the creation or maintenance of the cell lines, or from technical artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
+Variants that do not reproduce across these cohorts are likely the result of technical artifacts. 
+By contrast, if the same mutations are observed at identical frequencies in independently sequenced cohorts, we can conclude that recurrent cell line mutations are likely to blame. 
+Finally, to complicate matters, we may have a third situation where a real variant has a genotyping error probability that correlates with $Q$. 
+In this case, we expect the variant may reproduce, but at different frequency in some individuals.
  }
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. %To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
