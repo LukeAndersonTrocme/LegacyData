@@ -775,7 +775,7 @@ jpt_imp_path = "/Users/luke/Documents/Legacy_Misc/Misc/ImputationScores/"
 array = "610k" #2500k_2500o #ASA #CoreExome24
 #list of filenames
 jpt_imp_files = list.files(path=jpt_imp_path, 
-                           pattern=paste0(array,".imputed.1.info.gz"),
+                           pattern=paste0(array,".imputed.*.info.gz"),
                            full.names = T) 
 # Read the files
 jpt_imp <- lapply(jpt_imp_files, 

@@ -71,7 +71,7 @@ The second phase of the 1kGP implemented multiple technological and analytical i
 
 Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used to impute untyped variants, to estimate allele frequencies, and to answer a wide range of medical and evolutionary questions.
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
-\todo{Mafessoni et al. recently identified a batch effect in the 1kGP without using any quality control metrics, but instead, using an approach that identifies individuals and loci with unusual linkage disequilibrium patterns, these result partially overlap with the variants we identified using a more statistically powerful method \citep{mafessoni2018turning}.}\sgcomment{You are talking about things that have not been introduced yet... Maybe: Mafessoni et al. recently identified batch effects in the 1kGP by looking for individuals with excess linkage disequilibrium among distant variants. 
+\todo{Mafessoni et al. recently identified a batch effect in the 1kGP without using any quality control metrics, but instead, using an approach that identifies individuals and loci with unusual linkage disequilibrium (LD) patterns, these result partially overlap with the variants we identified using a more statistically powerful method \citep{mafessoni2018turning}.}\sgcomment{You are talking about things that have not been introduced yet... Maybe: Mafessoni et al. recently identified batch effects in the 1kGP by looking for individuals with excess LD among distant variants. 
 }
 Here we point out how these and additional unreported batch effects in the early phases of the 1kGP lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
 
@@ -105,12 +105,11 @@ Finally, we investigate how these variants have impacted modern genomics analyse
 \begin{figure}
 \scalebox{0.85}{\includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}}
 \caption{
-Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies \sgcomment{, and are distributed across the genome--this is outdated}. 
+Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies \sgcomment{, and are distributed across the genome--this is outdated}. \luke{not sure what this means?}
 \textbf{A} 
 Genome wide association of the average quality of mapped bases $Q$ for the 104 Japanese individuals included in the 1000 Genomes Project. 
 This GWAS identified $1034$ SNPs associated to the average $Q$ of SNPs mapped for an individual, with  $p < 10^{-6}$
 ($587$ SNPs had  $p < 10^{-8}.$)
-\sgcomment{Why do we say the following?} The same analysis was performed independently for each of the populations in the 1000 Genomes Project.
 \textbf{B} 
 Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent Japanese dataset from Nagahama.
 The size of blue dots are proportional to the number of variants in a given frequency bin that associate with $Q$ in the JPT. 
@@ -147,7 +146,7 @@ Thus, sequences called from low-$Q$ data contain variants that reproduce poorly 
 \caption{Sampling and sequencing technologies over time in the 1000 Genomes Project.
 \textbf{A} The average quality of mapped bases $Q$ for each individual per population included in the 1000 Genomes Project. 
  Populations are ranked by mean sequencing date (the earliest sequencing date was used for individuals with multiple dates). 
-The shape indicates whether the individual \sgcomment{belongs to -- could we clarify this?} Phase 1 or Phase 3 of the 1000 Genomes project. 
+The shape indicates whether the individual was first released in Phase 1 or Phase 3 of the 1000 Genomes project. 
 \textbf{B} Sequencing technologies used over the course of the 1000 Genomes Project.}
 \label{MapQual}
 \end{figure}
@@ -188,12 +187,16 @@ At a 10kb scale, we also see rather uniform distribution with a small number of 
 An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{VariantDensity}).
-\sgcomment{There seems to be a paragraph break needed, a logical link missing, or both?}\todo{The mutational 3-mer substitution patterns of this list of variants is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
+
+\todo{The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
 However, another enrichment profile is significantly enriched : TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT.}
 
-\todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a different method.
-We find that only 10\% of the variants they identified are in our list of suspicious variants and have correlated p-values to those identified using the GCAT method \ref{Mafessoni_MutSpect}.
-Moreover, the variants they identified are not enriched in the mutational spectra described above \ref{Mafessoni_MutSpect}. }
+\todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics.
+They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ \ref{Mafessoni_MutSpect}.
+We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method \ref{Mafessoni_MutSpect}.
+We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. 
+Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above \ref{Mafessoni_MutSpect}.
+These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suit of association tests.}
 
 
 \begin{table}[h!]
@@ -250,7 +253,7 @@ These $Q$-associated variants could also compromise the imputation of nearby rea
 
 We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
-Some of these publications noted that these variants were not flanked by linkage disequilibrium peaks \citep{Mandage2017}.
+Some of these publications noted that these variants were not flanked by LD peaks \citep{Mandage2017}.
 Indeed, we expect a large number of these variants to be filtered out by some quality controls like the Hardy-Weinberg  equilibrium test.
 However, the fact that some of these variants are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.
 

@@ -250,7 +250,7 @@ plt <- ggplot(data,
           plot.margin = unit(c(0,0,0,1.5), "lines")) +
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
-                        high = 'royalblue1',
+                        high = 'black',
                         guide = guide_legend(title = 'Variant\ncount',
                                              direction = 'vertical'))
 return(plt)
