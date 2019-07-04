@@ -762,3 +762,92 @@ saveRDS(omni,
                    'omni.rds'))
 ```
 
+##Imputation Scores
+```{r}
+library(data.table)
+library(spatstat)
+library(rdist)
+library(Rfast)
+#Imputation scores for Japanese genotyped individuals
+suspicious <- fread('/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/Significant_Positions_and_Pvals.txt')
+#set path and array name
+jpt_imp_path = "/Users/luke/Documents/Legacy_Misc/Misc/ImputationScores/"
+array = "610k" #2500k_2500o #ASA #CoreExome24
+#list of filenames
+jpt_imp_files = list.files(path=jpt_imp_path, 
+                           pattern=paste0(array,".imputed.1.info.gz"),
+                           full.names = T) 
+# Read the files
+jpt_imp <- lapply(jpt_imp_files, 
+                  function(x) {fread(paste('gzcat', x), 
+                                          header = T, 
+                                          sep ="\t")})
+# Combine them
+jpt_imp <- do.call("rbind", 
+                   lapply(jpt_imp, as.data.frame)) 
+
+jpt_imp <- separate(data = jpt_imp, 
+                    col = SNP, 
+                    into = c("Chr", "Pos"), 
+                    sep = ":")
+
+
+jpt_imp <- merge(jpt_imp, suspicious, 
+                 by = c('Chr', 'Pos'), all.x = T)
+
+jpt_imp$Pos <- as.numeric(as.character(jpt_imp$Pos))
+
+jpt_imp
+```
+
+```{r}
+
+imputed_position <- jpt_imp$Pos
+suspicious_position <- jpt_imp[which(jpt_imp$Adjusted_Log10p > 2),]$Pos
+
+jpt_imp$closest <- unlist(lapply(imputed_position, function(x) suspicious_position[which.min(abs(suspicious_position - x))]))
+jpt_imp$dist <- abs(jpt_imp$closest - jpt_imp$Pos)
+
+jpt_imp$dist_2 <- round(jpt_imp$dist, -1)
+
+jpt_imp_sub <- jpt_imp %>%
+  select(AvgCall, Rsq, dist_2) %>%
+  group_by(dist_2) %>%
+  summarise(AvgCall_mean = mean(AvgCall),
+            Rsq_mean = mean(Rsq))
+
+
+#plot distance from nearest suspicious variant 
+Rsq <- 
+  ggplot(jpt_imp_sub, 
+       aes(x= dist_2, 
+           y = Rsq_mean)) +
+  geom_point() +
+  labs(x = "Distance from nearest suspicious variant",
+       y = "Rsq") +
+  xlim(c(0,10000))
+
+AvgCall <- 
+  ggplot(jpt_imp_sub, 
+       aes(x= dist_2, 
+           y = AvgCall_mean)) +
+  geom_point() +
+  labs(x = "Distance from nearest suspicious variant",
+       y = "Average Call") +
+  xlim(c(0,10000))
+
+plot_grid(AvgCall, Rsq, ncol=1)
+
+ggsave(paste0(figurePath,
+              "Imputation_Distance_10s.jpg"),
+       height = 9,
+       width = 9)
+```
+
+```{r}
+
+
+```
+
+
+

@@ -110,31 +110,53 @@ return(plt)
 
 load data
 ```{r}
+#load regression results
+Regression <- readRDS('/Users/luke/Documents/Legacy_Misc/Misc/Regression.Rmd')
+#load supplementary files from Mafessoni
 t4 <- fread('/Users/luke/Downloads/evy199_supp/TableS4.bed',skip=1)
-t5 <- fread('/Users/luke/Downloads/evy199_supp/TableS5.bed',skip=1)
+
+#t5 <- fread('/Users/luke/Downloads/evy199_supp/TableS5.bed',skip=1)
+
 t6 <- fread('/Users/luke/Downloads/evy199_supp/TableS6.bed',skip=1)
-t7 <- fread('/Users/luke/Downloads/evy199_supp/TableS7.bed',skip=1)
-t8 <- fread('/Users/luke/Downloads/evy199_supp/TableS8.bed',skip=1)
 
-us <- fread('/Users/luke/Documents/LegacyData/LatexManuscript/SupplementaryData/Significant_Positions_and_Pvals.txt')
+#t7 <- fread('/Users/luke/Downloads/evy199_supp/TableS7.bed',skip=1)
 
-totalT<- unique(rbind(t4,t5,t6,t7,t8))
-totalTus <- merge(us, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'))
-totalTusX <- merge(us, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
+#t8 <- fread('/Users/luke/Downloads/evy199_supp/TableS8.bed',skip=1)
+
+
+#get total unique positions from most conservative tables (i.e cutoff of 1% MAF)
+totalT<- unique(rbind(t4,t6))
+
+#totalTus <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'))
+totalTusX <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
 totalTusX[is.na(totalTusX)] <- 1
 
 
-
+totalTusX
 ```
 
 ```{r}
+#select rows of interest
+#either present in Mafessoni OR significant in our data
+library(ggExtra)
+
+to_plot <- totalTusX %>%
+           filter(V5 < 1 | Adjusted_Log10p > 2)
+
 p_comp <- 
-  ggplot(totalTusX, 
+  ggplot(to_plot, 
        aes(x=Adjusted_Log10p, 
            y= -log10(V5))) +
-  geom_point(shape = 1) +
+  geom_point(shape = 1,
+             size = 1,
+             alpha = 0.3) +
   labs(x = 'Q-association',
-       y = 'LD-association')
+       y = 'LD-association') +
+  theme_classic() +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 20))
+
+p_comp <- ggExtra::ggMarginal(p_comp, type = "histogram")
 
 p_comp
 ```
@@ -183,27 +205,41 @@ mSNP <- read.table(paste0(DataPath,
 mSNP <- processContext(mSNP)
 
 maxFreq <- max(mSNP$Freq)
-mSNPplt <- plotContext(mSNP,'Mafessoni')
+mSNPplt <- plotContext(mSNP,'LD-associated')
 
 
 m_plot <-
   plot_grid(p_comp,
           mSNPplt,
           ncol = 1,
-          rel_heights = c(2, 1))
+          rel_heights = c(4, 1))
 
 ggsave(paste0(figurePath,
               'Mafessoni_MutSpect.jpg'),
        m_plot, 
-       height = 10,
-       width = 18)
+       height = 12,
+       width = 10)
 
 m_plot
 ```
 
 ```{r}
+#missing in Mafessoni 
+m_maf <- to_plot %>%
+           filter(V5 == 1 & Adjusted_Log10p > 2)
 
+#missing in ours
+m_us <- to_plot %>%
+           filter(V5 < 1 & Adjusted_Log10p < 2)
 
+#present in both
+both <- to_plot %>%
+           filter(V5 < 1 & Adjusted_Log10p > 2)
+
+print(paste("missing in Mafessoni : ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(to_plot)*100) )
+print(paste("missing in ours : ",nrow(m_us), "or : ",nrow(m_us)/nrow(to_plot)*100))
+print(paste("present in both : ",nrow(both), "or : ",nrow(both)/nrow(to_plot)*100))
+print(paste("total : ", nrow(to_plot)))
 ```
 
 
