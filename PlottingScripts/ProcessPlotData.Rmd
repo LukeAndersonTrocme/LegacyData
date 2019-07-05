@@ -792,21 +792,50 @@ jpt_imp <- separate(data = jpt_imp,
                     sep = ":")
 
 
-jpt_imp <- merge(jpt_imp, suspicious, 
-                 by = c('Chr', 'Pos'), all.x = T)
+#jpt_imp <- merge(jpt_imp, suspicious, 
+#                 by = c('Chr', 'Pos'), all.x = T)
 
 jpt_imp$Pos <- as.numeric(as.character(jpt_imp$Pos))
+jpt_imp$Chr <- as.numeric(as.character(jpt_imp$Chr))
 
 jpt_imp
 ```
 
 ```{r}
 
-imputed_position <- jpt_imp$Pos
-suspicious_position <- jpt_imp[which(jpt_imp$Adjusted_Log10p > 2),]$Pos
+close_list <- data.frame()
+for(chrom in seq(1,22)){
+  print(chrom)
+  
+  imputed_position <- 
+    jpt_imp %>% 
+    filter(Chr == chrom) %>%
+    select(Pos) %>%
+    unlist()
+  
+  suspicious_position <- 
+    suspicious %>% 
+    filter(Chr == chrom) %>%
+    select(Pos) %>%
+    unlist()
+  
+  close <- 
+  unlist(lapply(imputed_position, 
+                function(x) suspicious_position[which.min(abs(suspicious_position - x))]))
+  
+  out <- data.frame("Pos" = imputed_position, 
+                       "closest" = close)
+  rownames(out) <- NULL
+  
+  close_list <- rbind(close_list, out)
+}
 
-jpt_imp$closest <- unlist(lapply(imputed_position, function(x) suspicious_position[which.min(abs(suspicious_position - x))]))
-jpt_imp$dist <- abs(jpt_imp$closest - jpt_imp$Pos)
+close_list
+```
+
+```{r}
+
+jpt_imp$dist <- abs(close_list$closest - close_list$Pos)
 
 jpt_imp$dist_2 <- round(jpt_imp$dist, -1)
 
@@ -825,7 +854,7 @@ Rsq <-
   geom_point() +
   labs(x = "Distance from nearest suspicious variant",
        y = "Rsq") +
-  xlim(c(0,10000))
+  xlim(c(0,5000))
 
 AvgCall <- 
   ggplot(jpt_imp_sub, 
@@ -834,12 +863,12 @@ AvgCall <-
   geom_point() +
   labs(x = "Distance from nearest suspicious variant",
        y = "Average Call") +
-  xlim(c(0,10000))
+  xlim(c(0,5000))
 
 plot_grid(AvgCall, Rsq, ncol=1)
 
 ggsave(paste0(figurePath,
-              "Imputation_Distance_10s.jpg"),
+              "Imputation_Distance_100s_gw.jpg"),
        height = 9,
        width = 9)
 ```
