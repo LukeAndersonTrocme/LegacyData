@@ -837,7 +837,7 @@ close_list
 
 jpt_imp$dist <- abs(close_list$closest - close_list$Pos)
 
-jpt_imp$dist_2 <- round(jpt_imp$dist, -1)
+jpt_imp$dist_2 <- round(jpt_imp$dist, -3)
 
 jpt_imp_sub <- jpt_imp %>%
   select(AvgCall, Rsq, dist_2) %>%
@@ -868,7 +868,7 @@ AvgCall <-
 plot_grid(AvgCall, Rsq, ncol=1)
 
 ggsave(paste0(figurePath,
-              "Imputation_Distance_100s_gw.jpg"),
+              "Imputation_Distance_1000s_gw.jpg"),
        height = 9,
        width = 9)
 ```

@@ -440,7 +440,7 @@ In these plots we are comparing the deviance from the null model in the 15,270 v
 
 \begin{figure}
 \centering
-\includegraphics[width=13cm,keepaspectratio]{../Figures/histogram_of_sig_snps.jpg}
+\includegraphics[width=8cm,keepaspectratio]{../Figures/histogram_of_sig_snps.jpg}
 \caption{Frequency distribution of the 1034 $Q$ associated SNPs from the single population test in the JPT in blue and all SNPs in black. The association test lacks power to identify variants at low frequencies.}  
 \label{histogram_of_sig_snps}
 \end{figure}
@@ -468,7 +468,7 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=13cm,keepaspectratio]{../Figures/strict_gcat_mutational_enrichment.jpg}
+\includegraphics[width=10cm,keepaspectratio]{../Figures/strict_gcat_mutational_enrichment.jpg}
 \caption{Mutation spectrum of the 15,270 $Q$-associated variants that pass the 1kGP strict mask filter, compared to a random set of non-associated variants. A large fraction of the  $Q$-associated variants have the *AC${\rightarrow}$*CC mutational pattern. There is also an enrichment in TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT. Stars ( * ) indicate significant difference from the mutational spectrum of a set of control variants of equal size.}  
 \label{strict_gcat_mutational_enrichment}
 \end{figure}
@@ -547,7 +547,9 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
     
     \end{subfigure} 
     \caption{Association of SNPS in non-repetitive regions with $Q$.
-    \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. 
+    There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions.}
   \label{NRS_Manhattan}
   \end{figure}
@@ -560,7 +562,9 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
         \includegraphics[width=\hsize]{../Figures/QQPlot_NonRepeatIndels.jpg}
     
     \end{subfigure} 
-    \caption{Association of indels in non-repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of indels in non-repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. 
+    There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions.}
   \label{NRI_Manhattan}
   \end{figure}
@@ -573,7 +577,9 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
         \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatSNPs.jpg}
     
     \end{subfigure} 
-    \caption{Association of SNPS in repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of SNPS in repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. 
+    There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions.}
   \label{RS_Manhattan}
   \end{figure}
@@ -585,26 +591,32 @@ Among the 6,307 variants associated with $Q$ in the GCAT model including all pop
     	\center    
         \includegraphics[width=\hsize]{../Figures/QQPlot_RepeatIndels.jpg}
     \end{subfigure} 
-    \caption{Association of indels in repetitive regions with $Q$.  \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+    \caption{Association of indels in repetitive regions with $Q$.  \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. 
+    There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
   \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions.}
   \label{RI_Manhattan}
   \end{figure}
 
+\clearpage
+
 \begin{figure}[tbp]
-\includegraphics[width=12cm,keepaspectratio]{../Figures/Omni_AF.jpg}
+\includegraphics[width=11cm,keepaspectratio]{../Figures/Omni_AF.jpg}
 \caption{Estimated frequency and association strength of $Q$- associated variants present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
 \label{Omni}
 \end{figure}
 
 \begin{figure}[tbp]
-\includegraphics[width=12cm,keepaspectratio]{../Figures/PC1_Correlation.jpg}
-\caption{Sequencing metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1000 Genomes Project. The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
+\includegraphics[width=11cm,keepaspectratio]{../Figures/PC1_Correlation.jpg}
+\caption{Sequencing metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1000 Genomes Project. 
+The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
 \label{PC1_Correlation}
 \end{figure}
 
-\begin{figure}[h!]
-\includegraphics[width=12cm,keepaspectratio]{../Figures/MutationSpectrum_cutOff.png}
-\caption{Comparing mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  \textbf{A} 
+\begin{figure}[tbp]
+\includegraphics[width=11cm,keepaspectratio]{../Figures/MutationSpectrum_cutOff.png}
+\caption{Comparing mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  
+\textbf{A} 
 The  *AC${\rightarrow}$*CC mutational signature in JPT remains despite removing variants associated to quality.
 \textbf{B} 
 Removing individuals with average quality per mapped bases $Q$ below a threshold of 30 removes the mutational signature completely. }
