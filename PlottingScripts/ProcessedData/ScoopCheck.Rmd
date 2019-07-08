@@ -113,26 +113,21 @@ load data
 #load regression results
 Regression <- readRDS('/Users/luke/Documents/Legacy_Misc/Misc/Regression.Rmd')
 #load supplementary files from Mafessoni
-t4 <- fread('/Users/luke/Downloads/evy199_supp/TableS4.bed',skip=1)
-
 #t5 <- fread('/Users/luke/Downloads/evy199_supp/TableS5.bed',skip=1)
-
-t6 <- fread('/Users/luke/Downloads/evy199_supp/TableS6.bed',skip=1)
-
 #t7 <- fread('/Users/luke/Downloads/evy199_supp/TableS7.bed',skip=1)
-
 #t8 <- fread('/Users/luke/Downloads/evy199_supp/TableS8.bed',skip=1)
 
+t4 <- fread('/Users/luke/Downloads/evy199_supp/TableS4.bed',skip=1)
+t6 <- fread('/Users/luke/Downloads/evy199_supp/TableS6.bed',skip=1)
 
 #get total unique positions from most conservative tables (i.e cutoff of 1% MAF)
 totalT<- unique(rbind(t4,t6))
 
-#totalTus <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'))
-totalTusX <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
-totalTusX[is.na(totalTusX)] <- 1
+Merged_Regression <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
+Merged_Regression[is.na(Merged_Regression)] <- 1
 
 
-totalTusX
+Merged_Regression
 ```
 
 ```{r}
@@ -140,7 +135,7 @@ totalTusX
 #either present in Mafessoni OR significant in our data
 library(ggExtra)
 
-to_plot <- totalTusX %>%
+to_plot <- Merged_Regression %>%
            filter(V5 < 1 | Adjusted_Log10p > 2)
 
 p_comp <- 
@@ -155,8 +150,6 @@ p_comp <-
   theme_classic() +
   theme(axis.title = element_text(size = 20),
         axis.text = element_text(size = 20))
-
-p_comp <- ggExtra::ggMarginal(p_comp, type = "histogram")
 
 p_comp
 ```

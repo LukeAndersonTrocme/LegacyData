@@ -190,24 +190,13 @@ By contrast, variants that do not pass the 1kGP strict mask are more unevenly di
 \todo{The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
 There is also an enrichment of mutations from TAC, TCT, and TGT to the homonucleotide TTT. }\sgcomment{Point to figure}
 
-\todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics \citep{mafessoni2018turning}.
-<<<<<<< Updated upstream
-They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ 
-\sgcomment{the previous phrase is confusing to me. E.g., does "that" stand for patterns or variants?
-Maybe replace by :  
-A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that uses linkage disequilibrium rather than quality metrics to identify over 15,000 suspicious variants \citep{mafessoni2018turning}.
-  } (Figure \ref{Mafessoni_MutSpect}).
+
+A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that uses linkage disequilibrium rather than quality metrics to identify nearly 20,000 suspicious variants \citep{mafessoni2018turning} (Figure \ref{Mafessoni_MutSpect}).
+They identify 17,917 variants significantly associated to abnormal LD patterns that are not associated to $Q$ \ref{Mafessoni_MutSpect}.
 We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method \ref{Mafessoni_MutSpect}.
 We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. \sgcomment{Present proportions for both, or counts for both? Did they use only strict mask? }
 Interestingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
-These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.}
-=======
-They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ (Figure \ref{Mafessoni_MutSpect}).
-We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method (Figure \ref{Mafessoni_MutSpect}).
-We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. 
-Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
-These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suit of association tests.}
->>>>>>> Stashed changes
+These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.
 
 
 \begin{table}[h!]
@@ -228,20 +217,13 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 
 \subsection{Cell line or technical artifact}
 \todo{
-<<<<<<< Updated upstream
 To assess whether $Q$-associated variants result from sequencing artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
 Variants that do not reproduce across cohorts are likely the result of sequencing artifacts. 
 Variants that do reproduce across studies could result from (recurrent) cell line mutations or, more likely, from existing variants whose accurate genotyping depends on $Q$.   
-=======
-To assess whether or not $Q$-associated variants result from mutations occurring in the creation or maintenance of the cell lines, or from technical artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
-Variants that do not reproduce across these cohorts are likely the result of technical artifacts. 
-By contrast, if the same mutations are observed at identical frequencies in independently sequenced cohorts, we can conclude that recurrent cell line mutations are likely to blame. 
-Finally, to complicate matters, we may have a third situation where a real variant has a genotyping error probability that correlates with $Q$. 
-In this case, we expect the variant may reproduce, but with mismatched genotypes in some individuals.
->>>>>>> Stashed changes
- }
+}
 
-In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. %To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
+In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
+%To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
 Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
 This is more than the 2.96 predicted false positives according to our nominal false discovery rate of $\alpha = 0.01$. 
 Thus a small number of variants associated to $Q$ in the JPT are present in the population but with biased genotypes. 
@@ -252,7 +234,6 @@ The vast majority of polymorphisms associated with $Q$ are not present at all in
 Five variants show differing frequencies between both datasets and are likely explained by biased genotypes.
 Finally, 1,139 (or 18\%) are present in the resequenced data.
 The allele frequencies of these variants are nearly identical between datasets suggesting that variant calls are accurate for these 83 individuals. This is likely because these variants have biased genotypes in populations other than the CHB/CHD. 
-
 
 %Some mutational signatures are heterogenous where not all suspicious variants are completely spurious in all individuals or populations. 
 %Some mutational signatures reproduce across cohorts, whereas others do not and may be due to the different sequencing platforms used.
@@ -273,26 +254,23 @@ These $Q$-associated variants could also compromise the imputation of nearby rea
 
 We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
-Some of these publications noted that these variants were not flanked by LD peaks \citep{Mandage2017}.
-Indeed, we expect a large number of these variants to be filtered out by some quality controls like the Hardy-Weinberg  equilibrium test.
-However, the fact that some of these variants are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.
 
 Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
 One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}. 
 
-These articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+\todo{All of these articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
 They also removed rare alleles and alleles with high degrees of missingness.
+Indeed, we expect a large number of $Q$-associated variants to be filtered out by some quality controls like the Hardy-Weinberg equilibrium test.
 Even though the studies used state-of-the-art quality controls, the variants were imputed onto genotype data and reached genome wide significance for association with biological traits.
+However, the fact that some of these variants in other studies are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.
 
 These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations.
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
 The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
-One study reports associations with seven $Q$-associated variants that we find to be highly biased \citep{Mandage2017}. 
-That study considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype. 
-\todo{It is plausible that the EBV copy number phenotype is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.} \sgcomment{Don't forget to explain that the authors dealt with this using another QC metric!}
-
-
+One study that reports associations with seven highly biased $Q$-associated variants considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype \citep{Mandage2017}. 
+The authors noted that these seven variants were not flanked by LD peaks and were correctly removed from downstream analyses -- though still included in the NHGRI-EBI Catalog \citep{Mandage2017}.
+It is plausible that the EBV copy number phenotype is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.}
 
 \begin{table}[h!]
 \begin{tabular}{l l l r r r}
@@ -334,29 +312,33 @@ That study considered copy number of Epstein-Barr virus (EBV) sequence in the 1k
 
 \section{Discussion}
 
-\todo{Recommendations : doing their approach as well as ours. We recommend removing the variants we ID and the ones they find. Regression with QC metrics (shoutout to them)}
-
 The variants identified in this study are likely to be technical artifacts from legacy technologies.
 Different sequencing technologies will have different error profiles. 
 A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. 
 Differences in read quality and error profiles in turn require different calling pipelines.
  
-To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
+To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. 
+Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
-However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. Even though significant association of a variant with a quality metric is not in itself an indication that the variant is spurious, we would recommend to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
+However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. 
+Even though significant association of a variant with a quality metric is not in itself an indication that the variant is spurious, we would recommend to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
 
-For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the $Q$-associated SNPs or the individuals with $Q<30$ (lists of such variants and sample IDs are provided in the Supplementary Data). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be a worthwhile investment for the community. 
+For analyses where individual variants cannot be examined individually (mutation profiles, distributions of allele frequencies, polygenic risk scores), we would recommend to simply discard the individuals with $Q<30$ and to filter out the LD-associated variants identified by \cite{mafessoni2018turning} and the $Q$-associated variants we identified (lists of such variants and sample IDs are provided in the Supplementary Data). We also recommend that imputation servers discard individuals with low Q (or at least provide the option of performing the imputation without). Given the value of freely accessible data, resequencing individuals with low Q would  also likely be a worthwhile investment for the community. 
 
 \section{Conclusion}
 
 On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
-The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. The logistic factor analysis is more computationally demanding but produces more robust results \citep{song2015testing}. Both approaches produce comparable results.  
+The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. 
+The logistic factor analysis is more computationally demanding but produces more robust results \citep{song2015testing}. 
+All three approaches accounting for population structure we tested produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
 However, cleaning up existing databases is also important to avoid generating spurious results. 
 The present findings suggest that a substantial fraction of data from the final release of the 1kGP project is overdue for retirement or re-sequencing.
 
+\section{Author's Note}
+\todo{While reviewing our manuscript for publication, in response to our pre-print, the New York Genome Center announced that they had resequenced the original 1kGP dataset in a yet to be published dataset.}
 
 \section{Methods}
 \subsection{Code and data availability}
@@ -496,8 +478,8 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 \centering
 \includegraphics[width=13cm,keepaspectratio]{../Figures/Mafessoni_MutSpect.jpg}
 \caption{ \textbf{A} Comparison of the p-values from the association to unusual LD from \cite{mafessoni2018turning} and the p-values from the GCAT association test to quality metrics.
-There are a total of 40,266 variants in this plot with only 1328 ( 3\% ) are statistically significant in both test.
-There are 23172  variants ( 58\% ) that are $Q$-associated but not LD-associated and 15766 ( 39\% ) that are LD-associated but not $Q$-associated.
+There are a total of 42,307 variants in this plot with only 1,279 ( 3\% ) are statistically significant in both test.
+There are 23,111  variants ( 55\% ) that are $Q$-associated but not LD-associated and 17,917 ( 42\% ) that are LD-associated but not $Q$-associated.
 \textbf{B} Mutation spectrum of the variants significantly associated to unusual LD from \cite{mafessoni2018turning}. }  
 \label{Mafessoni_MutSpect}
 \end{figure}
