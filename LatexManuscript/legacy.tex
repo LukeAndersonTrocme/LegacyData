@@ -191,6 +191,7 @@ By contrast, variants that do not pass the 1kGP strict mask are more unevenly di
 There is also an enrichment of mutations from TAC, TCT, and TGT to the homonucleotide TTT. }\sgcomment{Point to figure}
 
 \todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics \citep{mafessoni2018turning}.
+<<<<<<< Updated upstream
 They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ 
 \sgcomment{the previous phrase is confusing to me. E.g., does "that" stand for patterns or variants?
 Maybe replace by :  
@@ -200,6 +201,13 @@ We find that 3\% of the variants they identified are also in our list of suspici
 We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. \sgcomment{Present proportions for both, or counts for both? Did they use only strict mask? }
 Interestingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
 These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.}
+=======
+They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ (Figure \ref{Mafessoni_MutSpect}).
+We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method (Figure \ref{Mafessoni_MutSpect}).
+We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. 
+Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
+These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suit of association tests.}
+>>>>>>> Stashed changes
 
 
 \begin{table}[h!]
@@ -220,9 +228,17 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 
 \subsection{Cell line or technical artifact}
 \todo{
+<<<<<<< Updated upstream
 To assess whether $Q$-associated variants result from sequencing artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
 Variants that do not reproduce across cohorts are likely the result of sequencing artifacts. 
 Variants that do reproduce across studies could result from (recurrent) cell line mutations or, more likely, from existing variants whose accurate genotyping depends on $Q$.   
+=======
+To assess whether or not $Q$-associated variants result from mutations occurring in the creation or maintenance of the cell lines, or from technical artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
+Variants that do not reproduce across these cohorts are likely the result of technical artifacts. 
+By contrast, if the same mutations are observed at identical frequencies in independently sequenced cohorts, we can conclude that recurrent cell line mutations are likely to blame. 
+Finally, to complicate matters, we may have a third situation where a real variant has a genotyping error probability that correlates with $Q$. 
+In this case, we expect the variant may reproduce, but with mismatched genotypes in some individuals.
+>>>>>>> Stashed changes
  }
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. %To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
