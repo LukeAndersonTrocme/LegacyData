@@ -104,7 +104,7 @@ Finally, we investigate how these variants have impacted modern genomics analyse
 \begin{figure}
 \scalebox{0.85}{\includegraphics[width=\hsize,keepaspectratio]{../Figures/Figure1.jpg}}
 \caption{
-Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies \sgcomment{, and are distributed across the genome--this is outdated}. \luke{not sure what this means?}
+Suspicious mutations carried by individuals with low quality data have distinct mutational profiles, reproduce poorly across studies, and are distributed across the genome.
 \textbf{A} 
 Genome wide association of the average quality of mapped bases $Q$ for the 104 Japanese individuals included in the 1000 Genomes Project. 
 This GWAS identified $1034$ SNPs associated to the average $Q$ of SNPs mapped for an individual, with  $p < 10^{-6}$
@@ -188,39 +188,41 @@ Distribution of association statistics in this region is provided in Figure \ref
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{VariantDensity}).
 
 \todo{The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
-However, another enrichment profile is significantly enriched : TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT.}
+There is also an enrichment of mutations from TAC, TCT, and TGT to the homonucleotide TTT. }\sgcomment{Point to figure}
 
 \todo{A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that is independent of quality metrics \citep{mafessoni2018turning}.
-They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ (Figure \ref{Mafessoni_MutSpect}).
+They identify over 15,000 variants significantly associated to abnormal LD patterns that are not associated to $Q$ 
+\sgcomment{the previous phrase is confusing to me. E.g., does "that" stand for patterns or variants?
+Maybe replace by :  
+A recent publication by Mafessoni et al. also identified a batch effect in the 1kGP using a method that uses linkage disequilibrium rather than quality metrics to identify over 15,000 suspicious variants \citep{mafessoni2018turning}.
+  } (Figure \ref{Mafessoni_MutSpect}).
 We find that 3\% of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method \ref{Mafessoni_MutSpect}.
-We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. 
-Interetingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
-These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suit of association tests.}
+We also find 23,172 $Q$-associated variants that are not associated to abnormal LD patterns. \sgcomment{Present proportions for both, or counts for both? Did they use only strict mask? }
+Interestingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}).
+These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.}
 
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{l  r r r}
-                      & {Repeat}  & {Non-Repeat}   & {Total}    \\ \hline
-{SNP}  & 3,369 \textcolor{gray}{0.53\textperthousand} & 11,059 \textcolor{gray}{0.56\textperthousand} & 14,428\\  
-{INDEL} & 181 \textcolor{gray}{0.3\textperthousand} & 657 \textcolor{gray}{0.66\textperthousand} & 838\\ \hline
-{Total} & 3,550 & 11,716 & 15,270\\
+\begin{tabular}{l  r r r  r r}
+                      & {Repeat} & \textcolor{gray}{Proportion} & {Non-Repeat} & \textcolor{gray}{Proportion}   & {Total}    \\ \hline
+{SNP}  & 3,369 &\textcolor{gray}{0.53\textperthousand} & 11,059 & \textcolor{gray}{0.56\textperthousand} & 14,428\\  
+{INDEL} & 181& \textcolor{gray}{0.3\textperthousand} & 657& \textcolor{gray}{0.66\textperthousand} & 838\\ \hline
+{Total} & 3,550& & 11,716 & & 15,270\\
 \end{tabular}
-\caption{Number of statistically significant variants  passing the 1000 Genomes Project strict mask per category. 
+\caption{Number and proportion of $Q$-associated variants passing the 1000 Genomes Project strict mask per category. 
 Variants that are flagged by the 1000 Genomes Project nested repeat mask file were analyzed separately for FDR calculation. SNPs and INDELs were also analyzed separately.
 A total of 15,270 are statistically significantly associated to $Q$. 
-\todo{The grey text is the proportion of significant associations per category.}
+\todo{The grey text is the proportion of $Q$-associated variants per category.}
 The number of variants included in the analysis for SNPs, SNPs in repeat regions, INDELs and INDELs in repeat regions are  19,846,786, 6,312,620, 1,770,315 and 586,342 respectively.}
 \label{sigTable}
 \end{table}
 
 \subsection{Cell line or technical artifact}
 \todo{
-To assess whether or not $Q$-associated variants result from mutations occurring in the creation or maintenance of the cell lines, or from technical artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
-Variants that do not reproduce across these cohorts are likely the result of technical artifacts. 
-By contrast, if the same mutations are observed at identical frequencies in independently sequenced cohorts, we can conclude that recurrent cell line mutations are likely to blame. 
-Finally, to complicate matters, we may have a third situation where a real variant has a genotyping error probability that correlates with $Q$. 
-In this case, we expect the variant may reproduce, but at different frequency in some individuals.
+To assess whether $Q$-associated variants result from sequencing artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
+Variants that do not reproduce across cohorts are likely the result of sequencing artifacts. 
+Variants that do reproduce across studies could result from (recurrent) cell line mutations or, more likely, from existing variants whose accurate genotyping depends on $Q$.   
  }
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. %To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
@@ -469,7 +471,7 @@ The populations that tend to have the most individuals with low $Q$ also tend to
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=10cm,keepaspectratio]{../Figures/strict_gcat_mutational_enrichment.jpg}
-\caption{Mutation spectrum of the 15,270 $Q$-associated variants that pass the 1kGP strict mask filter, compared to a random set of non-associated variants. A large fraction of the  $Q$-associated variants have the *AC${\rightarrow}$*CC mutational pattern. There is also an enrichment in TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and ACA${\rightarrow}$AAA (reverse complement : TGT${\rightarrow}$TTT). These three enrichments can be summarized as T*T${\rightarrow}$TTT. Stars ( * ) indicate significant difference from the mutational spectrum of a set of control variants of equal size.}  
+\caption{Mutation spectrum of the 15,270 $Q$-associated variants that pass the 1kGP strict mask filter, compared to a random set of non-associated variants. A large fraction of the  $Q$-associated variants have the *AC${\rightarrow}$*CC mutational pattern. There is also an enrichment in TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and  TGT${\rightarrow}$TTT (shown as reverse complement  ACA${\rightarrow}$AAA). These three enrichments can be summarized as T*T${\rightarrow}$TTT. Stars ( * ) indicate significant difference from the mutational spectrum of a set of control variants of equal size.}  
 \label{strict_gcat_mutational_enrichment}
 \end{figure}
 
@@ -494,7 +496,7 @@ There are 23172  variants ( 58\% ) that are $Q$-associated but not LD-associated
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/VariantDensity.jpg}
-\caption{The number of $Q$-associated variants per 10kb window across the genome.
+\caption{The number of $Q$-associated variants per 10kb window across the genome. \sgcomment{Any reason why this is plotted until 35?}
 Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
 One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.}  
 \label{VariantDensity}
