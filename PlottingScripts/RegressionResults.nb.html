@@ -344,7 +344,7 @@ div.tocify {
 <h1 class="title toc-ignore">Process Regression Results</h1>
 <h4 class="author">Luke Anderson-Trocmé,</h4>
 <address class="author_afil">
-Department of Human Genetics, McGill University, Montreal, Canada<br><h4 class="date">2019-June-13</h4>
+Department of Human Genetics, McGill University, Montreal, Canada<br><h4 class="date">2019-July-09</h4>
 
 </div>
 
@@ -354,40 +354,28 @@ Department of Human Genetics, McGill University, Montreal, Canada<br><h4 class="
 <h2>Load Libraries</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShkcGx5cilcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r library(dplyr)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmxpYnJhcnkobWFncml0dHIpXG5gYGAifQ== -->
+<pre class="r"><code>library(dplyr)
+library(magrittr)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYZHBseXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnN0YXRz4oCZOlxuXG4gICAgZmlsdGVyLCBsYWdcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmJhc2XigJk6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYbWFncml0dHLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTpwdXJycuKAmTpcblxuICAgIHNldF9uYW1lc1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnRpZHly4oCZOlxuXG4gICAgZXh0cmFjdFxuIn0= -->
 <pre><code>
-Attaching package: ‘dplyr’
+Attaching package: ‘magrittr’
 
-The following objects are masked from ‘package:stats’:
+The following object is masked from ‘package:purrr’:
 
-    filter, lag
+    set_names
 
-The following objects are masked from ‘package:base’:
+The following object is masked from ‘package:tidyr’:
 
-    intersect, setdiff, setequal, union</code></pre>
+    extract</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShtYWdyaXR0cilcbmxpYnJhcnkoZGF0YS50YWJsZSlcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r library(magrittr) library(data.table)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkYXRhLnRhYmxlKVxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShtdWx0dGVzdClcbmBgYCJ9 -->
+<pre class="r"><code>library(data.table)
+library(ggplot2)
+library(multtest)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZGF0YS50YWJsZSAxLjEyLjIgdXNpbmcgNCB0aHJlYWRzIChzZWUgP2dldERUdGhyZWFkcykuICBMYXRlc3QgbmV3czogci1kYXRhdGFibGUuY29tXG5cbkF0dGFjaGluZyBwYWNrYWdlOiDigJhkYXRhLnRhYmxl4oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpkcGx5cuKAmTpcblxuICAgIGJldHdlZW4sIGZpcnN0LCBsYXN0XG4ifQ== -->
-<pre><code>data.table 1.12.2 using 4 threads (see ?getDTthreads).  Latest news: r-datatable.com
-
-Attaching package: ‘data.table’
-
-The following objects are masked from ‘package:dplyr’:
-
-    between, first, last</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShtdWx0dGVzdClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r library(ggplot2) library(multtest)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBCaW9jR2VuZXJpY3NcbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogcGFyYWxsZWxcblxuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmEJpb2NHZW5lcmljc+KAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cGFyYWxsZWzigJk6XG5cbiAgICBjbHVzdGVyQXBwbHksIGNsdXN0ZXJBcHBseUxCLCBjbHVzdGVyQ2FsbCwgY2x1c3RlckV2YWxRLCBjbHVzdGVyRXhwb3J0LCBjbHVzdGVyTWFwLCBwYXJBcHBseSwgcGFyQ2FwcGx5LFxuICAgIHBhckxhcHBseSwgcGFyTGFwcGx5TEIsIHBhclJhcHBseSwgcGFyU2FwcGx5LCBwYXJTYXBwbHlMQlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6ZHBseXLigJk6XG5cbiAgICBjb21iaW5lLCBpbnRlcnNlY3QsIHNldGRpZmYsIHVuaW9uXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpzdGF0c+KAmTpcblxuICAgIElRUiwgbWFkLCBzZCwgdmFyLCB4dGFic1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgIGFueUR1cGxpY2F0ZWQsIGFwcGVuZCwgYXMuZGF0YS5mcmFtZSwgYmFzZW5hbWUsIGNiaW5kLCBjb2xNZWFucywgY29sbmFtZXMsIGNvbFN1bXMsIGRpcm5hbWUsIGRvLmNhbGwsXG4gICAgZHVwbGljYXRlZCwgZXZhbCwgZXZhbHEsIEZpbHRlciwgRmluZCwgZ2V0LCBncmVwLCBncmVwbCwgaW50ZXJzZWN0LCBpcy51bnNvcnRlZCwgbGFwcGx5LCBsZW5ndGhzLCBNYXAsIG1hcHBseSxcbiAgICBtYXRjaCwgbWdldCwgb3JkZXIsIHBhc3RlLCBwbWF4LCBwbWF4LmludCwgcG1pbiwgcG1pbi5pbnQsIFBvc2l0aW9uLCByYW5rLCByYmluZCwgUmVkdWNlLCByb3dNZWFucywgcm93bmFtZXMsXG4gICAgcm93U3Vtcywgc2FwcGx5LCBzZXRkaWZmLCBzb3J0LCB0YWJsZSwgdGFwcGx5LCB1bmlvbiwgdW5pcXVlLCB1bnNwbGl0LCB3aGljaCwgd2hpY2gubWF4LCB3aGljaC5taW5cblxuTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBCaW9iYXNlXG5XZWxjb21lIHRvIEJpb2NvbmR1Y3RvclxuXG4gICAgVmlnbmV0dGVzIGNvbnRhaW4gaW50cm9kdWN0b3J5IG1hdGVyaWFsOyB2aWV3IHdpdGggJ2Jyb3dzZVZpZ25ldHRlcygpJy4gVG8gY2l0ZSBCaW9jb25kdWN0b3IsIHNlZVxuICAgICdjaXRhdGlvbihcXEJpb2Jhc2VcXCknLCBhbmQgZm9yIHBhY2thZ2VzICdjaXRhdGlvbihcXHBrZ25hbWVcXCknLlxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBCaW9jR2VuZXJpY3NcbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogcGFyYWxsZWxcblxuQXR0YWNoaW5nIHBhY2thZ2U6IOKAmEJpb2NHZW5lcmljc+KAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cGFyYWxsZWzigJk6XG5cbiAgICBjbHVzdGVyQXBwbHksIGNsdXN0ZXJBcHBseUxCLCBjbHVzdGVyQ2FsbCwgY2x1c3RlckV2YWxRLCBjbHVzdGVyRXhwb3J0LCBjbHVzdGVyTWFwLCBwYXJBcHBseSxcbiAgICBwYXJDYXBwbHksIHBhckxhcHBseSwgcGFyTGFwcGx5TEIsIHBhclJhcHBseSwgcGFyU2FwcGx5LCBwYXJTYXBwbHlMQlxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6ZHBseXLigJk6XG5cbiAgICBjb21iaW5lLCBpbnRlcnNlY3QsIHNldGRpZmYsIHVuaW9uXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpzdGF0c+KAmTpcblxuICAgIElRUiwgbWFkLCBzZCwgdmFyLCB4dGFic1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgIGFueUR1cGxpY2F0ZWQsIGFwcGVuZCwgYXMuZGF0YS5mcmFtZSwgYmFzZW5hbWUsIGNiaW5kLCBjb2xNZWFucywgY29sbmFtZXMsIGNvbFN1bXMsIGRpcm5hbWUsIGRvLmNhbGwsXG4gICAgZHVwbGljYXRlZCwgZXZhbCwgZXZhbHEsIEZpbHRlciwgRmluZCwgZ2V0LCBncmVwLCBncmVwbCwgaW50ZXJzZWN0LCBpcy51bnNvcnRlZCwgbGFwcGx5LCBsZW5ndGhzLCBNYXAsXG4gICAgbWFwcGx5LCBtYXRjaCwgbWdldCwgb3JkZXIsIHBhc3RlLCBwbWF4LCBwbWF4LmludCwgcG1pbiwgcG1pbi5pbnQsIFBvc2l0aW9uLCByYW5rLCByYmluZCwgUmVkdWNlLFxuICAgIHJvd01lYW5zLCByb3duYW1lcywgcm93U3Vtcywgc2FwcGx5LCBzZXRkaWZmLCBzb3J0LCB0YWJsZSwgdGFwcGx5LCB1bmlvbiwgdW5pcXVlLCB1bnNwbGl0LCB3aGljaCxcbiAgICB3aGljaC5tYXgsIHdoaWNoLm1pblxuXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IEJpb2Jhc2VcbldlbGNvbWUgdG8gQmlvY29uZHVjdG9yXG5cbiAgICBWaWduZXR0ZXMgY29udGFpbiBpbnRyb2R1Y3RvcnkgbWF0ZXJpYWw7IHZpZXcgd2l0aCAnYnJvd3NlVmlnbmV0dGVzKCknLiBUbyBjaXRlIEJpb2NvbmR1Y3Rvciwgc2VlXG4gICAgJ2NpdGF0aW9uKFwiQmlvYmFzZVwiKScsIGFuZCBmb3IgcGFja2FnZXMgJ2NpdGF0aW9uKFwicGtnbmFtZVwiKScuXG4ifQ== -->
 <pre><code>Loading required package: BiocGenerics
 Loading required package: parallel
 
@@ -395,8 +383,8 @@ Attaching package: ‘BiocGenerics’
 
 The following objects are masked from ‘package:parallel’:
 
-    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ, clusterExport, clusterMap, parApply, parCapply,
-    parLapply, parLapplyLB, parRapply, parSapply, parSapplyLB
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ, clusterExport, clusterMap, parApply,
+    parCapply, parLapply, parLapplyLB, parRapply, parSapply, parSapplyLB
 
 The following objects are masked from ‘package:dplyr’:
 
@@ -409,59 +397,53 @@ The following objects are masked from ‘package:stats’:
 The following objects are masked from ‘package:base’:
 
     anyDuplicated, append, as.data.frame, basename, cbind, colMeans, colnames, colSums, dirname, do.call,
-    duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply, lengths, Map, mapply,
-    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce, rowMeans, rownames,
-    rowSums, sapply, setdiff, sort, table, tapply, union, unique, unsplit, which, which.max, which.min
+    duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect, is.unsorted, lapply, lengths, Map,
+    mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind, Reduce,
+    rowMeans, rownames, rowSums, sapply, setdiff, sort, table, tapply, union, unique, unsplit, which,
+    which.max, which.min
 
 Loading required package: Biobase
 Welcome to Bioconductor
 
     Vignettes contain introductory material; view with 'browseVignettes()'. To cite Bioconductor, see
-    'citation(\Biobase\)', and for packages 'citation(\pkgname\)'.</code></pre>
+    'citation(&quot;Biobase&quot;)', and for packages 'citation(&quot;pkgname&quot;)'.</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShjb3dwbG90KVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r library(cowplot)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShjb3dwbG90KVxubGlicmFyeShyZXNoYXBlMilcbmBgYCJ9 -->
+<pre class="r"><code>library(cowplot)
+library(reshape2)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYY293cGxvdOKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmdncGxvdDLigJk6XG5cbiAgICBnZ3NhdmVcbiJ9 -->
-<pre><code>
-Attaching package: ‘cowplot’
-
-The following object is masked from ‘package:ggplot2’:
-
-    ggsave</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShyZXNoYXBlMilcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r library(reshape2)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYcmVzaGFwZTLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmRhdGEudGFibGXigJk6XG5cbiAgICBkY2FzdCwgbWVsdFxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYcmVzaGFwZTLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTp0aWR5cuKAmTpcblxuICAgIHNtaXRoc1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6ZGF0YS50YWJsZeKAmTpcblxuICAgIGRjYXN0LCBtZWx0XG4ifQ== -->
 <pre><code>
 Attaching package: ‘reshape2’
+
+The following object is masked from ‘package:tidyr’:
+
+    smiths
 
 The following objects are masked from ‘package:data.table’:
 
     dcast, melt</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeSh0aWR5cilcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r library(tidyr)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoc2NhbGVzKVxuYGBgIn0= -->
+<pre class="r"><code>library(tidyr)
+library(scales)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYdGlkeXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTpyZXNoYXBlMuKAmTpcblxuICAgIHNtaXRoc1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdCBpcyBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOm1hZ3JpdHRy4oCZOlxuXG4gICAgZXh0cmFjdFxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYc2NhbGVz4oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cHVycnLigJk6XG5cbiAgICBkaXNjYXJkXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6cmVhZHLigJk6XG5cbiAgICBjb2xfZmFjdG9yXG4ifQ== -->
 <pre><code>
-Attaching package: ‘tidyr’
+Attaching package: ‘scales’
 
-The following object is masked from ‘package:reshape2’:
+The following object is masked from ‘package:purrr’:
 
-    smiths
+    discard
 
-The following object is masked from ‘package:magrittr’:
+The following object is masked from ‘package:readr’:
 
-    extract</code></pre>
+    col_factor</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubGlicmFyeShzY2FsZXMpXG4jRGlyZWN0b3JpZXNcbkRhdGFQYXRoIDwtICd+L0RvY3VtZW50cy9MZWdhY3lEYXRhL1Bsb3R0aW5nU2NyaXB0cy9Qcm9jZXNzZWREYXRhLydcbmZpZ3VyZVBhdGggPC0gJ34vRG9jdW1lbnRzL0xlZ2FjeURhdGEvRmlndXJlcy8nXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r library(scales) #Directories DataPath &lt;- ‘~/Documents/LegacyData/PlottingScripts/ProcessedData/’ figurePath &lt;- ‘~/Documents/LegacyData/Figures/’</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0RpcmVjdG9yaWVzXG5EYXRhUGF0aCA8LSAnfi9Eb2N1bWVudHMvTGVnYWN5RGF0YS9QbG90dGluZ1NjcmlwdHMvUHJvY2Vzc2VkRGF0YS8nXG5maWd1cmVQYXRoIDwtICd+L0RvY3VtZW50cy9MZWdhY3lEYXRhL0ZpZ3VyZXMvJ1xuYGBgIn0= -->
+<pre class="r"><code>#Directories
+DataPath &lt;- '~/Documents/LegacyData/PlottingScripts/ProcessedData/'
+figurePath &lt;- '~/Documents/LegacyData/Figures/'</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -470,79 +452,165 @@ The following object is masked from ‘package:magrittr’:
 <h2>StrictMask</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgYmFzaFxuYGBgYmFzaFxuRGF0YVBhdGg9Jy9Vc2Vycy9sdWtlL0RvY3VtZW50cy9MZWdhY3lEYXRhL1Bsb3R0aW5nU2NyaXB0cy9Qcm9jZXNzZWREYXRhLydcblxuI2Zyb20gYWxsIHBvc2l0aW9ucyBjcmVhdGUgYSBwc2V1ZG8gQkVEIGZpbGVcbmNhdCAkRGF0YVBhdGgvcnNJRC50eHQgfCBcXFxuYXdrICd7cHJpbnQgJDEsJDIsJDIrMSwkM30nIHwgXFxcbnRyICcgJyAnXFx0JyBcXFxuPiAkRGF0YVBhdGgvMWtHUF9wc2V1ZG9CZWQuYmVkXG4jc3VidHJhY3QgdGhlIHN0cmljdCBtYXNrIGZyb20gdGhlIDFrR1BcbmJlZHRvb2xzIHN1YnRyYWN0IFxcXG4tYSAkRGF0YVBhdGgvMWtHUF9wc2V1ZG9CZWQuYmVkIFxcXG4tYiAkRGF0YVBhdGgvMjAxNDEwMjAuc3RyaWN0X21hc2sud2hvbGVfZ2Vub21lLmJlZCBcXFxuPiAkRGF0YVBhdGgvMWtHUF9TdHJpY3RNYXNrLmJlZFxuYGBgXG5gYGAifQ== -->
-<p><code>bash</code>bash DataPath=‘/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData/’</p>
-</div>
-<div id="from-all-positions-create-a-pseudo-bed-file" class="section level1">
-<h1>from all positions create a pseudo BED file</h1>
-<p>cat $DataPath/rsID.txt |<br />
-awk ‘{print $1,$2,$2+1,$3}’ |<br />
-tr ‘’ ‘’<br />
-&gt; $DataPath/1kGP_pseudoBed.bed #subtract the strict mask from the 1kGP bedtools subtract<br />
--a $DataPath/1kGP_pseudoBed.bed<br />
--b $DataPath/20141020.strict_mask.whole_genome.bed<br />
-&gt; $DataPath/1kGP_StrictMask.bed</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgYmFzaFxuRGF0YVBhdGg9Jy9Vc2Vycy9sdWtlL0RvY3VtZW50cy9MZWdhY3lEYXRhL1Bsb3R0aW5nU2NyaXB0cy9Qcm9jZXNzZWREYXRhLydcblxuI2Zyb20gYWxsIHBvc2l0aW9ucyBjcmVhdGUgYSBwc2V1ZG8gQkVEIGZpbGVcbmNhdCAkRGF0YVBhdGgvcnNJRC50eHQgfCBcXFxuYXdrICd7cHJpbnQgJDEsJDIsJDIrMSwkM30nIHwgXFxcbnRyICcgJyAnXFx0JyBcXFxuPiAkRGF0YVBhdGgvMWtHUF9wc2V1ZG9CZWQuYmVkXG4jc3VidHJhY3QgdGhlIHN0cmljdCBtYXNrIGZyb20gdGhlIDFrR1BcbmJlZHRvb2xzIHN1YnRyYWN0IFxcXG4tYSAkRGF0YVBhdGgvMWtHUF9wc2V1ZG9CZWQuYmVkIFxcXG4tYiAkRGF0YVBhdGgvMjAxNDEwMjAuc3RyaWN0X21hc2sud2hvbGVfZ2Vub21lLmJlZCBcXFxuPiAkRGF0YVBhdGgvMWtHUF9TdHJpY3RNYXNrLmJlZFxuYGBgIn0= -->
+<pre class="bash"><code>DataPath='/Users/luke/Documents/LegacyData/PlottingScripts/ProcessedData/'
+
+#from all positions create a pseudo BED file
+cat $DataPath/rsID.txt | \
+awk '{print $1,$2,$2+1,$3}' | \
+tr ' ' '\t' \
+&gt; $DataPath/1kGP_pseudoBed.bed
+#subtract the strict mask from the 1kGP
+bedtools subtract \
+-a $DataPath/1kGP_pseudoBed.bed \
+-b $DataPath/20141020.strict_mask.whole_genome.bed \
+&gt; $DataPath/1kGP_StrictMask.bed</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
 <div id="load-data" class="section level2">
 <h2>Load Data</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyNyZWFkIFJlZ3Jlc3Npb24gcmVzdWx0c1xuUmVncmVzc2lvbiA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ0dlbm9tZVdpZGVfTEZBLnR4dCcpLFxuICAgICAgICAgICAgICAgICAgICBmaWxsID0gVFJVRSxcbiAgICAgICAgICAgICAgICAgICAgY29sLm5hbWVzID0gYygncnNJRCcsJ2RldmRpZmYnLCdkZXZfbG9ncCcsJ2InKSxcbiAgICAgICAgICAgICAgICAgICAgY29sQ2xhc3NlcyA9IGMoJ2NoYXJhY3RlcicsJ251bWVyaWMnLCdudW1lcmljJywnbnVtZXJpYycpKVxuXG4jI3JlYWQgUmVwZWF0c1xuUmVwZWF0cyA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ1JlZ19zdHJpY3RNYXNrX25lc3RlZFJlcGVhdHMuUE9TJyksXG4gICAgICAgICAgICAgICAgIGZpbGwgPSBUUlVFLFxuICAgICAgICAgICAgICAgICBjb2wubmFtZXMgPSBjKCdDaHInLCdQb3MnKSlcblJlcGVhdHMkUmVwZWF0PSd5ZXMnXG5cbiMjcmVhZCBJbmRlbHNcbkluZGVscyA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ1JlZ19pbmRlbHMuUE9TJyksXG4gICAgICAgICAgICAgICAgaGVhZGVyID0gVFJVRSlcbkluZGVscyRJbmRlbCA9ICd5ZXMnXG5cbiNyZWFkIGluIHJzSURzICh1c2VkIGZvciBHV0FTIGNhdGFsb2d1ZSBzZWFyY2gpXG5yc0lEPC1mcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ3JzSUQudHh0JyksXG4gICAgICAgICAgICBjb2wubmFtZXMgPSBjKCdDaHInLCdQb3MnLCdyc0lEJykpXG5cbnN0cmljdE1hc2sgPC0gZnJlYWQocGFzdGUwKERhdGFQYXRoLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgJzFrR1BfU3RyaWN0TWFzay5iZWQnKSxcbiAgICAgICAgICAgIGNvbC5uYW1lcyA9IGMoJ0NocicsJ1BvcycsJ1Bvcy4xJywncnNJRCcpKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ##read Regression results Regression &lt;- fread(paste0(DataPath,‘GenomeWide_LFA.txt’), fill = TRUE, col.names = c(‘rsID’,‘devdiff’,‘dev_logp’,‘b’), colClasses = c(‘character’,‘numeric’,‘numeric’,‘numeric’))</p>
-</div>
-<div id="read-repeats" class="section level2">
-<h2>read Repeats</h2>
-<p>Repeats &lt;- fread(paste0(DataPath,‘Reg_strictMask_nestedRepeats.POS’), fill = TRUE, col.names = c(‘Chr’,‘Pos’)) Repeats$Repeat=‘yes’</p>
-</div>
-<div id="read-indels" class="section level2">
-<h2>read Indels</h2>
-<p>Indels &lt;- fread(paste0(DataPath,‘Reg_indels.POS’), header = TRUE) Indels$Indel = ‘yes’</p>
-</div>
-</div>
-<div id="read-in-rsids-used-for-gwas-catalogue-search" class="section level1">
-<h1>read in rsIDs (used for GWAS catalogue search)</h1>
-<p>rsID&lt;-fread(paste0(DataPath,‘rsID.txt’), col.names = c(‘Chr’,‘Pos’,‘rsID’))</p>
-<p>strictMask &lt;- fread(paste0(DataPath, ‘1kGP_StrictMask.bed’), col.names = c(‘Chr’,‘Pos’,‘Pos.1’,‘rsID’))</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyaWN0TWFzayA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnMWtHUF9TdHJpY3RNYXNrLmJlZCcpLFxuICAgICAgICAgICAgY29sLm5hbWVzID0gYygnQ2hyJywnUG9zJywnUG9zLjEnLCdyc0lEJykpXG5cbmBgYCJ9 -->
+<pre class="r"><code>strictMask &lt;- fread(paste0(DataPath,
+                           '1kGP_StrictMask.bed'),
+            col.names = c('Chr','Pos','Pos.1','rsID'))
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoifC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tfFxufD09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09fFxuIn0= -->
+<pre><code>|--------------------------------------------------|
+|==================================================|</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyNDb21iaW5lIHRoZSBkYXRhXG5SZWdyZXNzaW9uIDwtIGxlZnRfam9pbihSZWdyZXNzaW9uLCBcbiAgICAgICAgICAgICAgICAgICAgICAgIHJzSUQsIFxuICAgICAgICAgICAgICAgICAgICAgICAgYnkgPSAncnNJRCcpXG5SZWdyZXNzaW9uIDwtIGxlZnRfam9pbihSZWdyZXNzaW9uLCBcbiAgICAgICAgICAgICAgICAgICAgICAgIFJlcGVhdHMsIFxuICAgICAgICAgICAgICAgICAgICAgICAgYnkgPSBjKCdDaHInLCdQb3MnKSlcblJlZ3Jlc3Npb24gPC0gbGVmdF9qb2luKFJlZ3Jlc3Npb24sIFxuICAgICAgICAgICAgICAgICAgICAgICAgSW5kZWxzLCBcbiAgICAgICAgICAgICAgICAgICAgICAgIGJ5ID0gYygnQ2hyJywnUG9zJykpXG4jcmVtb3ZlIG1pc3NpbmcgZGF0YVxuUmVncmVzc2lvbiA8LSBSZWdyZXNzaW9uW3doaWNoKCFpcy5uYShSZWdyZXNzaW9uJGRldmRpZmYpKSxdXG4jI3NhdmUgbWVtb3J5XG5ybShyc0lEKVxucm0oUmVwZWF0cylcbnJtKEluZGVscylcbmBgYCJ9 -->
+<pre class="r"><code>##Combine the data
+Regression &lt;- left_join(Regression, 
+                        rsID, 
+                        by = 'rsID')
+Regression &lt;- left_join(Regression, 
+                        Repeats, 
+                        by = c('Chr','Pos'))
+Regression &lt;- left_join(Regression, 
+                        Indels, 
+                        by = c('Chr','Pos'))
+#remove missing data
+Regression &lt;- Regression[which(!is.na(Regression$devdiff)),]
+##save memory
+rm(rsID)
+rm(Repeats)
+rm(Indels)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyNDb21iaW5lIHRoZSBkYXRhXG5SZWdyZXNzaW9uIDwtIGxlZnRfam9pbihSZWdyZXNzaW9uLCBcbiAgICAgICAgICAgICAgICAgICAgICAgIHJzSUQsIFxuICAgICAgICAgICAgICAgICAgICAgICAgYnkgPSAncnNJRCcpXG5cblJlZ3Jlc3Npb24gPC0gbGVmdF9qb2luKFJlZ3Jlc3Npb24sIFxuICAgICAgICAgICAgICAgICAgICAgICAgUmVwZWF0cywgXG4gICAgICAgICAgICAgICAgICAgICAgICBieSA9IGMoJ0NocicsJ1BvcycpKVxuXG5SZWdyZXNzaW9uIDwtIGxlZnRfam9pbihSZWdyZXNzaW9uLCBcbiAgICAgICAgICAgICAgICAgICAgICAgIEluZGVscywgXG4gICAgICAgICAgICAgICAgICAgICAgICBieSA9IGMoJ0NocicsJ1BvcycpKVxuXG4jcmVtb3ZlIG1pc3NpbmcgZGF0YVxuUmVncmVzc2lvbiA8LSBSZWdyZXNzaW9uW3doaWNoKCFpcy5uYShSZWdyZXNzaW9uJGRldmRpZmYpKSxdXG4jI3NhdmUgbWVtb3J5XG5ybShyc0lEKVxucm0oUmVwZWF0cylcbnJtKEluZGVscylcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r ##Combine the data Regression &lt;- left_join(Regression, rsID, by = ‘rsID’)</p>
-<p>Regression &lt;- left_join(Regression, Repeats, by = c(‘Chr’,‘Pos’))</p>
-<p>Regression &lt;- left_join(Regression, Indels, by = c(‘Chr’,‘Pos’))</p>
-</div>
-<div id="remove-missing-data" class="section level1">
-<h1>remove missing data</h1>
-<p>Regression &lt;- Regression[which(!is.na(Regression$devdiff)),] ##save memory rm(rsID) rm(Repeats) rm(Indels)</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUmVwZWF0X0luZGVscyA8LSB1bmlxdWUoUmVncmVzc2lvblt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb24kSW5kZWw9PSd5ZXMnICZcblx0XHRcdFx0XHRcdFx0XHQgICAgICAgIFJlZ3Jlc3Npb24kUmVwZWF0PT0neWVzJyksXSlcbk5PUmVwZWF0X0luZGVscyA8LSB1bmlxdWUoUmVncmVzc2lvblt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb24kSW5kZWw9PSd5ZXMnICZcblx0XHRcdFx0XHRcdFx0XHQgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb24kUmVwZWF0KSksXSlcblx0XHRcdFx0XHRcdFx0XHRcblJlcGVhdF9TTlBzIDwtIHVuaXF1ZShSZWdyZXNzaW9uW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICAgICAgaXMubmEoUmVncmVzc2lvbiRJbmRlbCkgJlxuXHRcdFx0XHRcdFx0XHRcdCAgICAgICAgUmVncmVzc2lvbiRSZXBlYXQ9PSd5ZXMnKSxdKVxuXHRcdFx0XHRcdFx0XHRcdFxuTk9SZXBlYXRfU05QcyA8LSB1bmlxdWUoUmVncmVzc2lvblt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb24kSW5kZWwpICZcblx0XHRcdFx0XHRcdFx0XHQgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb24kUmVwZWF0KSksXSlcbk5PUmVwZWF0X1NOUHMgPC0gTk9SZXBlYXRfU05Qc1t3aGljaCghaXMubmEoTk9SZXBlYXRfU05QcyRDaHIpKSxdXG5gYGAifQ== -->
+<pre class="r"><code>Repeat_Indels &lt;- unique(Regression[which(
+                        Regression$Indel=='yes' &amp;
+                                        Regression$Repeat=='yes'),])
+NORepeat_Indels &lt;- unique(Regression[which(
+                        Regression$Indel=='yes' &amp;
+                                        is.na(Regression$Repeat)),])
+                                
+Repeat_SNPs &lt;- unique(Regression[which(
+                        is.na(Regression$Indel) &amp;
+                                        Regression$Repeat=='yes'),])
+                                
+NORepeat_SNPs &lt;- unique(Regression[which(
+                        is.na(Regression$Indel) &amp;
+                                        is.na(Regression$Repeat)),])
+NORepeat_SNPs &lt;- NORepeat_SNPs[which(!is.na(NORepeat_SNPs$Chr)),]</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuUmVwZWF0X0luZGVscyA8LSB1bmlxdWUoUmVncmVzc2lvblt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb24kSW5kZWw9PSd5ZXMnICZcblx0XHRcdFx0XHRcdFx0XHQgICAgICAgIFJlZ3Jlc3Npb24kUmVwZWF0PT0neWVzJyksXSlcblxuTk9SZXBlYXRfSW5kZWxzIDwtIHVuaXF1ZShSZWdyZXNzaW9uW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbiRJbmRlbD09J3llcycgJlxuXHRcdFx0XHRcdFx0XHRcdCAgICAgICAgaXMubmEoUmVncmVzc2lvbiRSZXBlYXQpKSxdKVxuXHRcdFx0XHRcdFx0XHRcdFxuUmVwZWF0X1NOUHMgPC0gdW5pcXVlKFJlZ3Jlc3Npb25bd2hpY2goXG4gICAgICAgICAgICAgICAgICAgICAgICBpcy5uYShSZWdyZXNzaW9uJEluZGVsKSAmXG5cdFx0XHRcdFx0XHRcdFx0ICAgICAgICBSZWdyZXNzaW9uJFJlcGVhdD09J3llcycpLF0pXG5cdFx0XHRcdFx0XHRcdFx0XG5OT1JlcGVhdF9TTlBzIDwtIHVuaXF1ZShSZWdyZXNzaW9uW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICAgICAgaXMubmEoUmVncmVzc2lvbiRJbmRlbCkgJlxuXHRcdFx0XHRcdFx0XHRcdCAgICAgICAgaXMubmEoUmVncmVzc2lvbiRSZXBlYXQpKSxdKVxuTk9SZXBlYXRfU05QcyA8LSBOT1JlcGVhdF9TTlBzW3doaWNoKCFpcy5uYShOT1JlcGVhdF9TTlBzJENocikpLF1cbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r Repeat_Indels &lt;- unique(Regression[which( Regression<span class="math inline">\(Indel=='yes' &amp;  Regression\)</span>Repeat==‘yes’),])</p>
-<p>NORepeat_Indels &lt;- unique(Regression[which( Regression<span class="math inline">\(Indel=='yes' &amp;  is.na(Regression\)</span>Repeat)),])</p>
-<p>Repeat_SNPs &lt;- unique(Regression[which( is.na(Regression<span class="math inline">\(Indel) &amp;  Regression\)</span>Repeat==‘yes’),])</p>
-<p>NORepeat_SNPs &lt;- unique(Regression[which( is.na(Regression<span class="math inline">\(Indel) &amp;  is.na(Regression\)</span>Repeat)),]) NORepeat_SNPs &lt;- NORepeat_SNPs[which(!is.na(NORepeat_SNPs$Chr)),]</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgdHdvLXN0YWdlIEJlbmphbWluaSAmIEhvY2hiZXJnICgyMDA2KSBzdGVwLXVwIEZEUi1jb250cm9sbGluZ1xuVFNCSCA8LWZ1bmN0aW9uKGRmKXtcdFxucHJvY2VkdXJlcyA8LSBjKCBcIlRTQkhcIikgXG5kZiRwIDwtIHBjaGlzcShkZiRkZXZkaWZmLFxuICAgICAgICAgICAgICAgMSxcbiAgICAgICAgICAgICAgIGxvd2VyLnRhaWwgPSBGQUxTRSlcbmFkanVzdGVkIDwtIG10LnJhd3AyYWRqcChkZiRwLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICBwcm9jZWR1cmVzLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAuMDEpXG5hZGogPC0gYXMuZGF0YS5mcmFtZShhZGp1c3RlZCRhZGpbXG4gICAgICAgICAgICAgIG9yZGVyKGFkanVzdGVkJGluZGV4KSxdKVxuZGYkQWRqdXN0ZWRfTG9nMTBwIDwtIC1sb2cxMChhZGokVFNCSF8wLjAxKVxuZGYkQWRqdXN0ZWRfcCA8LSBhZGokVFNCSF8wLjAxXG5yZXR1cm4oZGYpXG59XG5SZXBlYXRfSW5kZWxzIDwtVFNCSChSZXBlYXRfSW5kZWxzKVxuTk9SZXBlYXRfSW5kZWxzIDwtVFNCSChOT1JlcGVhdF9JbmRlbHMpXG5SZXBlYXRfU05QcyA8LVRTQkgoUmVwZWF0X1NOUHMpXG5OT1JlcGVhdF9TTlBzIDwtVFNCSChOT1JlcGVhdF9TTlBzKVxuUmVncmVzc2lvbiA8LSBkby5jYWxsKFwicmJpbmRcIiwgXG4gICAgICAgICAgICAgICAgICAgICAgbGlzdChSZXBlYXRfSW5kZWxzLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIE5PUmVwZWF0X0luZGVscywgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICBSZXBlYXRfU05QcywgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICBOT1JlcGVhdF9TTlBzKSlcbiNyZW1vdmUgcG9zaXRpb25zIHRoYXQgZG9uJ3QgcGFzcyBzdHJpY3QgbWFza1xuUmVncmVzc2lvbk1hc2tlZCA8LSBhbnRpX2pvaW4oUmVncmVzc2lvbiwgXG4gICAgICAgICAgICAgICAgICAgICAgICBzdHJpY3RNYXNrLFxuICAgICAgICAgICAgICAgICAgICAgICAgYnkgPSBjKCdDaHInLCdQb3MnLCdyc0lEJykpXG53cml0ZS50YWJsZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksXSAkIHJzSUQsIFxuICAgICAgICAgICAgZmlsZSA9IHBhc3RlMChEYXRhUGF0aCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICdTaWduaWZpY2FudF9yc0lELnR4dCcpLFxuICAgICAgICAgICAgcXVvdGUgPSBGQUxTRSxcbiAgICAgICAgICAgIHJvdy5uYW1lcyA9IEZBTFNFLFxuICAgICAgICAgICAgY29sLm5hbWVzID0gRkFMU0UpXG53cml0ZS50YWJsZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksYygnQ2hyJywnUG9zJyldLCBcbiAgICAgICAgICAgIGZpbGUgPSBwYXN0ZTAoRGF0YVBhdGgsIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAnU2lnbmlmaWNhbnRfUG9zaXRpb25zLnR4dCcpLFxuICAgICAgICAgICAgcXVvdGUgPSBGQUxTRSxcbiAgICAgICAgICAgIHJvdy5uYW1lcyA9IEZBTFNFLFxuICAgICAgICAgICAgY29sLm5hbWVzID0gRkFMU0UsXG4gICAgICAgICAgICBzZXAgPSAnXFx0JylcbndyaXRlLnRhYmxlKFJlZ3Jlc3Npb25NYXNrZWRbd2hpY2goXG4gICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgID4gLWxvZzEwKDAuMDEpKSxjKCdDaHInLCdQb3MnLCdyc0lEJywnYicsJ0FkanVzdGVkX0xvZzEwcCcpXSwgXG4gICAgICAgICAgICBmaWxlID0gcGFzdGUwKERhdGFQYXRoLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgJ1NpZ25pZmljYW50X1Bvc2l0aW9uc19hbmRfUHZhbHMudHh0JyksXG4gICAgICAgICAgICBxdW90ZSA9IEZBTFNFLFxuICAgICAgICAgICAgcm93Lm5hbWVzID0gRkFMU0UsXG4gICAgICAgICAgICBzZXAgPSAnXFx0Jylcbm5zaWdSZXBJbmRlbCA8LSBucm93KHVuaXF1ZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEluZGVsPT0neWVzJyAmXG4gICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb25NYXNrZWQkUmVwZWF0PT0neWVzJyAmXG4gICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb25NYXNrZWQkQWRqdXN0ZWRfTG9nMTBwIFxuICAgICAgICAgICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksXSkpXG5uc2lnUmVwU05QIDwtIG5yb3codW5pcXVlKFJlZ3Jlc3Npb25NYXNrZWRbd2hpY2goXG4gICAgICAgICAgICAgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb25NYXNrZWQkSW5kZWwpICZcbiAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRSZXBlYXQ9PSd5ZXMnICZcbiAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICAgICAgICAgID4gLWxvZzEwKDAuMDEpKSxdKSlcbm5zaWdOb25SZXBJbmRlbCA8LSBucm93KHVuaXF1ZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEluZGVsPT0neWVzJyAmXG4gICAgICAgICAgICAgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb25NYXNrZWQkUmVwZWF0KSAmXG4gICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb25NYXNrZWQkQWRqdXN0ZWRfTG9nMTBwIFxuICAgICAgICAgICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksXSkpXG5uc2lnTm9uUmVwU05QIDwtIG5yb3codW5pcXVlKFJlZ3Jlc3Npb25NYXNrZWRbd2hpY2goXG4gICAgICAgICAgICAgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb25NYXNrZWQkSW5kZWwpICZcbiAgICAgICAgICAgICAgICAgICAgaXMubmEoUmVncmVzc2lvbk1hc2tlZCRSZXBlYXQpICZcbiAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICAgICAgICAgID4gLWxvZzEwKDAuMDEpKSxdKSlcbnByaW50KHBhc3RlMCgnUmVwZWF0IEluZGVscyA6ICcsbnNpZ1JlcEluZGVsLFxuICAgICAgICAgICAgICcgUmVwZWF0IFNOUHMgOiAnLG5zaWdSZXBTTlAsXG4gICAgICAgICAgICAgJyBOb25SZXBlYXQgSW5kZWxzIDogJyxuc2lnTm9uUmVwSW5kZWwsXG4gICAgICAgICAgICAgJyBOb25SZXBlYXQgU05QcyA6ICcsbnNpZ05vblJlcFNOUCkpXG5gYGAifQ== -->
+<pre class="r"><code>## two-stage Benjamini &amp; Hochberg (2006) step-up FDR-controlling
+TSBH &lt;-function(df){    
+procedures &lt;- c( &quot;TSBH&quot;) 
+df$p &lt;- pchisq(df$devdiff,
+               1,
+               lower.tail = FALSE)
+adjusted &lt;- mt.rawp2adjp(df$p, 
+                         procedures, 
+                         alpha = 0.01)
+adj &lt;- as.data.frame(adjusted$adj[
+              order(adjusted$index),])
+df$Adjusted_Log10p &lt;- -log10(adj$TSBH_0.01)
+df$Adjusted_p &lt;- adj$TSBH_0.01
+return(df)
+}
+Repeat_Indels &lt;-TSBH(Repeat_Indels)
+NORepeat_Indels &lt;-TSBH(NORepeat_Indels)
+Repeat_SNPs &lt;-TSBH(Repeat_SNPs)
+NORepeat_SNPs &lt;-TSBH(NORepeat_SNPs)
+Regression &lt;- do.call(&quot;rbind&quot;, 
+                      list(Repeat_Indels, 
+                           NORepeat_Indels, 
+                           Repeat_SNPs, 
+                           NORepeat_SNPs))
+#remove positions that don't pass strict mask
+RegressionMasked &lt;- anti_join(Regression, 
+                        strictMask,
+                        by = c('Chr','Pos','rsID'))
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),] $ rsID, 
+            file = paste0(DataPath, 
+                          'Significant_rsID.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE)
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),c('Chr','Pos')], 
+            file = paste0(DataPath, 
+                          'Significant_Positions.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE,
+            sep = '\t')
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),c('Chr','Pos','rsID','b','Adjusted_Log10p')], 
+            file = paste0(DataPath, 
+                          'Significant_Positions_and_Pvals.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            sep = '\t')
+nsigRepIndel &lt;- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &amp;
+                    RegressionMasked$Repeat=='yes' &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+nsigRepSNP &lt;- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &amp;
+                    RegressionMasked$Repeat=='yes' &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+nsigNonRepIndel &lt;- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &amp;
+                    is.na(RegressionMasked$Repeat) &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+nsigNonRepSNP &lt;- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &amp;
+                    is.na(RegressionMasked$Repeat) &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+print(paste0('Repeat Indels : ',nsigRepIndel,
+             ' Repeat SNPs : ',nsigRepSNP,
+             ' NonRepeat Indels : ',nsigNonRepIndel,
+             ' NonRepeat SNPs : ',nsigNonRepSNP))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucHJpbnQocGFzdGUwKCdSZXBlYXQgSW5kZWxzIDogJyxuc2lnUmVwSW5kZWwsXG4gICAgICAgICAgICAgJyBSZXBlYXQgU05QcyA6ICcsbnNpZ1JlcFNOUCxcbiAgICAgICAgICAgICAnIE5vblJlcGVhdCBJbmRlbHMgOiAnLG5zaWdOb25SZXBJbmRlbCxcbiAgICAgICAgICAgICAnIE5vblJlcGVhdCBTTlBzIDogJyxuc2lnTm9uUmVwU05QKSlcblxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r print(paste0(‘Repeat Indels :’,nsigRepIndel, ‘Repeat SNPs :’,nsigRepSNP, ‘NonRepeat Indels :’,nsigNonRepIndel, ‘NonRepeat SNPs :’,nsigNonRepSNP))</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFxcUmVwZWF0IEluZGVscyA6IDE4MSBSZXBlYXQgU05QcyA6IDMzNjkgTm9uUmVwZWF0IEluZGVscyA6IDY1NyBOb25SZXBlYXQgU05QcyA6IDExMDU5XFxcbiJ9 -->
-<pre><code>[1] \Repeat Indels : 181 Repeat SNPs : 3369 NonRepeat Indels : 657 NonRepeat SNPs : 11059\</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiUmVwZWF0IEluZGVscyA6IDE4MSBSZXBlYXQgU05QcyA6IDMzNjkgTm9uUmVwZWF0IEluZGVscyA6IDY1NyBOb25SZXBlYXQgU05QcyA6IDExMDU5XCJcbiJ9 -->
+<pre><code>[1] &quot;Repeat Indels : 181 Repeat SNPs : 3369 NonRepeat Indels : 657 NonRepeat SNPs : 11059&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -561,6 +629,7 @@ tr ‘’ ‘’<br />
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
 <div id="make-the-manhattan-plots" class="section level2">
 <h2>Make the Manhattan Plots</h2>
 <!-- rnb-text-end -->
@@ -574,7 +643,6 @@ tr ‘’ ‘’<br />
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
 </div>
 <div id="make-the-qq-plots" class="section level1">
 <h1>Make the QQ Plots</h1>
@@ -862,12 +930,74 @@ See problems(...) for more details.</code></pre>
 <h2>Density of Significant SNPs per Chromosome</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucGx0cyA8LSBsaXN0KClcbmJpbnMgPC0gbGlzdCgpXG5mb3IoY2hyb20gaW4gc2VxKDEsMjIsMSkpe1xuICBwcmludChjaHJvbSlcbiAgZGYgPC0gUmVncmVzc2lvbk1hc2tlZFt3aGljaCgoUmVncmVzc2lvbk1hc2tlZCRDaHIgPT0gY2hyb20pICZcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIChSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSkpLFxuICAgICAgICAgICAgICAgICAgIGMoJ0NocicsJ1BvcycpXVxuICBtYXNrIDwtIFJlZ3Jlc3Npb25bd2hpY2goKFJlZ3Jlc3Npb24kQ2hyID09IGNocm9tKSAmXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAoUmVncmVzc2lvbiRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPiAtbG9nMTAoMC4wMSkpICZcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIShSZWdyZXNzaW9uJHJzSUQgJWluJSBSZWdyZXNzaW9uTWFza2VkJHJzSUQpKSxcbiAgICAgICAgICAgICAgICAgICBjKCdDaHInLCdQb3MnKV1cbiAgXG4gIGwgPSBDaHJvbUxlbmd0aFt3aGljaChDaHJvbUxlbmd0aCRDaHIgPT0gY2hyb20pLFxuICAgICAgICAgICAgICAgICAgYygnTGVuZ3RoJyldW1sxXV1cbiAgYiA9IHNlcSgxLGwsYnk9MTAwMDApXG4gIGlmKGNocm9tID09IDEpe1xuICAgIHBsdHNbW2Nocm9tXV08LWdncGxvdChtYXNrLCBhZXMoeD1Qb3MpKSArXG4gICAgZ2VvbV9mcmVxcG9seShicmVha3MgPSBiLCBjb2xvciA9ICdncmV5NjAnKSArXG4gICAgZ2VvbV9mcmVxcG9seShkYXRhID0gZGYsIGJyZWFrcyA9IGIpICtcbiAgICB5bGltKDAsNTApK1xuICAgIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMudGlja3MueCA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgICBheGlzLmxpbmUgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgICAgcGxvdC5tYXJnaW4gPSBtYXJnaW4oMCwwLDAsMCksXG4gICAgICAgICAgYXhpcy50ZXh0PWVsZW1lbnRfdGV4dChzaXplPTYpLFxuICAgICAgICAgIGF4aXMudGl0bGU9ZWxlbWVudF90ZXh0KHNpemU9OCkpICsgXG4gICAgbGFicyh4PWNocm9tLHk9J1NpZ25pZmljYW50IHZhcmlhbnRzIHBlciAxMGtiIHdpbmRvdycpXG4gIH1cbiAgZWxzZXtcbiAgcGx0c1tbY2hyb21dXTwtZ2dwbG90KG1hc2ssIGFlcyh4PVBvcykpICtcbiAgICBnZW9tX2ZyZXFwb2x5KGJyZWFrcyA9IGIsIGNvbG9yID0gJ2dyZXk2MCcpICtcbiAgICBnZW9tX2ZyZXFwb2x5KGRhdGEgPSBkZiwgYnJlYWtzID0gYikgK1xuICAgIHlsaW0oMCw1MCkrXG4gICAgdGhlbWUoYXhpcy50ZXh0ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMudGlja3MgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgICAgYXhpcy50aXRsZS55ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMubGluZSA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgICBwbG90Lm1hcmdpbiA9IG1hcmdpbigwLDAsMCwwKSxcbiAgICAgICAgICBheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChzaXplPTgpKSArIFxuICAgIHhsYWIoY2hyb20pXG4gIH1cbiAgI2dldCBmcmVxIGNvdW50IHBlciBiaW5cbiAgYyA8LSBjdXQoZGYkUG9zLCBicmVha3MgPSBiKVxuICBiaW5zW1tjaHJvbV1dIDwtIGFzLmRhdGEuZnJhbWUodGFibGUoYykpXG59XG5cbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r plts &lt;- list() bins &lt;- list() for(chrom in seq(1,22,1)){ print(chrom) df &lt;- RegressionMasked[which((RegressionMasked<span class="math inline">\(Chr == chrom) &amp;  (RegressionMasked\)</span>Adjusted_Log10p &gt; -log10(0.01))), c(‘Chr’,‘Pos’)] mask &lt;- Regression[which((Regression<span class="math inline">\(Chr == chrom) &amp;  (Regression\)</span>Adjusted_Log10p &gt; -log10(0.01)) &amp; !(Regression<span class="math inline">\(rsID %in% RegressionMasked\)</span>rsID)), c(‘Chr’,‘Pos’)]</p>
-<p>l = ChromLength[which(ChromLength$Chr == chrom), c(‘Length’)][[1]] b = seq(1,l,by=10000) if(chrom == 1){ plts[[chrom]]&lt;-ggplot(mask, aes(x=Pos)) + geom_freqpoly(breaks = b, color = ‘grey60’) + geom_freqpoly(data = df, breaks = b) + ylim(0,50)+ theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.line = element_blank(), plot.margin = margin(0,0,0,0), axis.text=element_text(size=6), axis.title=element_text(size=8)) + labs(x=chrom,y=‘Significant variants per 10kb window’) } else{ plts[[chrom]]&lt;-ggplot(mask, aes(x=Pos)) + geom_freqpoly(breaks = b, color = ‘grey60’) + geom_freqpoly(data = df, breaks = b) + ylim(0,50)+ theme(axis.text = element_blank(), axis.ticks = element_blank(), axis.title.y = element_blank(), axis.line = element_blank(), plot.margin = margin(0,0,0,0), axis.title=element_text(size=8)) + xlab(chrom) } #get freq count per bin c &lt;- cut(df$Pos, breaks = b) bins[[chrom]] &lt;- as.data.frame(table(c)) }</p>
-<pre><code></code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2lnUGVyQ2hyb20gPC0gYXMuZGF0YS5mcmFtZSh0YWJsZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFJlZ3Jlc3Npb25NYXNrZWQkQWRqdXN0ZWRfTG9nMTBwID4gLWxvZzEwKDAuMDEpKSxdJENocikpXG5QZXJDaHJvbSA8LSBhcy5kYXRhLmZyYW1lKHRhYmxlKFJlZ3Jlc3Npb25NYXNrZWQkQ2hyKSlcbnNpZ1BlckNocm9tIDwtIG1lcmdlKHNpZ1BlckNocm9tLCBQZXJDaHJvbSwgYnk9J1ZhcjEnKVxuc2lnUGVyQ2hyb20kZGVuc2l0eSA8LSBzaWdQZXJDaHJvbSRGcmVxLngvc2lnUGVyQ2hyb20kRnJlcS55XG5nZ3Bsb3Qoc2lnUGVyQ2hyb20sIFxuICAgICAgIGFlcyh4PVZhcjEseT1kZW5zaXR5KSkrXG4gIGdlb21fYmFyKHN0YXQ9XCJpZGVudGl0eVwiKStcbiAgbGFicyh4PSdDaHJvbXNvbWUnLFxuICAgICAgIHk9J3Byb3BvcnRpb24gb2Ygc2lnbmlmaWNhbnQgdmFyaWFudHMnKVxuZ2dzYXZlKHBhc3RlMChmaWd1cmVQYXRoLFxuICAgICAgICAgICAgICAgICdDb3VudFBlckNocm9tLmpwZycpLCBcbiAgICAgICBoZWlnaHQ9NSwgXG4gICAgICAgd2lkdGg9MTApXG5DaHJvbUxlbmd0aCA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgJ0dSQ2gzN19DaHJvbUxlbmd0aC50eHQnKSxcbiAgICAgICAgICAgICAgICAgICAgIHNlcD0nXFx0JyxcbiAgICAgICAgICAgICAgICAgICAgIGNvbC5uYW1lcyA9IGMoJ0NocicsJ0xlbmd0aCcpKVxucGx0cyA8LSBsaXN0KClcbmJpbnMgPC0gbGlzdCgpXG5mb3IoY2hyb20gaW4gc2VxKDEsMjIsMSkpe1xuICBwcmludChjaHJvbSlcbiAgZGYgPC0gUmVncmVzc2lvbk1hc2tlZFt3aGljaCgoUmVncmVzc2lvbk1hc2tlZCRDaHIgPT0gY2hyb20pICZcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIChSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSkpLFxuICAgICAgICAgICAgICAgICAgIGMoJ0NocicsJ1BvcycpXVxuICBtYXNrIDwtIFJlZ3Jlc3Npb25bd2hpY2goKFJlZ3Jlc3Npb24kQ2hyID09IGNocm9tKSAmXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAoUmVncmVzc2lvbiRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPiAtbG9nMTAoMC4wMSkpICZcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIShSZWdyZXNzaW9uJHJzSUQgJWluJSBSZWdyZXNzaW9uTWFza2VkJHJzSUQpKSxcbiAgICAgICAgICAgICAgICAgICBjKCdDaHInLCdQb3MnKV1cbiAgXG4gIGwgPSBDaHJvbUxlbmd0aFt3aGljaChDaHJvbUxlbmd0aCRDaHIgPT0gY2hyb20pLFxuICAgICAgICAgICAgICAgICAgYygnTGVuZ3RoJyldW1sxXV1cbiAgYiA9IHNlcSgxLGwsYnk9MTAwMDApXG4gIGlmKGNocm9tID09IDEpe1xuICAgIHBsdHNbW2Nocm9tXV08LWdncGxvdChtYXNrLCBhZXMoeD1Qb3MpKSArXG4gICAgZ2VvbV9mcmVxcG9seShicmVha3MgPSBiLCBjb2xvciA9ICdncmV5NjAnKSArXG4gICAgZ2VvbV9mcmVxcG9seShkYXRhID0gZGYsIGJyZWFrcyA9IGIpICtcbiAgICB5bGltKDAsNTApK1xuICAgIHRoZW1lKGF4aXMudGV4dC54ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMudGlja3MueCA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgICBheGlzLmxpbmUgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgICAgcGxvdC5tYXJnaW4gPSBtYXJnaW4oMCwwLDAsMCksXG4gICAgICAgICAgYXhpcy50ZXh0PWVsZW1lbnRfdGV4dChzaXplPTYpLFxuICAgICAgICAgIGF4aXMudGl0bGU9ZWxlbWVudF90ZXh0KHNpemU9OCkpICsgXG4gICAgbGFicyh4PWNocm9tLHk9J1NpZ25pZmljYW50IHZhcmlhbnRzIHBlciAxMGtiIHdpbmRvdycpXG4gIH1cbiAgZWxzZXtcbiAgcGx0c1tbY2hyb21dXTwtZ2dwbG90KG1hc2ssIGFlcyh4PVBvcykpICtcbiAgICBnZW9tX2ZyZXFwb2x5KGJyZWFrcyA9IGIsIGNvbG9yID0gJ2dyZXk2MCcpICtcbiAgICBnZW9tX2ZyZXFwb2x5KGRhdGEgPSBkZiwgYnJlYWtzID0gYikgK1xuICAgIHlsaW0oMCw1MCkrXG4gICAgdGhlbWUoYXhpcy50ZXh0ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMudGlja3MgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgICAgYXhpcy50aXRsZS55ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICAgIGF4aXMubGluZSA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgICBwbG90Lm1hcmdpbiA9IG1hcmdpbigwLDAsMCwwKSxcbiAgICAgICAgICBheGlzLnRpdGxlPWVsZW1lbnRfdGV4dChzaXplPTgpKSArIFxuICAgIHhsYWIoY2hyb20pXG4gIH1cbiAgI2dldCBmcmVxIGNvdW50IHBlciBiaW5cbiAgYyA8LSBjdXQoZGYkUG9zLCBicmVha3MgPSBiKVxuICBiaW5zW1tjaHJvbV1dIDwtIGFzLmRhdGEuZnJhbWUodGFibGUoYykpXG59XG5cbmBgYCJ9 -->
+<pre class="r"><code>sigPerChrom &lt;- as.data.frame(table(RegressionMasked[which(RegressionMasked$Adjusted_Log10p &gt; -log10(0.01)),]$Chr))
+PerChrom &lt;- as.data.frame(table(RegressionMasked$Chr))
+sigPerChrom &lt;- merge(sigPerChrom, PerChrom, by='Var1')
+sigPerChrom$density &lt;- sigPerChrom$Freq.x/sigPerChrom$Freq.y
+ggplot(sigPerChrom, 
+       aes(x=Var1,y=density))+
+  geom_bar(stat=&quot;identity&quot;)+
+  labs(x='Chromsome',
+       y='proportion of significant variants')
+ggsave(paste0(figurePath,
+                'CountPerChrom.jpg'), 
+       height=5, 
+       width=10)
+ChromLength &lt;- fread(paste0(DataPath,
+                            'GRCh37_ChromLength.txt'),
+                     sep='\t',
+                     col.names = c('Chr','Length'))
+plts &lt;- list()
+bins &lt;- list()
+for(chrom in seq(1,22,1)){
+  print(chrom)
+  df &lt;- RegressionMasked[which((RegressionMasked$Chr == chrom) &amp;
+                           (RegressionMasked$Adjusted_Log10p 
+                            &gt; -log10(0.01))),
+                   c('Chr','Pos')]
+  mask &lt;- Regression[which((Regression$Chr == chrom) &amp;
+                           (Regression$Adjusted_Log10p 
+                            &gt; -log10(0.01)) &amp;
+                             !(Regression$rsID %in% RegressionMasked$rsID)),
+                   c('Chr','Pos')]
+  
+  l = ChromLength[which(ChromLength$Chr == chrom),
+                  c('Length')][[1]]
+  b = seq(1,l,by=10000)
+  if(chrom == 1){
+    plts[[chrom]]&lt;-ggplot(mask, aes(x=Pos)) +
+    geom_freqpoly(breaks = b, color = 'grey60') +
+    geom_freqpoly(data = df, breaks = b) +
+    ylim(0,50)+
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.line = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          axis.text=element_text(size=6),
+          axis.title=element_text(size=8)) + 
+    labs(x=chrom,y='Significant variants per 10kb window')
+  }
+  else{
+  plts[[chrom]]&lt;-ggplot(mask, aes(x=Pos)) +
+    geom_freqpoly(breaks = b, color = 'grey60') +
+    geom_freqpoly(data = df, breaks = b) +
+    ylim(0,50)+
+    theme(axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.y = element_blank(),
+          axis.line = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          axis.title=element_text(size=8)) + 
+    xlab(chrom)
+  }
+  #get freq count per bin
+  c &lt;- cut(df$Pos, breaks = b)
+  bins[[chrom]] &lt;- as.data.frame(table(c))
+}
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDFcblsxXSAyXG5bMV0gM1xuWzFdIDRcblsxXSA1XG5bMV0gNlxuWzFdIDdcblsxXSA4XG5bMV0gOVxuWzFdIDEwXG5bMV0gMTFcblsxXSAxMlxuWzFdIDEzXG5bMV0gMTRcblsxXSAxNVxuWzFdIDE2XG5bMV0gMTdcblsxXSAxOFxuWzFdIDE5XG5bMV0gMjBcblsxXSAyMVxuWzFdIDIyXG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDFcblsxXSAyXG5bMV0gM1xuWzFdIDRcblsxXSA1XG5bMV0gNlxuWzFdIDdcblsxXSA4XG4ifQ== -->
 <pre><code>[1] 1
 [1] 2
 [1] 3
@@ -875,41 +1005,8 @@ See problems(...) for more details.</code></pre>
 [1] 5
 [1] 6
 [1] 7
-[1] 8
-[1] 9
-[1] 10
-[1] 11
-[1] 12
-[1] 13
-[1] 14
-[1] 15
-[1] 16
-[1] 17
-[1] 18
-[1] 19
-[1] 20
-[1] 21
-[1] 22</code></pre>
+[1] 8</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIFRvdGFsQmlucyA8LSBiaW5zICU+JSBiaW5kX3Jvd3MoLmlkID0gXFxzb3VyY2VcXClcbmBgYFxuYGBgIn0= -->
-<p><code>r</code>r TotalBins &lt;- bins %&gt;% bind_rows(.id = )</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiVW5lcXVhbCBmYWN0b3IgbGV2ZWxzOiBjb2VyY2luZyB0byBjaGFyYWN0ZXJiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yYmluZGluZyBjaGFyYWN0ZXIgYW5kIGZhY3RvciB2ZWN0b3IsIGNvZXJjaW5nIGludG8gY2hhcmFjdGVyIHZlY3RvcmJpbmRpbmcgY2hhcmFjdGVyIGFuZCBmYWN0b3IgdmVjdG9yLCBjb2VyY2luZyBpbnRvIGNoYXJhY3RlciB2ZWN0b3JiaW5kaW5nIGNoYXJhY3RlciBhbmQgZmFjdG9yIHZlY3RvciwgY29lcmNpbmcgaW50byBjaGFyYWN0ZXIgdmVjdG9yXG4ifQ== -->
-<pre><code>Unequal factor levels: coercing to characterbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vectorbinding character and factor vector, coercing into character vector</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIHBwSGlzdCA8LSBnZ3Bsb3QoVG90YWxCaW5zLCBhZXMoeCA9IEZyZXEpKSArXG4gICAgICAgICAgICBnZW9tX2hpc3RvZ3JhbShiaW53aWR0aD0xKSArXG4gICAgICAgICAgICBzY2FsZV95X2xvZzEwKCkgK1xuICAgICAgICAgICAgdGhlbWVfY2xhc3NpYygpICtcbiAgICAgICAgICAgIGxhYnMoeD0nTnVtYmVyIG9mIFEtYXNzb2NpYXRlZCB2YXJpYW50cyBpbiBhIDEwa2Igd2luZG93JyxcbiAgICAgICAgICAgICAgICAgeT0nbG9nMTAgRnJlcXVlbmN5JylcbiAgICAgICAgICAgIFxucmVsV2lkdGhzIDwtIHVubGlzdChDaHJvbUxlbmd0aCRMZW5ndGgpLzEwMDAwMDAwMFxucmVsV2lkdGhzW1sxXV0gPC0gcmVsV2lkdGhzW1sxXV0qMS41XG5wIDwtIHBsb3RfZ3JpZChwbHRzW1sxXV0scGx0c1tbMl1dLHBsdHNbWzNdXSxwbHRzW1s0XV0scGx0c1tbNV1dLHBsdHNbWzZdXSxwbHRzW1s3XV0scGx0c1tbOF1dLHBsdHNbWzldXSxwbHRzW1sxMF1dLHBsdHNbWzExXV0scGx0c1tbMTJdXSxwbHRzW1sxM11dLHBsdHNbWzE0XV0scGx0c1tbMTVdXSxwbHRzW1sxNl1dLHBsdHNbWzE3XV0scGx0c1tbMThdXSxwbHRzW1sxOV1dLHBsdHNbWzIwXV0scGx0c1tbMjFdXSxwbHRzW1syMl1dLG5yb3c9MSxyZWxfd2lkdGhzID0gcmVsV2lkdGhzKVxucDIgPC0gcGxvdF9ncmlkKHAsIHBwSGlzdCxucm93PTIpXG5gYGBcbmBgYCJ9 -->
-<p><code>r</code>r ppHist &lt;- ggplot(TotalBins, aes(x = Freq)) + geom_histogram(binwidth=1) + scale_y_log10() + theme_classic() + labs(x=‘Number of Q-associated variants in a 10kb window’, y=‘log10 Frequency’)</p>
-<p>relWidths &lt;- unlist(ChromLength$Length)/100000000 relWidths[[1]] &lt;- relWidths[[1]]*1.5 p &lt;- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths) p2 &lt;- plot_grid(p, ppHist,nrow=2)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiVHJhbnNmb3JtYXRpb24gaW50cm9kdWNlZCBpbmZpbml0ZSB2YWx1ZXMgaW4gY29udGludW91cyB5LWF4aXNSZW1vdmVkIDI0IHJvd3MgY29udGFpbmluZyBtaXNzaW5nIHZhbHVlcyAoZ2VvbV9iYXIpLlxuIn0= -->
-<pre><code>Transformation introduced infinite values in continuous y-axisRemoved 24 rows containing missing values (geom_bar).</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ2dzYXZlKHBhc3RlMChmaWd1cmVQYXRoLFxuICAgICAgICAgICAgICAgICdWYXJpYW50RGVuc2l0eS5qcGcnKSwgXG4gICAgICAgaGVpZ2h0PTUsIFxuICAgICAgIHdpZHRoPTEwKVxuYGBgXG5gYGAifQ== -->
-<p><code>r</code>r ggsave(paste0(figurePath, ‘VariantDensity.jpg’), height=5, width=10)</p>
-<pre><code></code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 </div>
 </div>

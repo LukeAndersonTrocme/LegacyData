@@ -196,8 +196,8 @@ SFS <-
   scale_size(name = 'Suspicious\nvariant\ncount',
              breaks = c(1, 10, 100), 
              range = c(1, 6)) +
-  labs(x = "Nagahama frequency",
-       y = "1kGP JPT frequency") +
+  labs(x = "Nagahama alternate allele frequency",
+       y = "1kGP JPT alternate allele frequency") +
   scale_x_continuous(limits = c(-0.01,0.5)) +
   scale_y_continuous(limits = c(-0.01,0.5)) +
   theme(axis.line = element_blank(),
@@ -265,7 +265,7 @@ SNPplt <- SNPplt +
                SNP[which(SNP$chi_p < 0.00001),], 
              aes(x=End, y = Start), 
              shape = '*', 
-             color = 'black',
+             color = 'royalblue1',
              size = 10) 
 
 
