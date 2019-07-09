@@ -101,7 +101,7 @@ plt <- ggplot(data,
           plot.margin = unit(c(0,0,0,1.5), "lines")) +
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
-                        high = 'royalblue1',
+                        high = 'black',
                         guide = guide_legend(title = 'Variant\ncount',
                                              direction = 'vertical'))
 return(plt)
@@ -113,50 +113,120 @@ load data
 #load regression results
 Regression <- readRDS('/Users/luke/Documents/Legacy_Misc/Misc/Regression.Rmd')
 #load supplementary files from Mafessoni
-#t5 <- fread('/Users/luke/Downloads/evy199_supp/TableS5.bed',skip=1)
-#t7 <- fread('/Users/luke/Downloads/evy199_supp/TableS7.bed',skip=1)
-#t8 <- fread('/Users/luke/Downloads/evy199_supp/TableS8.bed',skip=1)
+#coding
+t4 <- read.table('/Users/luke/Downloads/evy199_supp/TableS4.bed', comment.char = "@", header = T)
+t4$type <- "rare_coding"
+t5 <- read.table('/Users/luke/Downloads/evy199_supp/TableS5.bed', comment.char = "@", header = T)
+t5$type <- "common_coding"
+#intergenic
+t6 <- read.table('/Users/luke/Downloads/evy199_supp/TableS6.bed', comment.char = "@", header = T)
+t6$type <- "common_intergenic"
+t7 <- read.table('/Users/luke/Downloads/evy199_supp/TableS7.bed', comment.char = "@", header = T)
+t7$type <- "rare_intergenic"
 
-t4 <- fread('/Users/luke/Downloads/evy199_supp/TableS4.bed',skip=1)
-t6 <- fread('/Users/luke/Downloads/evy199_supp/TableS6.bed',skip=1)
+#get total unique positions from most conservative tables
+totalT<- 
+  rbind(t4,t5,t6,t7) %>%
+  group_by(X.chr, end) %>% 
+  top_n(1) #keep unique positions only
 
-#get total unique positions from most conservative tables (i.e cutoff of 1% MAF)
-totalT<- unique(rbind(t4,t6))
+merged_regression <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('X.chr','end'), all.x=T)
+merged_regression[is.na(merged_regression)] <- 1
 
-Merged_Regression <- merge(Regression, totalT ,by.x = c('Chr','Pos'),by.y=c('V1','V3'), all.x=T)
-Merged_Regression[is.na(Merged_Regression)] <- 1
+#remove positions that don't pass strict mask
+merged_regression_masked <- 
+  anti_join(merged_regression, 
+            strictMask,
+            by = c('Chr','Pos','rsID'))
 
+#remove positions that DO pass strict mask
+merged_regression_unmasked <- 
+  anti_join(merged_regression, 
+            merged_regression_masked)
 
-Merged_Regression
+nrow(merged_regression)
+
+nrow(merged_regression_unmasked)
+
+nrow(merged_regression_masked)
+
+merged_regression_unmasked$strict_mask <- "Pass strict mask"
+merged_regression_masked$strict_mask <- "Fail strict mask"
+
+merged_regression <- rbind(merged_regression_masked, merged_regression_unmasked)
 ```
 
 ```{r}
 #select rows of interest
 #either present in Mafessoni OR significant in our data
-library(ggExtra)
 
-to_plot <- Merged_Regression %>%
-           filter(V5 < 1 | Adjusted_Log10p > 2)
+to_plot <- merged_regression %>%
+           filter(pvalue_glm_filt < 1 | Adjusted_Log10p > 2)
 
 p_comp <- 
   ggplot(to_plot, 
-       aes(x=Adjusted_Log10p, 
-           y= -log10(V5))) +
+         aes(x=Adjusted_Log10p, 
+             y= -log10(pvalue_glm_filt), 
+             color = strict_mask)) +
   geom_point(shape = 1,
              size = 1,
              alpha = 0.3) +
   labs(x = 'Q-association',
        y = 'LD-association') +
+  scale_color_grey(start = 0.1, end = 0.6) +
+  guides(color = F) +
+  facet_wrap(.~strict_mask)+
   theme_classic() +
   theme(axis.title = element_text(size = 20),
         axis.text = element_text(size = 20))
 
 p_comp
 ```
+```{r}
+#missing in Mafessoni
+p <- to_plot %>%
+  filter(strict_mask == 'Pass')
+
+m_maf <- p %>%
+           filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
+
+#missing in ours
+m_us <- p %>%
+           filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
+
+#present in both
+both <- p %>%
+           filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
+
+print(paste("missing in Mafessoni (Pass): ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(p)*100) )
+print(paste("missing in ours (Pass): ",nrow(m_us), "or : ",nrow(m_us)/nrow(p)*100))
+print(paste("present in both (Pass): ",nrow(both), "or : ",nrow(both)/nrow(p)*100))
+print(paste("total (Pass): ", nrow(p)))
+
+#missing in Mafessoni
+f <- to_plot %>%
+  filter(strict_mask == 'Fail')
+
+m_maf <- f %>%
+           filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
+
+#missing in ours
+m_us <- f %>%
+           filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
+
+#present in both
+both <- f %>%
+           filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
+
+print(paste("missing in Mafessoni (Fail): ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(f)*100) )
+print(paste("missing in ours (Fail): ",nrow(m_us), "or : ",nrow(m_us)/nrow(f)*100))
+print(paste("present in both (Fail): ",nrow(both), "or : ",nrow(both)/nrow(f)*100))
+print(paste("total (Fail): ", nrow(f)))
+```
 
 ```{r}
 mafessoni_snps <- 
-  totalT[,c('V1','V3')]
+  totalT[,c('X.chr','end')]
 
 write.table(mafessoni_snps, 
             file = paste0(DataPath,
@@ -216,24 +286,7 @@ ggsave(paste0(figurePath,
 m_plot
 ```
 
-```{r}
-#missing in Mafessoni 
-m_maf <- to_plot %>%
-           filter(V5 == 1 & Adjusted_Log10p > 2)
 
-#missing in ours
-m_us <- to_plot %>%
-           filter(V5 < 1 & Adjusted_Log10p < 2)
-
-#present in both
-both <- to_plot %>%
-           filter(V5 < 1 & Adjusted_Log10p > 2)
-
-print(paste("missing in Mafessoni : ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(to_plot)*100) )
-print(paste("missing in ours : ",nrow(m_us), "or : ",nrow(m_us)/nrow(to_plot)*100))
-print(paste("present in both : ",nrow(both), "or : ",nrow(both)/nrow(to_plot)*100))
-print(paste("total : ", nrow(to_plot)))
-```
 
 
 ```{r}
