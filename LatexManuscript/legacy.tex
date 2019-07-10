@@ -453,12 +453,9 @@ In these plots we are comparing the deviance from the null model in the 15,270 v
 \begin{figure}
 \includegraphics[width=\hsize,keepaspectratio]{../Figures/SNPOverlap6.jpg}
 
-\caption{Variants associated with average quality of mapped bases $Q$ in more than one population.
-The size of the vertical bars ( I ) are proportional to the -log10(p) value of that SNP.
-The x axis is ranked by the frequency of occurrence of a SNP, then by genomic position.
-Phase 1 populations are marked by a star ( * ).
-The line plot underneath shows the number of populations for which a variant has reached significance.
-The populations that tend to have the most individuals with low $Q$ also tend to have the most variants associated to $Q$.}
+\caption{Comparing results from the single population tests, we find 812 variants independently associated with average quality of mapped bases $Q$ in more than one population.
+\textbf{A} For each population, we plot the number of variants associated to at least one other population.
+\textbf{B} The number of populations for which a variant has reached significance.}
   \label{OverLap}
 \end{figure}
 
@@ -490,9 +487,10 @@ There are 23,111  variants ( 55\% ) that are $Q$-associated but not LD-associate
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=15cm,keepaspectratio]{../Figures/VariantDensity.jpg}
-\caption{The number of $Q$-associated variants per 10kb window across the genome.
+\caption{\textbf{A} The number of $Q$-associated variants per 10kb window across the genome.
 Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
-One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.}  
+One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.
+\textbf{B} Distribution of variant counts per 10kb window. Where variants that fail the strict mask are in grey and those that pass are in black. }  
 \label{VariantDensity}
 \end{figure}
 
