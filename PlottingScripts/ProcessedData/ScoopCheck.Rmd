@@ -185,7 +185,7 @@ p_comp
 ```{r}
 #missing in Mafessoni
 p <- to_plot %>%
-  filter(strict_mask == 'Pass')
+  filter(strict_mask == 'Pass strict mask')
 
 m_maf <- p %>%
            filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
@@ -205,7 +205,7 @@ print(paste("total (Pass): ", nrow(p)))
 
 #missing in Mafessoni
 f <- to_plot %>%
-  filter(strict_mask == 'Fail')
+  filter(strict_mask == 'Fail strict mask')
 
 m_maf <- f %>%
            filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)

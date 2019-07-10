@@ -451,14 +451,46 @@ for(chrom in seq(1,22,1)){
   bins[[chrom]] <- as.data.frame(table(c))
 }
 
- TotalBins <- bins %>% bind_rows(.id = "source")
- ppHist <- ggplot(TotalBins, aes(x = Freq)) +
-            geom_histogram(binwidth=1) +
-            scale_y_log10() +
-            theme_classic() +
-            labs(x='Number of Q-associated variants in a 10kb window',
-                 y='log10 Frequency')
-            
+ TotalBinCount <- 
+   bins %>% 
+   bind_rows(.id = "source") %>%
+   group_by(Freq) %>%
+   summarise(Count = n())
+ 
+ ppHist1 <- 
+   ggplot(TotalBinCount %>%
+            filter(Freq <= 5),
+          aes(x = Freq, y = Count)) +
+   geom_bar(stat="identity") +
+   scale_x_continuous(breaks = c(1,2,3,4,5))+
+   scale_y_log10() +
+   theme_classic() +
+   labs(x='',
+        y='log10 Count')
+ 
+ ppHist2 <- 
+   ggplot(TotalBinCount %>%
+            filter(Freq > 5),
+          aes(x = Freq, y = Count)) +
+   geom_bar(stat="identity") +
+   scale_x_continuous(breaks = c(6,7,8,9,10,35))+
+   theme_classic() +
+   labs(x='',
+        y='Count')
+ 
+ title <- 
+  ggdraw() + 
+  draw_label(paste0('Number of Q-associated variants in a 10kb window'),
+             size = 20)
+ ppHist <- 
+   plot_grid(title,
+             plot_grid(ppHist1, 
+                       ppHist2, 
+                       nrow=1, 
+                       rel_widths = c(1,3)),
+             ncol = 1,
+             rel_heights = c(1,5))
+  
 relWidths <- unlist(ChromLength$Length)/100000000
 relWidths[[1]] <- relWidths[[1]]*1.5
 p <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)

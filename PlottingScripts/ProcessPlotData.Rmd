@@ -260,7 +260,7 @@ Load mutation context and plot enrichment
 contextHeader = c('Chr','Pos','Ref','Alt','Flip','Context')
 
 #toggle for all snps or just JPT 1kGP snps
-name <-''#'strict.gcat.' #'gcat.' # '' #
+name <-'strict.gcat.' #'gcat.' # '' #
 
 #load SNP context
 SNP <- read.table(paste0(DataPath, name,'sig.pos.context.txt'), 

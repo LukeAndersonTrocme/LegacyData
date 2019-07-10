@@ -301,7 +301,7 @@ fig1 <- plot_grid(GWAS,
 ggsave(paste0(figurePath,
               'Figure1.jpg'),
        fig1, 
-       height = 20,
+       height = 21.25,
        width = 14)
 
 ```
@@ -571,7 +571,7 @@ plt <- ggplot(data,
           plot.margin = unit(c(0,0,0,1.5), "lines")) +
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
-                        high = 'royalblue1',
+                        high = 'black',
                         guide = guide_legend(title = 'count',
                                              direction = 'vertical'))
 return(plt)
@@ -583,12 +583,11 @@ chisq_min <- 5
 
 SNPplt <- SNPplt + 
   geom_point(data = 
-               SNP[which(SNP$Freq > chisq_min &
-                           SNP$chi_p < 1e-8),], 
+               SNP[which(SNP$chi_p < 0.00001),], 
              aes(x=End, y = Start), 
              shape = '*', 
-             color = 'black',
-             size = 6)
+             color = 'royalblue1',
+             size = 10) 
 
 
 mylegend <- g_legend(rSNPplt)
@@ -606,7 +605,6 @@ Mut_Spect_gcat <-
             rel_widths = c(1,0.15))
 
 Mut_Spect_gcat
-
 
 ggsave(paste0(figurePath,
               'strict_gcat_mutational_enrichment.jpg'),
