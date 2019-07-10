@@ -171,8 +171,8 @@ p_comp <-
   geom_point(shape = 1,
              size = 1,
              alpha = 0.3) +
-  labs(x = 'Q-association',
-       y = 'LD-association') +
+  labs(x = '-log10(p) Q-association',
+       y = '-log10(p) LD-association') +
   scale_color_grey(start = 0.1, end = 0.6) +
   guides(color = F) +
   facet_wrap(.~strict_mask)+
@@ -280,7 +280,7 @@ m_plot <-
 ggsave(paste0(figurePath,
               'Mafessoni_MutSpect.jpg'),
        m_plot, 
-       height = 12,
+       height = 10,
        width = 10)
 
 m_plot

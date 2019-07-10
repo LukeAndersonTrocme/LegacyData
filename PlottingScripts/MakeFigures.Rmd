@@ -446,7 +446,7 @@ See ProcessPlotData.Rmd for info on the overLap file
 overLap <- readRDS(paste0(DataPath,
                            'overLap.rds'))
 
-p1 <- ggplot(overLap, 
+ggplot(overLap, 
           aes(x = Pos,
               y = reorder(title, -Freq), 
               color = Population, 
@@ -469,8 +469,28 @@ p1 <- ggplot(overLap,
                 axis.text.x = element_blank(), 
                 axis.ticks.x = element_blank(), 
                 plot.margin = unit(c(1,1,0,1), "cm"))
-p1
 
+
+pop_count <- overLap %>%
+  select(Population, Chr, Pos) %>%
+  group_by(Population) %>%
+  summarise(count = n())
+
+p1 <- ggplot(pop_count, 
+       aes(x=reorder(Population, -count), 
+           y= count, 
+           fill = Population)) + 
+  geom_bar(stat="identity") +
+  scale_fill_manual(breaks = overLap$Population,
+                    values = MyColour) +
+  guides(fill = F) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title = element_text(size = 20)) +
+  labs(x = "Population",
+       y = "Number of variants Q-associated in at least two populations")
+
+p1
 ```
 
 ### Frequency of occurence
@@ -506,6 +526,24 @@ p2 <- ggplot(overLap,
                                               hjust = 1)) +
              labs(x = 'SNPs ranked by frequency of occurence and genomic position', 
                   y = 'Frequency\nof occurence')
+
+
+break_down <- overLap %>%
+  group_by(Chr,Pos) %>%
+  summarise(count = n()) %>%
+  group_by(count) %>%
+  summarise(freq = n()) %>%
+  filter(count > 1)
+
+p2 <- 
+  ggplot(break_down, aes(x = count, y = freq)) +
+  geom_bar(stat= "identity") +
+  scale_x_continuous(breaks = seq(1,13)) +
+  labs(x = "Number of populations with Q-associations to the same variant",
+       y = "Count") +
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size = 20))
+
 p2
 ```
 
@@ -514,19 +552,14 @@ put it all together and save it
 p3 <- plot_grid(p1, p2, 
                 ncol = 1, 
                 align = "v", 
-                rel_heights = c(3, 1))
+                rel_heights = c(3, 1), 
+                labels = c("A","B"))
 
 ggsave(paste0(figurePath,
               'SNPOverlap6.jpg'),
               p3, 
-              height = 8, 
-              width = 8)
-
-ggsave(paste0(figurePath,
-              'SNPOverlap6.PDF'),
-              p3, 
-              height = 8, 
-              width = 8)
+              height = 12, 
+              width = 12)
 
 p3
 ```

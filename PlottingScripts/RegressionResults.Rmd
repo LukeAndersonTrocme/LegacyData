@@ -405,6 +405,7 @@ ChromLength <- fread(paste0(DataPath,
                      col.names = c('Chr','Length'))
 plts <- list()
 bins <- list()
+bins_mask <- list()
 for(chrom in seq(1,22,1)){
   print(chrom)
   df <- RegressionMasked[which((RegressionMasked$Chr == chrom) &
@@ -449,6 +450,9 @@ for(chrom in seq(1,22,1)){
   #get freq count per bin
   c <- cut(df$Pos, breaks = b)
   bins[[chrom]] <- as.data.frame(table(c))
+  
+  c <- cut(mask$Pos, breaks = b)
+  bins_mask[[chrom]] <- as.data.frame(table(c))
 }
 
  TotalBinCount <- 
@@ -457,45 +461,38 @@ for(chrom in seq(1,22,1)){
    group_by(Freq) %>%
    summarise(Count = n())
  
- ppHist1 <- 
-   ggplot(TotalBinCount %>%
-            filter(Freq <= 5),
-          aes(x = Freq, y = Count)) +
-   geom_bar(stat="identity") +
-   scale_x_continuous(breaks = c(1,2,3,4,5))+
-   scale_y_log10() +
-   theme_classic() +
-   labs(x='',
-        y='log10 Count')
+  TotalBinCount_mask <- 
+   bins %>% 
+   bind_rows(.id = "source") %>%
+   group_by(Freq) %>%
+   summarise(Count = n()) 
  
- ppHist2 <- 
-   ggplot(TotalBinCount %>%
-            filter(Freq > 5),
-          aes(x = Freq, y = Count)) +
-   geom_bar(stat="identity") +
-   scale_x_continuous(breaks = c(6,7,8,9,10,35))+
-   theme_classic() +
-   labs(x='',
-        y='Count')
- 
- title <- 
-  ggdraw() + 
-  draw_label(paste0('Number of Q-associated variants in a 10kb window'),
-             size = 20)
+  TotalBinCount_mask$mask <- "Fail"
+  TotalBinCount$mask <- "Pass"
+  BinCount <- rbind(TotalBinCount, TotalBinCount_mask)
  ppHist <- 
-   plot_grid(title,
-             plot_grid(ppHist1, 
-                       ppHist2, 
-                       nrow=1, 
-                       rel_widths = c(1,3)),
-             ncol = 1,
-             rel_heights = c(1,5))
+   ggplot(BinCount,
+          aes(x = Freq, y = Count, color = mask)) +
+   geom_point(shape = 1 ) +
+   scale_y_log10()+
+   scale_color_manual(values = c("grey60", "black")) +
+   guides(color=guide_legend(title="Strict mask")) +
+   theme_classic() +
+   labs(x='Number of Q-associated variants in a 10kb window',
+        y='-log10(count)')
+ 
+ 
   
 relWidths <- unlist(ChromLength$Length)/100000000
 relWidths[[1]] <- relWidths[[1]]*1.5
 p <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
 
-p2 <- plot_grid(p, ppHist,nrow=2)
+p2 <- plot_grid(NULL,
+                p, 
+                ppHist,
+                nrow=3, 
+                rel_heights = c(1,5,5),
+                labels = c("A","","B"))
 
 ggsave(paste0(figurePath,
                 'VariantDensity.jpg'), 
