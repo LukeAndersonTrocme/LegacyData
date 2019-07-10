@@ -396,32 +396,16 @@ bedtools subtract \
 <h2>Load Data</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyNyZWFkIFJlZ3Jlc3Npb24gcmVzdWx0c1xuUmVncmVzc2lvbiA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ0dlbm9tZVdpZGVfTEZBLnR4dCcpLFxuICAgICAgICAgICAgICAgICAgICBmaWxsID0gVFJVRSxcbiAgICAgICAgICAgICAgICAgICAgY29sLm5hbWVzID0gYygncnNJRCcsJ2RldmRpZmYnLCdkZXZfbG9ncCcsJ2InKSxcbiAgICAgICAgICAgICAgICAgICAgY29sQ2xhc3NlcyA9IGMoJ2NoYXJhY3RlcicsJ251bWVyaWMnLCdudW1lcmljJywnbnVtZXJpYycpKVxuXG4jI3JlYWQgUmVwZWF0c1xuUmVwZWF0cyA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ1JlZ19zdHJpY3RNYXNrX25lc3RlZFJlcGVhdHMuUE9TJyksXG4gICAgICAgICAgICAgICAgIGZpbGwgPSBUUlVFLFxuICAgICAgICAgICAgICAgICBjb2wubmFtZXMgPSBjKCdDaHInLCdQb3MnKSlcblJlcGVhdHMkUmVwZWF0PSd5ZXMnXG5cbiMjcmVhZCBJbmRlbHNcbkluZGVscyA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ1JlZ19pbmRlbHMuUE9TJyksXG4gICAgICAgICAgICAgICAgaGVhZGVyID0gVFJVRSlcbkluZGVscyRJbmRlbCA9ICd5ZXMnXG5cbiNyZWFkIGluIHJzSURzICh1c2VkIGZvciBHV0FTIGNhdGFsb2d1ZSBzZWFyY2gpXG5yc0lEPC1mcmVhZChwYXN0ZTAoRGF0YVBhdGgsJ3JzSUQudHh0JyksXG4gICAgICAgICAgICBjb2wubmFtZXMgPSBjKCdDaHInLCdQb3MnLCdyc0lEJykpXG5cbnN0cmljdE1hc2sgPC0gZnJlYWQocGFzdGUwKERhdGFQYXRoLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgJzFrR1BfU3RyaWN0TWFzay5iZWQnKSxcbiAgICAgICAgICAgIGNvbC5uYW1lcyA9IGMoJ0NocicsJ1BvcycsJ1Bvcy4xJywncnNJRCcpKVxuYGBgIn0= -->
-<pre class="r"><code>##read Regression results
-Regression &lt;- fread(paste0(DataPath,'GenomeWide_LFA.txt'),
-                    fill = TRUE,
-                    col.names = c('rsID','devdiff','dev_logp','b'),
-                    colClasses = c('character','numeric','numeric','numeric'))
-
-##read Repeats
-Repeats &lt;- fread(paste0(DataPath,'Reg_strictMask_nestedRepeats.POS'),
-                 fill = TRUE,
-                 col.names = c('Chr','Pos'))
-Repeats$Repeat='yes'
-
-##read Indels
-Indels &lt;- fread(paste0(DataPath,'Reg_indels.POS'),
-                header = TRUE)
-Indels$Indel = 'yes'
-
-#read in rsIDs (used for GWAS catalogue search)
-rsID&lt;-fread(paste0(DataPath,'rsID.txt'),
-            col.names = c('Chr','Pos','rsID'))
-
-strictMask &lt;- fread(paste0(DataPath,
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyaWN0TWFzayA8LSBmcmVhZChwYXN0ZTAoRGF0YVBhdGgsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAnMWtHUF9TdHJpY3RNYXNrLmJlZCcpLFxuICAgICAgICAgICAgY29sLm5hbWVzID0gYygnQ2hyJywnUG9zJywnUG9zLjEnLCdyc0lEJykpXG5cbmBgYCJ9 -->
+<pre class="r"><code>strictMask &lt;- fread(paste0(DataPath,
                            '1kGP_StrictMask.bed'),
-            col.names = c('Chr','Pos','Pos.1','rsID'))</code></pre>
+            col.names = c('Chr','Pos','Pos.1','rsID'))
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoifC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tfFxufD09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09fFxuIn0= -->
+<pre><code>|--------------------------------------------------|
+|==================================================|</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -473,6 +457,101 @@ NORepeat_SNPs &lt;- NORepeat_SNPs[which(!is.na(NORepeat_SNPs$Chr)),]</code></pre
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgdHdvLXN0YWdlIEJlbmphbWluaSAmIEhvY2hiZXJnICgyMDA2KSBzdGVwLXVwIEZEUi1jb250cm9sbGluZ1xuVFNCSCA8LWZ1bmN0aW9uKGRmKXtcdFxucHJvY2VkdXJlcyA8LSBjKCBcIlRTQkhcIikgXG5cbmRmJHAgPC0gcGNoaXNxKGRmJGRldmRpZmYsXG4gICAgICAgICAgICAgICAxLFxuICAgICAgICAgICAgICAgbG93ZXIudGFpbCA9IEZBTFNFKVxuXG5hZGp1c3RlZCA8LSBtdC5yYXdwMmFkanAoZGYkcCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgcHJvY2VkdXJlcywgXG4gICAgICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLjAxKVxuXG5hZGogPC0gYXMuZGF0YS5mcmFtZShhZGp1c3RlZCRhZGpbXG4gICAgICAgICAgICAgIG9yZGVyKGFkanVzdGVkJGluZGV4KSxdKVxuXG5kZiRBZGp1c3RlZF9Mb2cxMHAgPC0gLWxvZzEwKGFkaiRUU0JIXzAuMDEpXG5kZiRBZGp1c3RlZF9wIDwtIGFkaiRUU0JIXzAuMDFcblxucmV0dXJuKGRmKVxufVxuXG5SZXBlYXRfSW5kZWxzIDwtVFNCSChSZXBlYXRfSW5kZWxzKVxuTk9SZXBlYXRfSW5kZWxzIDwtVFNCSChOT1JlcGVhdF9JbmRlbHMpXG5SZXBlYXRfU05QcyA8LVRTQkgoUmVwZWF0X1NOUHMpXG5OT1JlcGVhdF9TTlBzIDwtVFNCSChOT1JlcGVhdF9TTlBzKVxuXG5SZWdyZXNzaW9uIDwtIGRvLmNhbGwoXCJyYmluZFwiLCBcbiAgICAgICAgICAgICAgICAgICAgICBsaXN0KFJlcGVhdF9JbmRlbHMsIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgTk9SZXBlYXRfSW5kZWxzLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIFJlcGVhdF9TTlBzLCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIE5PUmVwZWF0X1NOUHMpKVxuXG4jcmVtb3ZlIHBvc2l0aW9ucyB0aGF0IGRvbid0IHBhc3Mgc3RyaWN0IG1hc2tcblJlZ3Jlc3Npb25NYXNrZWQgPC0gYW50aV9qb2luKFJlZ3Jlc3Npb24sIFxuICAgICAgICAgICAgICAgICAgICAgICAgc3RyaWN0TWFzayxcbiAgICAgICAgICAgICAgICAgICAgICAgIGJ5ID0gYygnQ2hyJywnUG9zJywncnNJRCcpKVxuXG53cml0ZS50YWJsZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksXSAkIHJzSUQsIFxuICAgICAgICAgICAgZmlsZSA9IHBhc3RlMChEYXRhUGF0aCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICdTaWduaWZpY2FudF9yc0lELnR4dCcpLFxuICAgICAgICAgICAgcXVvdGUgPSBGQUxTRSxcbiAgICAgICAgICAgIHJvdy5uYW1lcyA9IEZBTFNFLFxuICAgICAgICAgICAgY29sLm5hbWVzID0gRkFMU0UpXG5cbndyaXRlLnRhYmxlKFJlZ3Jlc3Npb25NYXNrZWRbd2hpY2goXG4gICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgID4gLWxvZzEwKDAuMDEpKSxjKCdDaHInLCdQb3MnKV0sIFxuICAgICAgICAgICAgZmlsZSA9IHBhc3RlMChEYXRhUGF0aCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICdTaWduaWZpY2FudF9Qb3NpdGlvbnMudHh0JyksXG4gICAgICAgICAgICBxdW90ZSA9IEZBTFNFLFxuICAgICAgICAgICAgcm93Lm5hbWVzID0gRkFMU0UsXG4gICAgICAgICAgICBjb2wubmFtZXMgPSBGQUxTRSxcbiAgICAgICAgICAgIHNlcCA9ICdcXHQnKVxuXG53cml0ZS50YWJsZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksYygnQ2hyJywnUG9zJywncnNJRCcsJ2InLCdBZGp1c3RlZF9Mb2cxMHAnKV0sIFxuICAgICAgICAgICAgZmlsZSA9IHBhc3RlMChEYXRhUGF0aCwgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICdTaWduaWZpY2FudF9Qb3NpdGlvbnNfYW5kX1B2YWxzLnR4dCcpLFxuICAgICAgICAgICAgcXVvdGUgPSBGQUxTRSxcbiAgICAgICAgICAgIHJvdy5uYW1lcyA9IEZBTFNFLFxuICAgICAgICAgICAgc2VwID0gJ1xcdCcpXG5cbm5zaWdSZXBJbmRlbCA8LSBucm93KHVuaXF1ZShSZWdyZXNzaW9uTWFza2VkW3doaWNoKFxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEluZGVsPT0neWVzJyAmXG4gICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb25NYXNrZWQkUmVwZWF0PT0neWVzJyAmXG4gICAgICAgICAgICAgICAgICAgIFJlZ3Jlc3Npb25NYXNrZWQkQWRqdXN0ZWRfTG9nMTBwIFxuICAgICAgICAgICAgICAgICAgICA+IC1sb2cxMCgwLjAxKSksXSkpXG5cbm5zaWdSZXBTTlAgPC0gbnJvdyh1bmlxdWUoUmVncmVzc2lvbk1hc2tlZFt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgaXMubmEoUmVncmVzc2lvbk1hc2tlZCRJbmRlbCkgJlxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJFJlcGVhdD09J3llcycgJlxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgICAgICAgICAgPiAtbG9nMTAoMC4wMSkpLF0pKVxuXG5uc2lnTm9uUmVwSW5kZWwgPC0gbnJvdyh1bmlxdWUoUmVncmVzc2lvbk1hc2tlZFt3aGljaChcbiAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRJbmRlbD09J3llcycgJlxuICAgICAgICAgICAgICAgICAgICBpcy5uYShSZWdyZXNzaW9uTWFza2VkJFJlcGVhdCkgJlxuICAgICAgICAgICAgICAgICAgICBSZWdyZXNzaW9uTWFza2VkJEFkanVzdGVkX0xvZzEwcCBcbiAgICAgICAgICAgICAgICAgICAgPiAtbG9nMTAoMC4wMSkpLF0pKVxuXG5uc2lnTm9uUmVwU05QIDwtIG5yb3codW5pcXVlKFJlZ3Jlc3Npb25NYXNrZWRbd2hpY2goXG4gICAgICAgICAgICAgICAgICAgIGlzLm5hKFJlZ3Jlc3Npb25NYXNrZWQkSW5kZWwpICZcbiAgICAgICAgICAgICAgICAgICAgaXMubmEoUmVncmVzc2lvbk1hc2tlZCRSZXBlYXQpICZcbiAgICAgICAgICAgICAgICAgICAgUmVncmVzc2lvbk1hc2tlZCRBZGp1c3RlZF9Mb2cxMHAgXG4gICAgICAgICAgICAgICAgICAgID4gLWxvZzEwKDAuMDEpKSxdKSlcblxucHJpbnQocGFzdGUwKCdSZXBlYXQgSW5kZWxzIDogJyxuc2lnUmVwSW5kZWwsXG4gICAgICAgICAgICAgJyBSZXBlYXQgU05QcyA6ICcsbnNpZ1JlcFNOUCxcbiAgICAgICAgICAgICAnIE5vblJlcGVhdCBJbmRlbHMgOiAnLG5zaWdOb25SZXBJbmRlbCxcbiAgICAgICAgICAgICAnIE5vblJlcGVhdCBTTlBzIDogJyxuc2lnTm9uUmVwU05QKSlcbmBgYCJ9 -->
+<pre class="r"><code>## two-stage Benjamini &amp; Hochberg (2006) step-up FDR-controlling
+TSBH &lt;-function(df){    
+procedures &lt;- c( &quot;TSBH&quot;) 
+
+df$p &lt;- pchisq(df$devdiff,
+               1,
+               lower.tail = FALSE)
+
+adjusted &lt;- mt.rawp2adjp(df$p, 
+                         procedures, 
+                         alpha = 0.01)
+
+adj &lt;- as.data.frame(adjusted$adj[
+              order(adjusted$index),])
+
+df$Adjusted_Log10p &lt;- -log10(adj$TSBH_0.01)
+df$Adjusted_p &lt;- adj$TSBH_0.01
+
+return(df)
+}
+
+Repeat_Indels &lt;-TSBH(Repeat_Indels)
+NORepeat_Indels &lt;-TSBH(NORepeat_Indels)
+Repeat_SNPs &lt;-TSBH(Repeat_SNPs)
+NORepeat_SNPs &lt;-TSBH(NORepeat_SNPs)
+
+Regression &lt;- do.call(&quot;rbind&quot;, 
+                      list(Repeat_Indels, 
+                           NORepeat_Indels, 
+                           Repeat_SNPs, 
+                           NORepeat_SNPs))
+
+#remove positions that don't pass strict mask
+RegressionMasked &lt;- anti_join(Regression, 
+                        strictMask,
+                        by = c('Chr','Pos','rsID'))
+
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),] $ rsID, 
+            file = paste0(DataPath, 
+                          'Significant_rsID.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE)
+
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),c('Chr','Pos')], 
+            file = paste0(DataPath, 
+                          'Significant_Positions.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE,
+            sep = '\t')
+
+write.table(RegressionMasked[which(
+            RegressionMasked$Adjusted_Log10p 
+            &gt; -log10(0.01)),c('Chr','Pos','rsID','b','Adjusted_Log10p')], 
+            file = paste0(DataPath, 
+                          'Significant_Positions_and_Pvals.txt'),
+            quote = FALSE,
+            row.names = FALSE,
+            sep = '\t')
+
+nsigRepIndel &lt;- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &amp;
+                    RegressionMasked$Repeat=='yes' &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+
+nsigRepSNP &lt;- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &amp;
+                    RegressionMasked$Repeat=='yes' &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+
+nsigNonRepIndel &lt;- nrow(unique(RegressionMasked[which(
+                    RegressionMasked$Indel=='yes' &amp;
+                    is.na(RegressionMasked$Repeat) &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+
+nsigNonRepSNP &lt;- nrow(unique(RegressionMasked[which(
+                    is.na(RegressionMasked$Indel) &amp;
+                    is.na(RegressionMasked$Repeat) &amp;
+                    RegressionMasked$Adjusted_Log10p 
+                    &gt; -log10(0.01)),]))
+
+print(paste0('Repeat Indels : ',nsigRepIndel,
+             ' Repeat SNPs : ',nsigRepSNP,
+             ' NonRepeat Indels : ',nsigNonRepIndel,
+             ' NonRepeat SNPs : ',nsigNonRepSNP))</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
