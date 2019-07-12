@@ -250,7 +250,7 @@ From the perspective of researchers, they act as black-box imputation machines t
 To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
 This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
-These $Q$-associated variants could also compromise the imputation of nearby real-variants causing not only improper imputation, but also false negatives for real variants.
+These $Q$-associated variants could also compromise the imputation of nearby real-variants, however when considering the imputation scores of genotype data from Japanese individuals from Nagahama, there does not appear to be any impact on nearby variant imputation scores (Figure \ref{imputation_score}).
 
 We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
 The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
@@ -503,6 +503,14 @@ One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 
 \caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the 10kb window with the most  $Q$-associated variants per 10kb across the genome.}  
 \label{Top10}
 \end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=10cm,keepaspectratio]{../Figures/Imputation_Distance_100s_gw.jpg}
+\caption{Imputation scores are not impacted by nearby suspicious variants. By comparing the imputation scores from Japanese Nagahama genotype data to the distance from the nearest suspicious variant, we find no impact on nearby variants. The only variants that do appear to have lower imputation scores are the suspicious variants themselves with a distance of zero on the plot. }  
+\label{imputation_score}
+\end{figure}
+
 
 \begin{figure}[tbp]
 \centering
