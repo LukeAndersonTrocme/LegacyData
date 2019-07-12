@@ -171,13 +171,11 @@ This variability could result from evolving sequence platform and protocols or v
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 23 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
-
-\sgcomment{initially was: Over 812 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each.}
-
-Over 1,165 variants were independently associated to low $Q$ with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
+Over 812 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each.
 
 
-To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
+
+To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or \sgcomment{"or" in this context is ambiguous. Do you mean "this approach is called ..." or do you mean something else?} Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
 These models were broadly consistent (See Figure \ref{CompareModel}).
 
