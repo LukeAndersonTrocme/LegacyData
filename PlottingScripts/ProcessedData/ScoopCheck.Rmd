@@ -102,6 +102,7 @@ plt <- ggplot(data,
     scale_fill_gradient(limits = c(0, maxFreq),
                         low = 'white', 
                         high = 'black',
+                        breaks = c(100,250,500),
                         guide = guide_legend(title = 'Variant\ncount',
                                              direction = 'vertical'))
 return(plt)
@@ -150,8 +151,8 @@ nrow(merged_regression_unmasked)
 
 nrow(merged_regression_masked)
 
-merged_regression_unmasked$strict_mask <- paste0("Pass strict mask (",nrow(merged_regression_unmasked),")")
-merged_regression_masked$strict_mask <- paste0("Fail strict mask (",nrow(merged_regression_masked),")")
+merged_regression_unmasked$strict_mask <- "Pass strict mask"
+merged_regression_masked$strict_mask <- "Fail strict mask"
 
 merged_regression <- rbind(merged_regression_masked, merged_regression_unmasked)
 ```
@@ -161,7 +162,7 @@ merged_regression <- rbind(merged_regression_masked, merged_regression_unmasked)
 #either present in Mafessoni OR significant in our data
 
 to_plot <- merged_regression %>%
-           filter(pvalue_glm_filt < 1 | Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt < 1 | Adjusted_Log10p > 2)
 
 p_comp <- 
   ggplot(to_plot, 
@@ -185,18 +186,18 @@ p_comp
 ```{r}
 #missing in Mafessoni
 p <- to_plot %>%
-  filter(strict_mask == 'Pass strict mask')
+  dplyr::filter(strict_mask == paste0("Pass strict mask (",nrow(merged_regression_unmasked),")"))
 
 m_maf <- p %>%
-           filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
 
 #missing in ours
 m_us <- p %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
 
 #present in both
 both <- p %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
 
 print(paste("missing in Mafessoni (Pass): ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(p)*100) )
 print(paste("missing in ours (Pass): ",nrow(m_us), "or : ",nrow(m_us)/nrow(p)*100))
@@ -205,18 +206,18 @@ print(paste("total (Pass): ", nrow(p)))
 
 #missing in Mafessoni
 f <- to_plot %>%
-  filter(strict_mask == 'Fail strict mask')
+  dplyr::filter(strict_mask == paste0("Fail strict mask (",nrow(merged_regression_masked),")"))
 
 m_maf <- f %>%
-           filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
 
 #missing in ours
 m_us <- f %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
 
 #present in both
 both <- f %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
 
 print(paste("missing in Mafessoni (Fail): ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(f)*100) )
 print(paste("missing in ours (Fail): ",nrow(m_us), "or : ",nrow(m_us)/nrow(f)*100))
@@ -225,15 +226,15 @@ print(paste("total (Fail): ", nrow(f)))
 
 
 m_maf <- to_plot %>%
-           filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt == 1 & Adjusted_Log10p > 2)
 
 #missing in ours
 m_us <- to_plot %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p < 2)
 
 #present in both
 both <- to_plot %>%
-           filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
+           dplyr::filter(pvalue_glm_filt < 1 & Adjusted_Log10p > 2)
 
 print(paste("missing in Mafessoni (total): ",nrow(m_maf), "or : ", nrow(m_maf)/nrow(to_plot)*100) )
 print(paste("missing in ours (total): ",nrow(m_us), "or : ",nrow(m_us)/nrow(to_plot)*100))
