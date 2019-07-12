@@ -197,8 +197,8 @@ A recent publication by Mafessoni et al. also identified a batch effect in the 1
 They identify 17,917 variants significantly associated to abnormal LD patterns that are not associated to $Q$.
 We find that 1,279 ( 3\% ) of the variants they identified are also in our list of suspicious variants and have correlated p-values to those identified using the GCAT method.
 We also find 23,111 $Q$-associated variants that are not associated to abnormal LD patterns. 
-Interestingly, the variants identified my Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}B).
-These results indicate that there may a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.
+Interestingly, the variants identified by Mafessoni et al. are not enriched in the mutational spectra described above (Figure \ref{Mafessoni_MutSpect}B).
+These results indicate that there may be a multitude of batch effects in the 1kGP that can only be identified using a suite of association tests.
 
 
 \begin{table}[h!]
@@ -233,7 +233,7 @@ Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic
 The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, suggesting that they are spurious variants.
 Five variants show differing frequencies between both datasets and are likely explained by biased genotypes.
 Finally, 1,139 (or 18\%) are present in the resequenced data at comparable frequencies.
-Because this is higher than the false discovery rate, we conclude that the cohort-wide GCAT test identifies predominantly spurious variants, but also variants that have biased genotypes in populations other than the CHB/CHD. 
+Because this is higher than the false discovery rate, we conclude that the cohort-wide GCAT test identifies predominantly spurious variants, but also variants that have biased genotypes. The similarity in allele frequencies for these variants suggests that the biases in allele frequencies are present in populations other than the CHB and CHD. 
 
 Finally, among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
 These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
@@ -246,7 +246,7 @@ From the perspective of researchers, they act as black-box imputation machines t
 
 To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
 We found that all of the variants associated with $Q$ were imputed back in the samples.
-This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
+This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the individuals with low $Q$.
 These $Q$-associated variants could also compromise the imputation of nearby real-variants, however when considering the imputation scores of genotype data from Japanese individuals from Nagahama, there does not appear to be any impact on nearby variant imputation scores (Figure \ref{imputation_score}).
 
 We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
