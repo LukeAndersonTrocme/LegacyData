@@ -216,23 +216,24 @@ The number of variants included in the analysis for SNPs, SNPs in repeat regions
 \label{sigTable}
 \end{table}
 
-\subsection{Cell line or technical artifact}
-To assess whether $Q$-associated variants result from sequencing artifacts, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
-Variants that do not reproduce across cohorts are likely the result of sequencing artifacts. 
-Variants that do reproduce across studies could result from (recurrent) cell line mutations or, more likely, from existing variants whose accurate genotyping depends on $Q$.   
+\subsection{Spurious variants, biased genotypes, or cell line artefacts?}
+To assess whether $Q$-associated variants are spurious variants resulting from sequencing artifacts or real variants exhibiting biased genotyping, we compare the original 1kGP sequence data to more recent sequencing efforts using the same cell lines.
+$Q$-associated variants that do not reproduce across sequencing experiments are likely the result of sequencing artifacts in the 1kGP. By contrast, 
+$Q$-associated variants that do reproduce across studies could result from (recurrent) cell line mutations or, more likely, from existing variants whose accurate genotyping depends on $Q$. Finally, given our nominal false discovery rate of $\alpha = 0.01$, we expect approximately $1\%$ of $Q$-associated variants to be false discoveries, i.e., variants that are not associated with $Q$ and that should therefore reproduce across experiments. 
+
 
 In 2017, Lan et al. resequenced 83 Han Chinese individuals from the 1kGP \citep{Lan2017}. 
 %To assess consistency between the two datasets, we consider consistency of genotype calls for $Q$-associated variants that are predicted to be polymorphic in these 83 individuals according to the 1kGP.
-Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}). 
-This is more than the 2.96 predicted false positives according to our nominal false discovery rate of $\alpha = 0.01$. 
-Thus a small number of variants associated to $Q$ in the JPT are present in the population but with biased genotypes. 
+Among the 296 such variants that were $Q$-associated in the CHB or CHS, only 6 are present in the resequenced data (Figure \ref{90HanSFS}).   
+This is slightly more but consistent with the 3 false positives predicted according to the $\alpha = 0.01$ nominal false discovery rate. 
+Thus the majority of $Q$-associated variants in the CHB or CHS  appear to be spurious variants. 
 
 We did a similar analysis using all variants identified in the GCAT model (rather than only variants significantly associated to $Q$ within the CHB and CHS). 
 Of the 15,270 $Q$-associated variants identified globally, 6,307 are polymorphic in the 1kGP for the 83 resequenced individuals  (See Figure \ref{90HanSFS_full}).
-The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, supporting sequencing rather than cell line artifacts.
+The vast majority of polymorphisms associated with $Q$ are not present at all in the resequencing dataset, suggesting that they are spurious variants.
 Five variants show differing frequencies between both datasets and are likely explained by biased genotypes.
-Finally, 1,139 (or 18\%) are present in the resequenced data.
-The allele frequencies of these variants are nearly identical between datasets suggesting that variant calls are accurate for these 83 individuals. This is likely because these variants have biased genotypes in populations other than the CHB/CHD. 
+Finally, 1,139 (or 18\%) are present in the resequenced data at comparable frequencies.
+Because this is higher than the false discovery rate, we conclude that the cohort-wide GCAT test identifies not only spurious variants, but also variants that have biased genotypes in populations other than the CHB/CHD. 
 
 %Some mutational signatures are heterogenous where not all suspicious variants are completely spurious in all individuals or populations. 
 %Some mutational signatures reproduce across cohorts, whereas others do not and may be due to the different sequencing platforms used.
