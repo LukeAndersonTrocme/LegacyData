@@ -52,7 +52,7 @@
 
 \maketitle
 \begin{abstract}
-Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a previously unreported batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and a small number of suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to contaminate modern studies in hidden ways. It may be time to retire or upgrade such legacy sequencing data.
+Recent reports have identified differences in the mutational spectra across human populations. While some of these reports have been replicated in other cohorts, most have been reported only in the 1000 Genomes Project (1kGP) data. While investigating an intriguing putative population stratification within the Japanese population, we identified a batch effect leading to spurious mutation calls in the 1kGP data and to the apparent population stratification. Because the 1kGP data is used extensively, we find that the batch effects also lead to incorrect imputation by leading imputation servers and a small number of suspicious GWAS associations. Lower-quality data from the early phases of the 1kGP thus continues to contaminate modern studies in hidden ways. It may be time to retire or upgrade such legacy sequencing data.
 \vspace{5mm}
 
 \textbf{Key words} : Batch Effect, Mutational Signature, Statistical Genetics, Population Genetics, Reference Cohorts, Imputation
@@ -69,7 +69,7 @@ Many more genomes are available indirectly through servers providing imputation 
 The first genomes in the 1kGP were sequenced 10 years ago \citep{VanDijk2014}. Since then, sequencing platforms have rapidly improved.  
 The second phase of the 1kGP implemented multiple technological and analytical improvements over its earlier phases \citep{The1000GenomesProjectConsortium2012,phase3}, leading to heterogeneous sample preparations and data quality over the course of the project.
 
-Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used to impute untyped variants, to estimate allele frequencies, and to answer a wide range of medical and evolutionary questions.
+Yet, because of the extraordinary value of freely available data, early data from the 1kGP is still widely used to impute untyped variants to estimate allele frequencies and to answer a wide range of medical and evolutionary questions.
 This raises the question of whether and how such legacy data should be included in contemporary analyses alongside more recent cohorts.
 Mafessoni et al. recently identified batch effects in the 1kGP by looking for individuals with excess LD among distant variants. \citep{mafessoni2018turning}.
 Here we point out how these and additional unreported batch effects in the early phases of the 1kGP lead to incorrect genetic conclusions through population genetic analyses and spurious GWAS associations as a result of imputation using the 1kGP as a reference.
@@ -130,9 +130,9 @@ Stars ( * ) indicate a significant deviation from the expected mutational spectr
 \subsection{A peculiar mutational signature in Japan}			
 	
 Harris and Pritchard reported an excess of a 3-mer substitution patterns *AC${\rightarrow}$*CC in a portion of the Japanese individuals in the 1kGP \citep{Harris2017a}.
-Our initial goal was to determine whether this signature could be explained by population structure or technological error.
+Our initial goal was to determine whether this signature could be explained by population structure or by technological bias.
 While trying to follow up on this observation in a larger and more recent Japanese cohort from Nagahama, we did not find this particular signature.
-When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}).
+When comparing the allele frequencies between the Japanese individuals from the 1kGP and this larger dataset, we observed a number of single nucleotide polymorphisms (SNPs) private to one of the two groups (Figure \ref{SFS}B).
 Given the similarity of the two populations, this strongly suggests a technical difference rather than a population structure effect.
 These mismatches were maintained despite only considering sites that satisfied strict quality masks and Hardy-Weinberg equilibrium in both cohorts.
 
@@ -158,12 +158,12 @@ We use logistic regression of the genotypes on $Q$ and identify 587 SNPs with $p
 While identifying putative low-quality SNPs to exclude, using a higher $p$-value threshold increases the stringency of the filtering (i.e., excluding SNPs with $ p < 10^{-6}$ is more stringent than excluding SNPS with $p < 10^{-8}$). 
 The variants that are associated to $Q$ have a significant enrichment in *AC${\rightarrow}$*CC mutations, GA*${\rightarrow}$GG*, and GC*${\rightarrow}$GG* mutations (Figure \ref{SFS}C).
 These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* in individuals with low $Q$.
-Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}.
+Statistical significance of these enrichments is computed using a chi-squared test following \cite{Harris2017a}.
 
 Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps}).
 The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
-For other analyses where quality of imputation matters, identifying $Q$-associated variants may be preferable. 
+For other analyses where quality of imputation matters, identifying and discarding $Q$-associated variants may be preferable. 
 
 \subsection{Identifying suspicious variants in the 1000 Genomes Project}
 The distribution of $Q$ across 1kGP populations shows that many populations have distributions of $Q$ scores comparable to that of the JPT, especially populations sequenced in the phase 1 of the project: sequencing done in the early phases of the 1kGP was more variable and overall tended to include lower quality sequencing data (Figure \ref{MapQual} and Figure \ref{quality_by_center}).
@@ -171,7 +171,7 @@ This variability could result from evolving sequence platform and protocols or v
 By 2011, older sequencing technologies were phased out, and methods became more consistent, resulting in higher and more uniform quality.
 
 We therefore performed the same reverse GWAS approach in all populations independently, and similarly identified $Q$-associated SNPs in 23 of the 26 populations in the 1kGP, with the phase 1 populations being most affected, with on average four times as many significantly associated sites compared to the phase 3 populations.
-Over 812 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each (Figure \ref{OverLap}).
+Over 812 variants were independently associated to low $Q$ in at least two populations with $ p < 10^{-6}$ in each.
 
 To build a test statistic to represent the association across all populations simultaneously, we performed a simple logistic regression predicting genotype based on $Q$ with the logistic factor analysis (LFA) as an offset to account for population structure or Genotype-Conditional Association Test  (GCAT) as proposed by \citep{song2015testing}. 
 We also considered two alternative approaches to account for confounders, namely using the leading five  principal components, and using population membership as covariates. 
