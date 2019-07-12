@@ -459,6 +459,10 @@ saveRDS(metaData,
 ```
 ##Overlap of Significant SNPs from Single Population test
 ```{r}
+strictMask <- fread(paste0(DataPath,
+                           '1kGP_StrictMask.bed'),
+            col.names = c('Chr','Pos','Pos.1','rsID'))
+
 phase1 <- c('YRI','LWK','CHB','CHD','JPT','CEU','LWK')
 #read single population regressions
 Reg <- fread(paste0(DataPath,
@@ -468,66 +472,64 @@ Reg <- fread(paste0(DataPath,
              colClasses = c('numeric', 'numeric', 
                             'character', 'numeric'))
 
-strictMask <- fread(paste0(DataPath,
-                           '1kGP_StrictMask.bed'),
-            col.names = c('Chr','Pos','Pos.1','rsID'))
-#remove positions that don't pass strict mask
-Reg <- anti_join(Reg,
+# positions that don't pass strict mask
+Reg_not_strict <- inner_join(Reg,
                  strictMask,
-                 by = c('Chr','Pos'))
+                 by = c('Chr','Pos')) %>%
+  select('Chr','Pos','Population','deviance') %>%
+  mutate(strict = "fail")
+
+#remove positions that don't pass strict mask
+Reg_strict <- anti_join(Reg,
+                 strictMask,
+                 by = c('Chr','Pos')) %>%
+  mutate(strict = "pass")
+
+Reg_mask <- rbind(Reg_strict, Reg_not_strict)
 
 #Get P-Values and significant sites
-Reg$plog10 <- -log10(pchisq(Reg$deviance, 1, 
+Reg_mask$plog10 <- -log10(pchisq(Reg_mask$deviance, 1, 
                             lower.tail = FALSE))
-Reg<-Reg[which(Reg$plog10 >= 6),]
+Reg_mask<-Reg_mask[which(Reg_mask$plog10 >= 6),]
 #Count number of populations where a variant is significant
-NumPop <- as.data.frame(table(Reg$Chr,Reg$Pos))
-NumPop <- NumPop[which(NumPop$Freq>1),]
+NumPop <- as.data.frame(table(Reg_mask$Chr,Reg_mask$Pos))
 names(NumPop) <- c('Chr','Pos', 'SigHits')
 NumPop$Chr<-as.numeric(as.character(NumPop$Chr)) 
 NumPop$Pos<-as.numeric(as.character(NumPop$Pos))
 
-m <- merge(Reg,
-           NumPop, 
-           by = c('Chr','Pos'))
-#count number of significant sites per population
-n <- as.data.frame(table(m$Pop))
-#put it all together for plotting
-overLap <- unique(merge(m,n,
-                        by.x = 'Population',
-                        by.y = 'Var1'))
-#include number of significant sites in titles
-overLap$title = paste0(overLap$Pop,
-                       ' : ', 
-                       overLap$Freq)
-#add asterix for Phase 1 pops
-Phase1Title <- paste('*',
-                     overLap[which(overLap$Pop 
-                                   %in% phase1),]$title)
-overLap[which(overLap$Pop
-              %in% phase1),]$title <- Phase1Title
-#set order by SigHits, Chromosome and Position
-overLap <- overLap[with(overLap, 
-                        order(-SigHits,
-                              Chr,
-                              Pos)),]
-overLap$Pos <- factor(overLap$Pos, 
-                      levels = unique(overLap$Pos))
-#this is for keeping track of the number of variants
-overLap$nrow <- seq(length = nrow(overLap))
-#this is for discrete point size
-overLap$Pcat <- 4
-overLap[which(overLap$plog10 < 8),]$Pcat <- 2
-overLap[which((overLap$plog10 > 8) & 
-              (overLap$plog10 < 10)),]$Pcat <- 3
+SinglePop <- NumPop[which(NumPop$SigHits==1),]
+SinglePop <- merge(Reg_mask,
+                   SinglePop, 
+                   by = c('Chr','Pos')) %>%
+  group_by(Population, strict) %>%
+  summarize(single_count = n())
 
+DoublePop <- NumPop[which(NumPop$SigHits>1),]
+DoublePop <- merge(Reg_mask,
+                   DoublePop, 
+                   by = c('Chr','Pos')) %>%
+  group_by(Population, strict) %>%
+  summarize(double_count = n())
 
-overLap
+Combined_count <- merge(DoublePop, SinglePop, by = c('Population', 'strict'))
+
+Combined_count[which(Combined_count$Pop%in% phase1),]$Population <- paste(Combined_count[which(Combined_count$Pop%in% phase1),]$Population, '*')
 
 #save to file
-saveRDS(overLap,
+saveRDS(Combined_count,
             paste0(DataPath,
                    'overLap.rds'))
+
+pos_count <- Reg_mask %>%
+  group_by(Chr,Pos,strict) %>%
+  summarize(count = n()) %>%
+  group_by(count, strict) %>%
+  summarize(freq = n())
+
+#save to file
+saveRDS(pos_count,
+            paste0(DataPath,
+                   'pos_count.rds'))
 ```
 
 
