@@ -112,9 +112,9 @@ This GWAS identified $1034$ SNPs associated to the average $Q$ of SNPs mapped fo
 \textbf{B} 
 Joint frequency spectrum plot of the Japanese from the 1000 Genomes Project and a more recent Japanese dataset from Nagahama.
 The plot is zoomed in on frequencies below 0.5 for clarity.
-The size of blue dots are proportional to the number of variants in a given frequency bin that associate with $Q$ in the JPT. 
+The size of blue dots are proportional to the number of suspicious SNPs in a given frequency bin (out of the 1034 identified by GWAS).  
 \textbf{C} 
-Mutation spectrum of the 1034 variants that associated with $Q$ in the JPT($p < 10^{-6}$), compared to the expectation from the distribution of all SNPs.
+Mutation spectrum of these 1034 variants compared to the expectation from the distribution of all SNPs.
 The majority of the variants with significant associations to $Q$ have the *AC${\rightarrow}$*CC mutational pattern. 
 There is also an enrichment in GA*${\rightarrow}$GG* and GC*${\rightarrow}$GG* mutations. 
 These three enrichments can be summarized as G**${\rightarrow}$GG*. 
@@ -205,8 +205,8 @@ These results indicate that there may be a multitude of batch effects in the 1kG
 \centering
 \begin{tabular}{l  r r r  r r}
                       & {Repeat} & \textcolor{gray}{Proportion} & {Non-Repeat} & \textcolor{gray}{Proportion}   & {Total}    \\ \hline
-{SNP}  & 3,369 &\textcolor{gray}{0.53\textperthousand} & 11,059 & \textcolor{gray}{0.56\textperthousand} & 14,428\\  
-{INDEL} & 181& \textcolor{gray}{0.3\textperthousand} & 657& \textcolor{gray}{0.66\textperthousand} & 838\\ \hline
+{SNP}  & 3,369 &\textcolor{gray}{  $5.3\times 10^{-4}$}& 11,059 &\textcolor{gray}{  $5.6\times 10^{-4}$}& 14,428\\  
+{INDEL} & 181& \textcolor{gray}{  $3.0\times 10^{-4}$}& 657& \textcolor{gray}{  $6.6\times 10^{-4}$} & 838\\ \hline
 {Total} & 3,550& & 11,716 & & 15,270\\
 \end{tabular}
 \caption{Number and proportion of $Q$-associated variants passing the 1000 Genomes Project strict mask per category. 
@@ -261,13 +261,13 @@ They also removed rare alleles and alleles with high degrees of missingness.
 Despite state-of-the-art quality controls, the variants were imputed onto genotype data, reached genome wide significance for association with biological traits, and were reported to the GWAS catalogue.
 However, the fact that some of these variants in other studies are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association. \sgcomment{I'm not sure what the previous sentence is saying}
 
-These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations.
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct association.
 To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{90HanSFS_full}).
 The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
 By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
 One study that reports associations with seven highly biased $Q$-associated variants considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype \citep{Mandage2017}. 
-These seven variants were not flanked by LD peaks and were correctly removed from downstream analyses however, they were still included in the NHGRI-EBI Catalog \citep{Mandage2017}.
-It is plausible that the EBV copy number phenotype is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.
+Even though these seven variants are reported in the GWAS catalogue, they were not flanked by LD peaks and were correctly removed from downstream analyses by \citep{Mandage2017}. 
+It is plausible that the EBV copy number phenotype estimation is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.
 
 \begin{table}[h!]
 \begin{tabular}{l l l r r r}
@@ -315,7 +315,7 @@ A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found tha
 Differences in read quality and error profiles in turn require different calling pipelines.
  
 To pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. 
-Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
+Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer actively introducing bias in recent sequence data.
 
 However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. 
 Even though significant association of a variant with a quality metric is not in itself an indication that the variant is spurious, we would recommend to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
@@ -324,10 +324,9 @@ For analyses where individual variants cannot be examined individually (mutation
 
 \section{Conclusion}
 
-On a technical front, we were surprised that strong association between variants and technical covariates in the 1kGP project had not been identified before. 
+On a technical front, we were surprised that such strong associations between variants and technical covariates in the 1kGP project had not been identified before. 
 The genome-wide logistic regression analysis of genotype on quality metric is straightforward, and should probably be a standard in a variety of -omics studies. 
 The logistic factor analysis is more computationally demanding but produces more robust results \citep{song2015testing}. 
-All three approaches accounting for population structure we tested produce comparable results.  
 
 More generally, to improve the quality of genomic reference datasets, we can proceed by addition of new and better data and by better curation of existing data.
 Given rapid technological progress, the focus of genomic research is naturally on the data generation side. 
@@ -336,7 +335,7 @@ The present findings suggest that a substantial fraction of data from the final 
 
 \section{Methods}
 \subsection{Code and data availability}
-Since this data is primarily performed using publicly available data, we provide fully reproducible and publicly available on \href{https://github.com/LukeAndersonTrocme/LegacyData}{GitHub}.
+Since this analysis is primarily performed using publicly available data, we provide fully reproducible and publicly available pipelines on \href{https://github.com/LukeAndersonTrocme/LegacyData}{GitHub}.
 This repository includes scripts used for data download, processing, analysis and plotting.
 %Supplementary data as well as preprocessed data for plotting are also available on GitHub.
 
@@ -348,17 +347,17 @@ If a sample was sequenced more than once, we took the average of each $Q$ score 
 The submission dates and sequencing centres for each sample in the analysis was available in the sequence index files.
 
 \subsection{Quality Controls}
-For the mutation spectrum analysis, we reproduced the quality control and data filtering pipelines used by Harris et al. as they applied the current state of the art quality thresholds to remove questionable sequences for detecting population level differences. 
+For the mutation spectrum analysis, we reproduced the quality control and data filtering pipelines used by Harris et al. 
 Several mask files were applied to remove regions of the genome that might be lower quality, or might have very different mutation rates or base pair complexity compared to the rest of the genome. 
 The 1kGP strict mask was used to remove low quality regions of the genome, highly conserved regions were removed using the phastCons100way mask file and highly repetitive regions were removed using the NestedRepeats mask file from RepeatMasker.
 Furthermore, only sites with missingness below 0.01, MAF less than 0.1, and MAF greater than 0.9 were considered.
 In total, 7,786,023 diallelic autosomal variants passed our quality controls for the mutation spectrum analysis.
 We calculated the mutation spectrum of base pair triplets for the list of significant variants for the JPT population using a similar method as described in  \citep{Harris2017a}.
 
-For the reverse GWAS, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
+For the GCAT analysis, the only filtration used was the application of an minor and major allele frequency cutoff of 0.000599 (removing singletons, doubletons and tripletons) resulting in a total of S=28,516,063 variants included in the test. 
 We also used the NestedRepeats mask file to flag variants inside repetitive regions as these were analyzed separately for false discovery rate estimation.
 Variants flagged by the 1kGP strict mask are included in the association test and included in the FDR adjustment. 
-These variants are only removed after the FDR and excluded from downstream discussion of error patterns, since most population genetics analyses use the strict mask as a filter, and we expect to find problematic variants in filtered regions.
+These variants are only removed after the FDR \sgcomment{I thought we used distinct FDR For all four categories?} and excluded from downstream discussion of error patterns, since most population genetics analyses use the strict mask as a filter, and we expect to find problematic variants in filtered regions.
 
 \subsection{Testing the association of quality to genotype}
 When conducting a statistical analysis of population genetics data, we must account for population structure. In a typical GWAS, we are interested in modelling the phenotype as a function of the genotype. 
@@ -377,10 +376,10 @@ The expected frequency for a SNP $s$ and individual $i$ can be estimated using p
 Under the null hypothesis the slope coefficient $\beta_s$ is zero and Model \eqref{gcat_basic} reduces to Model \eqref{lfa_basic}. 
 $\beta_s$ denotes the association to average quality of mapped bases $Q$ to genotype $y_{s}$. 
 To test the null hypothesis, we use the generalized likelihood ratio test statistic, whose deviance is a measure of the marginal importance of adding $Q$ in the model. 
-The deviance test statistic under the null model is approximately chi-square distributed with one degrees of freedom.
+The deviance test statistic under the null model is approximately chi-square distributed with one degree of freedom.
 
 We run a total of $S$ regressions, where $S$ is the total number of genomic loci. Given the large number of tests, the large proportion of expected null hypotheses and the positive dependencies across the genome, we used the two-stage Benjamini \& Hochberg step-up FDR-controlling procedure to adjust the \textit{p}-values \citep{Benjamini2006}.
-By using a nominal Type-I error rate $\alpha = 0.01$, a total of 15,270 variants were found to be statistically significance. 
+By using a nominal Type-I error rate $\alpha = 0.01$, a total of 15,270 variants were found to be statistically significant. 
 See Supplementary Data for a list of variants and adjusted \textit{p}-values.
 
 \subsection{Individual-specific allele frequency}
