@@ -446,6 +446,9 @@ See ProcessPlotData.Rmd for info on the overLap file
 overLap <- readRDS(paste0(DataPath,
                            'overLap.rds'))
 
+#remove variants that don't pass strict mask
+overLap <- overLap %>% dplyr::filter(strict == "pass")
+
 pop_order_single <- overLap %>% arrange(-single_count) %>% select(Population) %>% unique() %>% unlist()
 
 pop_order_double <- overLap %>% arrange(-double_count) %>% select(Population) %>% unique() %>% unlist()
@@ -453,11 +456,9 @@ pop_order_double <- overLap %>% arrange(-double_count) %>% select(Population) %>
 overLap$Population <- factor(overLap$Population, levels = pop_order_single)
 p1.1 <- ggplot(overLap, 
        aes(x=Population, 
-           y= single_count,  
-           fill = strict)) + 
+           y= single_count)) + 
   geom_bar(stat="identity") +
   scale_fill_grey() +
-  guides(fill = F) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 20),
         axis.text.y = element_text(size = 20),
         axis.title = element_text(size = 20),
@@ -468,11 +469,9 @@ p1.1 <- ggplot(overLap,
 overLap$Population <- factor(overLap$Population, levels = pop_order_double)
 p1.2 <- ggplot(overLap, 
        aes(x=Population, 
-           y= double_count,  
-           fill = strict)) + 
+           y= double_count)) + 
   geom_bar(stat="identity") +
   scale_fill_grey() +
-  guides(fill = guide_legend(title = 'strict mask')) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 20),
         axis.text.y = element_text(size = 20),
         axis.title = element_text(size = 20),
@@ -484,31 +483,52 @@ p1 <- plot_grid(p1.1,p1.2)
 
 p1
 ```
+```{r}
+all_sites <- all_sites %>% dplyr::filter(strict =="pass")
 
+pop_order <- all_sites %>% 
+  arrange(-total_count) %>% 
+  select(Population) %>% 
+  unique() %>% 
+  unlist()
+
+all_sites$Population <- factor(all_sites$Population, levels = pop_order)
+p1.a <- ggplot(all_sites, 
+       aes(x=Population, 
+           y= total_count)) + 
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 20),
+        axis.text.y = element_text(size = 20),
+        axis.title = element_text(size = 20),
+        plot.title = element_text(size = 20)) +
+  labs(x = "Population", y = "Variant count",
+       title = "Q-associated in single population test")
+
+p1.a
+```
 ### Frequency of occurence
 ```{r,fig.height=2,fig.width=5}
 #save to file
 pos_count <- readRDS(paste0(DataPath,
                    'pos_count.rds'))
-pos_count$strict <- paste(pos_count$strict, "strict mask")
+pos_count <- pos_count %>% dplyr::filter(strict =="pass")
+#pos_count$strict <- paste(pos_count$strict, "strict mask") 
 p2 <- 
   ggplot(pos_count, aes(x = count, y = freq)) +
   geom_bar(stat= "identity") +
-  #scale_x_continuous(breaks = seq(1,13)) +
+  scale_x_continuous(breaks = seq(1,13)) +
   labs(x = "Number of populations with Q-associations to the same variant",
        y = "Count") +
   theme(axis.text = element_text(size = 20),
         axis.title = element_text(size = 20),
-        strip.text = element_text(size = 20)) +
-  facet_wrap(.~strict, scales = 'free_y')
-
+        strip.text = element_text(size = 20))
 
 p2
 ```
 
 put it all together and save it
 ```{r,fig.height=11,fig.width=8}
-p3 <- plot_grid(p1, p2, 
+p3 <- plot_grid(p1.a, p2, 
                 ncol = 1, 
                 align = "v", 
                 rel_heights = c(3, 1), 
@@ -517,8 +537,8 @@ p3 <- plot_grid(p1, p2,
 ggsave(paste0(figurePath,
               'SNPOverlap6.jpg'),
               p3, 
-              height = 15, 
-              width = 20)
+              height = 12, 
+              width = 12)
 
 p3
 ```

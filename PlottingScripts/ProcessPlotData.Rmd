@@ -496,6 +496,14 @@ NumPop <- as.data.frame(table(Reg_mask$Chr,Reg_mask$Pos))
 names(NumPop) <- c('Chr','Pos', 'SigHits')
 NumPop$Chr<-as.numeric(as.character(NumPop$Chr)) 
 NumPop$Pos<-as.numeric(as.character(NumPop$Pos))
+all_sites <- merge(Reg_mask,
+                   NumPop, 
+                   by = c('Chr','Pos')) %>%
+  group_by(Population, strict) %>%
+  summarize(total_count = n())
+all_sites[which(all_sites$Population%in% phase1),]$Population <- 
+  paste0('*',all_sites[which(all_sites$Population%in% phase1),]$Population)
+
 
 SinglePop <- NumPop[which(NumPop$SigHits==1),]
 SinglePop <- merge(Reg_mask,
