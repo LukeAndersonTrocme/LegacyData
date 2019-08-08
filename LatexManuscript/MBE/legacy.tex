@@ -162,7 +162,7 @@ These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* 
 Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}.
 
 Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps}).
-The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal, however other signals identified by Harris and Pritchard appear unchanged (Figure \ref{MutSpect}).
+\todo{The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal enrichment in the Japanese, however other signals identified by Harris and Pritchard appear unchanged including the continental enrichment of *AC${\rightarrow}$*CC signal in East Asians compared to Africans as reported by Harris and Pritchard and replicated in the SGDP (Figure \ref{MutSpect} and \ref{MutSpect_continental}).}
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses where quality of imputation matters, identifying $Q$-associated variants may be preferable. 
 
@@ -184,6 +184,7 @@ We tested SNPs, INDELs and repetitive regions separately as they may have differ
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}).
+\todo{Chromosome 1 shows enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes despite accounting for chromosomal length (Figure \ref{MutEnrichment_chrom}).} 
 At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
 An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
@@ -468,6 +469,14 @@ Phase 1 populations are indicated by a star ( * ).
 
 \begin{figure}[tbp]
 \centering
+\includegraphics[width=10cm,keepaspectratio]{mutational_enrichment_per_chrom.jpg}
+\caption{Mutation spectrum enrichment of  $Q$-associated variants across each chromosome.
+Chromosome 1 has a strong enrichment in *AC${\rightarrow}$*CC mutational pattern.}  
+\label{MutEnrichment_chrom}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
 \includegraphics[width=13cm,keepaspectratio]{Mafessoni_MutSpect.jpg}
 \caption{ \textbf{A} Comparison of the p-values from the association to unusual LD from \cite{mafessoni2018turning} and the p-values from the GCAT association test to quality metrics.
 There are a total of 42,307 variants in this plot with only 1,279 ( 3\% ) are statistically significant in both tests.
@@ -626,5 +635,13 @@ Removing individuals with average quality per mapped bases $Q$ below a threshold
 \label{MutSpect}
 \end{figure}
 
+
+\begin{figure}[tbp]
+\includegraphics[width=11cm,keepaspectratio]{CutOffID_QUAL30_heatmap_v_AFR_nosingle.jpg}
+\caption{Comparing continental mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  
+The  *AC${\rightarrow}$*CC mutational signature in East Asian (EAS) Population remains despite removing individuals with average quality per mapped bases $Q$ below a threshold of 30.
+Points indicate significant mutation spectrum contrasts with $p <10^{-5}$}
+\label{MutSpect_continental}
+\end{figure}
 
 \end{document}
