@@ -1014,44 +1014,83 @@ ChromLength <- fread(paste0(DataPath,
 snp_combined <- merge(snp_combined, 
                       ChromLength, 
                       by = 'Chr')
-#normalize count
-snp_combined$norm_freq <- snp_combined$Freq / snp_combined$Length
+snp_combined <- merge(snp_combined, 
+                     PerChrom, 
+                     by.x='Chr',
+                     by.y='Var1')
+#normalize by length
+snp_combined$len_norm_freq <- snp_combined$Freq / snp_combined$Length
+#normalize by number of tests
+snp_combined$n_norm_freq <- snp_combined$Freq.x / snp_combined$Freq.y
 
+signature <- c("TAT → T", "TCT → T", "ACA → A")
+
+snp_combined$Signature = 'other'
+snp_combined[grepl("AC → C",
+                   snp_combined$title),]$Signature <- '*AC→*CC'
+snp_combined[grepl(paste(signature,
+                         collapse="|"),
+                   snp_combined$title),]$Signature <- 'T*T→TTT'
+
+snp_combined$Signature <- factor(snp_combined$Signature, 
+                                 levels = c("*AC→*CC", "T*T→TTT", "other"))
 mut_count_chrom <-
   ggplot(snp_combined, 
          aes(x=as.factor(Chr), 
-             y = norm_freq))+
-  geom_point(shape =1) +
-  geom_point(data = filter(snp_combined, 
-                           grepl("AC → C",title)),
-             aes(x=as.factor(Chr), 
-             y = norm_freq),
-             color = 'royalblue1',
-             shape = 1) +
+             y = n_norm_freq,
+         color = Signature))+
+  geom_point(shape = 1,
+             size = 4) +
+  scale_color_manual(values = c('blue','red','black'))+
   geom_text_repel(data = snp_combined %>% 
-                    filter(norm_freq > 0.00001),
+                    filter(n_norm_freq > 0.00025),
                   show.legend = FALSE,
                   aes(label = title),
                   size = 3,
                   force = 2)+
-  labs(y = 'proportion',
-       x = 'Chromosome')
+  labs(y = 'proportion of significant variants',
+       x = 'Chromosome')+
+   theme(axis.text=element_text(size=20),
+         axis.title=element_text(size=20),
+         legend.text=element_text(size=20),
+         legend.title=element_text(size=20),
+         legend.position = c(0.9, 0.8))
+
 
 ggsave(paste0(figurePath,
               'mutational_enrichment_per_chrom.jpg'),
               height=5, 
               width=12) 
-
-
-
+#reject
+geom_point(data = filter(snp_combined, 
+                           grepl("AC → C",title)),
+             aes(x=as.factor(Chr), 
+             y = n_norm_freq),
+             color = 'royalblue1',
+             shape = 1) +
+  geom_point(data = filter(snp_combined, 
+                           grepl(paste(signature,
+                                       collapse="|"),
+                                 title)),
+             aes(x=as.factor(Chr), 
+             y = n_norm_freq),
+             color = 'red',
+             shape = 1) +
 sig_per_chrom <-
   ggplot(sigPerChrom, 
          aes(x=Var1,y=density))+
   geom_bar(stat="identity")+
   labs(x='Chromosome',
-       y='proportion of significant variants')
+       y='proportion of significant variants')+
+   theme(axis.text=element_text(size=20),
+         axis.title=element_text(size=20))
 
-plot_grid(sig_per_chrom, mut_count_chrom, labels = 'AUTO', ncol =1, align = 'v')
+per_chr <-
+  plot_grid(sig_per_chrom, 
+          mut_count_chrom, 
+          labels = 'AUTO', 
+          ncol =1, 
+          align = 'v')
 ggsave(paste0(figurePath,
                 'CountPerChrom.jpg'), 
        height=8, 
@@ -1059,25 +1098,6 @@ ggsave(paste0(figurePath,
 ```
 ##Density of Significant SNPs per Chromosome
 ```{r}
-
-sigPerChrom <- as.data.frame(table(RegressionMasked[which(RegressionMasked$Adjusted_Log10p > -log10(0.01)),]$Chr))
-PerChrom <- as.data.frame(table(RegressionMasked$Chr))
-sigPerChrom <- merge(sigPerChrom, PerChrom, by='Var1')
-sigPerChrom$density <- sigPerChrom$Freq.x/sigPerChrom$Freq.y
-
-sig_per_chrom <-
-  ggplot(sigPerChrom, 
-         aes(x=Var1,y=density))+
-  geom_bar(stat="identity")+
-  labs(x='Chromosome',
-       y='proportion of significant variants')
-
-plot_grid(sig_per_chrom, mut_count_chrom, labels = 'AUTO', ncol =1, align = 'v')
-ggsave(paste0(figurePath,
-                'CountPerChrom.jpg'), 
-       height=8, 
-       width=11)
-
 ChromLength <- fread(paste0(DataPath,
                             'GRCh37_ChromLength.txt'),
                      sep='\t',
@@ -1099,7 +1119,7 @@ for(chrom in seq(1,22,1)){
   
   l = ChromLength[which(ChromLength$Chr == chrom),
                   c('Length')][[1]]
-  b = seq(1,l,by=10000)
+  b = seq(1,l,by=1000000)
   if(chrom == 1){
     plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
     geom_freqpoly(breaks = b, color = 'grey60') +
@@ -1108,10 +1128,24 @@ for(chrom in seq(1,22,1)){
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
           axis.line = element_blank(),
-          plot.margin = margin(0,0,0,0),
-          axis.text=element_text(size=6),
-          axis.title=element_text(size=8)) + 
-    labs(x=chrom,y='Significant variants per 10kb window')
+          plot.margin = margin(0,0,0,10),
+          axis.text=element_text(size=20),
+          axis.title=element_text(size=20)) + 
+    labs(x=chrom,
+         y='Significant variants per 1Mb window')
+  }
+  else if(chrom == 22){
+    plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
+    geom_freqpoly(breaks = b, color = 'grey60') +
+    geom_freqpoly(data = df, breaks = b) +
+    ylim(0,50)+
+    theme(axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.y = element_blank(),
+          axis.line = element_blank(),
+          plot.margin = margin(0,1,0,0),
+          axis.title=element_text(size=20)) + 
+    xlab(chrom)
   }
   else{
   plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
@@ -1123,7 +1157,7 @@ for(chrom in seq(1,22,1)){
           axis.title.y = element_blank(),
           axis.line = element_blank(),
           plot.margin = margin(0,0,0,0),
-          axis.title=element_text(size=8)) + 
+          axis.title=element_text(size=20)) + 
     xlab(chrom)
   }
   #get freq count per bin
@@ -1141,7 +1175,7 @@ for(chrom in seq(1,22,1)){
    summarise(Count = n())
  
   TotalBinCount_mask <- 
-   bins %>% 
+   bins_mask %>% 
    bind_rows(.id = "source") %>%
    group_by(Freq) %>%
    summarise(Count = n()) 
@@ -1152,19 +1186,37 @@ for(chrom in seq(1,22,1)){
  ppHist <- 
    ggplot(BinCount,
           aes(x = Freq, y = Count, color = mask)) +
-   geom_point(shape = 1 ) +
+   geom_point(shape = 1,
+              size = 4) +
    scale_y_log10()+
    scale_color_manual(values = c("grey60", "black")) +
    guides(color=guide_legend(title="Strict mask")) +
    theme_classic() +
-   labs(x='Number of Q-associated variants in a 10kb window',
-        y='-log10(count)')
- 
- 
+   labs(x='Number of Q-associated variants in a 1mb window',
+        y='-log10(count)')+
+   theme(axis.text=element_text(size=20),
+         axis.title=element_text(size=20),
+         legend.text=element_text(size=20),
+         legend.title=element_text(size=20),
+         legend.position = c(0.95, 0.8))
+
   
 relWidths <- unlist(ChromLength$Length)/100000000
 relWidths[[1]] <- relWidths[[1]]*1.5
-p <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
+p1000 <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
+
+plot_grid(sig_per_chrom, 
+          mut_count_chrom, 
+          p1000,
+          ppHist,
+          ncol=1,
+          labels = "AUTO")
+
+ggsave(paste0(figurePath,
+                'PerChromosome.jpg'), 
+       height=20, 
+       width=20)
+
 
 p2 <- plot_grid(NULL,
                 p, 

@@ -168,3 +168,7 @@ PlottingScripts/.Rhistory
 *.nosex
 
 *.map
+
+*.gz(busy)
+
+LatexManuscript/MBE/legacy_mbe.synctex.gz(busy)

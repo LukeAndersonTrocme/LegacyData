@@ -89,12 +89,8 @@ Harris and Pritchard further identified distinct mutational spectra across a ran
 In particular, the latter two studies  identified a heterogeneous mutational signature within 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-
-\todo{
-An excess of this signature has been observed in East Asians compared to Afriacas in the SGDP. 
-At a continental resolution, this signature has been partially reproduced in the SGDP -- an independent dataset with smaller sample size from the 1kGP \citep{Aikens2018, Harris2017a}. 
-Nevertheless, the heterogeneous signature reported by \cite{Harris2017a} had yet to be reproduced in a Japanese dataset, so we decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.}
-The herertogeneous signatrue reported by harris et al had not , so we decided.
+\todo{An excess of this signature has been observed in East Asians compared to Africans in the 1kGP and reproduced in the SGDP  \citep{Aikens2018, Harris2017a}.
+The heterogeneous signature reported by \cite{Harris2017a} had not yet been reproduced in a Japanese dataset, so we decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.}
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in recent publications and online resources.
 
@@ -187,11 +183,11 @@ We tested SNPs, INDELs and repetitive regions separately as they may have differ
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}A).
-\todo{Chromosome 1 shows strong enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes (Figure \ref{CountPerChrom}B).} 
-At a 10kb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{VariantDensity}).
-An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
+\todo{Chromosome 1 shows strong enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes despite normalizing for the number of variants tested per chromosome (Figure \ref{CountPerChrom}B).} 
+At a 1Mb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{CountPerChrom}C).
+%An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
 Distribution of association statistics in this region is provided in Figure \ref{Top10}.
-By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{VariantDensity}).
+By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{CountPerChrom}D).
 
 The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
 There is also an enrichment of mutations from TAC, TCT, and TGT to the homonucleotide TTT (Figure \ref{strict_gcat_mutational_enrichment}).
@@ -484,13 +480,17 @@ For the 14,616 variants that don't pass the strict mask, 650 ( 3\% ) variants ar
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=11cm,keepaspectratio]{CountPerChrom.jpg}
+\includegraphics[width=11cm,keepaspectratio]{PerChromosome.jpg}
 \caption{
 \textbf{A}
 The proportion of $Q$-associated variants per chromosome.
 \textbf{B}
 Mutation spectrum enrichment of  $Q$-associated variants across each chromosome.
 Chromosome 1 has a strong enrichment in *AC${\rightarrow}$*CC mutational pattern.
+\textbf{C} The number of $Q$-associated variants per 10kb window across the genome.
+Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
+One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.
+\textbf{D} Distribution of variant counts per 1Mb window. Where variants that fail the strict mask are in grey and those that pass are in black. 
 }  
 \label{CountPerChrom}
 \end{figure}
