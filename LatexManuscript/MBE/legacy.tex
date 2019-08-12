@@ -185,8 +185,8 @@ Lists of $Q$-associated variants and individuals with low $Q$ are provided in Su
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}A).
 \todo{Chromosome 1 shows strong enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes despite normalizing for the number of variants tested per chromosome (Figure \ref{CountPerChrom}B).} 
 At a 1Mb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{CountPerChrom}C).
-%An outlying 10kb region in chromosome 17 (bases : 22,020,000 to  22,030,000) has 35 $Q$-associated variants.
-Distribution of association statistics in this region is provided in Figure \ref{Top10}.
+Three outlying 1Mb regions in chromosomes 1, 2 and 17 have over 30 $Q$-associated variants.
+Distribution of association statistics in these regions are provided in Figure \ref{Top10}.
 By contrast, variants that do not pass the 1kGP strict mask are more unevenly distributed across the genome (Figure \ref{CountPerChrom}D).
 
 The mutational 3-mer substitution patterns of this list of variants from the GCAT model is similar to the signature identified in the single population test of the 1kGP JPT in that there is an enrichment in *AC${\rightarrow}$*CC.
@@ -489,7 +489,7 @@ Mutation spectrum enrichment of  $Q$-associated variants across each chromosome.
 Chromosome 1 has a strong enrichment in *AC${\rightarrow}$*CC mutational pattern.
 \textbf{C} The number of $Q$-associated variants per 10kb window across the genome.
 Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
-One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.
+%One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.
 \textbf{D} Distribution of variant counts per 1Mb window. Where variants that fail the strict mask are in grey and those that pass are in black. 
 }  
 \label{CountPerChrom}
@@ -497,18 +497,8 @@ One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=14cm,keepaspectratio]{VariantDensity.jpg}
-\caption{\textbf{A} The number of $Q$-associated variants per 10kb window across the genome.
-Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
-One region not flagged by the 1000 Genomes Project strict mask in chromosome 17 has more than 10 variants per window.
-\textbf{B} Distribution of variant counts per 10kb window. Where variants that fail the strict mask are in grey and those that pass are in black. }  
-\label{VariantDensity}
-\end{figure}
-
-\begin{figure}[tbp]
-\centering
 \includegraphics[width=10cm,keepaspectratio]{RegionOver10.jpg}
-\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the 10kb window with the most  $Q$-associated variants per 10kb across the genome.}  
+\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the three 1Mb windows with the most  $Q$-associated variants per 1Mb across the genome.}  
 \label{Top10}
 \end{figure}
 

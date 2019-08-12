@@ -1233,7 +1233,7 @@ ggsave(paste0(figurePath,
 #get 10kb regions with more than 10 sig snps
 over10  <- bins %>%
    bind_rows(.id = "source") %>%
-   filter(Freq >= 5) %>%
+   filter(Freq >= 30) %>%
    separate(c, c("start_bp", "end_bp"), ",")
 
 over10$start_bp <- as.numeric(as.character(substring(over10$start_bp,2)))
