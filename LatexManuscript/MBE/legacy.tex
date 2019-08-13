@@ -1,13 +1,13 @@
 %%% PREAMBLE 
 \documentclass[9pt,article]{template}
 
-\usepackage[export]{adjustbox}
-\usepackage{lscape}
-\usepackage{afterpage}
+%\usepackage[export]{adjustbox}
+%\usepackage{lscape}
+%\usepackage{afterpage}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{hyperref}
-\usepackage{ulem}
+%\usepackage{ulem}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
@@ -86,11 +86,11 @@ In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European
 Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
  
-In particular, the latter two studies  identified a heterogeneous mutational signature within 1kGP Japanese individuals.
+\todo{Another signature, *AC $\rightarrow$ *CC, has been observed at higher frequency in East Asians compared to Africans in the 1kGP and the SGDP  \citep{Aikens2018, Harris2017a}}. 
+ These two studies also found heterogeneous frequency of this signature among 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
-A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow.
-\todo{An excess of this signature has been observed in East Asians compared to Africans in the 1kGP and reproduced in the SGDP  \citep{Aikens2018, Harris2017a}.
-The heterogeneous signature reported by \cite{Harris2017a} had not yet been reproduced in a Japanese dataset, so we decided to follow up on this observation, by using a newly sequenced dataset of Japanese individuals from Nagahama.}
+A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow. This observation could not be reproduced in SGDP due to the small number of Japanese samples \citep{Aikens2018}.
+\todo{We therefore decided to follow up on this observation by using a newly sequenced dataset of Japanese individuals from Nagahama.}
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in recent publications and online resources.
 
