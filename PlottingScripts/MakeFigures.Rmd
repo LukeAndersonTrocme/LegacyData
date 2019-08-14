@@ -1164,48 +1164,59 @@ bins <- list()
 bins_mask <- list()
 for(chrom in seq(1,22,1)){
   print(chrom)
-  df <- RegressionMasked[which((RegressionMasked$Chr == chrom) &
-                           (RegressionMasked$Adjusted_Log10p 
-                            > -log10(0.01))),
-                   c('Chr','Pos')]
-  mask <- Regression[which((Regression$Chr == chrom) &
-                           (Regression$Adjusted_Log10p 
-                            > -log10(0.01)) &
-                             !(Regression$rsID %in% RegressionMasked$rsID)),
-                   c('Chr','Pos')]
+  #df <- RegressionMasked[which((RegressionMasked$Chr == chrom) &
+  #                         (RegressionMasked$Adjusted_Log10p 
+  #                          > -log10(0.01))),
+  #                 c('Chr','Pos')]
+  #mask <- Regression[which((Regression$Chr == chrom) &
+  #                         (Regression$Adjusted_Log10p 
+  #                          > -log10(0.01)) &
+  #                           !(Regression$rsID %in% RegressionMasked$rsID)),
+  #                 c('Chr','Pos')]
   
   df_sig <- Reg_Context_Masked[which((Reg_Context_Masked$Chr == chrom) &
                            (Reg_Context_Masked$Adjusted_Log10p > -log10(0.01)) &
                              Reg_Context_Masked$Signature != 'other'),
-                   c('Chr','Pos')]
+                   c('Chr','Pos', 'Signature')]
   mask_sig <- Reg_Context[which((Reg_Context$Chr == chrom) &
                            (Reg_Context$Adjusted_Log10p > -log10(0.01)) &
                              !(Reg_Context$rsID %in% Reg_Context_Masked$rsID) &
                              Reg_Context$Signature != 'other'),
-                   c('Chr','Pos')]
+                   c('Chr','Pos', 'Signature')]
   
   l = ChromLength[which(ChromLength$Chr == chrom),
                   c('Length')][[1]]
   b = seq(1,l,by=1000000)
   if(chrom == 1){
-    plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
-    geom_freqpoly(breaks = b, color = 'grey60') +
-    geom_freqpoly(data = df, breaks = b) +
-    ylim(0,50)+
-    theme(axis.text.x = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.line = element_blank(),
-          plot.margin = margin(0,0,0,10),
-          axis.text=element_text(size=20),
-          axis.title=element_text(size=20)) + 
-    labs(x=chrom,
-         y='Significant variants per 1Mb window')
+    plts[[chrom]]<-
+      ggplot(df_sig, aes(x=Pos)) +
+      #geom_freqpoly(breaks = b, color = 'grey60') +
+      #geom_freqpoly(data = df, breaks = b) +
+      geom_freqpoly(data = df_sig, 
+                    aes(color = Signature),
+                    breaks = b) +
+      scale_color_manual(values = c('blue','red'))+
+      guides(color=F)+
+      ylim(0,20)+
+      theme(axis.text.x = element_blank(),
+            axis.ticks.x = element_blank(),
+            axis.line = element_blank(),
+            plot.margin = margin(0,0,0,10),
+            axis.text=element_text(size=20),
+            axis.title=element_text(size=20)) + 
+      labs(x=chrom,
+           y='Significant variants per 1Mb window')
   }
   else if(chrom == 22){
-    plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
-    geom_freqpoly(breaks = b, color = 'grey60') +
-    geom_freqpoly(data = df, breaks = b) +
-    ylim(0,50)+
+    plts[[chrom]]<-ggplot(df_sig, aes(x=Pos)) +
+    #geom_freqpoly(breaks = b, color = 'grey60') +
+    #geom_freqpoly(data = df, breaks = b) +
+      geom_freqpoly(data = df_sig, 
+                    aes(color = Signature),
+                    breaks = b) +
+      scale_color_manual(values = c('blue','red'))+
+      guides(color=F)+
+    ylim(0,20)+
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.title.y = element_blank(),
@@ -1215,10 +1226,15 @@ for(chrom in seq(1,22,1)){
     xlab(chrom)
   }
   else{
-  plts[[chrom]]<-ggplot(mask, aes(x=Pos)) +
-    geom_freqpoly(breaks = b, color = 'grey60') +
-    geom_freqpoly(data = df, breaks = b) +
-    ylim(0,50)+
+  plts[[chrom]]<-ggplot(df_sig, aes(x=Pos)) +
+    #geom_freqpoly(breaks = b, color = 'grey60') +
+    #geom_freqpoly(data = df, breaks = b) +
+    geom_freqpoly(data = df_sig, 
+                    aes(color = Signature),
+                    breaks = b) +
+      scale_color_manual(values = c('blue','red'))+
+      guides(color=F)+
+    ylim(0,20)+
     theme(axis.text = element_blank(),
           axis.ticks = element_blank(),
           axis.title.y = element_blank(),
@@ -1228,11 +1244,11 @@ for(chrom in seq(1,22,1)){
     xlab(chrom)
   }
   #get freq count per bin
-  c <- cut(df$Pos, breaks = b)
-  bins[[chrom]] <- as.data.frame(table(c))
+  #c <- cut(df$Pos, breaks = b)
+  #bins[[chrom]] <- as.data.frame(table(c))
   
-  c <- cut(mask$Pos, breaks = b)
-  bins_mask[[chrom]] <- as.data.frame(table(c))
+  #c <- cut(mask$Pos, breaks = b)
+  #bins_mask[[chrom]] <- as.data.frame(table(c))
 }
 
  TotalBinCount <- 
@@ -1270,18 +1286,20 @@ for(chrom in seq(1,22,1)){
   
 relWidths <- unlist(ChromLength$Length)/100000000
 relWidths[[1]] <- relWidths[[1]]*1.5
-p1000 <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
+p1000_context <- plot_grid(plts[[1]],plts[[2]],plts[[3]],plts[[4]],plts[[5]],plts[[6]],plts[[7]],plts[[8]],plts[[9]],plts[[10]],plts[[11]],plts[[12]],plts[[13]],plts[[14]],plts[[15]],plts[[16]],plts[[17]],plts[[18]],plts[[19]],plts[[20]],plts[[21]],plts[[22]],nrow=1,rel_widths = relWidths)
 
+s<-
 plot_grid(sig_per_chrom, 
           mut_count_chrom, 
           p1000,
+          p1000_context,
           ppHist,
           ncol=1,
           labels = "AUTO")
 
 ggsave(paste0(figurePath,
                 'PerChromosome.jpg'), 
-       height=20, 
+       height=25, 
        width=20)
 
 
@@ -1317,8 +1335,12 @@ write.table(over10,
  makeSubPlot <- function(df,Name){
 p<-ggplot(df, 
        aes(x=Pos, 
-           y = Adjusted_Log10p))+
-  geom_point(size = 1) +
+           y = Adjusted_Log10p,
+           color = Signature))+
+  geom_point(alpha = 0.6,
+             size = 1) +
+  scale_color_manual(values = c('blue','red','black'))+
+  guides(color = F)+
   expand_limits(y=c(0,max(df$Adjusted_Log10p)+1))  +
   geom_hline(yintercept = -log10(0.01), 
              color = 'blue') +
@@ -1339,12 +1361,9 @@ return(p)
    start <- over10[i,]$start_bp
    end <- over10[i,]$end_bp
    title <- paste0('Chr',chr, ':',start,'-',end)
-   sub[[i]] <- RegressionMasked[which((RegressionMasked$Chr == chr) &
-                              (RegressionMasked$Pos > start) &
-                              (RegressionMasked$Pos < end)),
-                              c('Chr','Pos','rsID',
-                                'Adjusted_Log10p',
-                                'Repeat','Indel')]
+   sub[[i]] <- Reg_Context_Masked[which((Reg_Context_Masked$Chr == chr) &
+                              (Reg_Context_Masked$Pos > start) &
+                              (Reg_Context_Masked$Pos < end)),]
    pp[[i]] <- makeSubPlot(sub[[i]],title)
  }
 
