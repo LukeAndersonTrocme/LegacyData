@@ -1046,7 +1046,7 @@ mut_count_chrom <-
                     filter(n_norm_freq > 0.00025),
                   show.legend = FALSE,
                   aes(label = title),
-                  size = 3,
+                  size = 5,
                   force = 2)+
   labs(y = 'proportion of significant variants',
        x = 'Chromosome')+
@@ -1096,6 +1096,63 @@ ggsave(paste0(figurePath,
        height=8, 
        width=11)
 ```
+##PerMut PerChrom
+```{r}
+Reg_Context <- merge(Regression, rSNP, by=c('Chr','Pos'))
+Reg_Context<-
+  Reg_Context %>%
+  select(Chr, Pos, rsID, 
+         Adjusted_Log10p, 
+         Ref, Alt, Context)
+
+#get reverse complement of context, ref and alt
+Reg_Context$Rev<-ReverseComp(as.character(Reg_Context$Context))
+Reg_Context$RevRef<-ReverseComp(as.character(Reg_Context$Ref))
+Reg_Context$RevAlt<-ReverseComp(as.character(Reg_Context$Alt))
+#only get one half (to fold over)
+AC<-Reg_Context[which(Reg_Context$Ref 
+                      %in% 
+                        c('A','C')),]
+TG<-Reg_Context[which(Reg_Context$Ref 
+                      %in% 
+                        c('T','G')),]
+#fold over
+TG$Context <- TG$Rev
+TG$Ref <- TG$RevRef
+TG$Alt <- TG$RevAlt
+#bind them together
+data <- rbind(AC,TG)
+#combine it all together to get a context
+data$Mut <- paste0(data$Ref,' → ', 
+                substr(data$Context,1,1),
+                data$Alt,
+                substr(data$Context,3,3))
+
+data$Start <- substr(data$Mut,5,5)
+data$End <- substr(data$Mut,7,7)
+
+#modify title for plotting
+data$title <- 
+  paste0(data$Start,
+         substr(data$Mut,1,1),
+         data$End,
+         substr(data$Mut,2,5))
+
+Reg_Context <- data %>% select(Chr, Pos, rsID, Adjusted_Log10p, title)
+
+Reg_Context$Signature = 'other'
+Reg_Context[grepl("AC → C",
+                   Reg_Context$title),]$Signature <- '*AC→*CC'
+Reg_Context[grepl(paste(signature,
+                         collapse="|"),
+                   Reg_Context$title),]$Signature <- 'T*T→TTT'
+
+Reg_Context$Signature <- factor(Reg_Context$Signature, 
+                                 levels = c("*AC→*CC", "T*T→TTT", "other"))
+
+Reg_Context_Masked <- Reg_Context[which(Reg_Context$rsID %in% RegressionMasked$rsID),]
+```
+
 ##Density of Significant SNPs per Chromosome
 ```{r}
 ChromLength <- fread(paste0(DataPath,
@@ -1115,6 +1172,16 @@ for(chrom in seq(1,22,1)){
                            (Regression$Adjusted_Log10p 
                             > -log10(0.01)) &
                              !(Regression$rsID %in% RegressionMasked$rsID)),
+                   c('Chr','Pos')]
+  
+  df_sig <- Reg_Context_Masked[which((Reg_Context_Masked$Chr == chrom) &
+                           (Reg_Context_Masked$Adjusted_Log10p > -log10(0.01)) &
+                             Reg_Context_Masked$Signature != 'other'),
+                   c('Chr','Pos')]
+  mask_sig <- Reg_Context[which((Reg_Context$Chr == chrom) &
+                           (Reg_Context$Adjusted_Log10p > -log10(0.01)) &
+                             !(Reg_Context$rsID %in% Reg_Context_Masked$rsID) &
+                             Reg_Context$Signature != 'other'),
                    c('Chr','Pos')]
   
   l = ChromLength[which(ChromLength$Chr == chrom),
@@ -1264,15 +1331,13 @@ p<-ggplot(df,
 
 return(p)
 }
-
-top10<-head(over10[order(-over10$Freq),],10)
  
  sub <- list()
  pp <- list()
- for(i in seq(1,nrow(top10))){
-   chr <- top10[i,]$Chr
-   start <- top10[i,]$start_bp
-   end <- top10[i,]$end_bp
+ for(i in seq(1,nrow(over10))){
+   chr <- over10[i,]$source
+   start <- over10[i,]$start_bp
+   end <- over10[i,]$end_bp
    title <- paste0('Chr',chr, ':',start,'-',end)
    sub[[i]] <- RegressionMasked[which((RegressionMasked$Chr == chr) &
                               (RegressionMasked$Pos > start) &
@@ -1283,11 +1348,11 @@ top10<-head(over10[order(-over10$Freq),],10)
    pp[[i]] <- makeSubPlot(sub[[i]],title)
  }
 
- pp[[1]]
+ plot_grid(pp[[1]], pp[[2]], pp[[3]], nrow =1)
   ggsave(paste0(figurePath,
                 'RegionOver10.jpg'), 
        height=5, 
-       width=8)
+       width=10)
   
  ggsave(paste0(figurePath,
                 'top10.jpg'), 
