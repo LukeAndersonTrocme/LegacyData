@@ -239,37 +239,6 @@ Because this is higher than the false discovery rate, we conclude that the cohor
 Finally, among the 15,270 $Q$-associated variants, 613 are present on Illumina's Omni 2.5 chip (See Figure \ref{Omni}). 
 These are likely among the small number of variants that are present in the data but exhibit biased genotyping in 1kGP. 
 
-
-\subsection{Suspicious variants impact modern genomics analyses}
-
-State of the art imputation servers use a combination of many databases including some that are not freely available.
-From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
-
-To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
-We found that all of the variants associated with $Q$ were imputed back in the samples.
-This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
-These $Q$-associated variants could also compromise the imputation of nearby real-variants, however when considering the imputation scores of genotype data from Japanese individuals from Nagahama, there does not appear to be any impact on nearby variant imputation scores (Figure \ref{imputation_score}).
-
-We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
-The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
-
-Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
-One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}. 
-
-All of these articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
-They also removed rare alleles and alleles with high degrees of missingness.
-Indeed, we expect a large number of $Q$-associated variants to be filtered out by some quality controls like the Hardy-Weinberg equilibrium test.
-Even though the studies used state-of-the-art quality controls, the variants were imputed onto genotype data and reached genome wide significance for association with biological traits.
-However, the fact that some of these variants in other studies are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.
-
-These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations.
-To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{OverUnder30}).
-The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
-By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
-One study that reports associations with seven highly biased $Q$-associated variants considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype \citep{Mandage2017}. 
-These seven variants were not flanked by LD peaks and were correctly removed from downstream analyses however, they were still included in the NHGRI-EBI Catalog \citep{Mandage2017}.
-It is plausible that the EBV copy number phenotype is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.
-
 \begin{table}[h!]
 \begin{tabular}{l l l r r r}
   {Pubmed ID}  & {Disease/Trait} & {rsID} & \multicolumn{1}{p{1cm}}{\centering GWAS \\ -$\log_{10} p$} & \multicolumn{1}{p{1.5cm}}{\centering $Q$\\-$\log_{10} p$\\(adjusted)}      \\ \hline
@@ -308,6 +277,38 @@ It is plausible that the EBV copy number phenotype is sensitive to mapping and c
 \label{gwasTable}
 \end{table}
 
+\subsection{Suspicious variants impact modern genomics analyses}
+
+State of the art imputation servers use a combination of many databases including some that are not freely available.
+From the perspective of researchers, they act as black-box imputation machines that take observed genotypes as input and return imputed genotypes.  
+
+To investigate whether suspicious calls from the 1kGP are imputed into genotyping studies, we submitted genotype data for the first two chromosomes of the 1kGP genotype data to the Michigan Imputation Server.
+We found that all of the variants associated with $Q$ were imputed back in the samples.
+This suggests that the imputation reference panel still includes individuals with low $Q$, and the dubious variants will be imputed in individuals who most closely match the low-quality individual.
+These $Q$-associated variants could also compromise the imputation of nearby real-variants, however when considering the imputation scores of genotype data from Japanese individuals from Nagahama, there does not appear to be any impact on nearby variant imputation scores (Figure \ref{imputation_score}).
+
+We searched the literature for any GWAS that might have reported these $Q$-associated variants as being significantly associated with some biological trait, even though there is no particular reason for these variants to be associated with phenotypes.
+The NHGRI-EBI Catalog of published genome-wide association studies identified seventeen recent publications that had reported these variants as close to or above the genome-wide significant threshold (Table \ref{gwasTable}).
+
+Eleven of these studies included the 1kGP in their reference panel for imputation \citep{xu2012genome, lutz2015genome, park2015mercapturic, astle2016allelic, herold2016family,  suhre2017connecting, lopez2017genome, tian2017genome,  spracklen2017association,  nagy2017exploration, gao2018genome} and another used the 1kGP sequence data and cell lines directly \citep{Mandage2017}.
+One study used an in-house reference panel for imputation \citep{nishida2018key}, two studies genotyped individuals and imputed the data using the HapMap II as a reference  database for imputation \citep{Kraja2011, Ebejer2013} and two studies used genotyping chip data \citep{yucesoy2015genome, ellinghaus2016analysis}. 
+
+All of these articles used a variety of strict quality filters, including Hardy-Weinberg equilibrium test, deviations in expected allele frequency and sequencing data quality thresholds.
+They also removed rare alleles and alleles with high degrees of missingness.
+Indeed, we expect a large number of $Q$-associated variants to be filtered out by some quality controls like the Hardy-Weinberg equilibrium test.
+Even though the studies used state-of-the-art quality controls, the variants were imputed onto genotype data and reached genome wide significance for association with biological traits.
+However, the fact that some of these variants in other studies are not removed and that the great majority of these variants are missing from higher quality datasets means that these $Q$-associated variants should be flagged for removal to avoid spurious association.
+
+These associations are not necessarily incorrect -- a weak but significant bias in imputation may still result in a correct associations.
+To distinguish between variants with weak but significant association with $Q$ from variants with strong biases, we distinguished between variants where the allele frequency difference between individuals with low- and high-$Q$ is larger than a factor of two (which naturally separates two clusters of variants on Figure \ref{OverUnder30}).
+The majority (92.7\%) of the $Q$-associated variants are strongly biased in that they are more than twice as frequent in individuals with low-$Q$ compared to high-$Q$ data.
+By contrast, most $Q$-associated variants reported in the GWAS catalogue had weak bias (See Figure \ref{Pub_30}), with three exceptions.
+One study that reports associations with seven highly biased $Q$-associated variants considered copy number of Epstein-Barr virus (EBV) sequence in the 1kGP as a phenotype \citep{Mandage2017}. 
+These seven variants were not flanked by LD peaks and were correctly removed from downstream analyses however, they were still included in the NHGRI-EBI Catalog \citep{Mandage2017}.
+It is plausible that the EBV copy number phenotype is sensitive to mapping and confounded by the same technical artefacts that lead to biased SNP calling.
+
+
+
 \section{Discussion}
 
 The variants identified in this study could be explained by technical artifacts from legacy technologies. %are likely to be
@@ -315,9 +316,9 @@ Different sequencing technologies will have different error profiles.
 A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. 
 Differences in read quality and error profiles in turn require different calling pipelines.
 
-An enrichment in mutational profiles in one chromosome (Figure \ref{CountPerChrom}B) is difficult to explain biologically or technologically as neither are expected to produce chromosome-specific differences in error rates. 
-Bioinformatics data processing errors are one possibility that would be consistent with this as chromosomes are commonly treated and analyzed separately.
-However, to pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. 
+An enrichment in mutational profiles in one chromosome (Figure \ref{CountPerChrom}B) is difficult to explain through biological mechanisms or sequencing technology as neither are expected to produce systematic differences across chromosomes. 
+Issues arising from subtle differences in how these data were integrated or processed are one explanation that would be consistent with this as chromosomes are commonly treated and analyzed separately.
+However, to pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation, combination of sequencing technologies and data processing pipelines used throughout the 1kGP. 
 Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
 However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. 
@@ -418,7 +419,327 @@ The VCF file returned from the server was then downloaded and used to search for
 We would like to thank K. Harris for sharing her mutation spectrum scripts, F. Mafessoni, G. Santpere and A. Navarro for feedback on earlier versions of the manuscript.
 We would also like to thank the members of the Gravel lab for their help with coding and useful discussions.
 
-\bibliography{Legacy}
+%\bibliography{Legacy}
+\begin{thebibliography}{}
+
+\bibitem[{1000 Genomes Project Consortium},
+  2010]{1000GenomesProjectConsortium2010}
+{1000 Genomes Project Consortium} (2010).
+\newblock {A map of human genome variation from population-scale sequencing.}
+\newblock {\em Nature}, 467(7319):1061--73.
+
+\bibitem[{1000 Genomes Project Consortium},
+  2012]{The1000GenomesProjectConsortium2012}
+{1000 Genomes Project Consortium} (2012).
+\newblock {An integrated map of genetic variation}.
+\newblock {\em Nature}, 135:0--9.
+
+\bibitem[Aikens et~al., 2019]{Aikens2018}
+Aikens, R.~C., Johnson, K.~E., and Voight, B.~F. (2019).
+\newblock {Signals of Variation in Human Mutation Rate at Multiple Levels of
+  Sequence Context}.
+\newblock {\em Molecular Biology and Evolution}.
+
+\bibitem[Alexandrov et~al., 2013]{Alexandrov2013}
+Alexandrov, L.~B., Nik-Zainal, S., Wedge, D.~C., Aparicio, S.~A., Behjati, S.,
+  Biankin, A.~V., Bignell, G.~R., Bolli, N., Borg, A., B{\o}rresen-Dale, A.~L.,
+  Boyault, S., Burkhardt, B., Butler, A.~P., Caldas, C., Davies, H.~R.,
+  Desmedt, C., Eils, R., Eyfj{\"{o}}rd, J.~E., Foekens, J.~A., Greaves, M.,
+  Hosoda, F., Hutter, B., Ilicic, T., Imbeaud, S., Imielinsk, M., J{\"{a}}ger,
+  N., Jones, D.~T., Jonas, D., Knappskog, S., Koo, M., Lakhani, S.~R.,
+  L{\'{o}}pez-Ot{\'{i}}n, C., Martin, S., Munshi, N.~C., Nakamura, H.,
+  Northcott, P.~A., Pajic, M., Papaemmanuil, E., Paradiso, A., Pearson, J.~V.,
+  Puente, X.~S., Raine, K., Ramakrishna, M., Richardson, A.~L., Richter, J.,
+  Rosenstiel, P., Schlesner, M., Schumacher, T.~N., Span, P.~N., Teague, J.~W.,
+  Totoki, Y., Tutt, A.~N., Vald{\'{e}}s-Mas, R., {Van Buuren}, M.~M., {Van 'T
+  Veer}, L., Vincent-Salomon, A., Waddell, N., Yates, L.~R., Zucman-Rossi, J.,
+  {Andrew Futreal}, P., McDermott, U., Lichter, P., Meyerson, M., Grimmond,
+  S.~M., Siebert, R., Campo, E., Shibata, T., Pfister, S.~M., Campbell, P.~J.,
+  and Stratton, M.~R. (2013).
+\newblock {Signatures of mutational processes in human cancer}.
+\newblock {\em Nature}, 500(7463):415--421.
+
+\bibitem[Astle et~al., 2016]{astle2016allelic}
+Astle, W.~J., Elding, H., Jiang, T., Allen, D., Ruklisa, D., Mann, A.~L., Mead,
+  D., Bouman, H., Riveros-Mckay, F., Kostadima, M.~A., et~al. (2016).
+\newblock The allelic landscape of human blood cell trait variation and links
+  to common complex disease.
+\newblock {\em Cell}, 167(5):1415--1429.
+
+\bibitem[Balding and Nichols, 1995]{balding1995method}
+Balding, D.~J. and Nichols, R.~A. (1995).
+\newblock A method for quantifying differentiation between populations at
+  multi-allelic loci and its implications for investigating identity and
+  paternity.
+\newblock {\em Genetica}, 96(1-2):3--12.
+
+\bibitem[Benjamini et~al., 2006]{Benjamini2006}
+Benjamini, Y., Krieger, A.~M., and Yekutieli, D. (2006).
+\newblock {Adaptive linear step-up procedures that control the false discovery
+  rate}.
+\newblock {\em Biometrika}.
+
+\bibitem[Consortium et~al., 2015]{phase3}
+Consortium, . G.~P. et~al. (2015).
+\newblock A global reference for human genetic variation.
+\newblock {\em Nature}, 526(7571):68.
+
+\bibitem[Ebejer et~al., 2013]{Ebejer2013}
+Ebejer, J.~L., Duffy, D.~L., {Van Der Werf}, J., Wright, M.~J., Montgomery, G.,
+  Gillespie, N.~A., Hickie, I.~B., Martin, N.~G., and Medland, S.~E. (2013).
+\newblock {Genome-wide association study of inattention and
+  hyperactivity-impulsivity measured as quantitative traits}.
+\newblock {\em Twin Research and Human Genetics}.
+
+\bibitem[Ellinghaus et~al., 2016]{ellinghaus2016analysis}
+Ellinghaus, D., Jostins, L., Spain, S.~L., Cortes, A., Bethune, J., Han, B.,
+  Park, Y.~R., Raychaudhuri, S., Pouget, J.~G., H{\"u}benthal, M., et~al.
+  (2016).
+\newblock Analysis of five chronic inflammatory diseases identifies 27 new
+  associations and highlights disease-specific patterns at shared loci.
+\newblock {\em Nature genetics}, 48(5):510.
+
+\bibitem[Gao et~al., 2018]{gao2018genome}
+Gao, X.~R., Huang, H., Nannini, D.~R., Fan, F., and Kim, H. (2018).
+\newblock Genome-wide association analyses identify new loci influencing
+  intraocular pressure.
+\newblock {\em Human molecular genetics}, 27(12):2205--2213.
+
+\bibitem[Harris, 2015]{Harris2015a}
+Harris, K. (2015).
+\newblock {Evidence for recent, population-specific evolution of the human
+  mutation rate}.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  112(11):3439--3444.
+
+\bibitem[Harris and Pritchard, 2017]{Harris2017a}
+Harris, K. and Pritchard, J.~K. (2017).
+\newblock {Rapid evolution of the human mutation spectrum}.
+\newblock {\em eLife}, 6.
+
+\bibitem[Herold et~al., 2016]{herold2016family}
+Herold, C., Hooli, B.~V., Mullin, K., Liu, T., Roehr, J.~T., Mattheisen, M.,
+  Parrado, A.~R., Bertram, L., Lange, C., and Tanzi, R.~E. (2016).
+\newblock Family-based association analyses of imputed genotypes reveal
+  genome-wide significant association of alzheimer?s disease with osbpl6,
+  ptprg, and pdcl3.
+\newblock {\em Molecular psychiatry}, 21(11):1608.
+
+\bibitem[{International HapMap Consortium}, 2005]{HapMap2005}
+{International HapMap Consortium} (2005).
+\newblock {A haplotype map of the human genome.}
+\newblock {\em Nature}, 437(7063):1299--320.
+
+\bibitem[Kraja et~al., 2011]{Kraja2011}
+Kraja, A.~T., Vaidya, D., Pankow, J.~S., Goodarzi, M.~O., Assimes, T.~L.,
+  Kullo, I.~J., Sovio, U., Mathias, R.~A., Sun, Y.~V., Franceschini, N.,
+  Absher, D., Li, G., Zhang, Q., Feitosa, M.~F., Glazer, N.~L., Haritunians,
+  T., Hartikainen, A.~L., Knowles, J.~W., North, K.~E., Iribarren, C., Kral,
+  B., Yanek, L., O'Reilly, P.~F., McCarthy, M.~I., Jaquish, C., Couper, D.~J.,
+  Chakravarti, A., Psaty, B.~M., Becker, L.~C., Province, M.~A., Boerwinkle,
+  E., Quertermous, T., Palotie, L., Jarvelin, M.~R., Becker, D.~M., Kardia,
+  S.~L., Rotter, J.~I., Chen, Y. D.~I., and Borecki, I.~B. (2011).
+\newblock {A bivariate genome-wide approach to metabolic syndrome: STAMPEED
+  Consortium}.
+\newblock {\em Diabetes}.
+
+\bibitem[Lan et~al., 2017]{Lan2017}
+Lan, T., Lin, H., Zhu, W., Laurent, T. C. A.~M., Yang, M., Liu, X., Wang, J.,
+  Wang, J., Yang, H., Xu, X., and Guo, X. (2017).
+\newblock Deep whole-genome sequencing of 90 han chinese genomes.
+\newblock {\em GigaScience}, 6(9):gix067.
+
+\bibitem[Lek et~al., 2016]{Lek2016}
+Lek, M., Karczewski, K.~J., Minikel, E.~V., Samocha, K.~E., Banks, E., Fennell,
+  T., O'Donnell-Luria, A.~H., Ware, J.~S., Hill, A.~J., Cummings, B.~B.,
+  Tukiainen, T., Birnbaum, D.~P., Kosmicki, J.~A., Duncan, L.~E., Estrada, K.,
+  Zhao, F., Zou, J., Pierce-Hoffman, E., Berghout, J., Cooper, D.~N., Deflaux,
+  N., DePristo, M., Do, R., Flannick, J., Fromer, M., Gauthier, L., Goldstein,
+  J., Gupta, N., Howrigan, D., Kiezun, A., Kurki, M.~I., Moonshine, A.~L.,
+  Natarajan, P., Orozco, L., Peloso, G.~M., Poplin, R., Rivas, M.~A.,
+  Ruano-Rubio, V., Rose, S.~A., Ruderfer, D.~M., Shakir, K., Stenson, P.~D.,
+  Stevens, C., Thomas, B.~P., Tiao, G., Tusie-Luna, M.~T., Weisburd, B., Won,
+  H.~H., Yu, D., Altshuler, D.~M., Ardissino, D., Boehnke, M., Danesh, J.,
+  Donnelly, S., Elosua, R., Florez, J.~C., Gabriel, S.~B., Getz, G., Glatt,
+  S.~J., Hultman, C.~M., Kathiresan, S., Laakso, M., McCarroll, S., McCarthy,
+  M.~I., McGovern, D., McPherson, R., Neale, B.~M., Palotie, A., Purcell,
+  S.~M., Saleheen, D., Scharf, J.~M., Sklar, P., Sullivan, P.~F., Tuomilehto,
+  J., Tsuang, M.~T., Watkins, H.~C., Wilson, J.~G., Daly, M.~J., and MacArthur,
+  D.~G. (2016).
+\newblock {Analysis of protein-coding genetic variation in 60,706 humans}.
+\newblock {\em Nature}, 536(7616):285--291.
+
+\bibitem[L{\'o}pez-Mej{\'\i}as et~al., 2017]{lopez2017genome}
+L{\'o}pez-Mej{\'\i}as, R., Carmona, F.~D., Casta{\~n}eda, S., Genre, F.,
+  Remuzgo-Mart{\'\i}nez, S., Sevilla-Perez, B., Ortego-Centeno, N., Llorca, J.,
+  Ubilla, B., Mijares, V., et~al. (2017).
+\newblock A genome-wide association study suggests the hla class ii region as
+  the major susceptibility locus for iga vasculitis.
+\newblock {\em Scientific reports}, 7(1):5088.
+
+\bibitem[Lutz et~al., 2015]{lutz2015genome}
+Lutz, S.~M., Cho, M.~H., Young, K., Hersh, C.~P., Castaldi, P.~J., McDonald,
+  M.-L., Regan, E., Mattheisen, M., DeMeo, D.~L., Parker, M., et~al. (2015).
+\newblock A genome-wide association study identifies risk loci for spirometric
+  measures among smokers of european and african ancestry.
+\newblock {\em BMC genetics}, 16(1):138.
+
+\bibitem[Mafessoni et~al., 2018]{mafessoni2018turning}
+Mafessoni, F., Prasad, R.~B., Groop, L., Hansson, O., and Pr{\"u}fer, K.
+  (2018).
+\newblock Turning vice into virtue: Using batch-effects to detect errors in
+  large genomic data sets.
+\newblock {\em Genome biology and evolution}, 10(10):2697--2708.
+
+\bibitem[Mallick et~al., 2016]{Mallick2016}
+Mallick, S., Li, H., Lipson, M., Mathieson, I., Gymrek, M., Racimo, F., Zhao,
+  M., Chennagiri, N., Nordenfelt, S., Tandon, A., Skoglund, P., Lazaridis, I.,
+  Sankararaman, S., Fu, Q., Rohland, N., Renaud, G., Erlich, Y., Willems, T.,
+  Gallo, C., Spence, J.~P., Song, Y.~S., Poletti, G., Balloux, F., {Van Driem},
+  G., {De Knijff}, P., Romero, I.~G., Jha, A.~R., Behar, D.~M., Bravi, C.~M.,
+  Capelli, C., Hervig, T., Moreno-Estrada, A., Posukh, O.~L., Balanovska, E.,
+  Balanovsky, O., Karachanak-Yankova, S., Sahakyan, H., Toncheva, D.,
+  Yepiskoposyan, L., Tyler-Smith, C., Xue, Y., Abdullah, M.~S., Ruiz-Linares,
+  A., Beall, C.~M., {Di Rienzo}, A., Jeong, C., Starikovskaya, E.~B., Metspalu,
+  E., Parik, J., Villems, R., Henn, B.~M., Hodoglugil, U., Mahley, R.,
+  Sajantila, A., Stamatoyannopoulos, G., Wee, J.~T., Khusainova, R.,
+  Khusnutdinova, E., Litvinov, S., Ayodo, G., Comas, D., Hammer, M.~F.,
+  Kivisild, T., Klitz, W., Winkler, C.~A., Labuda, D., Bamshad, M., Jorde,
+  L.~B., Tishkoff, S.~A., Watkins, W.~S., Metspalu, M., Dryomov, S., Sukernik,
+  R., Singh, L., Thangaraj, K., Pa{\"{a}}bo, S., Kelso, J., Patterson, N., and
+  Reich, D. (2016).
+\newblock {The Simons Genome Diversity Project: 300 genomes from 142 diverse
+  populations}.
+\newblock {\em Nature}, 538(7624):201--206.
+
+\bibitem[Mandage et~al., 2017]{Mandage2017}
+Mandage, R., Telford, M., Rodr{\'{i}}guez, J.~A., Farr{\'{e}}, X., Layouni, H.,
+  Marigorta, U.~M., Cundiff, C., Heredia-Genestar, J.~M., Navarro, A., and
+  Santpere, G. (2017).
+\newblock {Genetic factors affecting EBV copy number in lymphoblastoid cell
+  lines derived from the 1000 Genome Project samples}.
+\newblock {\em PLoS ONE}.
+
+\bibitem[Mathieson and Reich, 2017]{Mathieson2017a}
+Mathieson, I. and Reich, D. (2017).
+\newblock {Differences in the rare variant spectrum among human populations}.
+\newblock {\em PLoS Genetics}, 13(2).
+
+\bibitem[McCarthy et~al., 2016]{mccarthy2016reference}
+McCarthy, S., Das, S., Kretzschmar, W., Delaneau, O., Wood, A.~R., Teumer, A.,
+  Kang, H.~M., Fuchsberger, C., Danecek, P., Sharp, K., et~al. (2016).
+\newblock A reference panel of 64,976 haplotypes for genotype imputation.
+\newblock {\em Nature genetics}, 48(10):1279.
+
+\bibitem[Minoche et~al., 2011]{Minoche2011}
+Minoche, A.~E., Dohm, J.~C., and Himmelbauer, H. (2011).
+\newblock {Evaluation of genomic high-throughput sequencing data generated on
+  Illumina HiSeq and Genome Analyzer systems}.
+\newblock {\em Genome Biology}, 12(11).
+
+\bibitem[Nagy et~al., 2017]{nagy2017exploration}
+Nagy, R., Boutin, T.~S., Marten, J., Huffman, J.~E., Kerr, S.~M., Campbell, A.,
+  Evenden, L., Gibson, J., Amador, C., Howard, D.~M., et~al. (2017).
+\newblock Exploration of haplotype research consortium imputation for
+  genome-wide association studies in 20,032 generation scotland participants.
+\newblock {\em Genome medicine}, 9(1):23.
+
+\bibitem[Nishida et~al., 2018]{nishida2018key}
+Nishida, N., Sugiyama, M., Sawai, H., Nishina, S., Sakai, A., Ohashi, J., Khor,
+  S.-S., Kakisaka, K., Tsuchiura, T., Hino, K., et~al. (2018).
+\newblock Key hla-drb1-dqb1 haplotypes and role of the btnl2 gene for response
+  to a hepatitis b vaccine.
+\newblock {\em Hepatology}, 68(3):848--858.
+
+\bibitem[Park et~al., 2015]{park2015mercapturic}
+Park, S.~L., Carmella, S.~G., Chen, M., Patel, Y., Stram, D.~O., Haiman, C.~A.,
+  Le~Marchand, L., and Hecht, S.~S. (2015).
+\newblock Mercapturic acids derived from the toxicants acrolein and
+  crotonaldehyde in the urine of cigarette smokers from five ethnic groups with
+  differing risks for lung cancer.
+\newblock {\em PLoS One}, 10(6):e0124841.
+
+\bibitem[Pfeifer et~al., 2002]{Pfeifer2002}
+Pfeifer, G.~P., Denissenko, M.~F., Olivier, M., Tretyakova, N., Hecht, S.~S.,
+  and Hainaut, P. (2002).
+\newblock {Tobacco smoke carcinogens, DNA damage and p53 mutations in
+  smoking-associated cancers}.
+\newblock {\em Oncogene}, 21-48(6):7435--7451.
+
+\bibitem[Pleasance et~al., 2010]{Pleasance2010}
+Pleasance, E.~D., Stephens, P.~J., O'Meara, S., McBride, D.~J., Meynert, A.,
+  Jones, D., Lin, M.~L., Beare, D., Lau, K.~W., Greenman, C., Varela, I.,
+  Nik-Zainal, S., Davies, H.~R., Ord{\~{o}}ez, G.~R., Mudie, L.~J., Latimer,
+  C., Edkins, S., Stebbings, L., Chen, L., Jia, M., Leroy, C., Marshall, J.,
+  Menzies, A., Butler, A., Teague, J.~W., Mangion, J., Sun, Y.~A., McLaughlin,
+  S.~F., Peckham, H.~E., Tsung, E.~F., Costa, G.~L., Lee, C.~C., Minna, J.~D.,
+  Gazdar, A., Birney, E., Rhodes, M.~D., McKernan, K.~J., Stratton, M.~R.,
+  Futreal, P.~A., and Campbell, P.~J. (2010).
+\newblock {A small-cell lung cancer genome with complex signatures of tobacco
+  exposure}.
+\newblock {\em Nature}, 463(7278):184--190.
+
+\bibitem[Pritchard et~al., 2000]{pritchard2000inference}
+Pritchard, J.~K., Stephens, M., and Donnelly, P. (2000).
+\newblock Inference of population structure using multilocus genotype data.
+\newblock {\em Genetics}, 155(2):945--959.
+
+\bibitem[Shiraishi et~al., 2015]{Shiraishi2015a}
+Shiraishi, Y., Tremmel, G., Miyano, S., and Stephens, M. (2015).
+\newblock {A Simple Model-Based Approach to Inferring and Visualizing Cancer
+  Mutation Signatures}.
+\newblock {\em PLoS Genetics}, 11(12).
+
+\bibitem[Song et~al., 2015]{song2015testing}
+Song, M., Hao, W., and Storey, J.~D. (2015).
+\newblock Testing for genetic associations in arbitrarily structured
+  populations.
+\newblock {\em Nature genetics}, 47(5):550.
+
+\bibitem[Spracklen et~al., 2017]{spracklen2017association}
+Spracklen, C.~N., Chen, P., Kim, Y.~J., Wang, X., Cai, H., Li, S., Long, J.,
+  Wu, Y., Wang, Y.~X., Takeuchi, F., et~al. (2017).
+\newblock Association analyses of east asian individuals and trans-ancestry
+  analyses with european individuals reveal new loci associated with
+  cholesterol and triglyceride levels.
+\newblock {\em Human molecular genetics}, 26(9):1770--1784.
+
+\bibitem[Suhre et~al., 2017]{suhre2017connecting}
+Suhre, K., Arnold, M., Bhagwat, A.~M., Cotton, R.~J., Engelke, R., Raffler, J.,
+  Sarwath, H., Thareja, G., Wahl, A., DeLisle, R.~K., et~al. (2017).
+\newblock Connecting genetic risk to disease end points through the human blood
+  plasma proteome.
+\newblock {\em Nature communications}, 8:14357.
+
+\bibitem[Tian et~al., 2017]{tian2017genome}
+Tian, C., Hromatka, B.~S., Kiefer, A.~K., Eriksson, N., Noble, S.~M., Tung,
+  J.~Y., and Hinds, D.~A. (2017).
+\newblock Genome-wide association and hla region fine-mapping studies identify
+  susceptibility loci for multiple common infections.
+\newblock {\em Nature communications}, 8(1):599.
+
+\bibitem[van Dijk et~al., 2014]{VanDijk2014}
+van Dijk, E.~L., Auger, H., Jaszczyszyn, Y., and Thermes, C. (2014).
+\newblock {Ten years of next-generation sequencing technology}.
+\newblock {\em Trends in Genetics}, 30(9):418--426.
+
+\bibitem[Xu et~al., 2012]{xu2012genome}
+Xu, J., Mo, Z., Ye, D., Wang, M., Liu, F., Jin, G., Xu, C., Wang, X., Shao, Q.,
+  Chen, Z., et~al. (2012).
+\newblock Genome-wide association study in chinese men identifies two new
+  prostate cancer risk loci at 9q31. 2 and 19q13. 4.
+\newblock {\em Nature genetics}, 44(11):1231.
+
+\bibitem[Yucesoy et~al., 2015]{yucesoy2015genome}
+Yucesoy, B., Kaufman, K.~M., Lummus, Z.~L., Weirauch, M.~T., Zhang, G.,
+  Cartier, A., Boulet, L.-P., Sastre, J., Quirce, S., Tarlo, S.~M., et~al.
+  (2015).
+\newblock Genome-wide association study identifies novel loci associated with
+  diisocyanate-induced occupational asthma.
+\newblock {\em Toxicological Sciences}, 146(1):192--201.
+
+\end{thebibliography}
+
 
 \clearpage
 
@@ -426,7 +747,7 @@ We would also like to thank the members of the Gravel lab for their help with co
 \section{Supplementary Figures}
 \clearpage
 
-\extrafloats{100}
+%\extrafloats{100}
 
 \renewcommand{\thefigure}{S\arabic{figure}}
 \setcounter{figure}{0}   	
