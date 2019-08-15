@@ -61,7 +61,7 @@
 \else  
   \RequirePackage[T1]{fontenc}
   \RequirePackage[utf8]{inputenc}
-  \RequirePackage{stix}
+  %\RequirePackage{stix}
   \RequirePackage[default]{opensans}
   \renewcommand{\ttdefault}{lmtt}
 \fi

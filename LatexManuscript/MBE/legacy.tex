@@ -86,11 +86,11 @@ In 2015, Harris reported 50\% more TCC ${\rightarrow}$ TTC mutations in European
 Strong population enrichments of a mutational signature suggests important genetic or environmental differences in the history of each population \citep{Harris2015a, Harris2017a}. 
 Harris and Pritchard further identified distinct mutational spectra across a range of populations, which were further examined in a recent publication by Aikens et al. \citep{Harris2017a,Aikens2018}.
  
-\todo{Another signature, *AC $\rightarrow$ *CC, has been observed at higher frequency in East Asians compared to Africans in the 1kGP and the SGDP  \citep{Aikens2018, Harris2017a}}. 
+Another signature, *AC $\rightarrow$ *CC, has been observed at higher frequency in East Asians compared to Africans in the 1kGP and the SGDP  \citep{Aikens2018, Harris2017a}. 
  These two studies also found heterogeneous frequency of this signature among 1kGP Japanese individuals.
 This heterogeneity is intriguing because differences in germline signatures accumulate over many generations.
 A systematic difference within the Japanese population would suggest sustained environmental or genetic differences across sub-populations within Japan with little to no gene flow. This observation could not be reproduced in SGDP due to the small number of Japanese samples \citep{Aikens2018}.
-\todo{We therefore decided to follow up on this observation by using a newly sequenced dataset of Japanese individuals from Nagahama.}
+We therefore decided to follow up on this observation by using a newly sequenced dataset of Japanese individuals from Nagahama.
 While we were unable to reproduce the mutational heterogeneity within the Japanese population, we could trace back the source of the discrepancy to a technical artefact in the 1kGP data.
 In addition to creating biases in mutational signatures, this artefact leads to spurious imputation results which have found their way in recent publications and online resources.
 
@@ -161,7 +161,7 @@ These three enrichments can be summarized as an excess of G**${\rightarrow}$GG* 
 Statistical significance of these enrichment is computed using a chi-squared test following \cite{Harris2017a}.
 
 Thus, this mutational signal is heavily enriched in $Q$-associated SNPs, but residual signal remains in non-significant SNPs, presumably because many rare alleles found in individuals with low $Q$ remain unidentifiable using association techniques due to lack of power (Supplementary Figure \ref{histogram_of_sig_snps}).
-\todo{The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal enrichment in the Japanese, however other signals identified by Harris and Pritchard appear unchanged including the continental enrichment of *AC${\rightarrow}$*CC signal in East Asians compared to Africans as reported by Harris and Pritchard and replicated in the SGDP (Figure \ref{MutSpect} and \ref{MutSpect_continental}).}
+The removal of individuals with $Q$ below 30 successfully removes the *AC${\rightarrow}$*CC signal enrichment in the Japanese, however other signals identified by Harris and Pritchard appear unchanged including the continental enrichment of *AC${\rightarrow}$*CC signal in East Asians compared to Africans as reported by Harris and Pritchard and replicated in the SGDP (Figure \ref{MutSpect} and \ref{MutSpect_continental}).
 For population genetic analyses sensitive to the accumulation of rare variants, the removal of individuals with low $Q$ appears preferable to filtering specific low-quality SNPs. 
 For other analyses where quality of imputation matters, identifying $Q$-associated variants may be preferable. 
 
@@ -183,7 +183,7 @@ We tested SNPs, INDELs and repetitive regions separately as they may have differ
 Lists of $Q$-associated variants and individuals with low $Q$ are provided in Supplementary Data.
 
 $Q$-associated variants are distributed across the genome, with chromosome 1 showing an excess of such variants, and other chromosomes being relatively uniform (Figure \ref{CountPerChrom}A).
-\todo{Chromosome 1 shows strong enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes despite normalizing for the number of variants tested per chromosome (Figure \ref{CountPerChrom}B).} 
+Chromosome 1 shows strong enrichments in the  *AC${\rightarrow}$*CC signal compared to other chromosomes despite normalizing for the number of variants tested per chromosome (Figure \ref{CountPerChrom}B).
 At a 1Mb scale, we also see rather uniform distribution with a small number of regions showing an enrichment for such variants (Figure \ref{CountPerChrom}C).
 Three outlying 1Mb regions in chromosomes 1, 2 and 17 have over 30 $Q$-associated variants.
 Distribution of association statistics in these regions are provided in Figure \ref{Top10}.
@@ -310,15 +310,15 @@ It is plausible that the EBV copy number phenotype is sensitive to mapping and c
 
 \section{Discussion}
 
-The variants identified in this study \todo{could be explained by} technical artifacts from legacy technologies. %are likely to be
+The variants identified in this study could be explained by technical artifacts from legacy technologies. %are likely to be
 Different sequencing technologies will have different error profiles. 
 A report comparing the Genome Analyzer II (GAII) to the Illumina HiSeq found that the GAII had much higher rates of reads below a quality score of 30 \citep{Minoche2011} with, for instance, different patterns of quality decrease along reads. 
 Differences in read quality and error profiles in turn require different calling pipelines.
 
-\todo{An enrichment in mutational profiles in one chromosome (Figure \ref{CountPerChrom}B) is difficult to explain biologically or technologically as neither are expected to produce chromosome-specific differences in error rates. 
+An enrichment in mutational profiles in one chromosome (Figure \ref{CountPerChrom}B) is difficult to explain biologically or technologically as neither are expected to produce chromosome-specific differences in error rates. 
 Bioinformatics data processing errors are one possibility that would be consistent with this as chromosomes are commonly treated and analyzed separately.
 However, to pinpoint the precise technical source of the discrepancy would require further forensic inquiries into the details of the heterogeneous sample preparation and data processing pipelines used throughout the 1kGP. 
-Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.}
+Given the progress in sequencing and calling that occurred since the early phases of the 1kGP (Figure \ref{MapQual}), it is likely that the source of these biases is not longer being actively introduced in recent sequence data.
 
 However, because the 1kGP data is widely used as a reference database, these variants are still being imputed onto new genotype data and can then impact association studies for a variety of phenotypes. 
 Even though significant association of a variant with a quality metric is not in itself an indication that the variant is spurious, we would recommend to carefully examine GWAS associations for such variants, e.g. by repeating the analysis without the 1kGP as part of the imputation panel. 
