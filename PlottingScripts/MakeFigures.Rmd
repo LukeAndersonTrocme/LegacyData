@@ -1194,7 +1194,8 @@ for(chrom in seq(1,22,1)){
       #geom_freqpoly(data = df, breaks = b) +
       geom_freqpoly(data = df_sig, 
                     aes(color = Signature),
-                    breaks = b) +
+                    breaks = b,
+                    alpha = 0.3) +
       scale_color_manual(values = c('blue','red'))+
       guides(color=F)+
       ylim(0,20)+
@@ -1213,7 +1214,8 @@ for(chrom in seq(1,22,1)){
     #geom_freqpoly(data = df, breaks = b) +
       geom_freqpoly(data = df_sig, 
                     aes(color = Signature),
-                    breaks = b) +
+                    breaks = b,
+                    alpha = 0.3) +
       scale_color_manual(values = c('blue','red'))+
       guides(color=F)+
     ylim(0,20)+
@@ -1231,7 +1233,8 @@ for(chrom in seq(1,22,1)){
     #geom_freqpoly(data = df, breaks = b) +
     geom_freqpoly(data = df_sig, 
                     aes(color = Signature),
-                    breaks = b) +
+                    breaks = b,
+                    alpha = 0.3) +
       scale_color_manual(values = c('blue','red'))+
       guides(color=F)+
     ylim(0,20)+
