@@ -1,0 +1,252 @@
+%%% PREAMBLE 
+\documentclass[9pt,article]{template}
+
+%\usepackage[export]{adjustbox}
+%\usepackage{lscape}
+%\usepackage{afterpage}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
+%\usepackage{ulem}
+\usepackage{textcomp}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+% Cross ref with main text
+\usepackage{xr}
+\externaldocument{legacy}
+
+
+\begin{document}
+
+\section{Supplementary Figures}
+\clearpage
+
+%\extrafloats{100}
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{figure}{0}   	
+
+\begin{figure}[tbp]
+\includegraphics[width=11cm,keepaspectratio]{PC1_Correlation.jpg}
+\caption{Sequencing metrics against the prevalence of the  *AC${\rightarrow}$*CC mutational signature in 1000 Genomes Project. 
+The average quality per mapped bases $Q$ per individual shows some clustering with individuals with low-quality data showing elevated rates of the signature.  }
+\label{PC1_Correlation}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=8cm,keepaspectratio]{histogram_of_sig_snps.jpg}
+\caption{Frequency distribution of the 1034 $Q$ associated SNPs from the single population test in the JPT in blue and all SNPs in black. The association test lacks power to identify variants at low frequencies.}  
+\label{histogram_of_sig_snps}
+\end{figure}
+
+\begin{figure}[tbp]
+\includegraphics[width=11cm,keepaspectratio]{MutationSpectrum_cutOff.png}
+\caption{Comparing mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  
+\textbf{A} 
+The  *AC${\rightarrow}$*CC mutational signature in JPT remains despite removing variants associated to quality.
+\textbf{B} 
+Removing individuals with average quality per mapped bases $Q$ below a threshold of 30 removes the mutational signature completely. }
+\label{MutSpect}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\includegraphics[width=7cm,keepaspectratio]{CutOffID_QUAL30_heatmap_v_AFR_nosingle.jpg}
+\caption{Comparing continental mutational signatures after removing $Q$-associated variants and after removing individuals with low $Q$.  
+The  *AC${\rightarrow}$*CC mutational signature in East Asian (EAS) Population remains despite removing individuals with average quality per mapped bases $Q$ below a threshold of 30.
+Points indicate significant mutation spectrum contrasts with $p <10^{-5}$}
+\label{MutSpect_continental}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=13cm,keepaspectratio]{quality_by_center.jpg}
+\caption{Sequencing date of samples included in the 1kGP coloured by sequencing centre. Improvements in sequencing platforms coincides with improvement in sequencing quality.}  
+\label{quality_by_center}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[width=\hsize,keepaspectratio]{SNPOverlap6.jpg}
+
+\caption{Results from the single population test. We find a total of 1,165 variants associated with the average quality of mapped bases $Q$.
+Phase 1 populations are indicated by a star ( * ).
+\textbf{A} For each population, we plot the number of variants associated to $Q$.
+\textbf{B} The number of populations for which a variant has reached significance.}
+  \label{OverLap}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=13cm,keepaspectratio]{fits_Significant_Positions_CompareModels.jpg}
+\caption{Comparison of three logistic regression models for testing association to $Q$.
+These methods model each genotype as a logistic function using principal components (PC), Population membership (Pop) or LFA as an offset.
+In these plots we are comparing the deviance from the null model in the 15,270 variants identified using the LFA model.}  
+\label{CompareModel}
+\end{figure}
+
+\begin{figure} \centering
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\hsize]{ManhattanPlot_NonRepeatSNPs.jpg}
+    \end{subfigure} 
+    \begin{subfigure}[b]{\linewidth}
+    	\center    
+        \includegraphics[width=\hsize]{QQPlot_NonRepeatSNPs.jpg}
+    
+    \end{subfigure} 
+    \caption{Association of SNPS in non-repetitive regions with $Q$.
+    \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions. 
+    There are 15,018 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+  \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in non repetitive regions.}
+  \label{NRS_Manhattan}
+  \end{figure}
+\begin{figure} \centering
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\hsize]{ManhattanPlot_NonRepeatIndels.jpg}
+    \end{subfigure} %
+    \begin{subfigure}[b]{\linewidth}
+    	\center    
+        \includegraphics[width=\hsize]{QQPlot_NonRepeatIndels.jpg}
+    
+    \end{subfigure} 
+    \caption{Association of indels in non-repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions. 
+    There are 2,121 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+  \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in non repetitive regions.}
+  \label{NRI_Manhattan}
+  \end{figure}
+\begin{figure} \centering
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\hsize]{ManhattanPlot_RepeatSNPs.jpg}
+    \end{subfigure} %
+    \begin{subfigure}[b]{\linewidth}
+    	\center    
+        \includegraphics[width=\hsize]{QQPlot_RepeatSNPs.jpg}
+    
+    \end{subfigure} 
+    \caption{Association of SNPS in repetitive regions with $Q$. \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions. 
+    There are 4,405 SNPs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+  \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for SNPs in repetitive regions.}
+  \label{RS_Manhattan}
+  \end{figure}
+\begin{figure} \centering
+    \begin{subfigure}[b]{\linewidth}
+        \includegraphics[width=\hsize]{ManhattanPlot_RepeatIndels.jpg}
+    \end{subfigure} %
+    \begin{subfigure}[b]{\linewidth}
+    	\center    
+        \includegraphics[width=\hsize]{QQPlot_RepeatIndels.jpg}
+    \end{subfigure} 
+    \caption{Association of indels in repetitive regions with $Q$.  \textbf{A} Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions. 
+    There are 642 INDELs that reach $p$ values greater than $ p < 0.01$ after performing a two-stage Benjamini and Hochberg FDR adjustment.  
+    The circles ( o ) are variants that reached values greater than 20, for clarity we implemented hard ceiling at 20. 
+  \textbf{B} QQ plot of the unadjusted p values for the reverse GWAS logistic regression analysis for INDELs in repetitive regions.}
+  \label{RI_Manhattan}
+  \end{figure}
+
+\clearpage
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=11cm,keepaspectratio]{PerChromosome.jpg}
+\caption{
+\textbf{A}
+The proportion of $Q$-associated variants per chromosome.
+\textbf{B}
+Mutation spectrum enrichment of  $Q$-associated variants across each chromosome.
+Chromosome 1 has a strong enrichment in *AC${\rightarrow}$*CC mutational pattern.
+\textbf{C} The number of $Q$-associated variants per 1Mb window across the genome.
+Grey bars indicate regions within and black bars indicate regions outside the 1000 Genomes Project strict mask.
+\textbf{D} Blue bars indicate the density of variants passing the strict mask with the *AC${\rightarrow}$*CC mutational pattern whereas red points have the T*T${\rightarrow}$TTT mutational pattern.
+Three regions not flagged by the 1000 Genomes Project strict mask in chromosomes 1, 2 and 17 have more than 30 variants per window.
+\textbf{E} Distribution of variant counts per 1Mb window. Where variants that fail the strict mask are in grey and those that pass are in black. 
+}  
+\label{CountPerChrom}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=10cm,keepaspectratio]{RegionOver10.jpg}
+\caption{Manhattan plot of the $-\log_{10}(p)$ values for the reverse GWAS logistic regression analysis for the three 1Mb windows with the most  $Q$-associated variants per 1Mb across the genome. 
+In these plots, blue points are variants with the *AC${\rightarrow}$*CC mutational pattern whereas red points have the T*T${\rightarrow}$TTT mutational pattern.}  
+\label{Top10}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=10cm,keepaspectratio]{strict_gcat_mutational_enrichment.jpg}
+\caption{Mutation spectrum of the 15,270 $Q$-associated variants that pass the 1kGP strict mask filter, compared to a random set of non-associated variants. A large fraction of the  $Q$-associated variants have the *AC${\rightarrow}$*CC mutational pattern. There is also an enrichment in TAT${\rightarrow}$TTT, TCT${\rightarrow}$TTT and  TGT${\rightarrow}$TTT (shown as reverse complement  ACA${\rightarrow}$AAA). These three enrichments can be summarized as T*T${\rightarrow}$TTT. Stars ( * ) indicate significant difference from the mutational spectrum of a set of control variants of equal size.}  
+\label{strict_gcat_mutational_enrichment}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=13cm,keepaspectratio]{Mafessoni_MutSpect.jpg}
+\caption{ \textbf{A} Comparison of the p-values from the association to unusual LD from \cite{mafessoni2018turning} and the p-values from the GCAT association test to quality metrics.
+There are a total of 42,307 variants in this plot with only 1,279 ( 3\% ) are statistically significant in both tests.
+There are 23,111  variants ( 55\% ) that are $Q$-associated but not LD-associated and 17,917 ( 42\% ) that are LD-associated but not $Q$-associated.
+For the 21,416 variants that pass the strict mask, 629 ( 3\% ) variants are both $Q$-associated and LD-associated; 8,495 variants ( 40\% ) are $Q$-associated but not LD-associated and 12,292 ( 57\% ) are LD-associated but not $Q$-associated.
+For the 14,616 variants that don't pass the strict mask, 650 ( 3\% ) variants are both $Q$-associated and LD-associated; 14,616 variants ( 70\% ) are $Q$-associated but not LD-associated and 5,625 ( 27\% ) are LD-associated but not $Q$-associated.
+\textbf{B} Mutation spectrum of the variants significantly associated to unusual LD from \cite{mafessoni2018turning}. }  
+\label{Mafessoni_MutSpect}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=9cm,keepaspectratio]{Han_1kGP_SFS_singlePop.jpg}
+\caption{Site frequency spectrum plot comparing the original 1000 Genomes Project data to the high depth resequence data for variants that, in the 1000 Genomes Project, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
+Among the 296 variants associated with $Q$ in the single population tests within the 1000 Genomes Project CHB and CHS, 6 are present in the resequenced data \citep{Lan2017}.}  
+\label{90HanSFS}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=9cm,keepaspectratio]{Han_1kGP_SFS_FullModel.jpg}
+\caption{Site frequency spectrum plot comparing the original 1000 Genomes Project data to the high depth resequence data for variants that, in the 1000 Genomes Project, are both associated with $Q$ and polymorphic in the 83 individuals that were resequenced.
+Among the 6,307 variants associated with $Q$ in the GCAT model including all populations, 1,139 are present in the high depth resequenced individuals.}  
+\label{90HanSFS_full}
+\end{figure}
+
+\begin{figure}[tbp]
+\includegraphics[width=11cm,keepaspectratio]{Omni_AF.jpg}
+\caption{Estimated frequency and association strength of $Q$- associated variants present on Illumina's Omni 2.5 chip. Variants highly associated to $Q$ tend to have low global allele frequencies.}
+\label{Omni}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=10cm,keepaspectratio]{Imputation_Distance_100s_gw.jpg}
+\caption{Imputation scores are not impacted by nearby suspicious variants. By comparing the imputation scores from Japanese Nagahama genotype data to the distance from the nearest suspicious variant, we find no impact on nearby variants. The only variants that do appear to have lower imputation scores are the suspicious variants themselves with a distance of zero on the plot. }  
+\label{imputation_score}
+\end{figure}
+
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{OverUnder30.jpg}
+\caption{Site frequency spectrum plot comparing the allele frequency difference between individuals with low- and high-$Q$. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Two clusters of are visible, where the majority (92.7\%) of the $Q$-associated variants are more than twice as frequent in individuals with low-$Q$.}  
+\label{OverUnder30}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=15cm,keepaspectratio]{Published_OverUnder30.jpg}
+\caption{Site frequency spectrum plot comparing the frequency of $Q$-associated variants identified in publications, for individuals with $Q$ scores above and below 30. The black dashed lines indicates equal allele frequencies while the red dotted line for variants twice as frequent in individuals with $Q$ scores below 30. Each of the rsIDs of the variants are labelled for clarity.}  
+\label{Pub_30}
+\end{figure}
+
+
+\end{document}
